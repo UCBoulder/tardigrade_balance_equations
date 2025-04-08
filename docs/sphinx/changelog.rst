@@ -33,6 +33,7 @@ Internal Changes
 - Moved the declarations of the balance of linear momentum to the header file. (:pull:`23`). By `Nathan Miller`_.
 - Corrected uninitialized warning in balance of mass. (:pull:`24`). By `Nathan Miller`_.
 - Moved balance of volume fraction declaration to the header file (:pull:`26`). By `Nathan Miller`_.
+- Allow users to perform a complete build of the tardigrade stack (:pull:`27`). By `Nathan Miller`_.
 
 Breaking Changes
 ================
