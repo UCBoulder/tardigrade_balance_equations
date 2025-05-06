@@ -1660,7 +1660,7 @@ void compute_current_rate_of_change(
 }
 
 template<
-    int dim, int node_count, int nphases,
+    int dim, bool is_per_unit_volume, int node_count, int nphases,
     class xi_in, typename dt_type, class density_t_in, class density_tp1_in, class e_t_in, class e_tp1_in,
     class u_t_in, class u_tp1_in, class umesh_t_in, class umesh_tp1_in, class density_dot_t_in, class e_dot_t_in, class u_dot_t_in,
     class X_in, class cauchy_stress_iter, class heat_flux_iter, class volume_fraction_iter, class internal_heat_generation_iter,
@@ -1829,7 +1829,7 @@ void evaluate_at_nodes(
 
         for ( unsigned int i = 0; i < node_count; ++i ){
 
-            tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<dim>(
+            tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<dim, is_per_unit_volume>(
                 density_tp1_p[ 0 ], density_dot_tp1_p[ 0 ],
                 std::cbegin( grad_density_tp1 ), std::cend( grad_density_tp1 ),
                 e_tp1_p[ 0 ], e_dot_tp1_p[ 0 ],
@@ -1862,7 +1862,7 @@ void evaluate_at_nodes(
 
         for ( unsigned int i = 0; i < node_count; ++i ){
 
-            tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<dim>(
+            tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<dim, is_per_unit_volume>(
                 std::cbegin( density_tp1_p ),     std::cend( density_tp1_p ),
                 std::cbegin( density_dot_tp1_p ), std::cend( density_dot_tp1_p ),
                 std::cbegin( grad_density_tp1 ),  std::cend( grad_density_tp1 ),
@@ -1897,7 +1897,7 @@ void evaluate_at_nodes(
 }
 
 template<
-    int dim, int node_count, int nphases,
+    int dim, bool is_per_unit_volume, int node_count, int nphases,
     class xi_in, typename dt_type, class density_t_in, class density_tp1_in, class e_t_in, class e_tp1_in,
     class u_t_in, class u_tp1_in, class umesh_t_in, class umesh_tp1_in, class density_dot_t_in, class e_dot_t_in, class u_dot_t_in,
     class X_in, class cauchy_stress_iter, class heat_flux_iter, class volume_fraction_iter, class internal_heat_generation_iter,
@@ -2098,7 +2098,7 @@ void evaluate_at_nodes(
 
         for ( unsigned int i = 0; i < node_count; ++i ){
 
-            tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<dim>(
+            tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<dim,is_per_unit_volume>(
                 density_tp1_p[ 0 ], density_dot_tp1_p[ 0 ],
                 std::cbegin( grad_density_tp1 ), std::cend( grad_density_tp1 ),
                 e_tp1_p[ 0 ], e_dot_tp1_p[ 0 ],
@@ -2130,7 +2130,7 @@ void evaluate_at_nodes(
 
             for ( unsigned int j = 0; j < node_count; ++j ){ // Loop over interpolation functions
 
-                tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<dim>(
+                tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<dim,is_per_unit_volume>(
                     density_tp1_p[ 0 ], density_dot_tp1_p[ 0 ],
                     std::cbegin( grad_density_tp1 ), std::cend( grad_density_tp1 ),
                     e_tp1_p[ 0 ], e_dot_tp1_p[ 0 ],
@@ -2233,7 +2233,7 @@ void evaluate_at_nodes(
 
         for ( unsigned int i = 0; i < node_count; ++i ){
 
-            tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<dim>(
+            tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<dim,is_per_unit_volume>(
                 std::cbegin( density_tp1_p ),     std::cend( density_tp1_p ),
                 std::cbegin( density_dot_tp1_p ), std::cend( density_dot_tp1_p ),
                 std::cbegin( grad_density_tp1 ),  std::cend( grad_density_tp1 ),
@@ -2267,7 +2267,7 @@ void evaluate_at_nodes(
 
             for ( unsigned int j = 0; j < node_count; ++j ){ // Loop over interpolation functions
 
-                tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<dim>(
+                tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<dim,is_per_unit_volume>(
                     std::cbegin( density_tp1_p ),     std::cend( density_tp1_p ),
                     std::cbegin( density_dot_tp1_p ), std::cend( density_dot_tp1_p ),
                     std::cbegin( grad_density_tp1 ),  std::cend( grad_density_tp1 ),
@@ -2383,6 +2383,8 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_fea, * boost::unit_test::toler
 
     constexpr unsigned int nphases = 1;
 
+    constexpr bool is_per_unit_volume = false;
+
     std::array< floatType, 8 > density_t = {
         0.61289453, 0.12062867, 0.8263408 , 0.60306013, 0.54506801,
         0.34276383, 0.30412079, 0.41702221
@@ -2496,7 +2498,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_fea, * boost::unit_test::toler
 
     floatType beta = 0.67;
 
-    evaluate_at_nodes<3, 8, 1 >(
+    evaluate_at_nodes<3, is_per_unit_volume, 8, 1 >(
         std::cbegin( local_point ),              std::cend( local_point ), dt,
         std::cbegin( density_t ),                std::cend( density_t ),
         std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -2533,7 +2535,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_fea, * boost::unit_test::toler
     std::array< floatType, 8 * 1 * 3 > dRdpi;
     std::array< floatType, 8 * 1 * 8 * 3 > dRdUMesh;
 
-    evaluate_at_nodes<3, 8, 1 >(
+    evaluate_at_nodes<3, is_per_unit_volume, 8, 1 >(
         std::cbegin( local_point ),              std::cend( local_point ), dt,
         std::cbegin( density_t ),                std::cend( density_t ),
         std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -2587,7 +2589,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_fea, * boost::unit_test::toler
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes<3, 8, 1 >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, 1 >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( xp ),                       std::cend( xp ),
@@ -2610,7 +2612,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_fea, * boost::unit_test::toler
                 std::begin( vp ), std::end( vp )
             );
 
-            evaluate_at_nodes<3, 8, 1 >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, 1 >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( xm ),                       std::cend( xm ),
@@ -2661,7 +2663,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_fea, * boost::unit_test::toler
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes<3, 8, 1 >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, 1 >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -2684,7 +2686,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_fea, * boost::unit_test::toler
                 std::begin( vp ), std::end( vp )
             );
 
-            evaluate_at_nodes<3, 8, 1 >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, 1 >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -2735,7 +2737,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_fea, * boost::unit_test::toler
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes<3, 8, 1 >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, 1 >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -2758,7 +2760,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_fea, * boost::unit_test::toler
                 std::begin( vp ), std::end( vp )
             );
 
-            evaluate_at_nodes<3, 8, 1 >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, 1 >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -2809,7 +2811,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_fea, * boost::unit_test::toler
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes<3, 8, 1 >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, 1 >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -2832,7 +2834,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_fea, * boost::unit_test::toler
                 std::begin( vp ), std::end( vp )
             );
 
-            evaluate_at_nodes<3, 8, 1 >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, 1 >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -2883,7 +2885,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_fea, * boost::unit_test::toler
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes<3, 8, 1 >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, 1 >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -2906,7 +2908,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_fea, * boost::unit_test::toler
                 std::begin( vp ), std::end( vp )
             );
 
-            evaluate_at_nodes<3, 8, 1 >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, 1 >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -2957,7 +2959,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_fea, * boost::unit_test::toler
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes<3, 8, 1 >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, 1 >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -2980,7 +2982,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_fea, * boost::unit_test::toler
                 std::begin( vp ), std::end( vp )
             );
 
-            evaluate_at_nodes<3, 8, 1 >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, 1 >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -3031,7 +3033,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_fea, * boost::unit_test::toler
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes<3, 8, 1 >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, 1 >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -3054,7 +3056,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_fea, * boost::unit_test::toler
                 std::begin( vp ), std::end( vp )
             );
 
-            evaluate_at_nodes<3, 8, 1 >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, 1 >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -3105,7 +3107,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_fea, * boost::unit_test::toler
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes<3, 8, 1 >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, 1 >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -3128,7 +3130,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_fea, * boost::unit_test::toler
                 std::begin( vp ), std::end( vp )
             );
 
-            evaluate_at_nodes<3, 8, 1 >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, 1 >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -3179,7 +3181,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_fea, * boost::unit_test::toler
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes<3, 8, 1 >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, 1 >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -3202,7 +3204,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_fea, * boost::unit_test::toler
                 std::begin( vp ), std::end( vp )
             );
 
-            evaluate_at_nodes<3, 8, 1 >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, 1 >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -3243,6 +3245,8 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_multiphase_fea, * boost::unit_
      */
 
     constexpr unsigned int nphases = 4;
+
+    constexpr bool is_per_unit_volume = false;
 
     std::array< floatType, nphases * 8 > density_t = {
         0.20763586, 0.29248941, 0.52001015, 0.90191137, 0.98363088,
@@ -3448,7 +3452,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_multiphase_fea, * boost::unit_
 
     floatType beta = 0.67;
 
-    evaluate_at_nodes<3, 8, nphases >(
+    evaluate_at_nodes<3, is_per_unit_volume, 8, nphases >(
         std::cbegin( local_point ),              std::cend( local_point ), dt,
         std::cbegin( density_t ),                std::cend( density_t ),
         std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -3485,7 +3489,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_multiphase_fea, * boost::unit_
     std::array< floatType, 8 * 1 * nphases * 3 * nphases > dRdpi;
     std::array< floatType, 8 * 1 * nphases * 8 * 3 > dRdUMesh;
 
-    evaluate_at_nodes<3, 8, nphases >(
+    evaluate_at_nodes<3, is_per_unit_volume, 8, nphases >(
         std::cbegin( local_point ),              std::cend( local_point ), dt,
         std::cbegin( density_t ),                std::cend( density_t ),
         std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -3539,7 +3543,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_multiphase_fea, * boost::unit_
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes<3, 8, nphases >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, nphases >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( xp ),                       std::cend( xp ),
@@ -3562,7 +3566,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_multiphase_fea, * boost::unit_
                 std::begin( vp ), std::end( vp )
             );
 
-            evaluate_at_nodes<3, 8, nphases >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, nphases >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( xm ),                       std::cend( xm ),
@@ -3613,7 +3617,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_multiphase_fea, * boost::unit_
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes<3, 8, nphases >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, nphases >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -3636,7 +3640,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_multiphase_fea, * boost::unit_
                 std::begin( vp ), std::end( vp )
             );
 
-            evaluate_at_nodes<3, 8, nphases >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, nphases >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -3687,7 +3691,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_multiphase_fea, * boost::unit_
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes<3, 8, nphases >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, nphases >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -3710,7 +3714,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_multiphase_fea, * boost::unit_
                 std::begin( vp ), std::end( vp )
             );
 
-            evaluate_at_nodes<3, 8, nphases >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, nphases >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -3761,7 +3765,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_multiphase_fea, * boost::unit_
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes<3, 8, nphases >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, nphases >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -3784,7 +3788,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_multiphase_fea, * boost::unit_
                 std::begin( vp ), std::end( vp )
             );
 
-            evaluate_at_nodes<3, 8, nphases >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, nphases >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -3835,7 +3839,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_multiphase_fea, * boost::unit_
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes<3, 8, nphases >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, nphases >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -3858,7 +3862,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_multiphase_fea, * boost::unit_
                 std::begin( vp ), std::end( vp )
             );
 
-            evaluate_at_nodes<3, 8, nphases >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, nphases >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -3909,7 +3913,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_multiphase_fea, * boost::unit_
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes<3, 8, nphases >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, nphases >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -3932,7 +3936,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_multiphase_fea, * boost::unit_
                 std::begin( vp ), std::end( vp )
             );
 
-            evaluate_at_nodes<3, 8, nphases >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, nphases >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -3983,7 +3987,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_multiphase_fea, * boost::unit_
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes<3, 8, nphases >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, nphases >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -4006,7 +4010,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_multiphase_fea, * boost::unit_
                 std::begin( vp ), std::end( vp )
             );
 
-            evaluate_at_nodes<3, 8, nphases >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, nphases >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -4057,7 +4061,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_multiphase_fea, * boost::unit_
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes<3, 8, nphases >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, nphases >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -4080,7 +4084,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_multiphase_fea, * boost::unit_
                 std::begin( vp ), std::end( vp )
             );
 
-            evaluate_at_nodes<3, 8, nphases >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, nphases >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -4131,7 +4135,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_multiphase_fea, * boost::unit_
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes<3, 8, nphases >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, nphases >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -4154,7 +4158,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_multiphase_fea, * boost::unit_
                 std::begin( vp ), std::end( vp )
             );
 
-            evaluate_at_nodes<3, 8, nphases >(
+            evaluate_at_nodes<3, is_per_unit_volume, 8, nphases >(
                 std::cbegin( local_point ),              std::cend( local_point ), dt,
                 std::cbegin( density_t ),                std::cend( density_t ),
                 std::cbegin( density_tp1 ),              std::cend( density_tp1 ),
@@ -4650,7 +4654,7 @@ BOOST_AUTO_TEST_CASE( test_linearHydraTest, * boost::unit_test::tolerance( DEFAU
 }
 
 template<
-    int dim, int node_count, int nphases, int num_additional_dof,
+    int dim, bool is_per_unit_volume, int node_count, int nphases, int num_additional_dof,
     class xi_in, typename dt_type,
     class density_t_in, class density_tp1_in,
     class u_t_in,       class u_tp1_in,
@@ -4978,7 +4982,7 @@ void evaluate_at_nodes(
 
             unsigned int j = active_phase;
 
-            tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<3,3,0,20,17,14,21>(
+            tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<3,is_per_unit_volume,3,0,20,17,14,21>(
                 density_tp1_p[ j ], density_dot_tp1_p[ j ],
                 std::cbegin( grad_density_tp1 )  + 3 * j, std::cbegin( grad_density_tp1 )  + 3 * ( j + 1 ),
                 e_tp1_p[ j ], e_dot_tp1_p[ j ],
@@ -5006,7 +5010,7 @@ void evaluate_at_nodes(
         }
         else{
 
-            tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<3,3,0,20,17,14,21>(
+            tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<3,is_per_unit_volume,3,0,20,17,14,21>(
                 std::cbegin( density_tp1_p ),     std::cend( density_tp1_p ),
                 std::cbegin( density_dot_tp1_p ), std::cend( density_dot_tp1_p ),
                 std::cbegin( grad_density_tp1 ),  std::cend( grad_density_tp1 ),
@@ -5039,7 +5043,7 @@ void evaluate_at_nodes(
 }
 
 template<
-    int dim, int node_count, int nphases, int num_additional_dof,
+    int dim, bool is_per_unit_volume, int node_count, int nphases, int num_additional_dof,
     class xi_in, typename dt_type,
     class density_t_in, class density_tp1_in,
     class u_t_in,       class u_tp1_in,
@@ -5441,7 +5445,7 @@ void evaluate_at_nodes(
 
             unsigned int j = active_phase;
 
-            tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<3,3,0,20,17,14,21>(
+            tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<3,is_per_unit_volume,3,0,20,17,14,21>(
                 density_tp1_p[ j ], density_dot_tp1_p[ j ],
                 std::cbegin( grad_density_tp1 )  + 3 * j, std::cbegin( grad_density_tp1 )  + 3 * ( j + 1 ),
                 e_tp1_p[ j ], e_dot_tp1_p[ j ],
@@ -5469,7 +5473,7 @@ void evaluate_at_nodes(
         }
         else{
 
-            tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<3,3,0,20,17,14,21>(
+            tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<3,is_per_unit_volume,3,0,20,17,14,21>(
                 std::cbegin( density_tp1_p ),     std::cend( density_tp1_p ),
                 std::cbegin( density_dot_tp1_p ), std::cend( density_dot_tp1_p ),
                 std::cbegin( grad_density_tp1 ),  std::cend( grad_density_tp1 ),
@@ -5503,7 +5507,7 @@ void evaluate_at_nodes(
 
                 unsigned int j = active_phase;
 
-                tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<3,3,0,20,17,14,21,num_dof>(
+                tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<3,is_per_unit_volume,3,0,20,17,14,21,num_dof>(
                     density_tp1_p[ j ], density_dot_tp1_p[ j ],
                     std::cbegin( grad_density_tp1 )  + 3 * j, std::cbegin( grad_density_tp1 )  + 3 * ( j + 1 ),
                     e_tp1_p[ j ], e_dot_tp1_p[ j ],
@@ -5545,7 +5549,7 @@ void evaluate_at_nodes(
             }
             else{
 
-                tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<3,3,0,20,17,14,21,num_dof>(
+                tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<3,is_per_unit_volume,3,0,20,17,14,21,num_dof>(
                     std::cbegin( density_tp1_p ),     std::cend( density_tp1_p ),
                     std::cbegin( density_dot_tp1_p ), std::cend( density_dot_tp1_p ),
                     std::cbegin( grad_density_tp1 ),  std::cend( grad_density_tp1 ),
@@ -5668,6 +5672,8 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea, * boost::unit_test:
 
     constexpr unsigned int num_additional_dof = 5;
 
+    constexpr bool is_per_unit_volume = false;
+
     std::array< floatType, 8 * nphases > density_t = {
         0.3213189 , 0.845533  , 0.18690375, 0.41729106, 0.98903451,
         0.23659981, 0.91683233, 0.91839747, 0.09129634, 0.46365272,
@@ -5948,7 +5954,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea, * boost::unit_test:
 
     std::array< floatType, 8 * nphases > result;
 
-    evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+    evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
         std::cbegin( local_point ),   std::cend( local_point ),
         dt,
         std::cbegin( density_t ),     std::cend( density_t ),
@@ -6000,7 +6006,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea, * boost::unit_test:
 
     std::fill( std::begin( result ), std::end( result ), 0 );
 
-    evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+    evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
         std::cbegin( local_point ),   std::cend( local_point ),
         dt,
         std::cbegin( density_t ),     std::cend( density_t ),
@@ -6062,7 +6068,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea, * boost::unit_test:
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),     std::cend( density_t ),
@@ -6090,7 +6096,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea, * boost::unit_test:
                 active_phase
             );
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),     std::cend( density_t ),
@@ -6153,7 +6159,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea, * boost::unit_test:
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),     std::cend( density_t ),
@@ -6181,7 +6187,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea, * boost::unit_test:
                 active_phase
             );
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),     std::cend( density_t ),
@@ -6244,7 +6250,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea, * boost::unit_test:
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),     std::cend( density_t ),
@@ -6272,7 +6278,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea, * boost::unit_test:
                 active_phase
             );
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),     std::cend( density_t ),
@@ -6335,7 +6341,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea, * boost::unit_test:
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),     std::cend( density_t ),
@@ -6363,7 +6369,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea, * boost::unit_test:
                 active_phase
             );
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),     std::cend( density_t ),
@@ -6426,7 +6432,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea, * boost::unit_test:
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),     std::cend( density_t ),
@@ -6454,7 +6460,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea, * boost::unit_test:
                 active_phase
             );
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),     std::cend( density_t ),
@@ -6517,7 +6523,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea, * boost::unit_test:
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),     std::cend( density_t ),
@@ -6545,7 +6551,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea, * boost::unit_test:
                 active_phase
             );
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),     std::cend( density_t ),
@@ -6608,7 +6614,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea, * boost::unit_test:
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),     std::cend( density_t ),
@@ -6636,7 +6642,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea, * boost::unit_test:
                 active_phase
             );
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),     std::cend( density_t ),
@@ -6699,7 +6705,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea, * boost::unit_test:
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),     std::cend( density_t ),
@@ -6727,7 +6733,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea, * boost::unit_test:
                 active_phase
             );
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),     std::cend( density_t ),
@@ -6782,6 +6788,8 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea_multiphase, * boost:
     constexpr unsigned int nphases = 4;
 
     constexpr unsigned int num_additional_dof = 5;
+
+    constexpr bool is_per_unit_volume = false;
 
     std::array< floatType, 8 * nphases > density_t = {
         0.3213189 , 0.845533  , 0.18690375, 0.41729106, 0.98903451,
@@ -7063,7 +7071,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea_multiphase, * boost:
 
     std::array< floatType, 8 * nphases > result;
 
-    evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+    evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
         std::cbegin( local_point ),   std::cend( local_point ),
         dt,
         std::cbegin( density_t ),     std::cend( density_t ),
@@ -7110,7 +7118,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea_multiphase, * boost:
 
     std::fill( std::begin( result ), std::end( result ), 0 );
 
-    evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+    evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
         std::cbegin( local_point ),   std::cend( local_point ),
         dt,
         std::cbegin( density_t ),     std::cend( density_t ),
@@ -7167,7 +7175,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea_multiphase, * boost:
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),     std::cend( density_t ),
@@ -7194,7 +7202,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea_multiphase, * boost:
                 std::begin( vp ),             std::end( vp )
             );
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),     std::cend( density_t ),
@@ -7249,7 +7257,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea_multiphase, * boost:
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),     std::cend( density_t ),
@@ -7276,7 +7284,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea_multiphase, * boost:
                 std::begin( vp ),             std::end( vp )
             );
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),     std::cend( density_t ),
@@ -7331,7 +7339,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea_multiphase, * boost:
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),     std::cend( density_t ),
@@ -7358,7 +7366,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea_multiphase, * boost:
                 std::begin( vp ),             std::end( vp )
             );
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),     std::cend( density_t ),
@@ -7413,7 +7421,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea_multiphase, * boost:
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),     std::cend( density_t ),
@@ -7440,7 +7448,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea_multiphase, * boost:
                 std::begin( vp ),             std::end( vp )
             );
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),     std::cend( density_t ),
@@ -7495,7 +7503,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea_multiphase, * boost:
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),     std::cend( density_t ),
@@ -7522,7 +7530,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea_multiphase, * boost:
                 std::begin( vp ),             std::end( vp )
             );
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),     std::cend( density_t ),
@@ -7577,7 +7585,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea_multiphase, * boost:
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),     std::cend( density_t ),
@@ -7604,7 +7612,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea_multiphase, * boost:
                 std::begin( vp ),             std::end( vp )
             );
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),     std::cend( density_t ),
@@ -7659,7 +7667,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea_multiphase, * boost:
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),     std::cend( density_t ),
@@ -7686,7 +7694,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea_multiphase, * boost:
                 std::begin( vp ),             std::end( vp )
             );
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),     std::cend( density_t ),
@@ -7741,7 +7749,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea_multiphase, * boost:
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),     std::cend( density_t ),
@@ -7768,7 +7776,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergy_hydra_fea_multiphase, * boost:
                 std::begin( vp ),             std::end( vp )
             );
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),     std::cend( density_t ),
