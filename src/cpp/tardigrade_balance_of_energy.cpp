@@ -1872,13 +1872,21 @@ namespace tardigradeBalanceEquations{
                 trace_velocity_gradient += *( velocity_gradient_begin + dim * i + i );
             }
 
-            result = density_dot * internal_energy + density * internal_energy_dot
-                   + internal_energy * std::inner_product( density_gradient_begin, density_gradient_end, velocity_begin, 0. )
-                   + density * internal_energy * trace_velocity_gradient
-                   + density * std::inner_product( velocity_begin, velocity_end, internal_energy_gradient_begin, 0. )
-                   - 0.5 * mass_change_rate * std::inner_product( velocity_begin, velocity_end, velocity_begin, 0. )
-                   + std::inner_product( net_interphase_force_begin, net_interphase_force_end, velocity_begin, 0. )
-                   - density * internal_heat_generation;
+            if ( is_per_unit_volume ){
+                result = internal_energy_dot
+                       + internal_energy * trace_velocity_gradient
+                       + std::inner_product( velocity_begin, velocity_end, internal_energy_gradient_begin, 0. );
+            }
+            else{
+                result = density_dot * internal_energy + density * internal_energy_dot
+                       + internal_energy * std::inner_product( density_gradient_begin, density_gradient_end, velocity_begin, 0. )
+                       + density * internal_energy * trace_velocity_gradient
+                       + density * std::inner_product( velocity_begin, velocity_end, internal_energy_gradient_begin, 0. );
+            }
+
+            result += -0.5 * mass_change_rate * std::inner_product( velocity_begin, velocity_end, velocity_begin, 0. )
+                    + std::inner_product( net_interphase_force_begin, net_interphase_force_end, velocity_begin, 0. )
+                    - density * internal_heat_generation;
 
             for ( unsigned int i = 0; i < dim; i++ ){
 
@@ -2004,29 +2012,47 @@ namespace tardigradeBalanceEquations{
             }
 
             velocity_gradient_type v_dot_v = std::inner_product( velocity_begin, velocity_end, velocity_begin, 0. );
-            velocity_gradient_type grad_rho_dot_v = std::inner_product( density_gradient_begin, density_gradient_end, velocity_begin, 0. );
 
-            result = density_dot * internal_energy + density * internal_energy_dot
-                   + internal_energy * grad_rho_dot_v
-                   + density * internal_energy * trace_velocity_gradient
-                   + density * std::inner_product( velocity_begin, velocity_end, internal_energy_gradient_begin, 0. )
-                   - 0.5 * mass_change_rate * v_dot_v
-                   + std::inner_product( net_interphase_force_begin, net_interphase_force_end, velocity_begin, 0. )
-                   - density * internal_heat_generation;
+            if ( is_per_unit_volume ){
+                result = internal_energy_dot
+                       + internal_energy * trace_velocity_gradient
+                       + std::inner_product( velocity_begin, velocity_end, internal_energy_gradient_begin, 0. );
+            }
+            else{
+                result = density_dot * internal_energy + density * internal_energy_dot
+                       + internal_energy * std::inner_product( density_gradient_begin, density_gradient_end, velocity_begin, 0. )
+                       + density * internal_energy * trace_velocity_gradient
+                       + density * std::inner_product( velocity_begin, velocity_end, internal_energy_gradient_begin, 0. );
+            }
 
-            dRdRho = internal_energy_dot + internal_energy * trace_velocity_gradient + std::inner_product( velocity_begin, velocity_end, internal_energy_gradient_begin, 0. )
-                   - internal_heat_generation - 0.5 * dCdRho * v_dot_v;
+            result += -0.5 * mass_change_rate * std::inner_product( velocity_begin, velocity_end, velocity_begin, 0. )
+                    + std::inner_product( net_interphase_force_begin, net_interphase_force_end, velocity_begin, 0. )
+                    - density * internal_heat_generation;
 
-            dRdRhoDot = internal_energy - 0.5 * dCdRhoDot * v_dot_v;
+            dRdRho = dRdRhoDot = dRdE = dRdEDot = 0;
+            if ( !is_per_unit_volume ){
 
-            std::transform( velocity_begin, velocity_end, dRdGradRho_begin, std::bind( std::multiplies<result_type>(), std::placeholders::_1, internal_energy ) );
+                dRdRho = internal_energy_dot + internal_energy * trace_velocity_gradient + std::inner_product( velocity_begin, velocity_end, internal_energy_gradient_begin, 0. );
+                dRdRhoDot = internal_energy;
+                std::transform( velocity_begin, velocity_end, dRdGradRho_begin, std::bind( std::multiplies<result_type>(), std::placeholders::_1, internal_energy ) );
 
-            dRdE = density_dot + std::inner_product( density_gradient_begin, density_gradient_end, velocity_begin, 0. )
-                 + density * trace_velocity_gradient;
+                dRdE = density_dot + std::inner_product( density_gradient_begin, density_gradient_end, velocity_begin, 0. ) + density * trace_velocity_gradient;
+                dRdEDot = density;
+                std::transform( velocity_begin, velocity_end, dRdGradE_begin, std::bind( std::multiplies<result_type>(), std::placeholders::_1, density ) );
 
-            dRdEDot = density;
+            }
+            else{
 
-            std::transform( velocity_begin, velocity_end, dRdGradE_begin, std::bind( std::multiplies<result_type>(), std::placeholders::_1, density ) );
+                std::fill( dRdGradRho_begin, dRdGradRho_end, 0 );
+
+                dRdE = trace_velocity_gradient;
+                dRdEDot = 1;
+                std::copy( velocity_begin, velocity_end, dRdGradE_begin );
+            }
+
+            dRdRho += -internal_heat_generation - 0.5 * dCdRho * v_dot_v;
+
+            dRdRhoDot += -0.5 * dCdRhoDot * v_dot_v;
 
             std::fill( dRdV_begin, dRdV_end, 0. );
 
@@ -2044,13 +2070,18 @@ namespace tardigradeBalanceEquations{
 
                 *( dRdGradRho_begin + i ) -= 0.5 * dCdGradRho[ i ] * v_dot_v;
 
-                *( dRdV_begin + i ) += internal_energy * ( *( density_gradient_begin + i ) )
-                                     + density * ( *( internal_energy_gradient_begin + i ) )
-                                     - 0.5 * dCdV[ i ] * v_dot_v
+                if ( !is_per_unit_volume ){
+                    *( dRdV_begin + i ) += internal_energy * ( *( density_gradient_begin + i ) )
+                                         + density * ( *( internal_energy_gradient_begin + i ) );
+                    *( dRdGradV_begin + dim * i + i ) += density * internal_energy;
+                }
+                else{
+                    *( dRdV_begin + i ) += ( *( internal_energy_gradient_begin + i ) );
+                    *( dRdGradV_begin + dim * i + i ) += internal_energy;
+                }
+                *( dRdV_begin + i ) += -0.5 * dCdV[ i ] * v_dot_v
                                      - mass_change_rate * ( *( velocity_begin + i ) )
                                      + *( net_interphase_force_begin + i );
-
-                *( dRdGradV_begin + dim * i + i ) += density * internal_energy;
 
                 for ( unsigned int j = 0; j < dim; j++ ){
 
