@@ -542,7 +542,8 @@ BOOST_AUTO_TEST_CASE( test_linearHydraTest, * boost::unit_test::tolerance( DEFAU
 }
 
 template<
-    int dim, int node_count, int nphases, int num_additional_dof,
+    int dim, bool is_per_unit_volume,
+    int node_count, int nphases, int num_additional_dof,
     class xi_in, typename dt_type,
     class density_t_in, class density_tp1_in,
     class u_t_in,       class u_tp1_in,
@@ -844,13 +845,25 @@ void evaluate_at_nodes(
 
             unsigned int j = active_phase;
 
-            tardigradeBalanceEquations::constraintEquations::computeInternalEnergyConstraint<9>(
-                e_tp1_p[ j ],
-                std::cbegin( material_response ) + material_response_size * j,
-                std::cbegin( material_response ) + material_response_size * ( j + 1 ),
-                Ns[ i ],
-                *( value_begin + nphases * i + j )
-            );
+            if ( is_per_unit_volume ){
+                tardigradeBalanceEquations::constraintEquations::computeInternalEnergyConstraint<9>(
+                    e_tp1_p[ j ], density_tp1_p[ j ],
+                    std::cbegin( material_response ) + material_response_size * j,
+                    std::cbegin( material_response ) + material_response_size * ( j + 1 ),
+                    Ns[ i ],
+                    *( value_begin + nphases * i + j )
+                );
+            }
+            else{
+                tardigradeBalanceEquations::constraintEquations::computeInternalEnergyConstraint<9>(
+                    e_tp1_p[ j ],
+                    std::cbegin( material_response ) + material_response_size * j,
+                    std::cbegin( material_response ) + material_response_size * ( j + 1 ),
+                    Ns[ i ],
+                    *( value_begin + nphases * i + j )
+                );
+            }
+
 
             std::transform(
                 value_begin + nphases * i + j,
@@ -866,12 +879,23 @@ void evaluate_at_nodes(
         }
         else{
 
-            tardigradeBalanceEquations::constraintEquations::computeInternalEnergyConstraint<9>(
-                std::cbegin( e_tp1_p ),              std::cend( e_tp1_p ),
-                std::cbegin( material_response ),    std::cend( material_response ),
-                Ns[ i ],
-                value_begin + nphases * i, value_begin + nphases * ( i + 1 )
-            );
+            if ( is_per_unit_volume ){
+                tardigradeBalanceEquations::constraintEquations::computeInternalEnergyConstraint<9>(
+                    std::cbegin( e_tp1_p ),              std::cend( e_tp1_p ),
+                    std::cbegin( density_tp1_p ),        std::cend( density_tp1_p ),
+                    std::cbegin( material_response ),    std::cend( material_response ),
+                    Ns[ i ],
+                    value_begin + nphases * i, value_begin + nphases * ( i + 1 )
+                );
+            }
+            else{
+                tardigradeBalanceEquations::constraintEquations::computeInternalEnergyConstraint<9>(
+                    std::cbegin( e_tp1_p ),              std::cend( e_tp1_p ),
+                    std::cbegin( material_response ),    std::cend( material_response ),
+                    Ns[ i ],
+                    value_begin + nphases * i, value_begin + nphases * ( i + 1 )
+                );
+            }
 
             std::transform(
                 value_begin + nphases * i,
@@ -891,7 +915,8 @@ void evaluate_at_nodes(
 }
 
 template<
-    int dim, int node_count, int nphases, int num_additional_dof,
+    int dim, bool is_per_unit_volume,
+    int node_count, int nphases, int num_additional_dof,
     class xi_in, typename dt_type,
     class density_t_in, class density_tp1_in,
     class u_t_in,       class u_tp1_in,
@@ -1267,13 +1292,24 @@ void evaluate_at_nodes(
 
             unsigned int j = active_phase;
 
-            tardigradeBalanceEquations::constraintEquations::computeInternalEnergyConstraint<9>(
-                e_tp1_p[ j ],
-                std::cbegin( material_response ) + material_response_size * j,
-                std::cbegin( material_response ) + material_response_size * ( j + 1 ),
-                Ns[ i ],
-                *( value_begin + nphases * i + j )
-            );
+            if ( is_per_unit_volume ){
+                tardigradeBalanceEquations::constraintEquations::computeInternalEnergyConstraint<9>(
+                    e_tp1_p[ j ], density_tp1_p[ j ],
+                    std::cbegin( material_response ) + material_response_size * j,
+                    std::cbegin( material_response ) + material_response_size * ( j + 1 ),
+                    Ns[ i ],
+                    *( value_begin + nphases * i + j )
+                );
+            }
+            else{
+                tardigradeBalanceEquations::constraintEquations::computeInternalEnergyConstraint<9>(
+                    e_tp1_p[ j ],
+                    std::cbegin( material_response ) + material_response_size * j,
+                    std::cbegin( material_response ) + material_response_size * ( j + 1 ),
+                    Ns[ i ],
+                    *( value_begin + nphases * i + j )
+                );
+            }
 
             std::transform(
                 value_begin + nphases * i + j,
@@ -1289,12 +1325,23 @@ void evaluate_at_nodes(
         }
         else{
 
-            tardigradeBalanceEquations::constraintEquations::computeInternalEnergyConstraint<9>(
-                std::cbegin( e_tp1_p ),              std::cend( e_tp1_p ),
-                std::cbegin( material_response ),    std::cend( material_response ),
-                Ns[ i ],
-                value_begin + nphases * i, value_begin + nphases * ( i + 1 )
-            );
+            if ( is_per_unit_volume ){
+                tardigradeBalanceEquations::constraintEquations::computeInternalEnergyConstraint<9>(
+                    std::cbegin( e_tp1_p ),              std::cend( e_tp1_p ),
+                    std::cbegin( density_tp1_p ),        std::cend( density_tp1_p ),
+                    std::cbegin( material_response ),    std::cend( material_response ),
+                    Ns[ i ],
+                    value_begin + nphases * i, value_begin + nphases * ( i + 1 )
+                );
+            }
+            else{
+                tardigradeBalanceEquations::constraintEquations::computeInternalEnergyConstraint<9>(
+                    std::cbegin( e_tp1_p ),              std::cend( e_tp1_p ),
+                    std::cbegin( material_response ),    std::cend( material_response ),
+                    Ns[ i ],
+                    value_begin + nphases * i, value_begin + nphases * ( i + 1 )
+                );
+            }
 
             std::transform(
                 value_begin + nphases * i,
@@ -1315,26 +1362,50 @@ void evaluate_at_nodes(
 
                 unsigned int j = active_phase;
 
-                tardigradeBalanceEquations::constraintEquations::computeInternalEnergyConstraint<3,9,num_dof>(
-                    e_tp1_p[ j ],
-                    std::cbegin( material_response ) + material_response_size * j,
-                    std::cbegin( material_response ) + material_response_size * ( j + 1 ),
-                    std::cbegin( material_response_jacobian ) + material_response_size * dof_vector_size * j,
-                    std::cbegin( material_response_jacobian ) + material_response_size * dof_vector_size * ( j + 1 ),
-                    Ns[ i ],
-                    Ns[ k ], std::begin( dNdx ) + 3 * k, std::begin( dNdx ) + 3 * ( k + 1 ),
-                    std::cbegin( dof_vector ) + ( nphases * num_phase_dof + num_additional_dof ),       std::cend( dof_vector ),
-                    dUDotdU,
-                    j,
-                    *( std::begin( value_n ) + nphases * i + j ),
-                    std::begin( dRdRho_n )            +        nphases * 1 * j, std::begin( dRdRho_n )            +        nphases * 1 * ( j + 1 ),
-                    std::begin( dRdU_n )              +        nphases * 3 * j, std::begin( dRdU_n )              +        nphases * 3 * ( j + 1 ),
-                    std::begin( dRdW_n )              +        nphases * 3 * j, std::begin( dRdW_n )              +        nphases * 3 * ( j + 1 ),
-                    std::begin( dRdTheta_n )          +        nphases * 1 * j, std::begin( dRdTheta_n )          +        nphases * 1 * ( j + 1 ),
-                    std::begin( dRdE_n )              +        nphases * 1 * j, std::begin( dRdE_n )              +        nphases * 1 * ( j + 1 ),
-                    std::begin( dRdZ_n )              + num_additional_dof * j, std::begin( dRdZ_n )              + num_additional_dof * ( j + 1 ),
-                    std::begin( dRdUMesh_n )          +                dim * j, std::begin( dRdUMesh_n )          +                dim * ( j + 1 )
-                );
+                if ( is_per_unit_volume ){
+                    tardigradeBalanceEquations::constraintEquations::computeInternalEnergyConstraint<3,9,num_dof>(
+                        e_tp1_p[ j ], density_tp1_p[ j ],
+                        std::cbegin( material_response ) + material_response_size * j,
+                        std::cbegin( material_response ) + material_response_size * ( j + 1 ),
+                        std::cbegin( material_response_jacobian ) + material_response_size * dof_vector_size * j,
+                        std::cbegin( material_response_jacobian ) + material_response_size * dof_vector_size * ( j + 1 ),
+                        Ns[ i ],
+                        Ns[ k ], std::begin( dNdx ) + 3 * k, std::begin( dNdx ) + 3 * ( k + 1 ),
+                        std::cbegin( dof_vector ) + ( nphases * num_phase_dof + num_additional_dof ),       std::cend( dof_vector ),
+                        dUDotdU,
+                        j,
+                        *( std::begin( value_n ) + nphases * i + j ),
+                        std::begin( dRdRho_n )            +        nphases * 1 * j, std::begin( dRdRho_n )            +        nphases * 1 * ( j + 1 ),
+                        std::begin( dRdU_n )              +        nphases * 3 * j, std::begin( dRdU_n )              +        nphases * 3 * ( j + 1 ),
+                        std::begin( dRdW_n )              +        nphases * 3 * j, std::begin( dRdW_n )              +        nphases * 3 * ( j + 1 ),
+                        std::begin( dRdTheta_n )          +        nphases * 1 * j, std::begin( dRdTheta_n )          +        nphases * 1 * ( j + 1 ),
+                        std::begin( dRdE_n )              +        nphases * 1 * j, std::begin( dRdE_n )              +        nphases * 1 * ( j + 1 ),
+                        std::begin( dRdZ_n )              + num_additional_dof * j, std::begin( dRdZ_n )              + num_additional_dof * ( j + 1 ),
+                        std::begin( dRdUMesh_n )          +                dim * j, std::begin( dRdUMesh_n )          +                dim * ( j + 1 )
+                    );
+                }
+                else{
+                    tardigradeBalanceEquations::constraintEquations::computeInternalEnergyConstraint<3,9,num_dof>(
+                        e_tp1_p[ j ],
+                        std::cbegin( material_response ) + material_response_size * j,
+                        std::cbegin( material_response ) + material_response_size * ( j + 1 ),
+                        std::cbegin( material_response_jacobian ) + material_response_size * dof_vector_size * j,
+                        std::cbegin( material_response_jacobian ) + material_response_size * dof_vector_size * ( j + 1 ),
+                        Ns[ i ],
+                        Ns[ k ], std::begin( dNdx ) + 3 * k, std::begin( dNdx ) + 3 * ( k + 1 ),
+                        std::cbegin( dof_vector ) + ( nphases * num_phase_dof + num_additional_dof ),       std::cend( dof_vector ),
+                        dUDotdU,
+                        j,
+                        *( std::begin( value_n ) + nphases * i + j ),
+                        std::begin( dRdRho_n )            +        nphases * 1 * j, std::begin( dRdRho_n )            +        nphases * 1 * ( j + 1 ),
+                        std::begin( dRdU_n )              +        nphases * 3 * j, std::begin( dRdU_n )              +        nphases * 3 * ( j + 1 ),
+                        std::begin( dRdW_n )              +        nphases * 3 * j, std::begin( dRdW_n )              +        nphases * 3 * ( j + 1 ),
+                        std::begin( dRdTheta_n )          +        nphases * 1 * j, std::begin( dRdTheta_n )          +        nphases * 1 * ( j + 1 ),
+                        std::begin( dRdE_n )              +        nphases * 1 * j, std::begin( dRdE_n )              +        nphases * 1 * ( j + 1 ),
+                        std::begin( dRdZ_n )              + num_additional_dof * j, std::begin( dRdZ_n )              + num_additional_dof * ( j + 1 ),
+                        std::begin( dRdUMesh_n )          +                dim * j, std::begin( dRdUMesh_n )          +                dim * ( j + 1 )
+                    );
+                }
 
                 std::transform(
                     std::begin( value_n ) + nphases * i + j,
@@ -1350,24 +1421,47 @@ void evaluate_at_nodes(
             }
             else{
 
-                tardigradeBalanceEquations::constraintEquations::computeInternalEnergyConstraint<3,9,num_dof>(
-                    std::cbegin( e_tp1_p ),              std::cend( e_tp1_p ),
-                    std::cbegin( material_response ),    std::cend( material_response ),
-                    std::cbegin( material_response_jacobian ),
-                    std::cend( material_response_jacobian ),
-                    Ns[ i ],
-                    Ns[ k ], std::begin( dNdx ) + 3 * k, std::begin( dNdx ) + 3 * ( k + 1 ),
-                    std::cbegin( dof_vector ) + ( nphases * num_phase_dof + num_additional_dof ),       std::cend( dof_vector ),
-                    dUDotdU,
-                    std::begin( value_n ) + nphases * i, std::begin( value_n ) + nphases * ( i + 1 ),
-                    std::begin( dRdRho_n )             , std::end( dRdRho_n )                       ,
-                    std::begin( dRdU_n )               , std::end( dRdU_n )                         ,
-                    std::begin( dRdW_n )               , std::end( dRdW_n )                         ,
-                    std::begin( dRdTheta_n )           , std::end( dRdTheta_n )                     ,
-                    std::begin( dRdE_n )               , std::end( dRdE_n )                         ,
-                    std::begin( dRdZ_n )               , std::end( dRdZ_n )                         ,
-                    std::begin( dRdUMesh_n )           , std::end( dRdUMesh_n )
-                );
+                if ( is_per_unit_volume ){
+                    tardigradeBalanceEquations::constraintEquations::computeInternalEnergyConstraint<3,9,num_dof>(
+                        std::cbegin( e_tp1_p ),              std::cend( e_tp1_p ),
+                        std::cbegin( density_tp1_p ),        std::cend( density_tp1_p ),
+                        std::cbegin( material_response ),    std::cend( material_response ),
+                        std::cbegin( material_response_jacobian ),
+                        std::cend( material_response_jacobian ),
+                        Ns[ i ],
+                        Ns[ k ], std::begin( dNdx ) + 3 * k, std::begin( dNdx ) + 3 * ( k + 1 ),
+                        std::cbegin( dof_vector ) + ( nphases * num_phase_dof + num_additional_dof ),       std::cend( dof_vector ),
+                        dUDotdU,
+                        std::begin( value_n ) + nphases * i, std::begin( value_n ) + nphases * ( i + 1 ),
+                        std::begin( dRdRho_n )             , std::end( dRdRho_n )                       ,
+                        std::begin( dRdU_n )               , std::end( dRdU_n )                         ,
+                        std::begin( dRdW_n )               , std::end( dRdW_n )                         ,
+                        std::begin( dRdTheta_n )           , std::end( dRdTheta_n )                     ,
+                        std::begin( dRdE_n )               , std::end( dRdE_n )                         ,
+                        std::begin( dRdZ_n )               , std::end( dRdZ_n )                         ,
+                        std::begin( dRdUMesh_n )           , std::end( dRdUMesh_n )
+                    );
+                }
+                else{
+                    tardigradeBalanceEquations::constraintEquations::computeInternalEnergyConstraint<3,9,num_dof>(
+                        std::cbegin( e_tp1_p ),              std::cend( e_tp1_p ),
+                        std::cbegin( material_response ),    std::cend( material_response ),
+                        std::cbegin( material_response_jacobian ),
+                        std::cend( material_response_jacobian ),
+                        Ns[ i ],
+                        Ns[ k ], std::begin( dNdx ) + 3 * k, std::begin( dNdx ) + 3 * ( k + 1 ),
+                        std::cbegin( dof_vector ) + ( nphases * num_phase_dof + num_additional_dof ),       std::cend( dof_vector ),
+                        dUDotdU,
+                        std::begin( value_n ) + nphases * i, std::begin( value_n ) + nphases * ( i + 1 ),
+                        std::begin( dRdRho_n )             , std::end( dRdRho_n )                       ,
+                        std::begin( dRdU_n )               , std::end( dRdU_n )                         ,
+                        std::begin( dRdW_n )               , std::end( dRdW_n )                         ,
+                        std::begin( dRdTheta_n )           , std::end( dRdTheta_n )                     ,
+                        std::begin( dRdE_n )               , std::end( dRdE_n )                         ,
+                        std::begin( dRdZ_n )               , std::end( dRdZ_n )                         ,
+                        std::begin( dRdUMesh_n )           , std::end( dRdUMesh_n )
+                    );
+                }
 
                 std::transform(
                     std::begin( value_n ) + nphases * i,
@@ -1462,6 +1556,8 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint, * boost::unit_test::
 
     constexpr unsigned int num_additional_dof = 5;
 
+    constexpr bool is_per_unit_volume = false;
+
     std::array< floatType, 8 * nphases > density_t = {
         0.20763586, 0.29248941, 0.52001015, 0.90191137, 0.98363088,
         0.25754206, 0.56435904, 0.80696868, 0.39437005, 0.73107304,
@@ -1720,7 +1816,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint, * boost::unit_test::
     };
     std::array< floatType, 8 * nphases > result;
 
-    evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+    evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
         std::cbegin( local_point ),   std::cend( local_point ),
         dt,
         std::cbegin( density_t ),             std::cend( density_t ),
@@ -1770,7 +1866,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint, * boost::unit_test::
 
     std::fill( std::begin( result ), std::end( result ), 0 );
 
-    evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+    evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
         std::cbegin( local_point ),   std::cend( local_point ),
         dt,
         std::cbegin( density_t ),             std::cend( density_t ),
@@ -1830,7 +1926,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint, * boost::unit_test::
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),             std::cend( density_t ),
@@ -1856,7 +1952,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint, * boost::unit_test::
                 active_phase
             );
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),             std::cend( density_t ),
@@ -1917,7 +2013,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint, * boost::unit_test::
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),             std::cend( density_t ),
@@ -1943,7 +2039,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint, * boost::unit_test::
                 active_phase
             );
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),             std::cend( density_t ),
@@ -2004,7 +2100,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint, * boost::unit_test::
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),             std::cend( density_t ),
@@ -2030,7 +2126,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint, * boost::unit_test::
                 active_phase
             );
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),             std::cend( density_t ),
@@ -2091,7 +2187,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint, * boost::unit_test::
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),             std::cend( density_t ),
@@ -2117,7 +2213,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint, * boost::unit_test::
                 active_phase
             );
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),             std::cend( density_t ),
@@ -2178,7 +2274,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint, * boost::unit_test::
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),             std::cend( density_t ),
@@ -2204,7 +2300,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint, * boost::unit_test::
                 active_phase
             );
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),             std::cend( density_t ),
@@ -2265,7 +2361,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint, * boost::unit_test::
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),             std::cend( density_t ),
@@ -2291,7 +2387,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint, * boost::unit_test::
                 active_phase
             );
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),             std::cend( density_t ),
@@ -2352,7 +2448,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint, * boost::unit_test::
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),             std::cend( density_t ),
@@ -2378,7 +2474,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint, * boost::unit_test::
                 active_phase
             );
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),             std::cend( density_t ),
@@ -2439,7 +2535,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint, * boost::unit_test::
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),             std::cend( density_t ),
@@ -2465,7 +2561,1065 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint, * boost::unit_test::
                 active_phase
             );
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+                std::cbegin( local_point ),   std::cend( local_point ),
+                dt,
+                std::cbegin( density_t ),             std::cend( density_t ),
+                std::cbegin( density_tp1 ),           std::cend( density_tp1 ),
+                std::cbegin( u_t ),                   std::cend( u_t ),
+                std::cbegin( u_tp1 ),                 std::cend( u_tp1 ),
+                std::cbegin( w_t ),                   std::cend( w_t ),
+                std::cbegin( w_tp1 ),                 std::cend( w_tp1 ),
+                std::cbegin( theta_t ),               std::cend( theta_t ),
+                std::cbegin( theta_tp1 ),             std::cend( theta_tp1 ),
+                std::cbegin( e_t ),                   std::cend( e_t ),
+                std::cbegin( e_tp1 ),                 std::cend( e_tp1 ),
+                std::cbegin( z_t ),                   std::cend( z_t ),
+                std::cbegin( z_tp1 ),                 std::cend( z_tp1 ),
+                std::cbegin( vf_t ),                  std::cend( vf_t ),
+                std::cbegin( vf_tp1 ),                std::cend( vf_tp1 ),
+                std::cbegin( umesh_t ),               std::cend( umesh_t ),
+                std::cbegin( xm ),                    std::cend( xm ),
+                std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+                std::cbegin( X ),                     std::cend( X ),
+                alpha, beta,
+                std::begin( vm ),  std::end( vm ),
+                active_phase
+            );
+
+            for ( unsigned int j = 0; j < outdim; ++j ){
+
+                const unsigned int node = j / ( nphases );
+                const unsigned int phase = ( j - nphases * node );
+
+                if ( phase == active_phase ){
+
+                    BOOST_TEST( dRdUMesh[ vardim * j + i ] == ( vp[ j ] - vm[ j ] ) / ( 2 * delta ) );
+
+                }
+
+            }
+
+        }
+
+    }
+
+}
+
+BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint2, * boost::unit_test::tolerance( 1e-5 ) ){
+
+    constexpr unsigned int nphases = 4;
+
+    constexpr unsigned int active_phase = 2;
+
+    constexpr unsigned int num_additional_dof = 5;
+
+    constexpr bool is_per_unit_volume = true;
+
+    std::array< floatType, 8 * nphases > density_t = {
+        0.20763586, 0.29248941, 0.52001015, 0.90191137, 0.98363088,
+        0.25754206, 0.56435904, 0.80696868, 0.39437005, 0.73107304,
+        0.16106901, 0.60069857, 0.86586446, 0.98352161, 0.07936579,
+        0.42834727, 0.20454286, 0.45063649, 0.54776357, 0.09332671,
+        0.29686078, 0.92758424, 0.56900373, 0.457412  , 0.75352599,
+        0.74186215, 0.04857903, 0.7086974 , 0.83924335, 0.16593788,
+        0.78099794, 0.28653662
+    };
+
+    std::array< floatType, 8 * nphases > density_tp1 = {
+        0.30646975, 0.66526147, 0.11139217, 0.66487245, 0.88785679,
+        0.69631127, 0.44032788, 0.43821438, 0.7650961 , 0.565642  ,
+        0.08490416, 0.58267109, 0.8148437 , 0.33706638, 0.92757658,
+        0.750717  , 0.57406383, 0.75164399, 0.07914896, 0.85938908,
+        0.82150411, 0.90987166, 0.1286312 , 0.08178009, 0.13841557,
+        0.39937871, 0.42430686, 0.56221838, 0.12224355, 0.2013995 ,
+        0.81164435, 0.46798757
+    };
+
+    std::array< floatType, 24 * nphases > u_t = {
+         0.8638643 ,  0.16435092, -0.58780855,  0.43551512, -0.2420283 ,
+         0.33676789, -0.94136055,  0.27180072, -0.93560413,  0.48956131,
+        -0.054174  , -0.75649129,  0.08527185, -0.86645111,  0.30672974,
+         0.99217265,  0.53879467,  0.14754823, -0.79472948,  0.39966815,
+         0.32233573, -0.90180574,  0.5845986 ,  0.03743318, -0.14826461,
+         0.57637435, -0.17686155, -0.03794745, -0.63674231, -0.3573622 ,
+         0.69106599, -0.6261925 , -0.16541788,  0.97806901, -0.52680038,
+         0.83366467,  0.83679494, -0.81740732, -0.07269455,  0.00443267,
+        -0.3726621 , -0.90532093, -0.51662873, -0.80894072, -0.52350019,
+         0.61558217,  0.78995658, -0.91355422, -0.39610633,  0.9611644 ,
+         0.07900965,  0.25261872, -0.98890918, -0.03018111,  0.97665707,
+        -0.24962895, -0.80592368, -0.07618248,  0.92600893, -0.31633877,
+         0.59784547,  0.59769266, -0.58350341, -0.1132646 ,  0.43120255,
+        -0.17896043, -0.61798609,  0.93498861,  0.30150073,  0.7309197 ,
+        -0.94951528, -0.46618837,  0.0041422 , -0.86510273,  0.98606652,
+        -0.52707521, -0.25141564, -0.57197617, -0.78910827, -0.53504043,
+        -0.39877973,  0.26888454, -0.43753044, -0.27544648, -0.98811431,
+        -0.26856175,  0.06777196, -0.67596833,  0.19486622, -0.41369506,
+         0.26410099, -0.94760679,  0.77518692, -0.96776274, -0.74608394,
+         0.55432492
+    };
+
+    std::array< floatType, 24 * nphases > u_tp1 = {
+        -0.90820954,  0.42199739,  0.94209228,  0.74336587,  0.4203233 ,
+         0.91701949, -0.14037332,  0.74575783, -0.28808466,  0.85952731,
+        -0.70244469,  0.88005803,  0.66543239,  0.69210968, -0.75215398,
+         0.1929738 , -0.96721504,  0.44236873, -0.98452497, -0.83035545,
+        -0.54900318,  0.75024907, -0.27284736,  0.07991987,  0.13620643,
+        -0.54907328,  0.14429354,  0.32190359, -0.40350921, -0.16274628,
+        -0.09382215,  0.86470132,  0.17498749,  0.89650474,  0.11206951,
+         0.00112284, -0.99293558, -0.03822191,  0.85491   , -0.60326862,
+        -0.89581773, -0.18644221, -0.25520704,  0.71430612, -0.94677777,
+         0.84029846,  0.361806  ,  0.80845199,  0.21505814,  0.62390662,
+        -0.32891225, -0.30086754, -0.22025154,  0.50959416, -0.26141765,
+        -0.51556039,  0.87533671,  0.81602217, -0.30240537,  0.26927614,
+        -0.45231558, -0.58776974, -0.32732094, -0.34580021,  0.7645522 ,
+         0.64460763,  0.41924646,  0.91869045, -0.15491329, -0.50993392,
+        -0.76520313, -0.39789328, -0.70947253, -0.81562781,  0.20586439,
+        -0.2716251 ,  0.12914069, -0.61732856,  0.35381172, -0.56898911,
+        -0.44395281,  0.48352084,  0.11947579, -0.33032717,  0.08597757,
+         0.38796941,  0.82426424,  0.16142643, -0.53462724,  0.49339526,
+         0.55553804, -0.59919737,  0.64114844, -0.07013029,  0.55953332,
+        -0.52504356
+    };
+
+    std::array< floatType, 24 * nphases > w_t = {
+        -0.03348395,  0.09073942,  0.03156301,  0.05457557,  0.03767487,
+        -0.05913918, -0.00586225,  0.06179277,  0.03500703, -0.09879442,
+        -0.08251845, -0.03064106,  0.08887311, -0.0017619 , -0.04596475,
+        -0.02791526, -0.05786947, -0.01575999, -0.05639291,  0.0691505 ,
+        -0.00874588, -0.0440396 ,  0.08657833, -0.03712973,  0.08194293,
+        -0.09131638,  0.04142301, -0.00322219, -0.01115579, -0.09273533,
+        -0.09186336, -0.03344928,  0.08942391,  0.023532  , -0.02622503,
+         0.02239541, -0.05877369, -0.06698671, -0.02763655,  0.07267067,
+         0.00188035, -0.0406197 ,  0.09005033,  0.06319322, -0.03540521,
+         0.09441965,  0.09747022, -0.01826797,  0.03118462, -0.01886936,
+        -0.04853038, -0.08346946, -0.04727793, -0.04570403, -0.02027218,
+        -0.06302279,  0.09076368, -0.07942402,  0.02504171, -0.01166052,
+        -0.01529639, -0.02560164,  0.07366294, -0.0439046 , -0.09588477,
+         0.0836194 ,  0.07289606, -0.04461964,  0.00469751, -0.07818236,
+        -0.08131459,  0.06749322, -0.01794686,  0.03234331,  0.08864011,
+        -0.05097388, -0.09736803, -0.09517032,  0.04187714,  0.08491038,
+        -0.00653395, -0.02497817,  0.00857208,  0.07178337,  0.03043077,
+        -0.05340402,  0.05491604, -0.0730773 , -0.06688801,  0.02253646,
+        -0.05224332,  0.04095571, -0.03009629, -0.04451521,  0.09978368,
+        -0.09187678
+    };
+
+    std::array< floatType, 24 * nphases > w_tp1 = {
+         0.0291645 , -0.09226008,  0.05204205, -0.05398201, -0.08203363,
+         0.02968994,  0.04652024,  0.03561906, -0.08961981, -0.04113861,
+        -0.00978233, -0.04257934,  0.06210269, -0.07377698,  0.02243587,
+         0.09764299,  0.08051131, -0.05556859, -0.09998362,  0.09611947,
+         0.0765426 ,  0.08389449, -0.01689929,  0.04892309, -0.0574337 ,
+        -0.02153919,  0.07030961, -0.07447756,  0.07877307, -0.00069841,
+        -0.01478087, -0.03887072,  0.08336976,  0.00352469,  0.06080527,
+         0.07153036,  0.08447647, -0.03932385, -0.03203783,  0.01901478,
+        -0.01173517,  0.08656851, -0.02048719, -0.00444439,  0.02343722,
+        -0.0190521 ,  0.09849569, -0.08022974, -0.05587934, -0.03546897,
+        -0.07045543, -0.04315615,  0.05584906,  0.0045784 , -0.09320927,
+         0.09652452,  0.0232013 , -0.0882121 ,  0.03223375, -0.02432613,
+        -0.07286534,  0.01273292,  0.04541599,  0.03422532, -0.05049737,
+         0.00497324,  0.00753269,  0.04336067, -0.02802653,  0.05954652,
+         0.02558437, -0.09233368,  0.0092958 ,  0.07238242,  0.01351483,
+        -0.06483435,  0.00207527,  0.05138917, -0.07797896,  0.06341982,
+        -0.06650367,  0.0068153 , -0.0228513 , -0.05027525,  0.0294865 ,
+        -0.09252158,  0.05200916,  0.00538813,  0.07515424,  0.00414366,
+        -0.09299337, -0.07127981,  0.05912092, -0.00160479, -0.01162415,
+        -0.03631304
+    };
+
+    std::array< floatType, 8 * nphases > theta_t = {
+        -0.4309016 ,  0.93177262, -0.13406134,  0.76800607,  0.29632625,
+         0.71685529,  0.70489909,  0.91262406,  0.39588447,  0.61079387,
+         0.46625579,  0.21045367,  0.43470827,  0.43150082, -0.91818441,
+         0.03222167,  0.58530272, -0.51407563, -0.06970403, -0.13002858,
+        -0.19442566, -0.75632094,  0.05142308, -0.10750327,  0.32678551,
+         0.09882612, -0.94491414, -0.93616402,  0.4027196 ,  0.41516224,
+         0.91987827,  0.75340936
+    };
+
+    std::array< floatType, 8 * nphases > theta_tp1 = {
+        -0.06388067,  0.25181302, -0.08563654, -0.55410753, -0.24664601,
+        -0.79223154,  0.33305424, -0.61593971, -0.04906443,  0.93487321,
+        -0.93666214, -0.6965401 , -0.40284163,  0.88361393,  0.81768359,
+        -0.67599832,  0.96223555,  0.50149505,  0.07995417,  0.86340577,
+         0.76121428, -0.21736701,  0.31268639,  0.29477029, -0.34606363,
+        -0.64121965, -0.06638025, -0.47343793, -0.28986975,  0.90828794,
+        -0.07772426,  0.36978293
+    };
+
+    std::array< floatType, 8 * nphases > e_t = {
+        -0.32754021,  0.99172216,  0.31753521, -0.60798107, -0.803632  ,
+         0.88636114,  0.88955566,  0.24265675, -0.966017  , -0.54893023,
+         0.60255357,  0.75091966, -0.09202037, -0.26895876, -0.45154998,
+        -0.76605897, -0.76851093,  0.9052054 ,  0.61725223, -0.67044128,
+        -0.5858999 ,  0.3111031 ,  0.52932843,  0.62062969, -0.67332462,
+         0.96825658, -0.54439587,  0.17883087,  0.17523151,  0.93472377,
+         0.31533489,  0.16980853
+    };
+
+    std::array< floatType, 8 * nphases > e_tp1 = {
+         0.03754516,  0.52931508, -0.78788948, -0.9958162 ,  0.90497774,
+        -0.00268464, -0.34332924, -0.26389348,  0.60768663, -0.23525958,
+         0.54033835, -0.119076  ,  0.68815493, -0.84759187, -0.03774334,
+        -0.06630058, -0.47134404,  0.88722949,  0.81005692, -0.1128074 ,
+        -0.80568079, -0.5864337 , -0.45701633, -0.03156045, -0.32324578,
+         0.54827214, -0.04794678,  0.74074101,  0.9915635 , -0.5603281 ,
+         0.22334275,  0.69500462
+    };
+
+    std::array< floatType, 8 * num_additional_dof > z_t = {
+         0.89047327, -0.41982715,  0.45408549, -0.9699677 ,  0.75828488,
+        -0.8721229 ,  0.4667908 ,  0.98922077,  0.00237956, -0.58133202,
+         0.18928717,  0.24829996,  0.33614547, -0.65477652,  0.79742538,
+         0.24198274, -0.91286259,  0.36808213, -0.60783191, -0.94531844,
+         0.10190655,  0.62662728,  0.7198823 , -0.79295815,  0.32608557,
+         0.42015045, -0.41096601,  0.942728  , -0.44262506, -0.86003562,
+         0.03856072,  0.38862977, -0.51068043, -0.3228356 ,  0.12725597,
+         0.77335633,  0.49465181, -0.58081608, -0.49644586,  0.04776138
+    };
+
+    std::array< floatType, 8 * num_additional_dof > z_tp1 = {
+         0.53791739,  0.23752356,  0.00264853,  0.19425068,  0.51212006,
+         0.07415959,  0.79550549,  0.89413498,  0.83070901,  0.50903668,
+        -0.50735799, -0.22945711, -0.4400001 ,  0.31532048, -0.35155675,
+         0.50878321, -0.77298184,  0.55072953,  0.17180395,  0.67077737,
+        -0.1382487 ,  0.24992891,  0.10882426,  0.95134253,  0.51094878,
+         0.0896265 , -0.65193582,  0.80822843, -0.58832443,  0.30008651,
+         0.87294371, -0.55284074, -0.54815292,  0.70363782,  0.65531005,
+        -0.29659329, -0.46980742, -0.74522306,  0.97587221,  0.6706862 
+    };
+
+    std::array< floatType, 8 * nphases > vf_t = {
+        0.8993916 , 0.51367933, 0.11438483, 0.05258034, 0.3305821 ,
+        0.92033043, 0.94758184, 0.84116387, 0.15867914, 0.41992317,
+        0.24624292, 0.20534977, 0.68482585, 0.48611167, 0.32490964,
+        0.10021446, 0.54476337, 0.34702515, 0.39109581, 0.31050874,
+        0.3871952 , 0.55585958, 0.01414381, 0.847647  , 0.92191986,
+        0.55052969, 0.26802112, 0.990239  , 0.38319403, 0.69365539,
+        0.68995255, 0.43430906
+    };
+
+    std::array< floatType, 8 * nphases> vf_tp1 = {
+        0.19915816, 0.96657938, 0.06369086, 0.48514939, 0.22073071,
+        0.29397413, 0.82852732, 0.36726556, 0.08334827, 0.19630901,
+        0.86037341, 0.97702885, 0.26798216, 0.67540899, 0.081199  ,
+        0.72346559, 0.41643661, 0.91815992, 0.31153617, 0.941467  ,
+        0.50324743, 0.34889292, 0.6470196 , 0.2497462 , 0.2297636 ,
+        0.19634644, 0.95989956, 0.49291373, 0.75161496, 0.47399188,
+        0.58754016, 0.58413898
+    };
+
+    std::array< floatType, 24 > umesh_t = {
+        0.53182759, 0.63440096, 0.84943179, 0.51044152, 0.65634786,
+        0.86791477, 0.48312667, 0.6486585 , 0.86600796, 0.50451273,
+        0.6267116 , 0.84752498, 0.53695906, 0.68247738, 0.83864355,
+        0.515573  , 0.70442428, 0.85712652, 0.48825814, 0.69673492,
+        0.85521971, 0.50964421, 0.67478802, 0.83673674
+    };
+
+    std::array< floatType, 24 > umesh_tp1 = {
+        0.72445532, 0.61102351, 0.72244338, 0.70877313, 0.5669913 ,
+        0.69069256, 0.7316781 , 0.55679573, 0.65823773, 0.7473603 ,
+        0.60082794, 0.68998856, 0.71831255, 0.63482305, 0.72559852,
+        0.70263035, 0.59079084, 0.69384769, 0.72553532, 0.58059527,
+        0.66139287, 0.74121752, 0.62462748, 0.6931437 
+    };
+
+    std::array< floatType, 24 * nphases > u_dot_t = {
+        -0.35408217, -0.27642269, -0.54347354, -0.41257191,  0.26195225,
+        -0.81579012, -0.13259765, -0.13827447, -0.0126298 , -0.14833942,
+        -0.37547755, -0.14729739,  0.78677833,  0.88832004,  0.00367335,
+         0.2479059 , -0.76876321, -0.36542904, -0.17034758,  0.73261832,
+        -0.49908927, -0.03393147,  0.97111957,  0.03897024,  0.22578905,
+        -0.75874267,  0.6526816 ,  0.20612026,  0.09013601, -0.31447233,
+        -0.39175842, -0.16595558,  0.36260153,  0.75091368,  0.02084467,
+         0.33862757,  0.17187311,  0.249807  ,  0.3493781 ,  0.68468488,
+        -0.83361002,  0.52736568, -0.51266725, -0.61155408,  0.14491391,
+        -0.80857497,  0.77065365,  0.25449794,  0.44683272, -0.96774159,
+         0.18886376,  0.11357038, -0.68208071, -0.69385897,  0.39105906,
+        -0.36246715,  0.38394059,  0.1087665 , -0.22209885,  0.85026498,
+         0.68333999, -0.28520487, -0.91281707, -0.39046385, -0.20362864,
+         0.40991766,  0.99071696, -0.28817027,  0.52509563,  0.18635383,
+         0.3834036 , -0.6977451 , -0.20224741, -0.5182882 , -0.31308797,
+         0.02625631,  0.3332491 , -0.78818303, -0.7382101 , -0.35603879,
+         0.32312867,  0.69301245,  0.10651469,  0.70890498, -0.23032438,
+        -0.36642421, -0.29147065, -0.65783634,  0.65822527, -0.32265831,
+         0.10474015,  0.15710294,  0.04306612, -0.99462387,  0.97669084,
+         0.81068315
+    };
+
+    std::array< floatType, 24 > X = {
+        0., 0., 0., 1., 0., 0., 1., 1., 0., 0., 1., 0., 0., 0., 1., 1., 0.,
+       1., 1., 1., 1., 0., 1., 1.
+    };
+
+    std::array< floatType, 3 > local_point = {
+         0.61587642, -0.98514724,  0.10318545
+    };
+
+    floatType dt = 1.3929383711957233;
+
+    floatType alpha = 0.56;
+
+    floatType beta = 0.67;
+
+    std::array< floatType, 8 * nphases > answer = {
+        +1.779151954e-02, +1.724462564e-02, +7.778485853e-03, +8.930603611e-03, +7.484283263e-02, +7.254223718e-02,
+        +3.272142739e-02, +3.756799243e-02, +5.599697538e-04, +5.427568315e-04, +2.448198310e-04, +2.810815509e-04,
+        +1.331151223e-04, +1.290232937e-04, +5.819818218e-05, +6.681826075e-05, +2.188562348e-02, +2.121288082e-02,
+        +9.568435804e-03, +1.098567369e-02, +9.206532646e-02, +8.923532841e-02, +4.025113413e-02, +4.621296877e-02,
+        +6.888274586e-04, +6.676535765e-04, +3.011566623e-04, +3.457627650e-04, +1.637469716e-04, +1.587135499e-04,
+        +7.159048440e-05, +8.219417643e-05
+    };
+    std::array< floatType, 8 * nphases > result;
+
+    evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+        std::cbegin( local_point ),   std::cend( local_point ),
+        dt,
+        std::cbegin( density_t ),             std::cend( density_t ),
+        std::cbegin( density_tp1 ),           std::cend( density_tp1 ),
+        std::cbegin( u_t ),                   std::cend( u_t ),
+        std::cbegin( u_tp1 ),                 std::cend( u_tp1 ),
+        std::cbegin( w_t ),                   std::cend( w_t ),
+        std::cbegin( w_tp1 ),                 std::cend( w_tp1 ),
+        std::cbegin( theta_t ),               std::cend( theta_t ),
+        std::cbegin( theta_tp1 ),             std::cend( theta_tp1 ),
+        std::cbegin( e_t ),                   std::cend( e_t ),
+        std::cbegin( e_tp1 ),                 std::cend( e_tp1 ),
+        std::cbegin( z_t ),                   std::cend( z_t ),
+        std::cbegin( z_tp1 ),                 std::cend( z_tp1 ),
+        std::cbegin( vf_t ),                  std::cend( vf_t ),
+        std::cbegin( vf_tp1 ),                std::cend( vf_tp1 ),
+        std::cbegin( umesh_t ),               std::cend( umesh_t ),
+        std::cbegin( umesh_tp1 ),             std::cend( umesh_tp1 ),
+        std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+        std::cbegin( X ),                     std::cend( X ),
+        alpha, beta,
+        std::begin( result ),  std::end( result ),
+        active_phase
+    );
+
+    for ( unsigned int i = 0; i < 8; ++i ){
+
+            BOOST_TEST( result[ nphases * i + active_phase ] == answer[ nphases * i + active_phase ] );
+
+    }
+
+    std::array< floatType, 8 * 1 * nphases * 8 * nphases * 1 > dRdRho;
+
+    std::array< floatType, 8 * 1 * nphases * 8 * nphases * 3 > dRdU;
+
+    std::array< floatType, 8 * 1 * nphases * 8 * nphases * 3 > dRdW;
+
+    std::array< floatType, 8 * 1 * nphases * 8 * nphases * 1 > dRdTheta;
+
+    std::array< floatType, 8 * 1 * nphases * 8 * nphases * 1 > dRdE;
+
+    std::array< floatType, 8 * 1 * nphases * 8 * nphases * num_additional_dof > dRdZ;
+
+    std::array< floatType, 8 * 1 * nphases * 8 * nphases * 1 > dRdVF;
+
+    std::array< floatType, 8 * 1 * nphases * 8 * 3 > dRdUMesh;
+
+    std::fill( std::begin( result ), std::end( result ), 0 );
+
+    evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+        std::cbegin( local_point ),   std::cend( local_point ),
+        dt,
+        std::cbegin( density_t ),             std::cend( density_t ),
+        std::cbegin( density_tp1 ),           std::cend( density_tp1 ),
+        std::cbegin( u_t ),                   std::cend( u_t ),
+        std::cbegin( u_tp1 ),                 std::cend( u_tp1 ),
+        std::cbegin( w_t ),                   std::cend( w_t ),
+        std::cbegin( w_tp1 ),                 std::cend( w_tp1 ),
+        std::cbegin( theta_t ),               std::cend( theta_t ),
+        std::cbegin( theta_tp1 ),             std::cend( theta_tp1 ),
+        std::cbegin( e_t ),                   std::cend( e_t ),
+        std::cbegin( e_tp1 ),                 std::cend( e_tp1 ),
+        std::cbegin( z_t ),                   std::cend( z_t ),
+        std::cbegin( z_tp1 ),                 std::cend( z_tp1 ),
+        std::cbegin( vf_t ),                  std::cend( vf_t ),
+        std::cbegin( vf_tp1 ),                std::cend( vf_tp1 ),
+        std::cbegin( umesh_t ),               std::cend( umesh_t ),
+        std::cbegin( umesh_tp1 ),             std::cend( umesh_tp1 ),
+        std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+        std::cbegin( X ),                     std::cend( X ),
+        alpha, beta,
+        std::begin( result ),  std::end( result ),
+        std::begin(   dRdRho ), std::end(   dRdRho ),
+        std::begin(     dRdU ), std::end(     dRdU ),
+        std::begin(     dRdW ), std::end(     dRdW ),
+        std::begin( dRdTheta ), std::end( dRdTheta ),
+        std::begin(     dRdE ), std::end(     dRdE ),
+        std::begin(     dRdZ ), std::end(     dRdZ ),
+        std::begin(    dRdVF ), std::end(    dRdVF ),
+        std::begin( dRdUMesh ), std::end( dRdUMesh ),
+        active_phase
+    );
+
+    for ( unsigned int i = 0; i < 8; ++i ){
+
+            BOOST_TEST( result[ nphases * i + active_phase ] == answer[ nphases * i + active_phase ] );
+
+    }
+
+    const floatType eps = 1e-5;
+
+    // Check the derivatives w.r.t. the density
+    {
+
+        constexpr unsigned int vardim = 1 * nphases * 8;
+        constexpr unsigned int outdim = 1 * nphases * 8;
+
+        for ( unsigned int i = 0; i < vardim; ++i ){
+
+            floatType delta = eps * std::fabs( density_tp1[ i ] ) + eps;
+
+            std::array< floatType, vardim > xp = density_tp1;
+            std::array< floatType, vardim > xm = density_tp1;
+
+            xp[ i ] += delta;
+            xm[ i ] -= delta;
+
+            std::array< floatType, outdim > vp, vm;
+
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+                std::cbegin( local_point ),   std::cend( local_point ),
+                dt,
+                std::cbegin( density_t ),             std::cend( density_t ),
+                std::cbegin( xp ),                    std::cend( xp ),
+                std::cbegin( u_t ),                   std::cend( u_t ),
+                std::cbegin( u_tp1 ),                 std::cend( u_tp1 ),
+                std::cbegin( w_t ),                   std::cend( w_t ),
+                std::cbegin( w_tp1 ),                 std::cend( w_tp1 ),
+                std::cbegin( theta_t ),               std::cend( theta_t ),
+                std::cbegin( theta_tp1 ),             std::cend( theta_tp1 ),
+                std::cbegin( e_t ),                   std::cend( e_t ),
+                std::cbegin( e_tp1 ),                 std::cend( e_tp1 ),
+                std::cbegin( z_t ),                   std::cend( z_t ),
+                std::cbegin( z_tp1 ),                 std::cend( z_tp1 ),
+                std::cbegin( vf_t ),                  std::cend( vf_t ),
+                std::cbegin( vf_tp1 ),                std::cend( vf_tp1 ),
+                std::cbegin( umesh_t ),               std::cend( umesh_t ),
+                std::cbegin( umesh_tp1 ),             std::cend( umesh_tp1 ),
+                std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+                std::cbegin( X ),                     std::cend( X ),
+                alpha, beta,
+                std::begin( vp ),  std::end( vp ),
+                active_phase
+            );
+
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+                std::cbegin( local_point ),   std::cend( local_point ),
+                dt,
+                std::cbegin( density_t ),             std::cend( density_t ),
+                std::cbegin( xm ),                    std::cend( xm ),
+                std::cbegin( u_t ),                   std::cend( u_t ),
+                std::cbegin( u_tp1 ),                 std::cend( u_tp1 ),
+                std::cbegin( w_t ),                   std::cend( w_t ),
+                std::cbegin( w_tp1 ),                 std::cend( w_tp1 ),
+                std::cbegin( theta_t ),               std::cend( theta_t ),
+                std::cbegin( theta_tp1 ),             std::cend( theta_tp1 ),
+                std::cbegin( e_t ),                   std::cend( e_t ),
+                std::cbegin( e_tp1 ),                 std::cend( e_tp1 ),
+                std::cbegin( z_t ),                   std::cend( z_t ),
+                std::cbegin( z_tp1 ),                 std::cend( z_tp1 ),
+                std::cbegin( vf_t ),                  std::cend( vf_t ),
+                std::cbegin( vf_tp1 ),                std::cend( vf_tp1 ),
+                std::cbegin( umesh_t ),               std::cend( umesh_t ),
+                std::cbegin( umesh_tp1 ),             std::cend( umesh_tp1 ),
+                std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+                std::cbegin( X ),                     std::cend( X ),
+                alpha, beta,
+                std::begin( vm ),  std::end( vm ),
+                active_phase
+            );
+
+            for ( unsigned int j = 0; j < outdim; ++j ){
+
+                const unsigned int node = j / ( nphases );
+                const unsigned int phase = ( j - nphases * node );
+
+                if ( phase == active_phase ){
+
+                    BOOST_TEST( dRdRho[ vardim * j + i ] == ( vp[ j ] - vm[ j ] ) / ( 2 * delta ) );
+
+                }
+
+            }
+
+        }
+
+    }
+
+    // Check the derivatives w.r.t. the velocity
+    {
+
+        constexpr unsigned int vardim = 3 * nphases * 8;
+        constexpr unsigned int outdim = 1 * nphases * 8;
+
+        for ( unsigned int i = 0; i < vardim; ++i ){
+
+            floatType delta = eps * std::fabs( u_tp1[ i ] ) + eps;
+
+            std::array< floatType, vardim > xp = u_tp1;
+            std::array< floatType, vardim > xm = u_tp1;
+
+            xp[ i ] += delta;
+            xm[ i ] -= delta;
+
+            std::array< floatType, outdim > vp, vm;
+
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+                std::cbegin( local_point ),   std::cend( local_point ),
+                dt,
+                std::cbegin( density_t ),             std::cend( density_t ),
+                std::cbegin( density_tp1 ),           std::cend( density_tp1 ),
+                std::cbegin( u_t ),                   std::cend( u_t ),
+                std::cbegin( xp ),                    std::cend( xp ),
+                std::cbegin( w_t ),                   std::cend( w_t ),
+                std::cbegin( w_tp1 ),                 std::cend( w_tp1 ),
+                std::cbegin( theta_t ),               std::cend( theta_t ),
+                std::cbegin( theta_tp1 ),             std::cend( theta_tp1 ),
+                std::cbegin( e_t ),                   std::cend( e_t ),
+                std::cbegin( e_tp1 ),                 std::cend( e_tp1 ),
+                std::cbegin( z_t ),                   std::cend( z_t ),
+                std::cbegin( z_tp1 ),                 std::cend( z_tp1 ),
+                std::cbegin( vf_t ),                  std::cend( vf_t ),
+                std::cbegin( vf_tp1 ),                std::cend( vf_tp1 ),
+                std::cbegin( umesh_t ),               std::cend( umesh_t ),
+                std::cbegin( umesh_tp1 ),             std::cend( umesh_tp1 ),
+                std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+                std::cbegin( X ),                     std::cend( X ),
+                alpha, beta,
+                std::begin( vp ),  std::end( vp ),
+                active_phase
+            );
+
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+                std::cbegin( local_point ),   std::cend( local_point ),
+                dt,
+                std::cbegin( density_t ),             std::cend( density_t ),
+                std::cbegin( density_tp1 ),           std::cend( density_tp1 ),
+                std::cbegin( u_t ),                   std::cend( u_t ),
+                std::cbegin( xm ),                    std::cend( xm ),
+                std::cbegin( w_t ),                   std::cend( w_t ),
+                std::cbegin( w_tp1 ),                 std::cend( w_tp1 ),
+                std::cbegin( theta_t ),               std::cend( theta_t ),
+                std::cbegin( theta_tp1 ),             std::cend( theta_tp1 ),
+                std::cbegin( e_t ),                   std::cend( e_t ),
+                std::cbegin( e_tp1 ),                 std::cend( e_tp1 ),
+                std::cbegin( z_t ),                   std::cend( z_t ),
+                std::cbegin( z_tp1 ),                 std::cend( z_tp1 ),
+                std::cbegin( vf_t ),                  std::cend( vf_t ),
+                std::cbegin( vf_tp1 ),                std::cend( vf_tp1 ),
+                std::cbegin( umesh_t ),               std::cend( umesh_t ),
+                std::cbegin( umesh_tp1 ),             std::cend( umesh_tp1 ),
+                std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+                std::cbegin( X ),                     std::cend( X ),
+                alpha, beta,
+                std::begin( vm ),  std::end( vm ),
+                active_phase
+            );
+
+            for ( unsigned int j = 0; j < outdim; ++j ){
+
+                const unsigned int node = j / ( nphases );
+                const unsigned int phase = ( j - nphases * node );
+
+                if ( phase == active_phase ){
+
+                    BOOST_TEST( dRdU[ vardim * j + i ] == ( vp[ j ] - vm[ j ] ) / ( 2 * delta ) );
+
+                }
+
+            }
+
+        }
+
+    }
+
+    // Check the derivatives w.r.t. the displacement
+    {
+
+        constexpr unsigned int vardim = 3 * nphases * 8;
+        constexpr unsigned int outdim = 1 * nphases * 8;
+
+        for ( unsigned int i = 0; i < vardim; ++i ){
+
+            floatType delta = eps * std::fabs( w_tp1[ i ] ) + eps;
+
+            std::array< floatType, vardim > xp = w_tp1;
+            std::array< floatType, vardim > xm = w_tp1;
+
+            xp[ i ] += delta;
+            xm[ i ] -= delta;
+
+            std::array< floatType, outdim > vp, vm;
+
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+                std::cbegin( local_point ),   std::cend( local_point ),
+                dt,
+                std::cbegin( density_t ),             std::cend( density_t ),
+                std::cbegin( density_tp1 ),           std::cend( density_tp1 ),
+                std::cbegin( u_t ),                   std::cend( u_t ),
+                std::cbegin( u_tp1 ),                 std::cend( u_tp1 ),
+                std::cbegin( w_t ),                   std::cend( w_t ),
+                std::cbegin( xp ),                    std::cend( xp ),
+                std::cbegin( theta_t ),               std::cend( theta_t ),
+                std::cbegin( theta_tp1 ),             std::cend( theta_tp1 ),
+                std::cbegin( e_t ),                   std::cend( e_t ),
+                std::cbegin( e_tp1 ),                 std::cend( e_tp1 ),
+                std::cbegin( z_t ),                   std::cend( z_t ),
+                std::cbegin( z_tp1 ),                 std::cend( z_tp1 ),
+                std::cbegin( vf_t ),                  std::cend( vf_t ),
+                std::cbegin( vf_tp1 ),                std::cend( vf_tp1 ),
+                std::cbegin( umesh_t ),               std::cend( umesh_t ),
+                std::cbegin( umesh_tp1 ),             std::cend( umesh_tp1 ),
+                std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+                std::cbegin( X ),                     std::cend( X ),
+                alpha, beta,
+                std::begin( vp ),  std::end( vp ),
+                active_phase
+            );
+
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+                std::cbegin( local_point ),   std::cend( local_point ),
+                dt,
+                std::cbegin( density_t ),             std::cend( density_t ),
+                std::cbegin( density_tp1 ),           std::cend( density_tp1 ),
+                std::cbegin( u_t ),                   std::cend( u_t ),
+                std::cbegin( u_tp1 ),                 std::cend( u_tp1 ),
+                std::cbegin( w_t ),                   std::cend( w_t ),
+                std::cbegin( xm ),                    std::cend( xm ),
+                std::cbegin( theta_t ),               std::cend( theta_t ),
+                std::cbegin( theta_tp1 ),             std::cend( theta_tp1 ),
+                std::cbegin( e_t ),                   std::cend( e_t ),
+                std::cbegin( e_tp1 ),                 std::cend( e_tp1 ),
+                std::cbegin( z_t ),                   std::cend( z_t ),
+                std::cbegin( z_tp1 ),                 std::cend( z_tp1 ),
+                std::cbegin( vf_t ),                  std::cend( vf_t ),
+                std::cbegin( vf_tp1 ),                std::cend( vf_tp1 ),
+                std::cbegin( umesh_t ),               std::cend( umesh_t ),
+                std::cbegin( umesh_tp1 ),             std::cend( umesh_tp1 ),
+                std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+                std::cbegin( X ),                     std::cend( X ),
+                alpha, beta,
+                std::begin( vm ),  std::end( vm ),
+                active_phase
+            );
+
+            for ( unsigned int j = 0; j < outdim; ++j ){
+
+                const unsigned int node = j / ( nphases );
+                const unsigned int phase = ( j - nphases * node );
+
+                if ( phase == active_phase ){
+
+                    BOOST_TEST( dRdW[ vardim * j + i ] == ( vp[ j ] - vm[ j ] ) / ( 2 * delta ) );
+
+                }
+
+            }
+
+        }
+
+    }
+
+    // Check the derivatives w.r.t. the temperature
+    {
+
+        constexpr unsigned int vardim = 1 * nphases * 8;
+        constexpr unsigned int outdim = 1 * nphases * 8;
+
+        for ( unsigned int i = 0; i < vardim; ++i ){
+
+            floatType delta = eps * std::fabs( theta_tp1[ i ] ) + eps;
+
+            std::array< floatType, vardim > xp = theta_tp1;
+            std::array< floatType, vardim > xm = theta_tp1;
+
+            xp[ i ] += delta;
+            xm[ i ] -= delta;
+
+            std::array< floatType, outdim > vp, vm;
+
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+                std::cbegin( local_point ),   std::cend( local_point ),
+                dt,
+                std::cbegin( density_t ),             std::cend( density_t ),
+                std::cbegin( density_tp1 ),           std::cend( density_tp1 ),
+                std::cbegin( u_t ),                   std::cend( u_t ),
+                std::cbegin( u_tp1 ),                 std::cend( u_tp1 ),
+                std::cbegin( w_t ),                   std::cend( w_t ),
+                std::cbegin( w_tp1 ),                 std::cend( w_tp1 ),
+                std::cbegin( theta_t ),               std::cend( theta_t ),
+                std::cbegin( xp ),                    std::cend( xp ),
+                std::cbegin( e_t ),                   std::cend( e_t ),
+                std::cbegin( e_tp1 ),                 std::cend( e_tp1 ),
+                std::cbegin( z_t ),                   std::cend( z_t ),
+                std::cbegin( z_tp1 ),                 std::cend( z_tp1 ),
+                std::cbegin( vf_t ),                  std::cend( vf_t ),
+                std::cbegin( vf_tp1 ),                std::cend( vf_tp1 ),
+                std::cbegin( umesh_t ),               std::cend( umesh_t ),
+                std::cbegin( umesh_tp1 ),             std::cend( umesh_tp1 ),
+                std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+                std::cbegin( X ),                     std::cend( X ),
+                alpha, beta,
+                std::begin( vp ),  std::end( vp ),
+                active_phase
+            );
+
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+                std::cbegin( local_point ),   std::cend( local_point ),
+                dt,
+                std::cbegin( density_t ),             std::cend( density_t ),
+                std::cbegin( density_tp1 ),           std::cend( density_tp1 ),
+                std::cbegin( u_t ),                   std::cend( u_t ),
+                std::cbegin( u_tp1 ),                 std::cend( u_tp1 ),
+                std::cbegin( w_t ),                   std::cend( w_t ),
+                std::cbegin( w_tp1 ),                 std::cend( w_tp1 ),
+                std::cbegin( theta_t ),               std::cend( theta_t ),
+                std::cbegin( xm ),                    std::cend( xm ),
+                std::cbegin( e_t ),                   std::cend( e_t ),
+                std::cbegin( e_tp1 ),                 std::cend( e_tp1 ),
+                std::cbegin( z_t ),                   std::cend( z_t ),
+                std::cbegin( z_tp1 ),                 std::cend( z_tp1 ),
+                std::cbegin( vf_t ),                  std::cend( vf_t ),
+                std::cbegin( vf_tp1 ),                std::cend( vf_tp1 ),
+                std::cbegin( umesh_t ),               std::cend( umesh_t ),
+                std::cbegin( umesh_tp1 ),             std::cend( umesh_tp1 ),
+                std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+                std::cbegin( X ),                     std::cend( X ),
+                alpha, beta,
+                std::begin( vm ),  std::end( vm ),
+                active_phase
+            );
+
+            for ( unsigned int j = 0; j < outdim; ++j ){
+
+                const unsigned int node = j / ( nphases );
+                const unsigned int phase = ( j - nphases * node );
+
+                if ( phase == active_phase ){
+
+                    BOOST_TEST( dRdTheta[ vardim * j + i ] == ( vp[ j ] - vm[ j ] ) / ( 2 * delta ) );
+
+                }
+
+            }
+
+        }
+
+    }
+
+    // Check the derivatives w.r.t. the internal energy
+    {
+
+        constexpr unsigned int vardim = 1 * nphases * 8;
+        constexpr unsigned int outdim = 1 * nphases * 8;
+
+        for ( unsigned int i = 0; i < vardim; ++i ){
+
+            floatType delta = eps * std::fabs( e_tp1[ i ] ) + eps;
+
+            std::array< floatType, vardim > xp = e_tp1;
+            std::array< floatType, vardim > xm = e_tp1;
+
+            xp[ i ] += delta;
+            xm[ i ] -= delta;
+
+            std::array< floatType, outdim > vp, vm;
+
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+                std::cbegin( local_point ),   std::cend( local_point ),
+                dt,
+                std::cbegin( density_t ),             std::cend( density_t ),
+                std::cbegin( density_tp1 ),           std::cend( density_tp1 ),
+                std::cbegin( u_t ),                   std::cend( u_t ),
+                std::cbegin( u_tp1 ),                 std::cend( u_tp1 ),
+                std::cbegin( w_t ),                   std::cend( w_t ),
+                std::cbegin( w_tp1 ),                 std::cend( w_tp1 ),
+                std::cbegin( theta_t ),               std::cend( theta_t ),
+                std::cbegin( theta_tp1 ),             std::cend( theta_tp1 ),
+                std::cbegin( e_t ),                   std::cend( e_t ),
+                std::cbegin( xp ),                    std::cend( xp ),
+                std::cbegin( z_t ),                   std::cend( z_t ),
+                std::cbegin( z_tp1 ),                 std::cend( z_tp1 ),
+                std::cbegin( vf_t ),                  std::cend( vf_t ),
+                std::cbegin( vf_tp1 ),                std::cend( vf_tp1 ),
+                std::cbegin( umesh_t ),               std::cend( umesh_t ),
+                std::cbegin( umesh_tp1 ),             std::cend( umesh_tp1 ),
+                std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+                std::cbegin( X ),                     std::cend( X ),
+                alpha, beta,
+                std::begin( vp ),  std::end( vp ),
+                active_phase
+            );
+
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+                std::cbegin( local_point ),   std::cend( local_point ),
+                dt,
+                std::cbegin( density_t ),             std::cend( density_t ),
+                std::cbegin( density_tp1 ),           std::cend( density_tp1 ),
+                std::cbegin( u_t ),                   std::cend( u_t ),
+                std::cbegin( u_tp1 ),                 std::cend( u_tp1 ),
+                std::cbegin( w_t ),                   std::cend( w_t ),
+                std::cbegin( w_tp1 ),                 std::cend( w_tp1 ),
+                std::cbegin( theta_t ),               std::cend( theta_t ),
+                std::cbegin( theta_tp1 ),             std::cend( theta_tp1 ),
+                std::cbegin( e_t ),                   std::cend( e_t ),
+                std::cbegin( xm ),                    std::cend( xm ),
+                std::cbegin( z_t ),                   std::cend( z_t ),
+                std::cbegin( z_tp1 ),                 std::cend( z_tp1 ),
+                std::cbegin( vf_t ),                  std::cend( vf_t ),
+                std::cbegin( vf_tp1 ),                std::cend( vf_tp1 ),
+                std::cbegin( umesh_t ),               std::cend( umesh_t ),
+                std::cbegin( umesh_tp1 ),             std::cend( umesh_tp1 ),
+                std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+                std::cbegin( X ),                     std::cend( X ),
+                alpha, beta,
+                std::begin( vm ),  std::end( vm ),
+                active_phase
+            );
+
+            for ( unsigned int j = 0; j < outdim; ++j ){
+
+                const unsigned int node = j / ( nphases );
+                const unsigned int phase = ( j - nphases * node );
+
+                if ( phase == active_phase ){
+
+                    BOOST_TEST( dRdE[ vardim * j + i ] == ( vp[ j ] - vm[ j ] ) / ( 2 * delta ) );
+
+                }
+
+            }
+
+        }
+
+    }
+
+    // Check the derivatives w.r.t. the additional dof
+    {
+
+        constexpr unsigned int vardim = num_additional_dof * 8;
+        constexpr unsigned int outdim = 1 * nphases * 8;
+
+        for ( unsigned int i = 0; i < vardim; ++i ){
+
+            floatType delta = eps * std::fabs( z_tp1[ i ] ) + eps;
+
+            std::array< floatType, vardim > xp = z_tp1;
+            std::array< floatType, vardim > xm = z_tp1;
+
+            xp[ i ] += delta;
+            xm[ i ] -= delta;
+
+            std::array< floatType, outdim > vp, vm;
+
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+                std::cbegin( local_point ),   std::cend( local_point ),
+                dt,
+                std::cbegin( density_t ),             std::cend( density_t ),
+                std::cbegin( density_tp1 ),           std::cend( density_tp1 ),
+                std::cbegin( u_t ),                   std::cend( u_t ),
+                std::cbegin( u_tp1 ),                 std::cend( u_tp1 ),
+                std::cbegin( w_t ),                   std::cend( w_t ),
+                std::cbegin( w_tp1 ),                 std::cend( w_tp1 ),
+                std::cbegin( theta_t ),               std::cend( theta_t ),
+                std::cbegin( theta_tp1 ),             std::cend( theta_tp1 ),
+                std::cbegin( e_t ),                   std::cend( e_t ),
+                std::cbegin( e_tp1 ),                 std::cend( e_tp1 ),
+                std::cbegin( z_t ),                   std::cend( z_t ),
+                std::cbegin( xp ),                    std::cend( xp ),
+                std::cbegin( vf_t ),                  std::cend( vf_t ),
+                std::cbegin( vf_tp1 ),                std::cend( vf_tp1 ),
+                std::cbegin( umesh_t ),               std::cend( umesh_t ),
+                std::cbegin( umesh_tp1 ),             std::cend( umesh_tp1 ),
+                std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+                std::cbegin( X ),                     std::cend( X ),
+                alpha, beta,
+                std::begin( vp ),  std::end( vp ),
+                active_phase
+            );
+
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+                std::cbegin( local_point ),   std::cend( local_point ),
+                dt,
+                std::cbegin( density_t ),             std::cend( density_t ),
+                std::cbegin( density_tp1 ),           std::cend( density_tp1 ),
+                std::cbegin( u_t ),                   std::cend( u_t ),
+                std::cbegin( u_tp1 ),                 std::cend( u_tp1 ),
+                std::cbegin( w_t ),                   std::cend( w_t ),
+                std::cbegin( w_tp1 ),                 std::cend( w_tp1 ),
+                std::cbegin( theta_t ),               std::cend( theta_t ),
+                std::cbegin( theta_tp1 ),             std::cend( theta_tp1 ),
+                std::cbegin( e_t ),                   std::cend( e_t ),
+                std::cbegin( e_tp1 ),                 std::cend( e_tp1 ),
+                std::cbegin( z_t ),                   std::cend( z_t ),
+                std::cbegin( xm ),                    std::cend( xm ),
+                std::cbegin( vf_t ),                  std::cend( vf_t ),
+                std::cbegin( vf_tp1 ),                std::cend( vf_tp1 ),
+                std::cbegin( umesh_t ),               std::cend( umesh_t ),
+                std::cbegin( umesh_tp1 ),             std::cend( umesh_tp1 ),
+                std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+                std::cbegin( X ),                     std::cend( X ),
+                alpha, beta,
+                std::begin( vm ),  std::end( vm ),
+                active_phase
+            );
+
+            for ( unsigned int j = 0; j < outdim; ++j ){
+
+                const unsigned int node = j / ( nphases );
+                const unsigned int phase = ( j - nphases * node );
+
+                if ( phase == active_phase ){
+
+                    BOOST_TEST( dRdZ[ vardim * j + i ] == ( vp[ j ] - vm[ j ] ) / ( 2 * delta ) );
+
+                }
+
+            }
+
+        }
+
+    }
+
+    // Check the derivatives w.r.t. the volume fraction
+    {
+
+        constexpr unsigned int vardim = 1 * nphases * 8;
+        constexpr unsigned int outdim = 1 * nphases * 8;
+
+        for ( unsigned int i = 0; i < vardim; ++i ){
+
+            floatType delta = eps * std::fabs( vf_tp1[ i ] ) + eps;
+
+            std::array< floatType, vardim > xp = vf_tp1;
+            std::array< floatType, vardim > xm = vf_tp1;
+
+            xp[ i ] += delta;
+            xm[ i ] -= delta;
+
+            std::array< floatType, outdim > vp, vm;
+
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+                std::cbegin( local_point ),   std::cend( local_point ),
+                dt,
+                std::cbegin( density_t ),             std::cend( density_t ),
+                std::cbegin( density_tp1 ),           std::cend( density_tp1 ),
+                std::cbegin( u_t ),                   std::cend( u_t ),
+                std::cbegin( u_tp1 ),                 std::cend( u_tp1 ),
+                std::cbegin( w_t ),                   std::cend( w_t ),
+                std::cbegin( w_tp1 ),                 std::cend( w_tp1 ),
+                std::cbegin( theta_t ),               std::cend( theta_t ),
+                std::cbegin( theta_tp1 ),             std::cend( theta_tp1 ),
+                std::cbegin( e_t ),                   std::cend( e_t ),
+                std::cbegin( e_tp1 ),                 std::cend( e_tp1 ),
+                std::cbegin( z_t ),                   std::cend( z_t ),
+                std::cbegin( z_tp1 ),                 std::cend( z_tp1 ),
+                std::cbegin( vf_t ),                  std::cend( vf_t ),
+                std::cbegin( xp ),                    std::cend( xp ),
+                std::cbegin( umesh_t ),               std::cend( umesh_t ),
+                std::cbegin( umesh_tp1 ),             std::cend( umesh_tp1 ),
+                std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+                std::cbegin( X ),                     std::cend( X ),
+                alpha, beta,
+                std::begin( vp ),  std::end( vp ),
+                active_phase
+            );
+
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+                std::cbegin( local_point ),   std::cend( local_point ),
+                dt,
+                std::cbegin( density_t ),             std::cend( density_t ),
+                std::cbegin( density_tp1 ),           std::cend( density_tp1 ),
+                std::cbegin( u_t ),                   std::cend( u_t ),
+                std::cbegin( u_tp1 ),                 std::cend( u_tp1 ),
+                std::cbegin( w_t ),                   std::cend( w_t ),
+                std::cbegin( w_tp1 ),                 std::cend( w_tp1 ),
+                std::cbegin( theta_t ),               std::cend( theta_t ),
+                std::cbegin( theta_tp1 ),             std::cend( theta_tp1 ),
+                std::cbegin( e_t ),                   std::cend( e_t ),
+                std::cbegin( e_tp1 ),                 std::cend( e_tp1 ),
+                std::cbegin( z_t ),                   std::cend( z_t ),
+                std::cbegin( z_tp1 ),                 std::cend( z_tp1 ),
+                std::cbegin( vf_t ),                  std::cend( vf_t ),
+                std::cbegin( xm ),                    std::cend( xm ),
+                std::cbegin( umesh_t ),               std::cend( umesh_t ),
+                std::cbegin( umesh_tp1 ),             std::cend( umesh_tp1 ),
+                std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+                std::cbegin( X ),                     std::cend( X ),
+                alpha, beta,
+                std::begin( vm ),  std::end( vm ),
+                active_phase
+            );
+
+            for ( unsigned int j = 0; j < outdim; ++j ){
+
+                const unsigned int node = j / ( nphases );
+                const unsigned int phase = ( j - nphases * node );
+
+                if ( phase == active_phase ){
+
+                    BOOST_TEST( dRdVF[ vardim * j + i ] == ( vp[ j ] - vm[ j ] ) / ( 2 * delta ) );
+
+                }
+
+            }
+
+        }
+
+    }
+
+    // Check the derivatives w.r.t. the mesh displacement
+    {
+
+        constexpr unsigned int vardim = 3 * 8;
+        constexpr unsigned int outdim = 1 * nphases * 8;
+
+        for ( unsigned int i = 0; i < vardim; ++i ){
+
+            floatType delta = eps * std::fabs( umesh_tp1[ i ] ) + eps;
+
+            std::array< floatType, vardim > xp = umesh_tp1;
+            std::array< floatType, vardim > xm = umesh_tp1;
+
+            xp[ i ] += delta;
+            xm[ i ] -= delta;
+
+            std::array< floatType, outdim > vp, vm;
+
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+                std::cbegin( local_point ),   std::cend( local_point ),
+                dt,
+                std::cbegin( density_t ),             std::cend( density_t ),
+                std::cbegin( density_tp1 ),           std::cend( density_tp1 ),
+                std::cbegin( u_t ),                   std::cend( u_t ),
+                std::cbegin( u_tp1 ),                 std::cend( u_tp1 ),
+                std::cbegin( w_t ),                   std::cend( w_t ),
+                std::cbegin( w_tp1 ),                 std::cend( w_tp1 ),
+                std::cbegin( theta_t ),               std::cend( theta_t ),
+                std::cbegin( theta_tp1 ),             std::cend( theta_tp1 ),
+                std::cbegin( e_t ),                   std::cend( e_t ),
+                std::cbegin( e_tp1 ),                 std::cend( e_tp1 ),
+                std::cbegin( z_t ),                   std::cend( z_t ),
+                std::cbegin( z_tp1 ),                 std::cend( z_tp1 ),
+                std::cbegin( vf_t ),                  std::cend( vf_t ),
+                std::cbegin( vf_tp1 ),                std::cend( vf_tp1 ),
+                std::cbegin( umesh_t ),               std::cend( umesh_t ),
+                std::cbegin( xp ),                    std::cend( xp ),
+                std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+                std::cbegin( X ),                     std::cend( X ),
+                alpha, beta,
+                std::begin( vp ),  std::end( vp ),
+                active_phase
+            );
+
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),             std::cend( density_t ),
@@ -2515,6 +3669,8 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint_multiphase, * boost::
     constexpr unsigned int nphases = 4;
 
     constexpr unsigned int num_additional_dof = 5;
+
+    constexpr bool is_per_unit_volume = false;
 
     std::array< floatType, 8 * nphases > density_t = {
         0.20763586, 0.29248941, 0.52001015, 0.90191137, 0.98363088,
@@ -2774,7 +3930,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint_multiphase, * boost::
     };
     std::array< floatType, 8 * nphases > result;
 
-    evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+    evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
         std::cbegin( local_point ),   std::cend( local_point ),
         dt,
         std::cbegin( density_t ),             std::cend( density_t ),
@@ -2819,7 +3975,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint_multiphase, * boost::
 
     std::fill( std::begin( result ), std::end( result ), 0 );
 
-    evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+    evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
         std::cbegin( local_point ),   std::cend( local_point ),
         dt,
         std::cbegin( density_t ),             std::cend( density_t ),
@@ -2874,7 +4030,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint_multiphase, * boost::
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),             std::cend( density_t ),
@@ -2899,7 +4055,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint_multiphase, * boost::
                 std::begin( vp ),  std::end( vp )
             );
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),             std::cend( density_t ),
@@ -2952,7 +4108,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint_multiphase, * boost::
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),             std::cend( density_t ),
@@ -2977,7 +4133,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint_multiphase, * boost::
                 std::begin( vp ),  std::end( vp )
             );
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),             std::cend( density_t ),
@@ -3030,7 +4186,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint_multiphase, * boost::
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),             std::cend( density_t ),
@@ -3055,7 +4211,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint_multiphase, * boost::
                 std::begin( vp ),  std::end( vp )
             );
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),             std::cend( density_t ),
@@ -3108,7 +4264,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint_multiphase, * boost::
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),             std::cend( density_t ),
@@ -3133,7 +4289,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint_multiphase, * boost::
                 std::begin( vp ),  std::end( vp )
             );
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),             std::cend( density_t ),
@@ -3186,7 +4342,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint_multiphase, * boost::
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),             std::cend( density_t ),
@@ -3211,7 +4367,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint_multiphase, * boost::
                 std::begin( vp ),  std::end( vp )
             );
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),             std::cend( density_t ),
@@ -3264,7 +4420,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint_multiphase, * boost::
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),             std::cend( density_t ),
@@ -3289,7 +4445,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint_multiphase, * boost::
                 std::begin( vp ),  std::end( vp )
             );
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),             std::cend( density_t ),
@@ -3342,7 +4498,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint_multiphase, * boost::
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),             std::cend( density_t ),
@@ -3367,7 +4523,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint_multiphase, * boost::
                 std::begin( vp ),  std::end( vp )
             );
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),             std::cend( density_t ),
@@ -3420,7 +4576,7 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint_multiphase, * boost::
 
             std::array< floatType, outdim > vp, vm;
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),             std::cend( density_t ),
@@ -3445,7 +4601,981 @@ BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint_multiphase, * boost::
                 std::begin( vp ),  std::end( vp )
             );
 
-            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+                std::cbegin( local_point ),   std::cend( local_point ),
+                dt,
+                std::cbegin( density_t ),             std::cend( density_t ),
+                std::cbegin( density_tp1 ),           std::cend( density_tp1 ),
+                std::cbegin( u_t ),                   std::cend( u_t ),
+                std::cbegin( u_tp1 ),                 std::cend( u_tp1 ),
+                std::cbegin( w_t ),                   std::cend( w_t ),
+                std::cbegin( w_tp1 ),                 std::cend( w_tp1 ),
+                std::cbegin( theta_t ),               std::cend( theta_t ),
+                std::cbegin( theta_tp1 ),             std::cend( theta_tp1 ),
+                std::cbegin( e_t ),                   std::cend( e_t ),
+                std::cbegin( e_tp1 ),                 std::cend( e_tp1 ),
+                std::cbegin( z_t ),                   std::cend( z_t ),
+                std::cbegin( z_tp1 ),                 std::cend( z_tp1 ),
+                std::cbegin( vf_t ),                  std::cend( vf_t ),
+                std::cbegin( vf_tp1 ),                std::cend( vf_tp1 ),
+                std::cbegin( umesh_t ),               std::cend( umesh_t ),
+                std::cbegin( xm ),                    std::cend( xm ),
+                std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+                std::cbegin( X ),                     std::cend( X ),
+                alpha, beta,
+                std::begin( vm ),  std::end( vm )
+            );
+
+            for ( unsigned int j = 0; j < outdim; ++j ){
+
+                BOOST_TEST( dRdUMesh[ vardim * j + i ] == ( vp[ j ] - vm[ j ] ) / ( 2 * delta ) );
+
+            }
+
+        }
+
+    }
+
+}
+
+BOOST_AUTO_TEST_CASE( test_computeInternalEnergyConstraint_multiphase2, * boost::unit_test::tolerance( 1e-5 ) ){
+
+    constexpr unsigned int nphases = 4;
+
+    constexpr unsigned int num_additional_dof = 5;
+
+    constexpr bool is_per_unit_volume = true;
+
+    std::array< floatType, 8 * nphases > density_t = {
+        0.20763586, 0.29248941, 0.52001015, 0.90191137, 0.98363088,
+        0.25754206, 0.56435904, 0.80696868, 0.39437005, 0.73107304,
+        0.16106901, 0.60069857, 0.86586446, 0.98352161, 0.07936579,
+        0.42834727, 0.20454286, 0.45063649, 0.54776357, 0.09332671,
+        0.29686078, 0.92758424, 0.56900373, 0.457412  , 0.75352599,
+        0.74186215, 0.04857903, 0.7086974 , 0.83924335, 0.16593788,
+        0.78099794, 0.28653662
+    };
+
+    std::array< floatType, 8 * nphases > density_tp1 = {
+        0.30646975, 0.66526147, 0.11139217, 0.66487245, 0.88785679,
+        0.69631127, 0.44032788, 0.43821438, 0.7650961 , 0.565642  ,
+        0.08490416, 0.58267109, 0.8148437 , 0.33706638, 0.92757658,
+        0.750717  , 0.57406383, 0.75164399, 0.07914896, 0.85938908,
+        0.82150411, 0.90987166, 0.1286312 , 0.08178009, 0.13841557,
+        0.39937871, 0.42430686, 0.56221838, 0.12224355, 0.2013995 ,
+        0.81164435, 0.46798757
+    };
+
+    std::array< floatType, 24 * nphases > u_t = {
+         0.8638643 ,  0.16435092, -0.58780855,  0.43551512, -0.2420283 ,
+         0.33676789, -0.94136055,  0.27180072, -0.93560413,  0.48956131,
+        -0.054174  , -0.75649129,  0.08527185, -0.86645111,  0.30672974,
+         0.99217265,  0.53879467,  0.14754823, -0.79472948,  0.39966815,
+         0.32233573, -0.90180574,  0.5845986 ,  0.03743318, -0.14826461,
+         0.57637435, -0.17686155, -0.03794745, -0.63674231, -0.3573622 ,
+         0.69106599, -0.6261925 , -0.16541788,  0.97806901, -0.52680038,
+         0.83366467,  0.83679494, -0.81740732, -0.07269455,  0.00443267,
+        -0.3726621 , -0.90532093, -0.51662873, -0.80894072, -0.52350019,
+         0.61558217,  0.78995658, -0.91355422, -0.39610633,  0.9611644 ,
+         0.07900965,  0.25261872, -0.98890918, -0.03018111,  0.97665707,
+        -0.24962895, -0.80592368, -0.07618248,  0.92600893, -0.31633877,
+         0.59784547,  0.59769266, -0.58350341, -0.1132646 ,  0.43120255,
+        -0.17896043, -0.61798609,  0.93498861,  0.30150073,  0.7309197 ,
+        -0.94951528, -0.46618837,  0.0041422 , -0.86510273,  0.98606652,
+        -0.52707521, -0.25141564, -0.57197617, -0.78910827, -0.53504043,
+        -0.39877973,  0.26888454, -0.43753044, -0.27544648, -0.98811431,
+        -0.26856175,  0.06777196, -0.67596833,  0.19486622, -0.41369506,
+         0.26410099, -0.94760679,  0.77518692, -0.96776274, -0.74608394,
+         0.55432492
+    };
+
+    std::array< floatType, 24 * nphases > u_tp1 = {
+        -0.90820954,  0.42199739,  0.94209228,  0.74336587,  0.4203233 ,
+         0.91701949, -0.14037332,  0.74575783, -0.28808466,  0.85952731,
+        -0.70244469,  0.88005803,  0.66543239,  0.69210968, -0.75215398,
+         0.1929738 , -0.96721504,  0.44236873, -0.98452497, -0.83035545,
+        -0.54900318,  0.75024907, -0.27284736,  0.07991987,  0.13620643,
+        -0.54907328,  0.14429354,  0.32190359, -0.40350921, -0.16274628,
+        -0.09382215,  0.86470132,  0.17498749,  0.89650474,  0.11206951,
+         0.00112284, -0.99293558, -0.03822191,  0.85491   , -0.60326862,
+        -0.89581773, -0.18644221, -0.25520704,  0.71430612, -0.94677777,
+         0.84029846,  0.361806  ,  0.80845199,  0.21505814,  0.62390662,
+        -0.32891225, -0.30086754, -0.22025154,  0.50959416, -0.26141765,
+        -0.51556039,  0.87533671,  0.81602217, -0.30240537,  0.26927614,
+        -0.45231558, -0.58776974, -0.32732094, -0.34580021,  0.7645522 ,
+         0.64460763,  0.41924646,  0.91869045, -0.15491329, -0.50993392,
+        -0.76520313, -0.39789328, -0.70947253, -0.81562781,  0.20586439,
+        -0.2716251 ,  0.12914069, -0.61732856,  0.35381172, -0.56898911,
+        -0.44395281,  0.48352084,  0.11947579, -0.33032717,  0.08597757,
+         0.38796941,  0.82426424,  0.16142643, -0.53462724,  0.49339526,
+         0.55553804, -0.59919737,  0.64114844, -0.07013029,  0.55953332,
+        -0.52504356
+    };
+
+    std::array< floatType, 24 * nphases > w_t = {
+        -0.03348395,  0.09073942,  0.03156301,  0.05457557,  0.03767487,
+        -0.05913918, -0.00586225,  0.06179277,  0.03500703, -0.09879442,
+        -0.08251845, -0.03064106,  0.08887311, -0.0017619 , -0.04596475,
+        -0.02791526, -0.05786947, -0.01575999, -0.05639291,  0.0691505 ,
+        -0.00874588, -0.0440396 ,  0.08657833, -0.03712973,  0.08194293,
+        -0.09131638,  0.04142301, -0.00322219, -0.01115579, -0.09273533,
+        -0.09186336, -0.03344928,  0.08942391,  0.023532  , -0.02622503,
+         0.02239541, -0.05877369, -0.06698671, -0.02763655,  0.07267067,
+         0.00188035, -0.0406197 ,  0.09005033,  0.06319322, -0.03540521,
+         0.09441965,  0.09747022, -0.01826797,  0.03118462, -0.01886936,
+        -0.04853038, -0.08346946, -0.04727793, -0.04570403, -0.02027218,
+        -0.06302279,  0.09076368, -0.07942402,  0.02504171, -0.01166052,
+        -0.01529639, -0.02560164,  0.07366294, -0.0439046 , -0.09588477,
+         0.0836194 ,  0.07289606, -0.04461964,  0.00469751, -0.07818236,
+        -0.08131459,  0.06749322, -0.01794686,  0.03234331,  0.08864011,
+        -0.05097388, -0.09736803, -0.09517032,  0.04187714,  0.08491038,
+        -0.00653395, -0.02497817,  0.00857208,  0.07178337,  0.03043077,
+        -0.05340402,  0.05491604, -0.0730773 , -0.06688801,  0.02253646,
+        -0.05224332,  0.04095571, -0.03009629, -0.04451521,  0.09978368,
+        -0.09187678
+    };
+
+    std::array< floatType, 24 * nphases > w_tp1 = {
+         0.0291645 , -0.09226008,  0.05204205, -0.05398201, -0.08203363,
+         0.02968994,  0.04652024,  0.03561906, -0.08961981, -0.04113861,
+        -0.00978233, -0.04257934,  0.06210269, -0.07377698,  0.02243587,
+         0.09764299,  0.08051131, -0.05556859, -0.09998362,  0.09611947,
+         0.0765426 ,  0.08389449, -0.01689929,  0.04892309, -0.0574337 ,
+        -0.02153919,  0.07030961, -0.07447756,  0.07877307, -0.00069841,
+        -0.01478087, -0.03887072,  0.08336976,  0.00352469,  0.06080527,
+         0.07153036,  0.08447647, -0.03932385, -0.03203783,  0.01901478,
+        -0.01173517,  0.08656851, -0.02048719, -0.00444439,  0.02343722,
+        -0.0190521 ,  0.09849569, -0.08022974, -0.05587934, -0.03546897,
+        -0.07045543, -0.04315615,  0.05584906,  0.0045784 , -0.09320927,
+         0.09652452,  0.0232013 , -0.0882121 ,  0.03223375, -0.02432613,
+        -0.07286534,  0.01273292,  0.04541599,  0.03422532, -0.05049737,
+         0.00497324,  0.00753269,  0.04336067, -0.02802653,  0.05954652,
+         0.02558437, -0.09233368,  0.0092958 ,  0.07238242,  0.01351483,
+        -0.06483435,  0.00207527,  0.05138917, -0.07797896,  0.06341982,
+        -0.06650367,  0.0068153 , -0.0228513 , -0.05027525,  0.0294865 ,
+        -0.09252158,  0.05200916,  0.00538813,  0.07515424,  0.00414366,
+        -0.09299337, -0.07127981,  0.05912092, -0.00160479, -0.01162415,
+        -0.03631304
+    };
+
+    std::array< floatType, 8 * nphases > theta_t = {
+        -0.4309016 ,  0.93177262, -0.13406134,  0.76800607,  0.29632625,
+         0.71685529,  0.70489909,  0.91262406,  0.39588447,  0.61079387,
+         0.46625579,  0.21045367,  0.43470827,  0.43150082, -0.91818441,
+         0.03222167,  0.58530272, -0.51407563, -0.06970403, -0.13002858,
+        -0.19442566, -0.75632094,  0.05142308, -0.10750327,  0.32678551,
+         0.09882612, -0.94491414, -0.93616402,  0.4027196 ,  0.41516224,
+         0.91987827,  0.75340936
+    };
+
+    std::array< floatType, 8 * nphases > theta_tp1 = {
+        -0.06388067,  0.25181302, -0.08563654, -0.55410753, -0.24664601,
+        -0.79223154,  0.33305424, -0.61593971, -0.04906443,  0.93487321,
+        -0.93666214, -0.6965401 , -0.40284163,  0.88361393,  0.81768359,
+        -0.67599832,  0.96223555,  0.50149505,  0.07995417,  0.86340577,
+         0.76121428, -0.21736701,  0.31268639,  0.29477029, -0.34606363,
+        -0.64121965, -0.06638025, -0.47343793, -0.28986975,  0.90828794,
+        -0.07772426,  0.36978293
+    };
+
+    std::array< floatType, 8 * nphases > e_t = {
+        -0.32754021,  0.99172216,  0.31753521, -0.60798107, -0.803632  ,
+         0.88636114,  0.88955566,  0.24265675, -0.966017  , -0.54893023,
+         0.60255357,  0.75091966, -0.09202037, -0.26895876, -0.45154998,
+        -0.76605897, -0.76851093,  0.9052054 ,  0.61725223, -0.67044128,
+        -0.5858999 ,  0.3111031 ,  0.52932843,  0.62062969, -0.67332462,
+         0.96825658, -0.54439587,  0.17883087,  0.17523151,  0.93472377,
+         0.31533489,  0.16980853
+    };
+
+    std::array< floatType, 8 * nphases > e_tp1 = {
+         0.03754516,  0.52931508, -0.78788948, -0.9958162 ,  0.90497774,
+        -0.00268464, -0.34332924, -0.26389348,  0.60768663, -0.23525958,
+         0.54033835, -0.119076  ,  0.68815493, -0.84759187, -0.03774334,
+        -0.06630058, -0.47134404,  0.88722949,  0.81005692, -0.1128074 ,
+        -0.80568079, -0.5864337 , -0.45701633, -0.03156045, -0.32324578,
+         0.54827214, -0.04794678,  0.74074101,  0.9915635 , -0.5603281 ,
+         0.22334275,  0.69500462
+    };
+
+    std::array< floatType, 8 * num_additional_dof > z_t = {
+         0.89047327, -0.41982715,  0.45408549, -0.9699677 ,  0.75828488,
+        -0.8721229 ,  0.4667908 ,  0.98922077,  0.00237956, -0.58133202,
+         0.18928717,  0.24829996,  0.33614547, -0.65477652,  0.79742538,
+         0.24198274, -0.91286259,  0.36808213, -0.60783191, -0.94531844,
+         0.10190655,  0.62662728,  0.7198823 , -0.79295815,  0.32608557,
+         0.42015045, -0.41096601,  0.942728  , -0.44262506, -0.86003562,
+         0.03856072,  0.38862977, -0.51068043, -0.3228356 ,  0.12725597,
+         0.77335633,  0.49465181, -0.58081608, -0.49644586,  0.04776138
+    };
+
+    std::array< floatType, 8 * num_additional_dof > z_tp1 = {
+         0.53791739,  0.23752356,  0.00264853,  0.19425068,  0.51212006,
+         0.07415959,  0.79550549,  0.89413498,  0.83070901,  0.50903668,
+        -0.50735799, -0.22945711, -0.4400001 ,  0.31532048, -0.35155675,
+         0.50878321, -0.77298184,  0.55072953,  0.17180395,  0.67077737,
+        -0.1382487 ,  0.24992891,  0.10882426,  0.95134253,  0.51094878,
+         0.0896265 , -0.65193582,  0.80822843, -0.58832443,  0.30008651,
+         0.87294371, -0.55284074, -0.54815292,  0.70363782,  0.65531005,
+        -0.29659329, -0.46980742, -0.74522306,  0.97587221,  0.6706862 
+    };
+
+    std::array< floatType, 8 * nphases > vf_t = {
+        0.8993916 , 0.51367933, 0.11438483, 0.05258034, 0.3305821 ,
+        0.92033043, 0.94758184, 0.84116387, 0.15867914, 0.41992317,
+        0.24624292, 0.20534977, 0.68482585, 0.48611167, 0.32490964,
+        0.10021446, 0.54476337, 0.34702515, 0.39109581, 0.31050874,
+        0.3871952 , 0.55585958, 0.01414381, 0.847647  , 0.92191986,
+        0.55052969, 0.26802112, 0.990239  , 0.38319403, 0.69365539,
+        0.68995255, 0.43430906
+    };
+
+    std::array< floatType, 8 * nphases> vf_tp1 = {
+        0.19915816, 0.96657938, 0.06369086, 0.48514939, 0.22073071,
+        0.29397413, 0.82852732, 0.36726556, 0.08334827, 0.19630901,
+        0.86037341, 0.97702885, 0.26798216, 0.67540899, 0.081199  ,
+        0.72346559, 0.41643661, 0.91815992, 0.31153617, 0.941467  ,
+        0.50324743, 0.34889292, 0.6470196 , 0.2497462 , 0.2297636 ,
+        0.19634644, 0.95989956, 0.49291373, 0.75161496, 0.47399188,
+        0.58754016, 0.58413898
+    };
+
+    std::array< floatType, 24 > umesh_t = {
+        0.53182759, 0.63440096, 0.84943179, 0.51044152, 0.65634786,
+        0.86791477, 0.48312667, 0.6486585 , 0.86600796, 0.50451273,
+        0.6267116 , 0.84752498, 0.53695906, 0.68247738, 0.83864355,
+        0.515573  , 0.70442428, 0.85712652, 0.48825814, 0.69673492,
+        0.85521971, 0.50964421, 0.67478802, 0.83673674
+    };
+
+    std::array< floatType, 24 > umesh_tp1 = {
+        0.72445532, 0.61102351, 0.72244338, 0.70877313, 0.5669913 ,
+        0.69069256, 0.7316781 , 0.55679573, 0.65823773, 0.7473603 ,
+        0.60082794, 0.68998856, 0.71831255, 0.63482305, 0.72559852,
+        0.70263035, 0.59079084, 0.69384769, 0.72553532, 0.58059527,
+        0.66139287, 0.74121752, 0.62462748, 0.6931437 
+    };
+
+    std::array< floatType, 24 * nphases > u_dot_t = {
+        -0.35408217, -0.27642269, -0.54347354, -0.41257191,  0.26195225,
+        -0.81579012, -0.13259765, -0.13827447, -0.0126298 , -0.14833942,
+        -0.37547755, -0.14729739,  0.78677833,  0.88832004,  0.00367335,
+         0.2479059 , -0.76876321, -0.36542904, -0.17034758,  0.73261832,
+        -0.49908927, -0.03393147,  0.97111957,  0.03897024,  0.22578905,
+        -0.75874267,  0.6526816 ,  0.20612026,  0.09013601, -0.31447233,
+        -0.39175842, -0.16595558,  0.36260153,  0.75091368,  0.02084467,
+         0.33862757,  0.17187311,  0.249807  ,  0.3493781 ,  0.68468488,
+        -0.83361002,  0.52736568, -0.51266725, -0.61155408,  0.14491391,
+        -0.80857497,  0.77065365,  0.25449794,  0.44683272, -0.96774159,
+         0.18886376,  0.11357038, -0.68208071, -0.69385897,  0.39105906,
+        -0.36246715,  0.38394059,  0.1087665 , -0.22209885,  0.85026498,
+         0.68333999, -0.28520487, -0.91281707, -0.39046385, -0.20362864,
+         0.40991766,  0.99071696, -0.28817027,  0.52509563,  0.18635383,
+         0.3834036 , -0.6977451 , -0.20224741, -0.5182882 , -0.31308797,
+         0.02625631,  0.3332491 , -0.78818303, -0.7382101 , -0.35603879,
+         0.32312867,  0.69301245,  0.10651469,  0.70890498, -0.23032438,
+        -0.36642421, -0.29147065, -0.65783634,  0.65822527, -0.32265831,
+         0.10474015,  0.15710294,  0.04306612, -0.99462387,  0.97669084,
+         0.81068315
+    };
+
+    std::array< floatType, 24 > X = {
+        0., 0., 0., 1., 0., 0., 1., 1., 0., 0., 1., 0., 0., 0., 1., 1., 0.,
+       1., 1., 1., 1., 0., 1., 1.
+    };
+
+    std::array< floatType, 3 > local_point = {
+         0.61587642, -0.98514724,  0.10318545
+    };
+
+    floatType dt = 1.3929383711957233;
+
+    floatType alpha = 0.56;
+
+    floatType beta = 0.67;
+
+    std::array< floatType, 8 * nphases > answer = {
+        +1.779151954e-02, +1.724462564e-02, +7.778485853e-03, +8.930603611e-03, +7.484283263e-02, +7.254223718e-02,
+        +3.272142739e-02, +3.756799243e-02, +5.599697538e-04, +5.427568315e-04, +2.448198310e-04, +2.810815509e-04,
+        +1.331151223e-04, +1.290232937e-04, +5.819818218e-05, +6.681826075e-05, +2.188562348e-02, +2.121288082e-02,
+        +9.568435804e-03, +1.098567369e-02, +9.206532646e-02, +8.923532841e-02, +4.025113413e-02, +4.621296877e-02,
+        +6.888274586e-04, +6.676535765e-04, +3.011566623e-04, +3.457627650e-04, +1.637469716e-04, +1.587135499e-04,
+        +7.159048440e-05, +8.219417643e-05
+    };
+    std::array< floatType, 8 * nphases > result;
+
+    evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+        std::cbegin( local_point ),   std::cend( local_point ),
+        dt,
+        std::cbegin( density_t ),             std::cend( density_t ),
+        std::cbegin( density_tp1 ),           std::cend( density_tp1 ),
+        std::cbegin( u_t ),                   std::cend( u_t ),
+        std::cbegin( u_tp1 ),                 std::cend( u_tp1 ),
+        std::cbegin( w_t ),                   std::cend( w_t ),
+        std::cbegin( w_tp1 ),                 std::cend( w_tp1 ),
+        std::cbegin( theta_t ),               std::cend( theta_t ),
+        std::cbegin( theta_tp1 ),             std::cend( theta_tp1 ),
+        std::cbegin( e_t ),                   std::cend( e_t ),
+        std::cbegin( e_tp1 ),                 std::cend( e_tp1 ),
+        std::cbegin( z_t ),                   std::cend( z_t ),
+        std::cbegin( z_tp1 ),                 std::cend( z_tp1 ),
+        std::cbegin( vf_t ),                  std::cend( vf_t ),
+        std::cbegin( vf_tp1 ),                std::cend( vf_tp1 ),
+        std::cbegin( umesh_t ),               std::cend( umesh_t ),
+        std::cbegin( umesh_tp1 ),             std::cend( umesh_tp1 ),
+        std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+        std::cbegin( X ),                     std::cend( X ),
+        alpha, beta,
+        std::begin( result ),  std::end( result )
+    );
+
+    BOOST_TEST( result == answer, CHECK_PER_ELEMENT );
+
+    std::array< floatType, 8 * 1 * nphases * 8 * nphases * 1 > dRdRho;
+
+    std::array< floatType, 8 * 1 * nphases * 8 * nphases * 3 > dRdU;
+
+    std::array< floatType, 8 * 1 * nphases * 8 * nphases * 3 > dRdW;
+
+    std::array< floatType, 8 * 1 * nphases * 8 * nphases * 1 > dRdTheta;
+
+    std::array< floatType, 8 * 1 * nphases * 8 * nphases * 1 > dRdE;
+
+    std::array< floatType, 8 * 1 * nphases * 8 * nphases * num_additional_dof > dRdZ;
+
+    std::array< floatType, 8 * 1 * nphases * 8 * nphases * 1 > dRdVF;
+
+    std::array< floatType, 8 * 1 * nphases * 8 * 3 > dRdUMesh;
+
+    std::fill( std::begin( result ), std::end( result ), 0 );
+
+    evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+        std::cbegin( local_point ),   std::cend( local_point ),
+        dt,
+        std::cbegin( density_t ),             std::cend( density_t ),
+        std::cbegin( density_tp1 ),           std::cend( density_tp1 ),
+        std::cbegin( u_t ),                   std::cend( u_t ),
+        std::cbegin( u_tp1 ),                 std::cend( u_tp1 ),
+        std::cbegin( w_t ),                   std::cend( w_t ),
+        std::cbegin( w_tp1 ),                 std::cend( w_tp1 ),
+        std::cbegin( theta_t ),               std::cend( theta_t ),
+        std::cbegin( theta_tp1 ),             std::cend( theta_tp1 ),
+        std::cbegin( e_t ),                   std::cend( e_t ),
+        std::cbegin( e_tp1 ),                 std::cend( e_tp1 ),
+        std::cbegin( z_t ),                   std::cend( z_t ),
+        std::cbegin( z_tp1 ),                 std::cend( z_tp1 ),
+        std::cbegin( vf_t ),                  std::cend( vf_t ),
+        std::cbegin( vf_tp1 ),                std::cend( vf_tp1 ),
+        std::cbegin( umesh_t ),               std::cend( umesh_t ),
+        std::cbegin( umesh_tp1 ),             std::cend( umesh_tp1 ),
+        std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+        std::cbegin( X ),                     std::cend( X ),
+        alpha, beta,
+        std::begin( result ),  std::end( result ),
+        std::begin(   dRdRho ), std::end(   dRdRho ),
+        std::begin(     dRdU ), std::end(     dRdU ),
+        std::begin(     dRdW ), std::end(     dRdW ),
+        std::begin( dRdTheta ), std::end( dRdTheta ),
+        std::begin(     dRdE ), std::end(     dRdE ),
+        std::begin(     dRdZ ), std::end(     dRdZ ),
+        std::begin(    dRdVF ), std::end(    dRdVF ),
+        std::begin( dRdUMesh ), std::end( dRdUMesh )
+    );
+
+    BOOST_TEST( result == answer, CHECK_PER_ELEMENT );
+
+    const floatType eps = 1e-5;
+
+    // Check the derivatives w.r.t. the density
+    {
+
+        constexpr unsigned int vardim = 1 * nphases * 8;
+        constexpr unsigned int outdim = 1 * nphases * 8;
+
+        for ( unsigned int i = 0; i < vardim; ++i ){
+
+            floatType delta = eps * std::fabs( density_tp1[ i ] ) + eps;
+
+            std::array< floatType, vardim > xp = density_tp1;
+            std::array< floatType, vardim > xm = density_tp1;
+
+            xp[ i ] += delta;
+            xm[ i ] -= delta;
+
+            std::array< floatType, outdim > vp, vm;
+
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+                std::cbegin( local_point ),   std::cend( local_point ),
+                dt,
+                std::cbegin( density_t ),             std::cend( density_t ),
+                std::cbegin( xp ),                    std::cend( xp ),
+                std::cbegin( u_t ),                   std::cend( u_t ),
+                std::cbegin( u_tp1 ),                 std::cend( u_tp1 ),
+                std::cbegin( w_t ),                   std::cend( w_t ),
+                std::cbegin( w_tp1 ),                 std::cend( w_tp1 ),
+                std::cbegin( theta_t ),               std::cend( theta_t ),
+                std::cbegin( theta_tp1 ),             std::cend( theta_tp1 ),
+                std::cbegin( e_t ),                   std::cend( e_t ),
+                std::cbegin( e_tp1 ),                 std::cend( e_tp1 ),
+                std::cbegin( z_t ),                   std::cend( z_t ),
+                std::cbegin( z_tp1 ),                 std::cend( z_tp1 ),
+                std::cbegin( vf_t ),                  std::cend( vf_t ),
+                std::cbegin( vf_tp1 ),                std::cend( vf_tp1 ),
+                std::cbegin( umesh_t ),               std::cend( umesh_t ),
+                std::cbegin( umesh_tp1 ),             std::cend( umesh_tp1 ),
+                std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+                std::cbegin( X ),                     std::cend( X ),
+                alpha, beta,
+                std::begin( vp ),  std::end( vp )
+            );
+
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+                std::cbegin( local_point ),   std::cend( local_point ),
+                dt,
+                std::cbegin( density_t ),             std::cend( density_t ),
+                std::cbegin( xm ),                    std::cend( xm ),
+                std::cbegin( u_t ),                   std::cend( u_t ),
+                std::cbegin( u_tp1 ),                 std::cend( u_tp1 ),
+                std::cbegin( w_t ),                   std::cend( w_t ),
+                std::cbegin( w_tp1 ),                 std::cend( w_tp1 ),
+                std::cbegin( theta_t ),               std::cend( theta_t ),
+                std::cbegin( theta_tp1 ),             std::cend( theta_tp1 ),
+                std::cbegin( e_t ),                   std::cend( e_t ),
+                std::cbegin( e_tp1 ),                 std::cend( e_tp1 ),
+                std::cbegin( z_t ),                   std::cend( z_t ),
+                std::cbegin( z_tp1 ),                 std::cend( z_tp1 ),
+                std::cbegin( vf_t ),                  std::cend( vf_t ),
+                std::cbegin( vf_tp1 ),                std::cend( vf_tp1 ),
+                std::cbegin( umesh_t ),               std::cend( umesh_t ),
+                std::cbegin( umesh_tp1 ),             std::cend( umesh_tp1 ),
+                std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+                std::cbegin( X ),                     std::cend( X ),
+                alpha, beta,
+                std::begin( vm ),  std::end( vm )
+            );
+
+            for ( unsigned int j = 0; j < outdim; ++j ){
+
+                BOOST_TEST( dRdRho[ vardim * j + i ] == ( vp[ j ] - vm[ j ] ) / ( 2 * delta ) );
+
+            }
+
+        }
+
+    }
+
+    // Check the derivatives w.r.t. the velocity
+    {
+
+        constexpr unsigned int vardim = 3 * nphases * 8;
+        constexpr unsigned int outdim = 1 * nphases * 8;
+
+        for ( unsigned int i = 0; i < vardim; ++i ){
+
+            floatType delta = eps * std::fabs( u_tp1[ i ] ) + eps;
+
+            std::array< floatType, vardim > xp = u_tp1;
+            std::array< floatType, vardim > xm = u_tp1;
+
+            xp[ i ] += delta;
+            xm[ i ] -= delta;
+
+            std::array< floatType, outdim > vp, vm;
+
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+                std::cbegin( local_point ),   std::cend( local_point ),
+                dt,
+                std::cbegin( density_t ),             std::cend( density_t ),
+                std::cbegin( density_tp1 ),           std::cend( density_tp1 ),
+                std::cbegin( u_t ),                   std::cend( u_t ),
+                std::cbegin( xp ),                    std::cend( xp ),
+                std::cbegin( w_t ),                   std::cend( w_t ),
+                std::cbegin( w_tp1 ),                 std::cend( w_tp1 ),
+                std::cbegin( theta_t ),               std::cend( theta_t ),
+                std::cbegin( theta_tp1 ),             std::cend( theta_tp1 ),
+                std::cbegin( e_t ),                   std::cend( e_t ),
+                std::cbegin( e_tp1 ),                 std::cend( e_tp1 ),
+                std::cbegin( z_t ),                   std::cend( z_t ),
+                std::cbegin( z_tp1 ),                 std::cend( z_tp1 ),
+                std::cbegin( vf_t ),                  std::cend( vf_t ),
+                std::cbegin( vf_tp1 ),                std::cend( vf_tp1 ),
+                std::cbegin( umesh_t ),               std::cend( umesh_t ),
+                std::cbegin( umesh_tp1 ),             std::cend( umesh_tp1 ),
+                std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+                std::cbegin( X ),                     std::cend( X ),
+                alpha, beta,
+                std::begin( vp ),  std::end( vp )
+            );
+
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+                std::cbegin( local_point ),   std::cend( local_point ),
+                dt,
+                std::cbegin( density_t ),             std::cend( density_t ),
+                std::cbegin( density_tp1 ),           std::cend( density_tp1 ),
+                std::cbegin( u_t ),                   std::cend( u_t ),
+                std::cbegin( xm ),                    std::cend( xm ),
+                std::cbegin( w_t ),                   std::cend( w_t ),
+                std::cbegin( w_tp1 ),                 std::cend( w_tp1 ),
+                std::cbegin( theta_t ),               std::cend( theta_t ),
+                std::cbegin( theta_tp1 ),             std::cend( theta_tp1 ),
+                std::cbegin( e_t ),                   std::cend( e_t ),
+                std::cbegin( e_tp1 ),                 std::cend( e_tp1 ),
+                std::cbegin( z_t ),                   std::cend( z_t ),
+                std::cbegin( z_tp1 ),                 std::cend( z_tp1 ),
+                std::cbegin( vf_t ),                  std::cend( vf_t ),
+                std::cbegin( vf_tp1 ),                std::cend( vf_tp1 ),
+                std::cbegin( umesh_t ),               std::cend( umesh_t ),
+                std::cbegin( umesh_tp1 ),             std::cend( umesh_tp1 ),
+                std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+                std::cbegin( X ),                     std::cend( X ),
+                alpha, beta,
+                std::begin( vm ),  std::end( vm )
+            );
+
+            for ( unsigned int j = 0; j < outdim; ++j ){
+
+                BOOST_TEST( dRdU[ vardim * j + i ] == ( vp[ j ] - vm[ j ] ) / ( 2 * delta ) );
+
+            }
+
+        }
+
+    }
+
+    // Check the derivatives w.r.t. the displacement
+    {
+
+        constexpr unsigned int vardim = 3 * nphases * 8;
+        constexpr unsigned int outdim = 1 * nphases * 8;
+
+        for ( unsigned int i = 0; i < vardim; ++i ){
+
+            floatType delta = eps * std::fabs( w_tp1[ i ] ) + eps;
+
+            std::array< floatType, vardim > xp = w_tp1;
+            std::array< floatType, vardim > xm = w_tp1;
+
+            xp[ i ] += delta;
+            xm[ i ] -= delta;
+
+            std::array< floatType, outdim > vp, vm;
+
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+                std::cbegin( local_point ),   std::cend( local_point ),
+                dt,
+                std::cbegin( density_t ),             std::cend( density_t ),
+                std::cbegin( density_tp1 ),           std::cend( density_tp1 ),
+                std::cbegin( u_t ),                   std::cend( u_t ),
+                std::cbegin( u_tp1 ),                 std::cend( u_tp1 ),
+                std::cbegin( w_t ),                   std::cend( w_t ),
+                std::cbegin( xp ),                    std::cend( xp ),
+                std::cbegin( theta_t ),               std::cend( theta_t ),
+                std::cbegin( theta_tp1 ),             std::cend( theta_tp1 ),
+                std::cbegin( e_t ),                   std::cend( e_t ),
+                std::cbegin( e_tp1 ),                 std::cend( e_tp1 ),
+                std::cbegin( z_t ),                   std::cend( z_t ),
+                std::cbegin( z_tp1 ),                 std::cend( z_tp1 ),
+                std::cbegin( vf_t ),                  std::cend( vf_t ),
+                std::cbegin( vf_tp1 ),                std::cend( vf_tp1 ),
+                std::cbegin( umesh_t ),               std::cend( umesh_t ),
+                std::cbegin( umesh_tp1 ),             std::cend( umesh_tp1 ),
+                std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+                std::cbegin( X ),                     std::cend( X ),
+                alpha, beta,
+                std::begin( vp ),  std::end( vp )
+            );
+
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+                std::cbegin( local_point ),   std::cend( local_point ),
+                dt,
+                std::cbegin( density_t ),             std::cend( density_t ),
+                std::cbegin( density_tp1 ),           std::cend( density_tp1 ),
+                std::cbegin( u_t ),                   std::cend( u_t ),
+                std::cbegin( u_tp1 ),                 std::cend( u_tp1 ),
+                std::cbegin( w_t ),                   std::cend( w_t ),
+                std::cbegin( xm ),                    std::cend( xm ),
+                std::cbegin( theta_t ),               std::cend( theta_t ),
+                std::cbegin( theta_tp1 ),             std::cend( theta_tp1 ),
+                std::cbegin( e_t ),                   std::cend( e_t ),
+                std::cbegin( e_tp1 ),                 std::cend( e_tp1 ),
+                std::cbegin( z_t ),                   std::cend( z_t ),
+                std::cbegin( z_tp1 ),                 std::cend( z_tp1 ),
+                std::cbegin( vf_t ),                  std::cend( vf_t ),
+                std::cbegin( vf_tp1 ),                std::cend( vf_tp1 ),
+                std::cbegin( umesh_t ),               std::cend( umesh_t ),
+                std::cbegin( umesh_tp1 ),             std::cend( umesh_tp1 ),
+                std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+                std::cbegin( X ),                     std::cend( X ),
+                alpha, beta,
+                std::begin( vm ),  std::end( vm )
+            );
+
+            for ( unsigned int j = 0; j < outdim; ++j ){
+
+                BOOST_TEST( dRdW[ vardim * j + i ] == ( vp[ j ] - vm[ j ] ) / ( 2 * delta ) );
+
+            }
+
+        }
+
+    }
+
+    // Check the derivatives w.r.t. the temperature
+    {
+
+        constexpr unsigned int vardim = 1 * nphases * 8;
+        constexpr unsigned int outdim = 1 * nphases * 8;
+
+        for ( unsigned int i = 0; i < vardim; ++i ){
+
+            floatType delta = eps * std::fabs( theta_tp1[ i ] ) + eps;
+
+            std::array< floatType, vardim > xp = theta_tp1;
+            std::array< floatType, vardim > xm = theta_tp1;
+
+            xp[ i ] += delta;
+            xm[ i ] -= delta;
+
+            std::array< floatType, outdim > vp, vm;
+
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+                std::cbegin( local_point ),   std::cend( local_point ),
+                dt,
+                std::cbegin( density_t ),             std::cend( density_t ),
+                std::cbegin( density_tp1 ),           std::cend( density_tp1 ),
+                std::cbegin( u_t ),                   std::cend( u_t ),
+                std::cbegin( u_tp1 ),                 std::cend( u_tp1 ),
+                std::cbegin( w_t ),                   std::cend( w_t ),
+                std::cbegin( w_tp1 ),                 std::cend( w_tp1 ),
+                std::cbegin( theta_t ),               std::cend( theta_t ),
+                std::cbegin( xp ),                    std::cend( xp ),
+                std::cbegin( e_t ),                   std::cend( e_t ),
+                std::cbegin( e_tp1 ),                 std::cend( e_tp1 ),
+                std::cbegin( z_t ),                   std::cend( z_t ),
+                std::cbegin( z_tp1 ),                 std::cend( z_tp1 ),
+                std::cbegin( vf_t ),                  std::cend( vf_t ),
+                std::cbegin( vf_tp1 ),                std::cend( vf_tp1 ),
+                std::cbegin( umesh_t ),               std::cend( umesh_t ),
+                std::cbegin( umesh_tp1 ),             std::cend( umesh_tp1 ),
+                std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+                std::cbegin( X ),                     std::cend( X ),
+                alpha, beta,
+                std::begin( vp ),  std::end( vp )
+            );
+
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+                std::cbegin( local_point ),   std::cend( local_point ),
+                dt,
+                std::cbegin( density_t ),             std::cend( density_t ),
+                std::cbegin( density_tp1 ),           std::cend( density_tp1 ),
+                std::cbegin( u_t ),                   std::cend( u_t ),
+                std::cbegin( u_tp1 ),                 std::cend( u_tp1 ),
+                std::cbegin( w_t ),                   std::cend( w_t ),
+                std::cbegin( w_tp1 ),                 std::cend( w_tp1 ),
+                std::cbegin( theta_t ),               std::cend( theta_t ),
+                std::cbegin( xm ),                    std::cend( xm ),
+                std::cbegin( e_t ),                   std::cend( e_t ),
+                std::cbegin( e_tp1 ),                 std::cend( e_tp1 ),
+                std::cbegin( z_t ),                   std::cend( z_t ),
+                std::cbegin( z_tp1 ),                 std::cend( z_tp1 ),
+                std::cbegin( vf_t ),                  std::cend( vf_t ),
+                std::cbegin( vf_tp1 ),                std::cend( vf_tp1 ),
+                std::cbegin( umesh_t ),               std::cend( umesh_t ),
+                std::cbegin( umesh_tp1 ),             std::cend( umesh_tp1 ),
+                std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+                std::cbegin( X ),                     std::cend( X ),
+                alpha, beta,
+                std::begin( vm ),  std::end( vm )
+            );
+
+            for ( unsigned int j = 0; j < outdim; ++j ){
+
+                BOOST_TEST( dRdTheta[ vardim * j + i ] == ( vp[ j ] - vm[ j ] ) / ( 2 * delta ) );
+
+            }
+
+        }
+
+    }
+
+    // Check the derivatives w.r.t. the internal energy
+    {
+
+        constexpr unsigned int vardim = 1 * nphases * 8;
+        constexpr unsigned int outdim = 1 * nphases * 8;
+
+        for ( unsigned int i = 0; i < vardim; ++i ){
+
+            floatType delta = eps * std::fabs( e_tp1[ i ] ) + eps;
+
+            std::array< floatType, vardim > xp = e_tp1;
+            std::array< floatType, vardim > xm = e_tp1;
+
+            xp[ i ] += delta;
+            xm[ i ] -= delta;
+
+            std::array< floatType, outdim > vp, vm;
+
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+                std::cbegin( local_point ),   std::cend( local_point ),
+                dt,
+                std::cbegin( density_t ),             std::cend( density_t ),
+                std::cbegin( density_tp1 ),           std::cend( density_tp1 ),
+                std::cbegin( u_t ),                   std::cend( u_t ),
+                std::cbegin( u_tp1 ),                 std::cend( u_tp1 ),
+                std::cbegin( w_t ),                   std::cend( w_t ),
+                std::cbegin( w_tp1 ),                 std::cend( w_tp1 ),
+                std::cbegin( theta_t ),               std::cend( theta_t ),
+                std::cbegin( theta_tp1 ),             std::cend( theta_tp1 ),
+                std::cbegin( e_t ),                   std::cend( e_t ),
+                std::cbegin( xp ),                    std::cend( xp ),
+                std::cbegin( z_t ),                   std::cend( z_t ),
+                std::cbegin( z_tp1 ),                 std::cend( z_tp1 ),
+                std::cbegin( vf_t ),                  std::cend( vf_t ),
+                std::cbegin( vf_tp1 ),                std::cend( vf_tp1 ),
+                std::cbegin( umesh_t ),               std::cend( umesh_t ),
+                std::cbegin( umesh_tp1 ),             std::cend( umesh_tp1 ),
+                std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+                std::cbegin( X ),                     std::cend( X ),
+                alpha, beta,
+                std::begin( vp ),  std::end( vp )
+            );
+
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+                std::cbegin( local_point ),   std::cend( local_point ),
+                dt,
+                std::cbegin( density_t ),             std::cend( density_t ),
+                std::cbegin( density_tp1 ),           std::cend( density_tp1 ),
+                std::cbegin( u_t ),                   std::cend( u_t ),
+                std::cbegin( u_tp1 ),                 std::cend( u_tp1 ),
+                std::cbegin( w_t ),                   std::cend( w_t ),
+                std::cbegin( w_tp1 ),                 std::cend( w_tp1 ),
+                std::cbegin( theta_t ),               std::cend( theta_t ),
+                std::cbegin( theta_tp1 ),             std::cend( theta_tp1 ),
+                std::cbegin( e_t ),                   std::cend( e_t ),
+                std::cbegin( xm ),                    std::cend( xm ),
+                std::cbegin( z_t ),                   std::cend( z_t ),
+                std::cbegin( z_tp1 ),                 std::cend( z_tp1 ),
+                std::cbegin( vf_t ),                  std::cend( vf_t ),
+                std::cbegin( vf_tp1 ),                std::cend( vf_tp1 ),
+                std::cbegin( umesh_t ),               std::cend( umesh_t ),
+                std::cbegin( umesh_tp1 ),             std::cend( umesh_tp1 ),
+                std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+                std::cbegin( X ),                     std::cend( X ),
+                alpha, beta,
+                std::begin( vm ),  std::end( vm )
+            );
+
+            for ( unsigned int j = 0; j < outdim; ++j ){
+
+                BOOST_TEST( dRdE[ vardim * j + i ] == ( vp[ j ] - vm[ j ] ) / ( 2 * delta ) );
+
+            }
+
+        }
+
+    }
+
+    // Check the derivatives w.r.t. the additional dof
+    {
+
+        constexpr unsigned int vardim = num_additional_dof * 8;
+        constexpr unsigned int outdim = 1 * nphases * 8;
+
+        for ( unsigned int i = 0; i < vardim; ++i ){
+
+            floatType delta = eps * std::fabs( z_tp1[ i ] ) + eps;
+
+            std::array< floatType, vardim > xp = z_tp1;
+            std::array< floatType, vardim > xm = z_tp1;
+
+            xp[ i ] += delta;
+            xm[ i ] -= delta;
+
+            std::array< floatType, outdim > vp, vm;
+
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+                std::cbegin( local_point ),   std::cend( local_point ),
+                dt,
+                std::cbegin( density_t ),             std::cend( density_t ),
+                std::cbegin( density_tp1 ),           std::cend( density_tp1 ),
+                std::cbegin( u_t ),                   std::cend( u_t ),
+                std::cbegin( u_tp1 ),                 std::cend( u_tp1 ),
+                std::cbegin( w_t ),                   std::cend( w_t ),
+                std::cbegin( w_tp1 ),                 std::cend( w_tp1 ),
+                std::cbegin( theta_t ),               std::cend( theta_t ),
+                std::cbegin( theta_tp1 ),             std::cend( theta_tp1 ),
+                std::cbegin( e_t ),                   std::cend( e_t ),
+                std::cbegin( e_tp1 ),                 std::cend( e_tp1 ),
+                std::cbegin( z_t ),                   std::cend( z_t ),
+                std::cbegin( xp ),                    std::cend( xp ),
+                std::cbegin( vf_t ),                  std::cend( vf_t ),
+                std::cbegin( vf_tp1 ),                std::cend( vf_tp1 ),
+                std::cbegin( umesh_t ),               std::cend( umesh_t ),
+                std::cbegin( umesh_tp1 ),             std::cend( umesh_tp1 ),
+                std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+                std::cbegin( X ),                     std::cend( X ),
+                alpha, beta,
+                std::begin( vp ),  std::end( vp )
+            );
+
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+                std::cbegin( local_point ),   std::cend( local_point ),
+                dt,
+                std::cbegin( density_t ),             std::cend( density_t ),
+                std::cbegin( density_tp1 ),           std::cend( density_tp1 ),
+                std::cbegin( u_t ),                   std::cend( u_t ),
+                std::cbegin( u_tp1 ),                 std::cend( u_tp1 ),
+                std::cbegin( w_t ),                   std::cend( w_t ),
+                std::cbegin( w_tp1 ),                 std::cend( w_tp1 ),
+                std::cbegin( theta_t ),               std::cend( theta_t ),
+                std::cbegin( theta_tp1 ),             std::cend( theta_tp1 ),
+                std::cbegin( e_t ),                   std::cend( e_t ),
+                std::cbegin( e_tp1 ),                 std::cend( e_tp1 ),
+                std::cbegin( z_t ),                   std::cend( z_t ),
+                std::cbegin( xm ),                    std::cend( xm ),
+                std::cbegin( vf_t ),                  std::cend( vf_t ),
+                std::cbegin( vf_tp1 ),                std::cend( vf_tp1 ),
+                std::cbegin( umesh_t ),               std::cend( umesh_t ),
+                std::cbegin( umesh_tp1 ),             std::cend( umesh_tp1 ),
+                std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+                std::cbegin( X ),                     std::cend( X ),
+                alpha, beta,
+                std::begin( vm ),  std::end( vm )
+            );
+
+            for ( unsigned int j = 0; j < outdim; ++j ){
+
+                BOOST_TEST( dRdZ[ vardim * j + i ] == ( vp[ j ] - vm[ j ] ) / ( 2 * delta ) );
+
+            }
+
+        }
+
+    }
+
+    // Check the derivatives w.r.t. the volume fraction
+    {
+
+        constexpr unsigned int vardim = 1 * nphases * 8;
+        constexpr unsigned int outdim = 1 * nphases * 8;
+
+        for ( unsigned int i = 0; i < vardim; ++i ){
+
+            floatType delta = eps * std::fabs( vf_tp1[ i ] ) + eps;
+
+            std::array< floatType, vardim > xp = vf_tp1;
+            std::array< floatType, vardim > xm = vf_tp1;
+
+            xp[ i ] += delta;
+            xm[ i ] -= delta;
+
+            std::array< floatType, outdim > vp, vm;
+
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+                std::cbegin( local_point ),   std::cend( local_point ),
+                dt,
+                std::cbegin( density_t ),             std::cend( density_t ),
+                std::cbegin( density_tp1 ),           std::cend( density_tp1 ),
+                std::cbegin( u_t ),                   std::cend( u_t ),
+                std::cbegin( u_tp1 ),                 std::cend( u_tp1 ),
+                std::cbegin( w_t ),                   std::cend( w_t ),
+                std::cbegin( w_tp1 ),                 std::cend( w_tp1 ),
+                std::cbegin( theta_t ),               std::cend( theta_t ),
+                std::cbegin( theta_tp1 ),             std::cend( theta_tp1 ),
+                std::cbegin( e_t ),                   std::cend( e_t ),
+                std::cbegin( e_tp1 ),                 std::cend( e_tp1 ),
+                std::cbegin( z_t ),                   std::cend( z_t ),
+                std::cbegin( z_tp1 ),                 std::cend( z_tp1 ),
+                std::cbegin( vf_t ),                  std::cend( vf_t ),
+                std::cbegin( xp ),                    std::cend( xp ),
+                std::cbegin( umesh_t ),               std::cend( umesh_t ),
+                std::cbegin( umesh_tp1 ),             std::cend( umesh_tp1 ),
+                std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+                std::cbegin( X ),                     std::cend( X ),
+                alpha, beta,
+                std::begin( vp ),  std::end( vp )
+            );
+
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+                std::cbegin( local_point ),   std::cend( local_point ),
+                dt,
+                std::cbegin( density_t ),             std::cend( density_t ),
+                std::cbegin( density_tp1 ),           std::cend( density_tp1 ),
+                std::cbegin( u_t ),                   std::cend( u_t ),
+                std::cbegin( u_tp1 ),                 std::cend( u_tp1 ),
+                std::cbegin( w_t ),                   std::cend( w_t ),
+                std::cbegin( w_tp1 ),                 std::cend( w_tp1 ),
+                std::cbegin( theta_t ),               std::cend( theta_t ),
+                std::cbegin( theta_tp1 ),             std::cend( theta_tp1 ),
+                std::cbegin( e_t ),                   std::cend( e_t ),
+                std::cbegin( e_tp1 ),                 std::cend( e_tp1 ),
+                std::cbegin( z_t ),                   std::cend( z_t ),
+                std::cbegin( z_tp1 ),                 std::cend( z_tp1 ),
+                std::cbegin( vf_t ),                  std::cend( vf_t ),
+                std::cbegin( xm ),                    std::cend( xm ),
+                std::cbegin( umesh_t ),               std::cend( umesh_t ),
+                std::cbegin( umesh_tp1 ),             std::cend( umesh_tp1 ),
+                std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+                std::cbegin( X ),                     std::cend( X ),
+                alpha, beta,
+                std::begin( vm ),  std::end( vm )
+            );
+
+            for ( unsigned int j = 0; j < outdim; ++j ){
+
+                BOOST_TEST( dRdVF[ vardim * j + i ] == ( vp[ j ] - vm[ j ] ) / ( 2 * delta ) );
+
+            }
+
+        }
+
+    }
+
+    // Check the derivatives w.r.t. the mesh displacement
+    {
+
+        constexpr unsigned int vardim = 3 * 8;
+        constexpr unsigned int outdim = 1 * nphases * 8;
+
+        for ( unsigned int i = 0; i < vardim; ++i ){
+
+            floatType delta = eps * std::fabs( umesh_tp1[ i ] ) + eps;
+
+            std::array< floatType, vardim > xp = umesh_tp1;
+            std::array< floatType, vardim > xm = umesh_tp1;
+
+            xp[ i ] += delta;
+            xm[ i ] -= delta;
+
+            std::array< floatType, outdim > vp, vm;
+
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
+                std::cbegin( local_point ),   std::cend( local_point ),
+                dt,
+                std::cbegin( density_t ),             std::cend( density_t ),
+                std::cbegin( density_tp1 ),           std::cend( density_tp1 ),
+                std::cbegin( u_t ),                   std::cend( u_t ),
+                std::cbegin( u_tp1 ),                 std::cend( u_tp1 ),
+                std::cbegin( w_t ),                   std::cend( w_t ),
+                std::cbegin( w_tp1 ),                 std::cend( w_tp1 ),
+                std::cbegin( theta_t ),               std::cend( theta_t ),
+                std::cbegin( theta_tp1 ),             std::cend( theta_tp1 ),
+                std::cbegin( e_t ),                   std::cend( e_t ),
+                std::cbegin( e_tp1 ),                 std::cend( e_tp1 ),
+                std::cbegin( z_t ),                   std::cend( z_t ),
+                std::cbegin( z_tp1 ),                 std::cend( z_tp1 ),
+                std::cbegin( vf_t ),                  std::cend( vf_t ),
+                std::cbegin( vf_tp1 ),                std::cend( vf_tp1 ),
+                std::cbegin( umesh_t ),               std::cend( umesh_t ),
+                std::cbegin( xp ),                    std::cend( xp ),
+                std::cbegin( u_dot_t ),               std::cend( u_dot_t ),
+                std::cbegin( X ),                     std::cend( X ),
+                alpha, beta,
+                std::begin( vp ),  std::end( vp )
+            );
+
+            evaluate_at_nodes< 3, is_per_unit_volume, 8, nphases, num_additional_dof >(
                 std::cbegin( local_point ),   std::cend( local_point ),
                 dt,
                 std::cbegin( density_t ),             std::cend( density_t ),
