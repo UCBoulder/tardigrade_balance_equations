@@ -57,6 +57,8 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergyNonDivergence, * boost::unit_te
 
     constexpr unsigned int dim = 3;
 
+    constexpr bool is_per_unit_volume = false;
+
     floatType density = 0.69646919;
 
     floatType density_dot = 0.28613933;
@@ -87,7 +89,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergyNonDivergence, * boost::unit_te
 
     floatType result;
 
-    tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>(
+    tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
         density, density_dot, std::begin( density_gradient ), std::end( density_gradient ),
         internal_energy, internal_energy_dot, std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
         std::begin( velocity ), std::end( velocity ), std::begin( velocity_gradient ), std::end( velocity_gradient ),
@@ -105,7 +107,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergyNonDivergence, * boost::unit_te
 
     secondOrderTensor dRdGradV, dRdCauchy;
 
-    tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>(
+    tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
         density, density_dot, std::begin( density_gradient ), std::end( density_gradient ),
         internal_energy, internal_energy_dot, std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
         std::begin( velocity ), std::end( velocity ), std::begin( velocity_gradient ), std::end( velocity_gradient ),
@@ -134,7 +136,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergyNonDivergence, * boost::unit_te
 
         floatType vp, vm;
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>(
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
             xp, density_dot, std::begin( density_gradient ), std::end( density_gradient ),
             internal_energy, internal_energy_dot, std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
             std::begin( velocity ), std::end( velocity ), std::begin( velocity_gradient ), std::end( velocity_gradient ),
@@ -142,7 +144,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergyNonDivergence, * boost::unit_te
             std::begin( net_interphase_force ), std::end( net_interphase_force ), vp
         );
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>(
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
             xm, density_dot, std::begin( density_gradient ), std::end( density_gradient ),
             internal_energy, internal_energy_dot, std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
             std::begin( velocity ), std::end( velocity ), std::begin( velocity_gradient ), std::end( velocity_gradient ),
@@ -168,7 +170,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergyNonDivergence, * boost::unit_te
 
         floatType vp, vm;
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>(
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
             density, xp, std::begin( density_gradient ), std::end( density_gradient ),
             internal_energy, internal_energy_dot, std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
             std::begin( velocity ), std::end( velocity ), std::begin( velocity_gradient ), std::end( velocity_gradient ),
@@ -176,7 +178,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergyNonDivergence, * boost::unit_te
             std::begin( net_interphase_force ), std::end( net_interphase_force ), vp
         );
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>(
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
             density, xm, std::begin( density_gradient ), std::end( density_gradient ),
             internal_energy, internal_energy_dot, std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
             std::begin( velocity ), std::end( velocity ), std::begin( velocity_gradient ), std::end( velocity_gradient ),
@@ -202,7 +204,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergyNonDivergence, * boost::unit_te
 
         floatType vp, vm;
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>(
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
             density, density_dot, std::begin( xp ), std::end( xp ),
             internal_energy, internal_energy_dot, std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
             std::begin( velocity ), std::end( velocity ), std::begin( velocity_gradient ), std::end( velocity_gradient ),
@@ -210,7 +212,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergyNonDivergence, * boost::unit_te
             std::begin( net_interphase_force ), std::end( net_interphase_force ), vp
         );
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>(
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
             density, density_dot, std::begin( xm ), std::end( xm ),
             internal_energy, internal_energy_dot, std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
             std::begin( velocity ), std::end( velocity ), std::begin( velocity_gradient ), std::end( velocity_gradient ),
@@ -236,7 +238,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergyNonDivergence, * boost::unit_te
 
         floatType vp, vm;
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>(
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
             density, density_dot, std::begin( density_gradient ), std::end( density_gradient ),
             xp, internal_energy_dot, std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
             std::begin( velocity ), std::end( velocity ), std::begin( velocity_gradient ), std::end( velocity_gradient ),
@@ -244,7 +246,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergyNonDivergence, * boost::unit_te
             std::begin( net_interphase_force ), std::end( net_interphase_force ), vp
         );
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>(
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
             density, density_dot, std::begin( density_gradient ), std::end( density_gradient ),
             xm, internal_energy_dot, std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
             std::begin( velocity ), std::end( velocity ), std::begin( velocity_gradient ), std::end( velocity_gradient ),
@@ -270,7 +272,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergyNonDivergence, * boost::unit_te
 
         floatType vp, vm;
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>(
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
             density, density_dot, std::begin( density_gradient ), std::end( density_gradient ),
             internal_energy, xp, std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
             std::begin( velocity ), std::end( velocity ), std::begin( velocity_gradient ), std::end( velocity_gradient ),
@@ -278,7 +280,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergyNonDivergence, * boost::unit_te
             std::begin( net_interphase_force ), std::end( net_interphase_force ), vp
         );
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>(
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
             density, density_dot, std::begin( density_gradient ), std::end( density_gradient ),
             internal_energy, xm, std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
             std::begin( velocity ), std::end( velocity ), std::begin( velocity_gradient ), std::end( velocity_gradient ),
@@ -304,7 +306,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergyNonDivergence, * boost::unit_te
 
         floatType vp, vm;
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>(
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
             density, density_dot, std::begin( density_gradient ), std::end( density_gradient ),
             internal_energy, internal_energy_dot, std::begin( xp ), std::end( xp ),
             std::begin( velocity ), std::end( velocity ), std::begin( velocity_gradient ), std::end( velocity_gradient ),
@@ -312,7 +314,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergyNonDivergence, * boost::unit_te
             std::begin( net_interphase_force ), std::end( net_interphase_force ), vp
         );
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>(
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
             density, density_dot, std::begin( density_gradient ), std::end( density_gradient ),
             internal_energy, internal_energy_dot, std::begin( xm ), std::end( xm ),
             std::begin( velocity ), std::end( velocity ), std::begin( velocity_gradient ), std::end( velocity_gradient ),
@@ -338,7 +340,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergyNonDivergence, * boost::unit_te
 
         floatType vp, vm;
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>(
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
             density, density_dot, std::begin( density_gradient ), std::end( density_gradient ),
             internal_energy, internal_energy_dot, std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
             std::begin( xp ), std::end( xp ), std::begin( velocity_gradient ), std::end( velocity_gradient ),
@@ -346,7 +348,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergyNonDivergence, * boost::unit_te
             std::begin( net_interphase_force ), std::end( net_interphase_force ), vp
         );
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>(
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
             density, density_dot, std::begin( density_gradient ), std::end( density_gradient ),
             internal_energy, internal_energy_dot, std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
             std::begin( xm ), std::end( xm ), std::begin( velocity_gradient ), std::end( velocity_gradient ),
@@ -372,7 +374,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergyNonDivergence, * boost::unit_te
 
         floatType vp, vm;
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>(
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
             density, density_dot, std::begin( density_gradient ), std::end( density_gradient ),
             internal_energy, internal_energy_dot, std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
             std::begin( velocity ), std::end( velocity ), std::begin( xp ), std::end( xp ),
@@ -380,7 +382,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergyNonDivergence, * boost::unit_te
             std::begin( net_interphase_force ), std::end( net_interphase_force ), vp
         );
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>(
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
             density, density_dot, std::begin( density_gradient ), std::end( density_gradient ),
             internal_energy, internal_energy_dot, std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
             std::begin( velocity ), std::end( velocity ), std::begin( xm ), std::end( xm ),
@@ -406,7 +408,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergyNonDivergence, * boost::unit_te
 
         floatType vp, vm;
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>(
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
             density, density_dot, std::begin( density_gradient ), std::end( density_gradient ),
             internal_energy, internal_energy_dot, std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
             std::begin( velocity ), std::end( velocity ), std::begin( velocity_gradient ), std::end( velocity_gradient ),
@@ -414,7 +416,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergyNonDivergence, * boost::unit_te
             std::begin( net_interphase_force ), std::end( net_interphase_force ), vp
         );
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>(
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
             density, density_dot, std::begin( density_gradient ), std::end( density_gradient ),
             internal_energy, internal_energy_dot, std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
             std::begin( velocity ), std::end( velocity ), std::begin( velocity_gradient ), std::end( velocity_gradient ),
@@ -440,7 +442,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergyNonDivergence, * boost::unit_te
 
         floatType vp, vm;
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>(
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
             density, density_dot, std::begin( density_gradient ), std::end( density_gradient ),
             internal_energy, internal_energy_dot, std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
             std::begin( velocity ), std::end( velocity ), std::begin( velocity_gradient ), std::end( velocity_gradient ),
@@ -448,7 +450,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergyNonDivergence, * boost::unit_te
             std::begin( net_interphase_force ), std::end( net_interphase_force ), vp
         );
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>(
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
             density, density_dot, std::begin( density_gradient ), std::end( density_gradient ),
             internal_energy, internal_energy_dot, std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
             std::begin( velocity ), std::end( velocity ), std::begin( velocity_gradient ), std::end( velocity_gradient ),
@@ -474,7 +476,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergyNonDivergence, * boost::unit_te
 
         floatType vp, vm;
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>(
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
              density, density_dot, std::begin( density_gradient ), std::end( density_gradient ),
              internal_energy, internal_energy_dot, std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
              std::begin( velocity ), std::end( velocity ), std::begin( velocity_gradient ), std::end( velocity_gradient ),
@@ -482,7 +484,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergyNonDivergence, * boost::unit_te
              std::begin( net_interphase_force ), std::end( net_interphase_force ), vp
         );
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>(
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
             density, density_dot, std::begin( density_gradient ), std::end( density_gradient ),
             internal_energy, internal_energy_dot, std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
             std::begin( velocity ), std::end( velocity ), std::begin( velocity_gradient ), std::end( velocity_gradient ),
@@ -508,7 +510,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergyNonDivergence, * boost::unit_te
 
         floatType vp, vm;
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>(
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
             density, density_dot, std::begin( density_gradient ), std::end( density_gradient ),
             internal_energy, internal_energy_dot, std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
             std::begin( velocity ), std::end( velocity ), std::begin( velocity_gradient ), std::end( velocity_gradient ),
@@ -516,7 +518,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfEnergyNonDivergence, * boost::unit_te
             std::begin( xp ), std::end( xp ), vp
         );
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>(
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
             density, density_dot, std::begin( density_gradient ), std::end( density_gradient ),
             internal_energy, internal_energy_dot, std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
             std::begin( velocity ), std::end( velocity ), std::begin( velocity_gradient ), std::end( velocity_gradient ),
@@ -537,6 +539,8 @@ BOOST_AUTO_TEST_CASE( test_multiphase_computeBalanceOfEnergyNonDivergence, * boo
     constexpr unsigned int nphases = 5;
 
     constexpr unsigned int dim = 3;
+
+    constexpr bool is_per_unit_volume = false;
 
     constexpr unsigned int sot_dim = dim * dim;
 
@@ -592,19 +596,21 @@ BOOST_AUTO_TEST_CASE( test_multiphase_computeBalanceOfEnergyNonDivergence, * boo
 
     std::array<floatType,nphases> result;
 
-    tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>( std::begin( density ),                  std::end( density ),
-                                                                                           std::begin( density_dot ),              std::end( density_dot ),
-                                                                                           std::begin( density_gradient ),         std::end( density_gradient ),
-                                                                                           std::begin( internal_energy ),          std::end( internal_energy ),
-                                                                                           std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
-                                                                                           std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
-                                                                                           std::begin( velocity ),                 std::end( velocity ),
-                                                                                           std::begin( velocity_gradient ),        std::end( velocity_gradient ),
-                                                                                           std::begin( cauchy_stress ),            std::end( cauchy_stress ),
-                                                                                           std::begin( volume_fraction ),          std::end( volume_fraction ),
-                                                                                           std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
-                                                                                           std::begin( net_interphase_force ),     std::end( net_interphase_force ),
-                                                                                           std::begin( result ),                   std::end( result ) );
+    tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
+        std::begin( density ),                  std::end( density ),
+        std::begin( density_dot ),              std::end( density_dot ),
+        std::begin( density_gradient ),         std::end( density_gradient ),
+        std::begin( internal_energy ),          std::end( internal_energy ),
+        std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
+        std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
+        std::begin( velocity ),                 std::end( velocity ),
+        std::begin( velocity_gradient ),        std::end( velocity_gradient ),
+        std::begin( cauchy_stress ),            std::end( cauchy_stress ),
+        std::begin( volume_fraction ),          std::end( volume_fraction ),
+        std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
+        std::begin( net_interphase_force ),     std::end( net_interphase_force ),
+        std::begin( result ),                   std::end( result )
+    );
 
     BOOST_TEST( result == answer, CHECK_PER_ELEMENT );
 
@@ -616,31 +622,33 @@ BOOST_AUTO_TEST_CASE( test_multiphase_computeBalanceOfEnergyNonDivergence, * boo
 
     std::array<floatType,sot_dim*nphases> dRdGradV, dRdCauchy;
 
-    tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>( std::begin( density ),                  std::end( density ),
-                                                                                           std::begin( density_dot ),              std::end( density_dot ),
-                                                                                           std::begin( density_gradient ),         std::end( density_gradient ),
-                                                                                           std::begin( internal_energy ),          std::end( internal_energy ),
-                                                                                           std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
-                                                                                           std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
-                                                                                           std::begin( velocity ),                 std::end( velocity ),
-                                                                                           std::begin( velocity_gradient ),        std::end( velocity_gradient ),
-                                                                                           std::begin( cauchy_stress ),            std::end( cauchy_stress ),
-                                                                                           std::begin( volume_fraction ),          std::end( volume_fraction ),
-                                                                                           std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
-                                                                                           std::begin( net_interphase_force ),     std::end( net_interphase_force ),
-                                                                                           std::begin( result ),                   std::end( result ),
-                                                                                           std::begin( dRdRho ),                   std::end( dRdRho ),
-                                                                                           std::begin( dRdRhoDot ),                std::end( dRdRhoDot ),
-                                                                                           std::begin( dRdGradRho ),               std::end( dRdGradRho ),
-                                                                                           std::begin( dRdE ),                     std::end( dRdE ),
-                                                                                           std::begin( dRdEDot ),                  std::end( dRdEDot ),
-                                                                                           std::begin( dRdGradE ),                 std::end( dRdGradE ),
-                                                                                           std::begin( dRdV ),                     std::end( dRdV ),
-                                                                                           std::begin( dRdGradV ),                 std::end( dRdGradV ),
-                                                                                           std::begin( dRdCauchy ),                std::end( dRdCauchy ),
-                                                                                           std::begin( dRdPhi ),                   std::end( dRdPhi ),
-                                                                                           std::begin( dRdr ),                     std::end( dRdr ),
-                                                                                           std::begin( dRdpi ),                    std::end( dRdpi ) );
+    tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
+        std::begin( density ),                  std::end( density ),
+        std::begin( density_dot ),              std::end( density_dot ),
+        std::begin( density_gradient ),         std::end( density_gradient ),
+        std::begin( internal_energy ),          std::end( internal_energy ),
+        std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
+        std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
+        std::begin( velocity ),                 std::end( velocity ),
+        std::begin( velocity_gradient ),        std::end( velocity_gradient ),
+        std::begin( cauchy_stress ),            std::end( cauchy_stress ),
+        std::begin( volume_fraction ),          std::end( volume_fraction ),
+        std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
+        std::begin( net_interphase_force ),     std::end( net_interphase_force ),
+        std::begin( result ),                   std::end( result ),
+        std::begin( dRdRho ),                   std::end( dRdRho ),
+        std::begin( dRdRhoDot ),                std::end( dRdRhoDot ),
+        std::begin( dRdGradRho ),               std::end( dRdGradRho ),
+        std::begin( dRdE ),                     std::end( dRdE ),
+        std::begin( dRdEDot ),                  std::end( dRdEDot ),
+        std::begin( dRdGradE ),                 std::end( dRdGradE ),
+        std::begin( dRdV ),                     std::end( dRdV ),
+        std::begin( dRdGradV ),                 std::end( dRdGradV ),
+        std::begin( dRdCauchy ),                std::end( dRdCauchy ),
+        std::begin( dRdPhi ),                   std::end( dRdPhi ),
+        std::begin( dRdr ),                     std::end( dRdr ),
+        std::begin( dRdpi ),                    std::end( dRdpi )
+    );
 
     BOOST_TEST( result == answer, CHECK_PER_ELEMENT );
 
@@ -658,33 +666,37 @@ BOOST_AUTO_TEST_CASE( test_multiphase_computeBalanceOfEnergyNonDivergence, * boo
 
         std::array<floatType,nphases> vp, vm;
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>( std::begin( xp ),                       std::end( xp ),
-                                                                                               std::begin( density_dot ),              std::end( density_dot ),
-                                                                                               std::begin( density_gradient ),         std::end( density_gradient ),
-                                                                                               std::begin( internal_energy ),          std::end( internal_energy ),
-                                                                                               std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
-                                                                                               std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
-                                                                                               std::begin( velocity ),                 std::end( velocity ),
-                                                                                               std::begin( velocity_gradient ),        std::end( velocity_gradient ),
-                                                                                               std::begin( cauchy_stress ),            std::end( cauchy_stress ),
-                                                                                               std::begin( volume_fraction ),          std::end( volume_fraction ),
-                                                                                               std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
-                                                                                               std::begin( net_interphase_force ),     std::end( net_interphase_force ),
-                                                                                               std::begin( vp ),                       std::end( vp ) );
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
+            std::begin( xp ),                       std::end( xp ),
+            std::begin( density_dot ),              std::end( density_dot ),
+            std::begin( density_gradient ),         std::end( density_gradient ),
+            std::begin( internal_energy ),          std::end( internal_energy ),
+            std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
+            std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
+            std::begin( velocity ),                 std::end( velocity ),
+            std::begin( velocity_gradient ),        std::end( velocity_gradient ),
+            std::begin( cauchy_stress ),            std::end( cauchy_stress ),
+            std::begin( volume_fraction ),          std::end( volume_fraction ),
+            std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
+            std::begin( net_interphase_force ),     std::end( net_interphase_force ),
+            std::begin( vp ),                       std::end( vp )
+        );
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>( std::begin( xm ),                       std::end( xm ),
-                                                                                               std::begin( density_dot ),              std::end( density_dot ),
-                                                                                               std::begin( density_gradient ),         std::end( density_gradient ),
-                                                                                               std::begin( internal_energy ),          std::end( internal_energy ),
-                                                                                               std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
-                                                                                               std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
-                                                                                               std::begin( velocity ),                 std::end( velocity ),
-                                                                                               std::begin( velocity_gradient ),        std::end( velocity_gradient ),
-                                                                                               std::begin( cauchy_stress ),            std::end( cauchy_stress ),
-                                                                                               std::begin( volume_fraction ),          std::end( volume_fraction ),
-                                                                                               std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
-                                                                                               std::begin( net_interphase_force ),     std::end( net_interphase_force ),
-                                                                                               std::begin( vm ),                       std::end( vm ) );
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
+            std::begin( xm ),                       std::end( xm ),
+            std::begin( density_dot ),              std::end( density_dot ),
+            std::begin( density_gradient ),         std::end( density_gradient ),
+            std::begin( internal_energy ),          std::end( internal_energy ),
+            std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
+            std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
+            std::begin( velocity ),                 std::end( velocity ),
+            std::begin( velocity_gradient ),        std::end( velocity_gradient ),
+            std::begin( cauchy_stress ),            std::end( cauchy_stress ),
+            std::begin( volume_fraction ),          std::end( volume_fraction ),
+            std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
+            std::begin( net_interphase_force ),     std::end( net_interphase_force ),
+            std::begin( vm ),                       std::end( vm )
+        );
 
         for ( unsigned int j = 0; j < nphases; j++ ){
 
@@ -717,33 +729,37 @@ BOOST_AUTO_TEST_CASE( test_multiphase_computeBalanceOfEnergyNonDivergence, * boo
 
         std::array<floatType,nphases> vp, vm;
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>( std::begin( density ),                  std::end( density ),
-                                                                                               std::begin( xp ),                       std::end( xp ),
-                                                                                               std::begin( density_gradient ),         std::end( density_gradient ),
-                                                                                               std::begin( internal_energy ),          std::end( internal_energy ),
-                                                                                               std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
-                                                                                               std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
-                                                                                               std::begin( velocity ),                 std::end( velocity ),
-                                                                                               std::begin( velocity_gradient ),        std::end( velocity_gradient ),
-                                                                                               std::begin( cauchy_stress ),            std::end( cauchy_stress ),
-                                                                                               std::begin( volume_fraction ),          std::end( volume_fraction ),
-                                                                                               std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
-                                                                                               std::begin( net_interphase_force ),     std::end( net_interphase_force ),
-                                                                                               std::begin( vp ),                       std::end( vp ) );
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
+            std::begin( density ),                  std::end( density ),
+            std::begin( xp ),                       std::end( xp ),
+            std::begin( density_gradient ),         std::end( density_gradient ),
+            std::begin( internal_energy ),          std::end( internal_energy ),
+            std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
+            std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
+            std::begin( velocity ),                 std::end( velocity ),
+            std::begin( velocity_gradient ),        std::end( velocity_gradient ),
+            std::begin( cauchy_stress ),            std::end( cauchy_stress ),
+            std::begin( volume_fraction ),          std::end( volume_fraction ),
+            std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
+            std::begin( net_interphase_force ),     std::end( net_interphase_force ),
+            std::begin( vp ),                       std::end( vp )
+        );
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>( std::begin( density ),                  std::end( density ),
-                                                                                               std::begin( xm ),                       std::end( xm ),
-                                                                                               std::begin( density_gradient ),         std::end( density_gradient ),
-                                                                                               std::begin( internal_energy ),          std::end( internal_energy ),
-                                                                                               std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
-                                                                                               std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
-                                                                                               std::begin( velocity ),                 std::end( velocity ),
-                                                                                               std::begin( velocity_gradient ),        std::end( velocity_gradient ),
-                                                                                               std::begin( cauchy_stress ),            std::end( cauchy_stress ),
-                                                                                               std::begin( volume_fraction ),          std::end( volume_fraction ),
-                                                                                               std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
-                                                                                               std::begin( net_interphase_force ),     std::end( net_interphase_force ),
-                                                                                               std::begin( vm ),                       std::end( vm ) );
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
+            std::begin( density ),                  std::end( density ),
+            std::begin( xm ),                       std::end( xm ),
+            std::begin( density_gradient ),         std::end( density_gradient ),
+            std::begin( internal_energy ),          std::end( internal_energy ),
+            std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
+            std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
+            std::begin( velocity ),                 std::end( velocity ),
+            std::begin( velocity_gradient ),        std::end( velocity_gradient ),
+            std::begin( cauchy_stress ),            std::end( cauchy_stress ),
+            std::begin( volume_fraction ),          std::end( volume_fraction ),
+            std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
+            std::begin( net_interphase_force ),     std::end( net_interphase_force ),
+            std::begin( vm ),                       std::end( vm )
+        );
 
         for ( unsigned int j = 0; j < nphases; j++ ){
 
@@ -776,33 +792,37 @@ BOOST_AUTO_TEST_CASE( test_multiphase_computeBalanceOfEnergyNonDivergence, * boo
 
         std::array<floatType,nphases> vp, vm;
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>( std::begin( density ),                  std::end( density ),
-                                                                                               std::begin( density_dot ),              std::end( density_dot ),
-                                                                                               std::begin( xp ),                       std::end( xp ),
-                                                                                               std::begin( internal_energy ),          std::end( internal_energy ),
-                                                                                               std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
-                                                                                               std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
-                                                                                               std::begin( velocity ),                 std::end( velocity ),
-                                                                                               std::begin( velocity_gradient ),        std::end( velocity_gradient ),
-                                                                                               std::begin( cauchy_stress ),            std::end( cauchy_stress ),
-                                                                                               std::begin( volume_fraction ),          std::end( volume_fraction ),
-                                                                                               std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
-                                                                                               std::begin( net_interphase_force ),     std::end( net_interphase_force ),
-                                                                                               std::begin( vp ),                       std::end( vp ) );
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
+            std::begin( density ),                  std::end( density ),
+            std::begin( density_dot ),              std::end( density_dot ),
+            std::begin( xp ),                       std::end( xp ),
+            std::begin( internal_energy ),          std::end( internal_energy ),
+            std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
+            std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
+            std::begin( velocity ),                 std::end( velocity ),
+            std::begin( velocity_gradient ),        std::end( velocity_gradient ),
+            std::begin( cauchy_stress ),            std::end( cauchy_stress ),
+            std::begin( volume_fraction ),          std::end( volume_fraction ),
+            std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
+            std::begin( net_interphase_force ),     std::end( net_interphase_force ),
+            std::begin( vp ),                       std::end( vp )
+        );
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>( std::begin( density ),                  std::end( density ),
-                                                                                               std::begin( density_dot ),              std::end( density_dot ),
-                                                                                               std::begin( xm ),                       std::end( xm ),
-                                                                                               std::begin( internal_energy ),          std::end( internal_energy ),
-                                                                                               std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
-                                                                                               std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
-                                                                                               std::begin( velocity ),                 std::end( velocity ),
-                                                                                               std::begin( velocity_gradient ),        std::end( velocity_gradient ),
-                                                                                               std::begin( cauchy_stress ),            std::end( cauchy_stress ),
-                                                                                               std::begin( volume_fraction ),          std::end( volume_fraction ),
-                                                                                               std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
-                                                                                               std::begin( net_interphase_force ),     std::end( net_interphase_force ),
-                                                                                               std::begin( vm ),                       std::end( vm ) );
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
+            std::begin( density ),                  std::end( density ),
+            std::begin( density_dot ),              std::end( density_dot ),
+            std::begin( xm ),                       std::end( xm ),
+            std::begin( internal_energy ),          std::end( internal_energy ),
+            std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
+            std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
+            std::begin( velocity ),                 std::end( velocity ),
+            std::begin( velocity_gradient ),        std::end( velocity_gradient ),
+            std::begin( cauchy_stress ),            std::end( cauchy_stress ),
+            std::begin( volume_fraction ),          std::end( volume_fraction ),
+            std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
+            std::begin( net_interphase_force ),     std::end( net_interphase_force ),
+            std::begin( vm ),                       std::end( vm )
+        );
 
         for ( unsigned int j = 0; j < nphases; j++ ){
 
@@ -839,33 +859,37 @@ BOOST_AUTO_TEST_CASE( test_multiphase_computeBalanceOfEnergyNonDivergence, * boo
 
         std::array<floatType,nphases> vp, vm;
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>( std::begin( density ),                  std::end( density ),
-                                                                                               std::begin( density_dot ),              std::end( density_dot ),
-                                                                                               std::begin( density_gradient ),         std::end( density_gradient ),
-                                                                                               std::begin( xp ),                       std::end( xp ),
-                                                                                               std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
-                                                                                               std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
-                                                                                               std::begin( velocity ),                 std::end( velocity ),
-                                                                                               std::begin( velocity_gradient ),        std::end( velocity_gradient ),
-                                                                                               std::begin( cauchy_stress ),            std::end( cauchy_stress ),
-                                                                                               std::begin( volume_fraction ),          std::end( volume_fraction ),
-                                                                                               std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
-                                                                                               std::begin( net_interphase_force ),     std::end( net_interphase_force ),
-                                                                                               std::begin( vp ),                       std::end( vp ) );
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
+            std::begin( density ),                  std::end( density ),
+            std::begin( density_dot ),              std::end( density_dot ),
+            std::begin( density_gradient ),         std::end( density_gradient ),
+            std::begin( xp ),                       std::end( xp ),
+            std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
+            std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
+            std::begin( velocity ),                 std::end( velocity ),
+            std::begin( velocity_gradient ),        std::end( velocity_gradient ),
+            std::begin( cauchy_stress ),            std::end( cauchy_stress ),
+            std::begin( volume_fraction ),          std::end( volume_fraction ),
+            std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
+            std::begin( net_interphase_force ),     std::end( net_interphase_force ),
+            std::begin( vp ),                       std::end( vp )
+        );
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>( std::begin( density ),                  std::end( density ),
-                                                                                               std::begin( density_dot ),              std::end( density_dot ),
-                                                                                               std::begin( density_gradient ),         std::end( density_gradient ),
-                                                                                               std::begin( xm ),                       std::end( xm ),
-                                                                                               std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
-                                                                                               std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
-                                                                                               std::begin( velocity ),                 std::end( velocity ),
-                                                                                               std::begin( velocity_gradient ),        std::end( velocity_gradient ),
-                                                                                               std::begin( cauchy_stress ),            std::end( cauchy_stress ),
-                                                                                               std::begin( volume_fraction ),          std::end( volume_fraction ),
-                                                                                               std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
-                                                                                               std::begin( net_interphase_force ),     std::end( net_interphase_force ),
-                                                                                               std::begin( vm ),                       std::end( vm ) );
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
+            std::begin( density ),                  std::end( density ),
+            std::begin( density_dot ),              std::end( density_dot ),
+            std::begin( density_gradient ),         std::end( density_gradient ),
+            std::begin( xm ),                       std::end( xm ),
+            std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
+            std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
+            std::begin( velocity ),                 std::end( velocity ),
+            std::begin( velocity_gradient ),        std::end( velocity_gradient ),
+            std::begin( cauchy_stress ),            std::end( cauchy_stress ),
+            std::begin( volume_fraction ),          std::end( volume_fraction ),
+            std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
+            std::begin( net_interphase_force ),     std::end( net_interphase_force ),
+            std::begin( vm ),                       std::end( vm )
+        );
 
         for ( unsigned int j = 0; j < nphases; j++ ){
 
@@ -898,33 +922,37 @@ BOOST_AUTO_TEST_CASE( test_multiphase_computeBalanceOfEnergyNonDivergence, * boo
 
         std::array<floatType,nphases> vp, vm;
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>( std::begin( density ),                  std::end( density ),
-                                                                                               std::begin( density_dot ),              std::end( density_dot ),
-                                                                                               std::begin( density_gradient ),         std::end( density_gradient ),
-                                                                                               std::begin( internal_energy ),          std::end( internal_energy ),
-                                                                                               std::begin( xp ),                       std::end( xp ),
-                                                                                               std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
-                                                                                               std::begin( velocity ),                 std::end( velocity ),
-                                                                                               std::begin( velocity_gradient ),        std::end( velocity_gradient ),
-                                                                                               std::begin( cauchy_stress ),            std::end( cauchy_stress ),
-                                                                                               std::begin( volume_fraction ),          std::end( volume_fraction ),
-                                                                                               std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
-                                                                                               std::begin( net_interphase_force ),     std::end( net_interphase_force ),
-                                                                                               std::begin( vp ),                       std::end( vp ) );
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
+            std::begin( density ),                  std::end( density ),
+            std::begin( density_dot ),              std::end( density_dot ),
+            std::begin( density_gradient ),         std::end( density_gradient ),
+            std::begin( internal_energy ),          std::end( internal_energy ),
+            std::begin( xp ),                       std::end( xp ),
+            std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
+            std::begin( velocity ),                 std::end( velocity ),
+            std::begin( velocity_gradient ),        std::end( velocity_gradient ),
+            std::begin( cauchy_stress ),            std::end( cauchy_stress ),
+            std::begin( volume_fraction ),          std::end( volume_fraction ),
+            std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
+            std::begin( net_interphase_force ),     std::end( net_interphase_force ),
+            std::begin( vp ),                       std::end( vp )
+        );
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>( std::begin( density ),                  std::end( density ),
-                                                                                               std::begin( density_dot ),              std::end( density_dot ),
-                                                                                               std::begin( density_gradient ),         std::end( density_gradient ),
-                                                                                               std::begin( internal_energy ),          std::end( internal_energy ),
-                                                                                               std::begin( xm ),                       std::end( xm ),
-                                                                                               std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
-                                                                                               std::begin( velocity ),                 std::end( velocity ),
-                                                                                               std::begin( velocity_gradient ),        std::end( velocity_gradient ),
-                                                                                               std::begin( cauchy_stress ),            std::end( cauchy_stress ),
-                                                                                               std::begin( volume_fraction ),          std::end( volume_fraction ),
-                                                                                               std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
-                                                                                               std::begin( net_interphase_force ),     std::end( net_interphase_force ),
-                                                                                               std::begin( vm ),                       std::end( vm ) );
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
+            std::begin( density ),                  std::end( density ),
+            std::begin( density_dot ),              std::end( density_dot ),
+            std::begin( density_gradient ),         std::end( density_gradient ),
+            std::begin( internal_energy ),          std::end( internal_energy ),
+            std::begin( xm ),                       std::end( xm ),
+            std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
+            std::begin( velocity ),                 std::end( velocity ),
+            std::begin( velocity_gradient ),        std::end( velocity_gradient ),
+            std::begin( cauchy_stress ),            std::end( cauchy_stress ),
+            std::begin( volume_fraction ),          std::end( volume_fraction ),
+            std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
+            std::begin( net_interphase_force ),     std::end( net_interphase_force ),
+            std::begin( vm ),                       std::end( vm )
+        );
 
         for ( unsigned int j = 0; j < nphases; j++ ){
 
@@ -957,33 +985,37 @@ BOOST_AUTO_TEST_CASE( test_multiphase_computeBalanceOfEnergyNonDivergence, * boo
 
         std::array<floatType,nphases> vp, vm;
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>( std::begin( density ),                  std::end( density ),
-                                                                                               std::begin( density_dot ),              std::end( density_dot ),
-                                                                                               std::begin( density_gradient ),         std::end( density_gradient ),
-                                                                                               std::begin( internal_energy ),          std::end( internal_energy ),
-                                                                                               std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
-                                                                                               std::begin( xp ),                       std::end( xp ),
-                                                                                               std::begin( velocity ),                 std::end( velocity ),
-                                                                                               std::begin( velocity_gradient ),        std::end( velocity_gradient ),
-                                                                                               std::begin( cauchy_stress ),            std::end( cauchy_stress ),
-                                                                                               std::begin( volume_fraction ),          std::end( volume_fraction ),
-                                                                                               std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
-                                                                                               std::begin( net_interphase_force ),     std::end( net_interphase_force ),
-                                                                                               std::begin( vp ),                       std::end( vp ) );
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
+            std::begin( density ),                  std::end( density ),
+            std::begin( density_dot ),              std::end( density_dot ),
+            std::begin( density_gradient ),         std::end( density_gradient ),
+            std::begin( internal_energy ),          std::end( internal_energy ),
+            std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
+            std::begin( xp ),                       std::end( xp ),
+            std::begin( velocity ),                 std::end( velocity ),
+            std::begin( velocity_gradient ),        std::end( velocity_gradient ),
+            std::begin( cauchy_stress ),            std::end( cauchy_stress ),
+            std::begin( volume_fraction ),          std::end( volume_fraction ),
+            std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
+            std::begin( net_interphase_force ),     std::end( net_interphase_force ),
+            std::begin( vp ),                       std::end( vp )
+        );
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>( std::begin( density ),                  std::end( density ),
-                                                                                               std::begin( density_dot ),              std::end( density_dot ),
-                                                                                               std::begin( density_gradient ),         std::end( density_gradient ),
-                                                                                               std::begin( internal_energy ),          std::end( internal_energy ),
-                                                                                               std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
-                                                                                               std::begin( xm ),                       std::end( xm ),
-                                                                                               std::begin( velocity ),                 std::end( velocity ),
-                                                                                               std::begin( velocity_gradient ),        std::end( velocity_gradient ),
-                                                                                               std::begin( cauchy_stress ),            std::end( cauchy_stress ),
-                                                                                               std::begin( volume_fraction ),          std::end( volume_fraction ),
-                                                                                               std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
-                                                                                               std::begin( net_interphase_force ),     std::end( net_interphase_force ),
-                                                                                               std::begin( vm ),                       std::end( vm ) );
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
+            std::begin( density ),                  std::end( density ),
+            std::begin( density_dot ),              std::end( density_dot ),
+            std::begin( density_gradient ),         std::end( density_gradient ),
+            std::begin( internal_energy ),          std::end( internal_energy ),
+            std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
+            std::begin( xm ),                       std::end( xm ),
+            std::begin( velocity ),                 std::end( velocity ),
+            std::begin( velocity_gradient ),        std::end( velocity_gradient ),
+            std::begin( cauchy_stress ),            std::end( cauchy_stress ),
+            std::begin( volume_fraction ),          std::end( volume_fraction ),
+            std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
+            std::begin( net_interphase_force ),     std::end( net_interphase_force ),
+            std::begin( vm ),                       std::end( vm )
+        );
 
         for ( unsigned int j = 0; j < nphases; j++ ){
 
@@ -1020,33 +1052,37 @@ BOOST_AUTO_TEST_CASE( test_multiphase_computeBalanceOfEnergyNonDivergence, * boo
 
         std::array<floatType,nphases> vp, vm;
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>( std::begin( density ),                  std::end( density ),
-                                                                                               std::begin( density_dot ),              std::end( density_dot ),
-                                                                                               std::begin( density_gradient ),         std::end( density_gradient ),
-                                                                                               std::begin( internal_energy ),          std::end( internal_energy ),
-                                                                                               std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
-                                                                                               std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
-                                                                                               std::begin( xp ),                       std::end( xp ),
-                                                                                               std::begin( velocity_gradient ),        std::end( velocity_gradient ),
-                                                                                               std::begin( cauchy_stress ),            std::end( cauchy_stress ),
-                                                                                               std::begin( volume_fraction ),          std::end( volume_fraction ),
-                                                                                               std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
-                                                                                               std::begin( net_interphase_force ),     std::end( net_interphase_force ),
-                                                                                               std::begin( vp ),                       std::end( vp ) );
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
+            std::begin( density ),                  std::end( density ),
+            std::begin( density_dot ),              std::end( density_dot ),
+            std::begin( density_gradient ),         std::end( density_gradient ),
+            std::begin( internal_energy ),          std::end( internal_energy ),
+            std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
+            std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
+            std::begin( xp ),                       std::end( xp ),
+            std::begin( velocity_gradient ),        std::end( velocity_gradient ),
+            std::begin( cauchy_stress ),            std::end( cauchy_stress ),
+            std::begin( volume_fraction ),          std::end( volume_fraction ),
+            std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
+            std::begin( net_interphase_force ),     std::end( net_interphase_force ),
+            std::begin( vp ),                       std::end( vp )
+        );
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>( std::begin( density ),                  std::end( density ),
-                                                                                               std::begin( density_dot ),              std::end( density_dot ),
-                                                                                               std::begin( density_gradient ),         std::end( density_gradient ),
-                                                                                               std::begin( internal_energy ),          std::end( internal_energy ),
-                                                                                               std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
-                                                                                               std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
-                                                                                               std::begin( xm ),                       std::end( xm ),
-                                                                                               std::begin( velocity_gradient ),        std::end( velocity_gradient ),
-                                                                                               std::begin( cauchy_stress ),            std::end( cauchy_stress ),
-                                                                                               std::begin( volume_fraction ),          std::end( volume_fraction ),
-                                                                                               std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
-                                                                                               std::begin( net_interphase_force ),     std::end( net_interphase_force ),
-                                                                                               std::begin( vm ),                       std::end( vm ) );
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
+            std::begin( density ),                  std::end( density ),
+            std::begin( density_dot ),              std::end( density_dot ),
+            std::begin( density_gradient ),         std::end( density_gradient ),
+            std::begin( internal_energy ),          std::end( internal_energy ),
+            std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
+            std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
+            std::begin( xm ),                       std::end( xm ),
+            std::begin( velocity_gradient ),        std::end( velocity_gradient ),
+            std::begin( cauchy_stress ),            std::end( cauchy_stress ),
+            std::begin( volume_fraction ),          std::end( volume_fraction ),
+            std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
+            std::begin( net_interphase_force ),     std::end( net_interphase_force ),
+            std::begin( vm ),                       std::end( vm )
+        );
 
         for ( unsigned int j = 0; j < nphases; j++ ){
 
@@ -1083,33 +1119,37 @@ BOOST_AUTO_TEST_CASE( test_multiphase_computeBalanceOfEnergyNonDivergence, * boo
 
         std::array<floatType,nphases> vp, vm;
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>( std::begin( density ),                  std::end( density ),
-                                                                                               std::begin( density_dot ),              std::end( density_dot ),
-                                                                                               std::begin( density_gradient ),         std::end( density_gradient ),
-                                                                                               std::begin( internal_energy ),          std::end( internal_energy ),
-                                                                                               std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
-                                                                                               std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
-                                                                                               std::begin( velocity ),                 std::end( velocity ),
-                                                                                               std::begin( xp ),                       std::end( xp ),
-                                                                                               std::begin( cauchy_stress ),            std::end( cauchy_stress ),
-                                                                                               std::begin( volume_fraction ),          std::end( volume_fraction ),
-                                                                                               std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
-                                                                                               std::begin( net_interphase_force ),     std::end( net_interphase_force ),
-                                                                                               std::begin( vp ),                       std::end( vp ) );
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
+            std::begin( density ),                  std::end( density ),
+            std::begin( density_dot ),              std::end( density_dot ),
+            std::begin( density_gradient ),         std::end( density_gradient ),
+            std::begin( internal_energy ),          std::end( internal_energy ),
+            std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
+            std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
+            std::begin( velocity ),                 std::end( velocity ),
+            std::begin( xp ),                       std::end( xp ),
+            std::begin( cauchy_stress ),            std::end( cauchy_stress ),
+            std::begin( volume_fraction ),          std::end( volume_fraction ),
+            std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
+            std::begin( net_interphase_force ),     std::end( net_interphase_force ),
+            std::begin( vp ),                       std::end( vp )
+        );
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>( std::begin( density ),                  std::end( density ),
-                                                                                               std::begin( density_dot ),              std::end( density_dot ),
-                                                                                               std::begin( density_gradient ),         std::end( density_gradient ),
-                                                                                               std::begin( internal_energy ),          std::end( internal_energy ),
-                                                                                               std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
-                                                                                               std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
-                                                                                               std::begin( velocity ),                 std::end( velocity ),
-                                                                                               std::begin( xm ),                       std::end( xm ),
-                                                                                               std::begin( cauchy_stress ),            std::end( cauchy_stress ),
-                                                                                               std::begin( volume_fraction ),          std::end( volume_fraction ),
-                                                                                               std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
-                                                                                               std::begin( net_interphase_force ),     std::end( net_interphase_force ),
-                                                                                               std::begin( vm ),                       std::end( vm ) );
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
+            std::begin( density ),                  std::end( density ),
+            std::begin( density_dot ),              std::end( density_dot ),
+            std::begin( density_gradient ),         std::end( density_gradient ),
+            std::begin( internal_energy ),          std::end( internal_energy ),
+            std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
+            std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
+            std::begin( velocity ),                 std::end( velocity ),
+            std::begin( xm ),                       std::end( xm ),
+            std::begin( cauchy_stress ),            std::end( cauchy_stress ),
+            std::begin( volume_fraction ),          std::end( volume_fraction ),
+            std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
+            std::begin( net_interphase_force ),     std::end( net_interphase_force ),
+            std::begin( vm ),                       std::end( vm )
+        );
 
         for ( unsigned int j = 0; j < nphases; j++ ){
 
@@ -1146,33 +1186,37 @@ BOOST_AUTO_TEST_CASE( test_multiphase_computeBalanceOfEnergyNonDivergence, * boo
 
         std::array<floatType,nphases> vp, vm;
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>( std::begin( density ),                  std::end( density ),
-                                                                                               std::begin( density_dot ),              std::end( density_dot ),
-                                                                                               std::begin( density_gradient ),         std::end( density_gradient ),
-                                                                                               std::begin( internal_energy ),          std::end( internal_energy ),
-                                                                                               std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
-                                                                                               std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
-                                                                                               std::begin( velocity ),                 std::end( velocity ),
-                                                                                               std::begin( velocity_gradient ),        std::end( velocity_gradient ),
-                                                                                               std::begin( xp ),                       std::end( xp ),
-                                                                                               std::begin( volume_fraction ),          std::end( volume_fraction ),
-                                                                                               std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
-                                                                                               std::begin( net_interphase_force ),     std::end( net_interphase_force ),
-                                                                                               std::begin( vp ),                       std::end( vp ) );
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
+            std::begin( density ),                  std::end( density ),
+            std::begin( density_dot ),              std::end( density_dot ),
+            std::begin( density_gradient ),         std::end( density_gradient ),
+            std::begin( internal_energy ),          std::end( internal_energy ),
+            std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
+            std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
+            std::begin( velocity ),                 std::end( velocity ),
+            std::begin( velocity_gradient ),        std::end( velocity_gradient ),
+            std::begin( xp ),                       std::end( xp ),
+            std::begin( volume_fraction ),          std::end( volume_fraction ),
+            std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
+            std::begin( net_interphase_force ),     std::end( net_interphase_force ),
+            std::begin( vp ),                       std::end( vp )
+        );
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>( std::begin( density ),                  std::end( density ),
-                                                                                               std::begin( density_dot ),              std::end( density_dot ),
-                                                                                               std::begin( density_gradient ),         std::end( density_gradient ),
-                                                                                               std::begin( internal_energy ),          std::end( internal_energy ),
-                                                                                               std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
-                                                                                               std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
-                                                                                               std::begin( velocity ),                 std::end( velocity ),
-                                                                                               std::begin( velocity_gradient ),        std::end( velocity_gradient ),
-                                                                                               std::begin( xm ),                       std::end( xm ),
-                                                                                               std::begin( volume_fraction ),          std::end( volume_fraction ),
-                                                                                               std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
-                                                                                               std::begin( net_interphase_force ),     std::end( net_interphase_force ),
-                                                                                               std::begin( vm ),                       std::end( vm ) );
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
+            std::begin( density ),                  std::end( density ),
+            std::begin( density_dot ),              std::end( density_dot ),
+            std::begin( density_gradient ),         std::end( density_gradient ),
+            std::begin( internal_energy ),          std::end( internal_energy ),
+            std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
+            std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
+            std::begin( velocity ),                 std::end( velocity ),
+            std::begin( velocity_gradient ),        std::end( velocity_gradient ),
+            std::begin( xm ),                       std::end( xm ),
+            std::begin( volume_fraction ),          std::end( volume_fraction ),
+            std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
+            std::begin( net_interphase_force ),     std::end( net_interphase_force ),
+            std::begin( vm ),                       std::end( vm )
+        );
 
         for ( unsigned int j = 0; j < nphases; j++ ){
 
@@ -1209,33 +1253,37 @@ BOOST_AUTO_TEST_CASE( test_multiphase_computeBalanceOfEnergyNonDivergence, * boo
 
         std::array<floatType,nphases> vp, vm;
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>( std::begin( density ),                  std::end( density ),
-                                                                                               std::begin( density_dot ),              std::end( density_dot ),
-                                                                                               std::begin( density_gradient ),         std::end( density_gradient ),
-                                                                                               std::begin( internal_energy ),          std::end( internal_energy ),
-                                                                                               std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
-                                                                                               std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
-                                                                                               std::begin( velocity ),                 std::end( velocity ),
-                                                                                               std::begin( velocity_gradient ),        std::end( velocity_gradient ),
-                                                                                               std::begin( cauchy_stress ),            std::end( cauchy_stress ),
-                                                                                               std::begin( xp ),                       std::end( xp ),
-                                                                                               std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
-                                                                                               std::begin( net_interphase_force ),     std::end( net_interphase_force ),
-                                                                                               std::begin( vp ),                       std::end( vp ) );
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
+            std::begin( density ),                  std::end( density ),
+            std::begin( density_dot ),              std::end( density_dot ),
+            std::begin( density_gradient ),         std::end( density_gradient ),
+            std::begin( internal_energy ),          std::end( internal_energy ),
+            std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
+            std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
+            std::begin( velocity ),                 std::end( velocity ),
+            std::begin( velocity_gradient ),        std::end( velocity_gradient ),
+            std::begin( cauchy_stress ),            std::end( cauchy_stress ),
+            std::begin( xp ),                       std::end( xp ),
+            std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
+            std::begin( net_interphase_force ),     std::end( net_interphase_force ),
+            std::begin( vp ),                       std::end( vp )
+        );
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>( std::begin( density ),                  std::end( density ),
-                                                                                               std::begin( density_dot ),              std::end( density_dot ),
-                                                                                               std::begin( density_gradient ),         std::end( density_gradient ),
-                                                                                               std::begin( internal_energy ),          std::end( internal_energy ),
-                                                                                               std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
-                                                                                               std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
-                                                                                               std::begin( velocity ),                 std::end( velocity ),
-                                                                                               std::begin( velocity_gradient ),        std::end( velocity_gradient ),
-                                                                                               std::begin( cauchy_stress ),            std::end( cauchy_stress ),
-                                                                                               std::begin( xm ),                       std::end( xm ),
-                                                                                               std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
-                                                                                               std::begin( net_interphase_force ),     std::end( net_interphase_force ),
-                                                                                               std::begin( vm ),                       std::end( vm ) );
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
+            std::begin( density ),                  std::end( density ),
+            std::begin( density_dot ),              std::end( density_dot ),
+            std::begin( density_gradient ),         std::end( density_gradient ),
+            std::begin( internal_energy ),          std::end( internal_energy ),
+            std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
+            std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
+            std::begin( velocity ),                 std::end( velocity ),
+            std::begin( velocity_gradient ),        std::end( velocity_gradient ),
+            std::begin( cauchy_stress ),            std::end( cauchy_stress ),
+            std::begin( xm ),                       std::end( xm ),
+            std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
+            std::begin( net_interphase_force ),     std::end( net_interphase_force ),
+            std::begin( vm ),                       std::end( vm )
+        );
 
         for ( unsigned int j = 0; j < nphases; j++ ){
 
@@ -1270,33 +1318,37 @@ BOOST_AUTO_TEST_CASE( test_multiphase_computeBalanceOfEnergyNonDivergence, * boo
 
         std::array<floatType,nphases> vp, vm;
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>( std::begin( density ),                  std::end( density ),
-                                                                                               std::begin( density_dot ),              std::end( density_dot ),
-                                                                                               std::begin( density_gradient ),         std::end( density_gradient ),
-                                                                                               std::begin( internal_energy ),          std::end( internal_energy ),
-                                                                                               std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
-                                                                                               std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
-                                                                                               std::begin( velocity ),                 std::end( velocity ),
-                                                                                               std::begin( velocity_gradient ),        std::end( velocity_gradient ),
-                                                                                               std::begin( cauchy_stress ),            std::end( cauchy_stress ),
-                                                                                               std::begin( volume_fraction ),          std::end( volume_fraction ),
-                                                                                               std::begin( xp ),                       std::end( xp ),
-                                                                                               std::begin( net_interphase_force ),     std::end( net_interphase_force ),
-                                                                                               std::begin( vp ),                       std::end( vp ) );
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
+            std::begin( density ),                  std::end( density ),
+            std::begin( density_dot ),              std::end( density_dot ),
+            std::begin( density_gradient ),         std::end( density_gradient ),
+            std::begin( internal_energy ),          std::end( internal_energy ),
+            std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
+            std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
+            std::begin( velocity ),                 std::end( velocity ),
+            std::begin( velocity_gradient ),        std::end( velocity_gradient ),
+            std::begin( cauchy_stress ),            std::end( cauchy_stress ),
+            std::begin( volume_fraction ),          std::end( volume_fraction ),
+            std::begin( xp ),                       std::end( xp ),
+            std::begin( net_interphase_force ),     std::end( net_interphase_force ),
+            std::begin( vp ),                       std::end( vp )
+        );
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>( std::begin( density ),                  std::end( density ),
-                                                                                               std::begin( density_dot ),              std::end( density_dot ),
-                                                                                               std::begin( density_gradient ),         std::end( density_gradient ),
-                                                                                               std::begin( internal_energy ),          std::end( internal_energy ),
-                                                                                               std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
-                                                                                               std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
-                                                                                               std::begin( velocity ),                 std::end( velocity ),
-                                                                                               std::begin( velocity_gradient ),        std::end( velocity_gradient ),
-                                                                                               std::begin( cauchy_stress ),            std::end( cauchy_stress ),
-                                                                                               std::begin( volume_fraction ),          std::end( volume_fraction ),
-                                                                                               std::begin( xm ),                       std::end( xm ),
-                                                                                               std::begin( net_interphase_force ),     std::end( net_interphase_force ),
-                                                                                               std::begin( vm ),                       std::end( vm ) );
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
+            std::begin( density ),                  std::end( density ),
+            std::begin( density_dot ),              std::end( density_dot ),
+            std::begin( density_gradient ),         std::end( density_gradient ),
+            std::begin( internal_energy ),          std::end( internal_energy ),
+            std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
+            std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
+            std::begin( velocity ),                 std::end( velocity ),
+            std::begin( velocity_gradient ),        std::end( velocity_gradient ),
+            std::begin( cauchy_stress ),            std::end( cauchy_stress ),
+            std::begin( volume_fraction ),          std::end( volume_fraction ),
+            std::begin( xm ),                       std::end( xm ),
+            std::begin( net_interphase_force ),     std::end( net_interphase_force ),
+            std::begin( vm ),                       std::end( vm )
+        );
 
         for ( unsigned int j = 0; j < nphases; j++ ){
 
@@ -1331,33 +1383,37 @@ BOOST_AUTO_TEST_CASE( test_multiphase_computeBalanceOfEnergyNonDivergence, * boo
 
         std::array<floatType,nphases> vp, vm;
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>( std::begin( density ),                  std::end( density ),
-                                                                                               std::begin( density_dot ),              std::end( density_dot ),
-                                                                                               std::begin( density_gradient ),         std::end( density_gradient ),
-                                                                                               std::begin( internal_energy ),          std::end( internal_energy ),
-                                                                                               std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
-                                                                                               std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
-                                                                                               std::begin( velocity ),                 std::end( velocity ),
-                                                                                               std::begin( velocity_gradient ),        std::end( velocity_gradient ),
-                                                                                               std::begin( cauchy_stress ),            std::end( cauchy_stress ),
-                                                                                               std::begin( volume_fraction ),          std::end( volume_fraction ),
-                                                                                               std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
-                                                                                               std::begin( xp ),                       std::end( xp ),
-                                                                                               std::begin( vp ),                       std::end( vp ) );
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
+            std::begin( density ),                  std::end( density ),
+            std::begin( density_dot ),              std::end( density_dot ),
+            std::begin( density_gradient ),         std::end( density_gradient ),
+            std::begin( internal_energy ),          std::end( internal_energy ),
+            std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
+            std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
+            std::begin( velocity ),                 std::end( velocity ),
+            std::begin( velocity_gradient ),        std::end( velocity_gradient ),
+            std::begin( cauchy_stress ),            std::end( cauchy_stress ),
+            std::begin( volume_fraction ),          std::end( volume_fraction ),
+            std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
+            std::begin( xp ),                       std::end( xp ),
+            std::begin( vp ),                       std::end( vp )
+        );
 
-        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim>( std::begin( density ),                  std::end( density ),
-                                                                                               std::begin( density_dot ),              std::end( density_dot ),
-                                                                                               std::begin( density_gradient ),         std::end( density_gradient ),
-                                                                                               std::begin( internal_energy ),          std::end( internal_energy ),
-                                                                                               std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
-                                                                                               std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
-                                                                                               std::begin( velocity ),                 std::end( velocity ),
-                                                                                               std::begin( velocity_gradient ),        std::end( velocity_gradient ),
-                                                                                               std::begin( cauchy_stress ),            std::end( cauchy_stress ),
-                                                                                               std::begin( volume_fraction ),          std::end( volume_fraction ),
-                                                                                               std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
-                                                                                               std::begin( xm ),                       std::end( xm ),
-                                                                                               std::begin( vm ),                       std::end( vm ) );
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
+            std::begin( density ),                  std::end( density ),
+            std::begin( density_dot ),              std::end( density_dot ),
+            std::begin( density_gradient ),         std::end( density_gradient ),
+            std::begin( internal_energy ),          std::end( internal_energy ),
+            std::begin( internal_energy_dot ),      std::end( internal_energy_dot ),
+            std::begin( internal_energy_gradient ), std::end( internal_energy_gradient ),
+            std::begin( velocity ),                 std::end( velocity ),
+            std::begin( velocity_gradient ),        std::end( velocity_gradient ),
+            std::begin( cauchy_stress ),            std::end( cauchy_stress ),
+            std::begin( volume_fraction ),          std::end( volume_fraction ),
+            std::begin( internal_heat_generation ), std::end( internal_heat_generation ),
+            std::begin( xm ),                       std::end( xm ),
+            std::begin( vm ),                       std::end( vm )
+        );
 
         for ( unsigned int j = 0; j < nphases; j++ ){
 

@@ -54,10 +54,10 @@ namespace tardigradeBalanceEquations{
              * \param &density_dot: The partial temporal derivative of the apparent density (dm / dv) of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} \rho^{\alpha}\right)\f$
              * \param &density_gradient_begin: The starting iterator of the spatial gradient of the apparent density (dm/dv) of phase \f$ \alpha \f$ \f$\left( \rho^{\alpha}_{,i} \right) \f$
              * \param &density_gradient_end: The stopping iterator of the spatial gradient of the apparent density (dm/dv) of phase \f$ \alpha \f$ \f$\left( \rho^{\alpha}_{,i} \right) \f$
-             * \param &internal_energy: The internal energy per unit mass of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
-             * \param &internal_energy_dot: The partial temporal derivative of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} e^{\alpha}\right)\f$
-             * \param &internal_energy_gradient_begin: The starting iterator of the spatial gradient of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
-             * \param &internal_energy_gradient_end: The stopping iterator of the spatial gradient of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
+             * \param &internal_energy: The internal energy of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
+             * \param &internal_energy_dot: The partial temporal derivative of the internal energy of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} e^{\alpha}\right)\f$
+             * \param &internal_energy_gradient_begin: The starting iterator of the spatial gradient of the internal energy of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
+             * \param &internal_energy_gradient_end: The stopping iterator of the spatial gradient of the internal energy of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
              * \param &velocity_begin: The starting iterator of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_i \right) \f$
              * \param &velocity_end: The stopping iterator of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_i \right) \f$
              * \param &velocity_gradient_begin: The starting iterator of the spatial gradient of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_{i,j} \right) \f$
@@ -76,7 +76,7 @@ namespace tardigradeBalanceEquations{
              * \param &result: The result of the non-divergence part of the balance of energy
              */
 
-            computeBalanceOfEnergyNonDivergence<dim>(
+            computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
                 density, density_dot, density_gradient_begin, density_gradient_end,
                 internal_energy, internal_energy_dot, internal_energy_gradient_begin, internal_energy_gradient_end,
                 velocity_begin, velocity_end, velocity_gradient_begin, velocity_gradient_end,
@@ -157,10 +157,10 @@ namespace tardigradeBalanceEquations{
              * \param &density_dot: The partial temporal derivative of the apparent density (dm / dv) of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} \rho^{\alpha}\right)\f$
              * \param &density_gradient_begin: The starting iterator of the spatial gradient of the apparent density (dm/dv) of phase \f$ \alpha \f$ \f$\left( \rho^{\alpha}_{,i} \right) \f$
              * \param &density_gradient_end: The stopping iterator of the spatial gradient of the apparent density (dm/dv) of phase \f$ \alpha \f$ \f$\left( \rho^{\alpha}_{,i} \right) \f$
-             * \param &internal_energy: The internal energy per unit mass of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
-             * \param &internal_energy_dot: The partial temporal derivative of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} e^{\alpha}\right)\f$
-             * \param &internal_energy_gradient_begin: The starting iterator of the spatial gradient of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
-             * \param &internal_energy_gradient_end: The stopping iterator of the spatial gradient of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
+             * \param &internal_energy: The internal energy of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
+             * \param &internal_energy_dot: The partial temporal derivative of the internal energy of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} e^{\alpha}\right)\f$
+             * \param &internal_energy_gradient_begin: The starting iterator of the spatial gradient of the internal energy of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
+             * \param &internal_energy_gradient_end: The stopping iterator of the spatial gradient of the internal energy of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
              * \param &velocity_begin: The starting iterator of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_i \right) \f$
              * \param &velocity_end: The stopping iterator of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_i \right) \f$
              * \param &velocity_gradient_begin: The starting iterator of the spatial gradient of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_{i,j} \right) \f$
@@ -222,7 +222,7 @@ namespace tardigradeBalanceEquations{
 
             std::array< dRdGradTestFunction_type, dim > dRdGradTestFunction;
 
-            computeBalanceOfEnergyNonDivergence<dim>(
+            computeBalanceOfEnergyNonDivergence<dim,is_per_unit_volume>(
                 density, density_dot, density_gradient_begin, density_gradient_end,
                 internal_energy, internal_energy_dot, internal_energy_gradient_begin, internal_energy_gradient_end,
                 velocity_begin, velocity_end, velocity_gradient_begin, velocity_gradient_end,
@@ -379,12 +379,12 @@ namespace tardigradeBalanceEquations{
              * \param &density_dot_end: The stopping iterator of the partial temporal derivative of the apparent density (dm / dv) of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} \rho^{\alpha}\right)\f$
              * \param &density_gradient_begin: The starting iterator of the spatial gradient of the apparent density (dm/dv) of phase \f$ \alpha \f$ \f$\left( \rho^{\alpha}_{,i} \right) \f$
              * \param &density_gradient_end: The stopping iterator of the spatial gradient of the apparent density (dm/dv) of phase \f$ \alpha \f$ \f$\left( \rho^{\alpha}_{,i} \right) \f$
-             * \param &internal_energy_begin: The starting iterator of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
-             * \param &internal_energy_end: The stopping iterator of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
-             * \param &internal_energy_dot_begin: The starting iterator of the partial temporal derivative of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} e^{\alpha}\right)\f$
-             * \param &internal_energy_dot_end: The stopping iterator of the partial temporal derivative of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} e^{\alpha}\right)\f$
-             * \param &internal_energy_gradient_begin: The starting iterator of the spatial gradient of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
-             * \param &internal_energy_gradient_end: The stopping iterator of the spatial gradient of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
+             * \param &internal_energy_begin: The starting iterator of the internal energy of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
+             * \param &internal_energy_end: The stopping iterator of the internal energy of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
+             * \param &internal_energy_dot_begin: The starting iterator of the partial temporal derivative of the internal energy of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} e^{\alpha}\right)\f$
+             * \param &internal_energy_dot_end: The stopping iterator of the partial temporal derivative of the internal energy of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} e^{\alpha}\right)\f$
+             * \param &internal_energy_gradient_begin: The starting iterator of the spatial gradient of the internal energy of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
+             * \param &internal_energy_gradient_end: The stopping iterator of the spatial gradient of the internal energy of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
              * \param &velocity_begin: The starting iterator of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_i \right) \f$
              * \param &velocity_end: The stopping iterator of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_i \right) \f$
              * \param &velocity_gradient_begin: The starting iterator of the spatial gradient of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_{i,j} \right) \f$
@@ -518,12 +518,12 @@ namespace tardigradeBalanceEquations{
              * \param &density_dot_end: The stopping iterator of the partial temporal derivative of the apparent density (dm / dv) of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} \rho^{\alpha}\right)\f$
              * \param &density_gradient_begin: The starting iterator of the spatial gradient of the apparent density (dm/dv) of phase \f$ \alpha \f$ \f$\left( \rho^{\alpha}_{,i} \right) \f$
              * \param &density_gradient_end: The stopping iterator of the spatial gradient of the apparent density (dm/dv) of phase \f$ \alpha \f$ \f$\left( \rho^{\alpha}_{,i} \right) \f$
-             * \param &internal_energy_begin: The starting iterator of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
-             * \param &internal_energy_end: The stopping iterator of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
-             * \param &internal_energy_dot_begin: The starting iterator of the partial temporal derivative of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} e^{\alpha}\right)\f$
-             * \param &internal_energy_dot_end: The stopping iterator of the partial temporal derivative of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} e^{\alpha}\right)\f$
-             * \param &internal_energy_gradient_begin: The starting iterator of the spatial gradient of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
-             * \param &internal_energy_gradient_end: The stopping iterator of the spatial gradient of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
+             * \param &internal_energy_begin: The starting iterator of the internal energy of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
+             * \param &internal_energy_end: The stopping iterator of the internal energy of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
+             * \param &internal_energy_dot_begin: The starting iterator of the partial temporal derivative of the internal energy of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} e^{\alpha}\right)\f$
+             * \param &internal_energy_dot_end: The stopping iterator of the partial temporal derivative of the internal energy of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} e^{\alpha}\right)\f$
+             * \param &internal_energy_gradient_begin: The starting iterator of the spatial gradient of the internal energy of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
+             * \param &internal_energy_gradient_end: The stopping iterator of the spatial gradient of the internal energy of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
              * \param &velocity_begin: The starting iterator of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_i \right) \f$
              * \param &velocity_end: The stopping iterator of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_i \right) \f$
              * \param &velocity_gradient_begin: The starting iterator of the spatial gradient of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_{i,j} \right) \f$
@@ -683,10 +683,10 @@ namespace tardigradeBalanceEquations{
              * \param &density_dot: The partial temporal derivative of the apparent density (dm / dv) of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} \rho^{\alpha}\right)\f$
              * \param &density_gradient_begin: The starting iterator of the spatial gradient of the apparent density (dm/dv) of phase \f$ \alpha \f$ \f$\left( \rho^{\alpha}_{,i} \right) \f$
              * \param &density_gradient_end: The stopping iterator of the spatial gradient of the apparent density (dm/dv) of phase \f$ \alpha \f$ \f$\left( \rho^{\alpha}_{,i} \right) \f$
-             * \param &internal_energy: The internal energy per unit mass of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
-             * \param &internal_energy_dot: The partial temporal derivative of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} e^{\alpha}\right)\f$
-             * \param &internal_energy_gradient_begin: The starting iterator of the spatial gradient of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
-             * \param &internal_energy_gradient_end: The stopping iterator of the spatial gradient of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
+             * \param &internal_energy: The internal energy of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
+             * \param &internal_energy_dot: The partial temporal derivative of the internal energy of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} e^{\alpha}\right)\f$
+             * \param &internal_energy_gradient_begin: The starting iterator of the spatial gradient of the internal energy of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
+             * \param &internal_energy_gradient_end: The stopping iterator of the spatial gradient of the internal energy of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
              * \param &velocity_begin: The starting iterator of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_i \right) \f$
              * \param &velocity_end: The stopping iterator of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_i \right) \f$
              * \param &velocity_gradient_begin: The starting iterator of the spatial gradient of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_{i,j} \right) \f$
@@ -780,10 +780,10 @@ namespace tardigradeBalanceEquations{
              * \param &density_dot: The partial temporal derivative of the apparent density (dm / dv) of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} \rho^{\alpha}\right)\f$
              * \param &density_gradient_begin: The starting iterator of the spatial gradient of the apparent density (dm/dv) of phase \f$ \alpha \f$ \f$\left( \rho^{\alpha}_{,i} \right) \f$
              * \param &density_gradient_end: The stopping iterator of the spatial gradient of the apparent density (dm/dv) of phase \f$ \alpha \f$ \f$\left( \rho^{\alpha}_{,i} \right) \f$
-             * \param &internal_energy: The internal energy per unit mass of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
-             * \param &internal_energy_dot: The partial temporal derivative of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} e^{\alpha}\right)\f$
-             * \param &internal_energy_gradient_begin: The starting iterator of the spatial gradient of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
-             * \param &internal_energy_gradient_end: The stopping iterator of the spatial gradient of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
+             * \param &internal_energy: The internal energy of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
+             * \param &internal_energy_dot: The partial temporal derivative of the internal energy of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} e^{\alpha}\right)\f$
+             * \param &internal_energy_gradient_begin: The starting iterator of the spatial gradient of the internal energy of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
+             * \param &internal_energy_gradient_end: The stopping iterator of the spatial gradient of the internal energy of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
              * \param &velocity_begin: The starting iterator of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_i \right) \f$
              * \param &velocity_end: The stopping iterator of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_i \right) \f$
              * \param &velocity_gradient_begin: The starting iterator of the spatial gradient of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_{i,j} \right) \f$
@@ -1420,12 +1420,12 @@ namespace tardigradeBalanceEquations{
              * \param &density_dot_end: The stopping iterator of the partial temporal derivative of the apparent density (dm / dv) of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} \rho^{\alpha}\right)\f$
              * \param &density_gradient_begin: The starting iterator of the spatial gradient of the apparent density (dm/dv) of phase \f$ \alpha \f$ \f$\left( \rho^{\alpha}_{,i} \right) \f$
              * \param &density_gradient_end: The stopping iterator of the spatial gradient of the apparent density (dm/dv) of phase \f$ \alpha \f$ \f$\left( \rho^{\alpha}_{,i} \right) \f$
-             * \param &internal_energy_begin: The starting iterator of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
-             * \param &internal_energy_end: The stopping iterator of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
-             * \param &internal_energy_dot_begin: The starting iterator of the partial temporal derivative of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} e^{\alpha}\right)\f$
-             * \param &internal_energy_dot_end: The stopping iterator of the partial temporal derivative of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} e^{\alpha}\right)\f$
-             * \param &internal_energy_gradient_begin: The starting iterator of the spatial gradient of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
-             * \param &internal_energy_gradient_end: The stopping iterator of the spatial gradient of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
+             * \param &internal_energy_begin: The starting iterator of the internal energy of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
+             * \param &internal_energy_end: The stopping iterator of the internal energy of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
+             * \param &internal_energy_dot_begin: The starting iterator of the partial temporal derivative of the internal energy of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} e^{\alpha}\right)\f$
+             * \param &internal_energy_dot_end: The stopping iterator of the partial temporal derivative of the internal energy of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} e^{\alpha}\right)\f$
+             * \param &internal_energy_gradient_begin: The starting iterator of the spatial gradient of the internal energy of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
+             * \param &internal_energy_gradient_end: The stopping iterator of the spatial gradient of the internal energy of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
              * \param &velocity_begin: The starting iterator of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_i \right) \f$
              * \param &velocity_end: The stopping iterator of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_i \right) \f$
              * \param &velocity_gradient_begin: The starting iterator of the spatial gradient of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_{i,j} \right) \f$
@@ -1578,12 +1578,12 @@ namespace tardigradeBalanceEquations{
              * \param &density_dot_end: The stopping iterator of the partial temporal derivative of the apparent density (dm / dv) of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} \rho^{\alpha}\right)\f$
              * \param &density_gradient_begin: The starting iterator of the spatial gradient of the apparent density (dm/dv) of phase \f$ \alpha \f$ \f$\left( \rho^{\alpha}_{,i} \right) \f$
              * \param &density_gradient_end: The stopping iterator of the spatial gradient of the apparent density (dm/dv) of phase \f$ \alpha \f$ \f$\left( \rho^{\alpha}_{,i} \right) \f$
-             * \param &internal_energy_begin: The starting iterator of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
-             * \param &internal_energy_end: The stopping iterator of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
-             * \param &internal_energy_dot_begin: The starting iterator of the partial temporal derivative of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} e^{\alpha}\right)\f$
-             * \param &internal_energy_dot_end: The stopping iterator of the partial temporal derivative of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} e^{\alpha}\right)\f$
-             * \param &internal_energy_gradient_begin: The starting iterator of the spatial gradient of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
-             * \param &internal_energy_gradient_end: The stopping iterator of the spatial gradient of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
+             * \param &internal_energy_begin: The starting iterator of the internal energy of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
+             * \param &internal_energy_end: The stopping iterator of the internal energy of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
+             * \param &internal_energy_dot_begin: The starting iterator of the partial temporal derivative of the internal energy of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} e^{\alpha}\right)\f$
+             * \param &internal_energy_dot_end: The stopping iterator of the partial temporal derivative of the internal energy of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} e^{\alpha}\right)\f$
+             * \param &internal_energy_gradient_begin: The starting iterator of the spatial gradient of the internal energy of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
+             * \param &internal_energy_gradient_end: The stopping iterator of the spatial gradient of the internal energy of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
              * \param &velocity_begin: The starting iterator of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_i \right) \f$
              * \param &velocity_end: The stopping iterator of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_i \right) \f$
              * \param &velocity_gradient_begin: The starting iterator of the spatial gradient of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_{i,j} \right) \f$
@@ -1792,7 +1792,8 @@ namespace tardigradeBalanceEquations{
 
 
         template<
-            int dim, typename density_type, typename density_dot_type,
+            int dim, bool is_per_unit_volume,
+            typename density_type, typename density_dot_type,
             class density_gradient_iter,
             typename internal_energy_type, typename internal_energy_dot_type,
             class internal_energy_gradient_iter,
@@ -1821,14 +1822,18 @@ namespace tardigradeBalanceEquations{
              * 
              * \f$ \frac{\partial}{\partial t}\left( \rho^{\alpha} e^{\alpha} \right) + \left( \rho^{\alpha} v_i^{\alpha} e^{\alpha} \right)_{,i} - \frac{1}{2} c^{\alpha} v_i^{\alpha} v_i^{\alpha} + \sum_{\beta} \pi_i^{\alpha \beta} v_i^{\alpha} - \phi^{\alpha}\sigma_{ji}^{\alpha}v_{i,j}^{\alpha} - \rho^{\alpha} r^{\alpha} \f$
              * 
+             * NOTE: If is_per_unit_volume is true then the internal energy is assumed to be per unit volume rather than per unit mass meaning that the balance equation is
+             * 
+             * \f$ \frac{\partial}{\partial t}\left( e^{\alpha} \right) + \left( v_i^{\alpha} e^{\alpha} \right)_{,i} - \frac{1}{2} c^{\alpha} v_i^{\alpha} v_i^{\alpha} + \sum_{\beta} \pi_i^{\alpha \beta} v_i^{\alpha} - \phi^{\alpha}\sigma_{ji}^{\alpha}v_{i,j}^{\alpha} - \rho^{\alpha} r^{\alpha} \f$
+             * 
              * \param &density: The apparent density (dm / dv) of phase \f$ \alpha \f$ \f$\left(\rho^{\alpha}\right)\f$
              * \param &density_dot: The partial temporal derivative of the apparent density (dm / dv) of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} \rho^{\alpha}\right)\f$
              * \param &density_gradient_begin: The starting iterator of the spatial gradient of the apparent density (dm/dv) of phase \f$ \alpha \f$ \f$\left( \rho^{\alpha}_{,i} \right) \f$
              * \param &density_gradient_end: The stopping iterator of the spatial gradient of the apparent density (dm/dv) of phase \f$ \alpha \f$ \f$\left( \rho^{\alpha}_{,i} \right) \f$
-             * \param &internal_energy: The internal energy per unit mass of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
-             * \param &internal_energy_dot: The partial temporal derivative of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} e^{\alpha}\right)\f$
-             * \param &internal_energy_gradient_begin: The starting iterator of the spatial gradient of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
-             * \param &internal_energy_gradient_end: The stopping iterator of the spatial gradient of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
+             * \param &internal_energy: The internal energy of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
+             * \param &internal_energy_dot: The partial temporal derivative of the internal energy of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} e^{\alpha}\right)\f$
+             * \param &internal_energy_gradient_begin: The starting iterator of the spatial gradient of the internal energy of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
+             * \param &internal_energy_gradient_end: The stopping iterator of the spatial gradient of the internal energy of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
              * \param &velocity_begin: The starting iterator of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_i \right) \f$
              * \param &velocity_end: The stopping iterator of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_i \right) \f$
              * \param &velocity_gradient_begin: The starting iterator of the spatial gradient of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_{i,j} \right) \f$
@@ -1877,7 +1882,7 @@ namespace tardigradeBalanceEquations{
         }
 
         template<
-            int dim,
+            int dim, bool is_per_unit_volume,
             typename density_type, typename density_dot_type,
             class density_gradient_iter,
             typename internal_energy_type, typename internal_energy_dot_type,
@@ -1922,14 +1927,18 @@ namespace tardigradeBalanceEquations{
              * 
              * \f$ \frac{\partial}{\partial t}\left( \rho^{\alpha} e^{\alpha} \right) + \left( \rho^{\alpha} v_i^{\alpha} e^{\alpha} \right)_{,i} - \frac{1}{2} c^{\alpha} v_i^{\alpha} v_i^{\alpha} + \sum_{\beta} \pi_i^{\alpha \beta} v_i^{\alpha} - \phi^{\alpha}\sigma_{ji}^{\alpha}v_{i,j}^{\alpha} - \rho^{\alpha} r^{\alpha} \f$
              * 
+             * NOTE: If is_per_unit_volume is true then the internal energy is assumed to be per unit volume rather than per unit mass meaning that the balance equation is
+             * 
+             * \f$ \frac{\partial}{\partial t}\left( e^{\alpha} \right) + \left( v_i^{\alpha} e^{\alpha} \right)_{,i} - \frac{1}{2} c^{\alpha} v_i^{\alpha} v_i^{\alpha} + \sum_{\beta} \pi_i^{\alpha \beta} v_i^{\alpha} - \phi^{\alpha}\sigma_{ji}^{\alpha}v_{i,j}^{\alpha} - \rho^{\alpha} r^{\alpha} \f$
+             * 
              * \param &density: The apparent density (dm / dv) of phase \f$ \alpha \f$ \f$\left(\rho^{\alpha}\right)\f$
              * \param &density_dot: The partial temporal derivative of the apparent density (dm / dv) of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} \rho^{\alpha}\right)\f$
              * \param &density_gradient_begin: The starting iterator of the spatial gradient of the apparent density (dm/dv) of phase \f$ \alpha \f$ \f$\left( \rho^{\alpha}_{,i} \right) \f$
              * \param &density_gradient_end: The stopping iterator of the spatial gradient of the apparent density (dm/dv) of phase \f$ \alpha \f$ \f$\left( \rho^{\alpha}_{,i} \right) \f$
-             * \param &internal_energy: The internal energy per unit mass of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
-             * \param &internal_energy_dot: The partial temporal derivative of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} e^{\alpha}\right)\f$
-             * \param &internal_energy_gradient_begin: The starting iterator of the spatial gradient of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
-             * \param &internal_energy_gradient_end: The stopping iterator of the spatial gradient of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
+             * \param &internal_energy: The internal energy of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
+             * \param &internal_energy_dot: The partial temporal derivative of the internal energy of phase \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} e^{\alpha}\right)\f$
+             * \param &internal_energy_gradient_begin: The starting iterator of the spatial gradient of the internal energy of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
+             * \param &internal_energy_gradient_end: The stopping iterator of the spatial gradient of the internal energy of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
              * \param &velocity_begin: The starting iterator of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_i \right) \f$
              * \param &velocity_end: The stopping iterator of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_i \right) \f$
              * \param &velocity_gradient_begin: The starting iterator of the spatial gradient of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_{i,j} \right) \f$
@@ -2049,7 +2058,7 @@ namespace tardigradeBalanceEquations{
         }
 
         template<
-            int dim,
+            int dim, bool is_per_unit_volume,
             class density_iter, class density_dot_iter, class density_gradient_iter,
             class internal_energy_iter, class internal_energy_dot_iter, class internal_energy_gradient_iter,
             class velocity_iter, class velocity_gradient_iter,
@@ -2079,6 +2088,10 @@ namespace tardigradeBalanceEquations{
              * 
              * \f$ \frac{\partial}{\partial t}\left( \rho^{\alpha} e^{\alpha} \right) + \left( \rho^{\alpha} v_i^{\alpha} e^{\alpha} \right)_{,i} - \frac{1}{2} c^{\alpha} v_i^{\alpha} v_i^{\alpha} + \sum_{\beta} \pi_i^{\alpha \beta} v_i^{\alpha} - \phi^{\alpha}\sigma_{ji}^{\alpha}v_{i,j}^{\alpha} - \rho^{\alpha} r^{\alpha} \f$
              * 
+             * NOTE: If is_per_unit_volume is true then the internal energy is assumed to be per unit volume rather than per unit mass meaning that the balance equation is
+             * 
+             * \f$ \frac{\partial}{\partial t}\left( e^{\alpha} \right) + \left( v_i^{\alpha} e^{\alpha} \right)_{,i} - \frac{1}{2} c^{\alpha} v_i^{\alpha} v_i^{\alpha} + \sum_{\beta} \pi_i^{\alpha \beta} v_i^{\alpha} - \phi^{\alpha}\sigma_{ji}^{\alpha}v_{i,j}^{\alpha} - \rho^{\alpha} r^{\alpha} \f$
+             * 
              * \param &density_begin: The starting iterator of the apparent density (dm / dv) of phase \f$ \alpha \f$ \f$\left(\rho^{\alpha}\right)\f$
              * \param &density_end: The stopping iterator of the apparent density (dm / dv) of phase \f$ \alpha \f$ \f$\left(\rho^{\alpha}\right)\f$
              * \param &density_dot_begin: The starting iterator of the partial temporal derivative of the apparent density (dm / dv) of phase
@@ -2087,14 +2100,14 @@ namespace tardigradeBalanceEquations{
              *     \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} \rho^{\alpha}\right)\f$
              * \param &density_gradient_begin: The starting iterator of the spatial gradient of the apparent density (dm/dv) of phase \f$ \alpha \f$ \f$\left( \rho^{\alpha}_{,i} \right) \f$
              * \param &density_gradient_end: The stopping iterator of the spatial gradient of the apparent density (dm/dv) of phase \f$ \alpha \f$ \f$\left( \rho^{\alpha}_{,i} \right) \f$
-             * \param &internal_energy_begin: The starting iterator of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
-             * \param &internal_energy_end: The stopping iterator of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
-             * \param &internal_energy_dot_begin: The starting iterator of the partial temporal derivative of the internal energy per unit mass of phase
+             * \param &internal_energy_begin: The starting iterator of the internal energy of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
+             * \param &internal_energy_end: The stopping iterator of the internal energy of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
+             * \param &internal_energy_dot_begin: The starting iterator of the partial temporal derivative of the internal energy of phase
              *     \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} e^{\alpha}\right)\f$
-             * \param &internal_energy_dot_end: The stopping iterator of the partial temporal derivative of the internal energy per unit mass of phase
+             * \param &internal_energy_dot_end: The stopping iterator of the partial temporal derivative of the internal energy of phase
              *     \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} e^{\alpha}\right)\f$
-             * \param &internal_energy_gradient_begin: The starting iterator of the spatial gradient of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
-             * \param &internal_energy_gradient_end: The stopping iterator of the spatial gradient of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
+             * \param &internal_energy_gradient_begin: The starting iterator of the spatial gradient of the internal energy of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
+             * \param &internal_energy_gradient_end: The stopping iterator of the spatial gradient of the internal energy of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
              * \param &velocity_begin: The starting iterator of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_i \right) \f$
              * \param &velocity_end: The stopping iterator of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_i \right) \f$
              * \param &velocity_gradient_begin: The starting iterator of the spatial gradient of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_{i,j} \right) \f$
@@ -2115,7 +2128,7 @@ namespace tardigradeBalanceEquations{
 
                 unsigned int phase = ( unsigned int )( rho - density_begin );
 
-                computeBalanceOfEnergyNonDivergence<dim>(
+                computeBalanceOfEnergyNonDivergence<dim, is_per_unit_volume>(
                     *( density_begin + phase ), *( density_dot_begin + phase ), density_gradient_begin + dim * phase, density_gradient_begin + dim * ( phase + 1 ),
                     *( internal_energy_begin + phase ), *( internal_energy_dot_begin + phase ),
                     internal_energy_gradient_begin + dim * phase, internal_energy_gradient_begin + dim * ( phase + 1 ),
@@ -2132,7 +2145,7 @@ namespace tardigradeBalanceEquations{
         }
 
         template<
-            int dim,
+            int dim, bool is_per_unit_volume,
             class density_iter, class density_dot_iter, class density_gradient_iter,
             class internal_energy_iter, class internal_energy_dot_iter, class internal_energy_gradient_iter,
             class velocity_iter, class velocity_gradient_iter,
@@ -2180,6 +2193,10 @@ namespace tardigradeBalanceEquations{
              * 
              * \f$ \frac{\partial}{\partial t}\left( \rho^{\alpha} e^{\alpha} \right) + \left( \rho^{\alpha} v_i^{\alpha} e^{\alpha} \right)_{,i} - \frac{1}{2} c^{\alpha} v_i^{\alpha} v_i^{\alpha} + \sum_{\beta} \pi_i^{\alpha \beta} v_i^{\alpha} - \phi^{\alpha}\sigma_{ji}^{\alpha}v_{i,j}^{\alpha} - \rho^{\alpha} r^{\alpha} \f$
              * 
+             * NOTE: If is_per_unit_volume is true then the internal energy is assumed to be per unit volume rather than per unit mass meaning that the balance equation is
+             * 
+             * \f$ \frac{\partial}{\partial t}\left( e^{\alpha} \right) + \left( v_i^{\alpha} e^{\alpha} \right)_{,i} - \frac{1}{2} c^{\alpha} v_i^{\alpha} v_i^{\alpha} + \sum_{\beta} \pi_i^{\alpha \beta} v_i^{\alpha} - \phi^{\alpha}\sigma_{ji}^{\alpha}v_{i,j}^{\alpha} - \rho^{\alpha} r^{\alpha} \f$
+             * 
              * \param &density_begin: The starting iterator of the apparent density (dm / dv) of phase \f$ \alpha \f$ \f$\left(\rho^{\alpha}\right)\f$
              * \param &density_end: The stopping iterator of the apparent density (dm / dv) of phase \f$ \alpha \f$ \f$\left(\rho^{\alpha}\right)\f$
              * \param &density_dot_begin: The starting iterator of the partial temporal derivative of the apparent density (dm / dv) of phase
@@ -2188,14 +2205,14 @@ namespace tardigradeBalanceEquations{
              *     \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} \rho^{\alpha}\right)\f$
              * \param &density_gradient_begin: The starting iterator of the spatial gradient of the apparent density (dm/dv) of phase \f$ \alpha \f$ \f$\left( \rho^{\alpha}_{,i} \right) \f$
              * \param &density_gradient_end: The stopping iterator of the spatial gradient of the apparent density (dm/dv) of phase \f$ \alpha \f$ \f$\left( \rho^{\alpha}_{,i} \right) \f$
-             * \param &internal_energy_begin: The starting iterator of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
-             * \param &internal_energy_end: The stopping iterator of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
-             * \param &internal_energy_dot_begin: The starting iterator of the partial temporal derivative of the internal energy per unit mass of phase
+             * \param &internal_energy_begin: The starting iterator of the internal energy of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
+             * \param &internal_energy_end: The stopping iterator of the internal energy of phase \f$ \alpha \f$ \f$\left(e^{\alpha}\right)\f$
+             * \param &internal_energy_dot_begin: The starting iterator of the partial temporal derivative of the internal energy of phase
              *     \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} e^{\alpha}\right)\f$
-             * \param &internal_energy_dot_end: The stopping iterator of the partial temporal derivative of the internal energy per unit mass of phase
+             * \param &internal_energy_dot_end: The stopping iterator of the partial temporal derivative of the internal energy of phase
              *     \f$ \alpha \f$ \f$\left(\frac{\partial}{\partial t} e^{\alpha}\right)\f$
-             * \param &internal_energy_gradient_begin: The starting iterator of the spatial gradient of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
-             * \param &internal_energy_gradient_end: The stopping iterator of the spatial gradient of the internal energy per unit mass of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
+             * \param &internal_energy_gradient_begin: The starting iterator of the spatial gradient of the internal energy of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
+             * \param &internal_energy_gradient_end: The stopping iterator of the spatial gradient of the internal energy of phase \f$ \alpha \f$ \f$\left( e^{\alpha}_{,i} \right) \f$
              * \param &velocity_begin: The starting iterator of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_i \right) \f$
              * \param &velocity_end: The stopping iterator of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_i \right) \f$
              * \param &velocity_gradient_begin: The starting iterator of the spatial gradient of the velocity of phase \f$ \alpha \f$ \f$\left( v^{\alpha}_{i,j} \right) \f$
@@ -2240,7 +2257,7 @@ namespace tardigradeBalanceEquations{
 
                 unsigned int phase = ( unsigned int )( rho - density_begin );
 
-                computeBalanceOfEnergyNonDivergence<dim>(
+                computeBalanceOfEnergyNonDivergence<dim, is_per_unit_volume>(
                     *( density_begin + phase ), *( density_dot_begin + phase ), density_gradient_begin + dim * phase, density_gradient_begin + dim * ( phase + 1 ),
                     *( internal_energy_begin + phase ), *( internal_energy_dot_begin + phase ),
                     internal_energy_gradient_begin + dim * phase, internal_energy_gradient_begin + dim * ( phase + 1 ),

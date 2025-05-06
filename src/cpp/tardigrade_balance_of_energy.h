@@ -354,7 +354,7 @@ namespace tardigradeBalanceEquations{
         );
 
         template<
-            int dim,
+            int dim, bool is_per_unit_volume,
             typename density_type, typename density_dot_type,
             class density_gradient_iter,
             typename internal_energy_type, typename internal_energy_dot_type,
@@ -381,7 +381,7 @@ namespace tardigradeBalanceEquations{
         );
 
         template<
-            int dim,
+            int dim, bool is_per_unit_volume,
             typename density_type, typename density_dot_type,
             class density_gradient_iter,
             typename internal_energy_type, typename internal_energy_dot_type,
@@ -423,7 +423,7 @@ namespace tardigradeBalanceEquations{
         );
 
         template<
-            int dim,
+            int dim, bool is_per_unit_volume,
             class density_iter, class density_dot_iter, class density_gradient_iter,
             class internal_energy_iter, class internal_energy_dot_iter, class internal_energy_gradient_iter,
             class velocity_iter, class velocity_gradient_iter,
@@ -450,7 +450,7 @@ namespace tardigradeBalanceEquations{
         );
 
         template<
-            int dim,
+            int dim, bool is_per_unit_volume,
             class density_iter, class density_dot_iter, class density_gradient_iter,
             class internal_energy_iter, class internal_energy_dot_iter, class internal_energy_gradient_iter,
             class velocity_iter, class velocity_gradient_iter,
