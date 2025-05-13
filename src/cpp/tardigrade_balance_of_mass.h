@@ -223,7 +223,7 @@ namespace tardigradeBalanceEquations{
             class material_response_iter, class material_response_jacobian_iter,
             class interpolationFunctionGradient_iter,
             class full_material_response_dof_gradient_iter,
-            class dRdRho_iter, class dRdU_iter, class dRdW_iter, class dRdTheta_iter, class dRdE_iter, class dRdZ_iter,
+            class dRdRho_iter, class dRdU_iter, class dRdW_iter, class dRdTheta_iter, class dRdE_iter, class dRdVF_iter, class dRdZ_iter,
             class dRdUMesh_iter,
             typename dDensityDotdDensity_type, typename dUDotdU_type,
             int density_index         = 0,
@@ -231,7 +231,8 @@ namespace tardigradeBalanceEquations{
             int velocity_index        = 4,
             int temperature_index     = 7,
             int internal_energy_index = 8,
-            int additional_dof_index  = 9
+            int volume_fraction_index = 9,
+            int additional_dof_index  = 10
         >
         inline void computeBalanceOfMass(
             const density_type &density,                                  const densityDot_type &density_dot,
@@ -254,6 +255,7 @@ namespace tardigradeBalanceEquations{
             dRdW_iter dRdW_begin,             dRdW_iter dRdW_end,
             dRdTheta_iter dRdTheta_begin,     dRdTheta_iter dRdTheta_end,
             dRdE_iter dRdE_begin,             dRdE_iter dRdE_end,
+            dRdVF_iter dRdVF_begin,           dRdVF_iter dRdVF_end,
             dRdZ_iter dRdZ_begin,             dRdZ_iter dRdZ_end,
             dRdUMesh_iter dRdUMesh_begin,     dRdUMesh_iter dRdUMesh_end
         );
@@ -267,7 +269,8 @@ namespace tardigradeBalanceEquations{
             class material_response_iter, class material_response_jacobian_iter,
             class interpolationFunctionGradient_iter,
             class full_material_response_dof_gradient_iter,
-            class dRdRho_iter, class dRdU_iter, class dRdW_iter, class dRdTheta_iter, class dRdE_iter, class dRdZ_iter,
+            class dRdRho_iter, class dRdU_iter, class dRdW_iter, class dRdTheta_iter, class dRdE_iter,
+            class dRdVF_iter, class dRdZ_iter,
             class dRdUMesh_iter,
             typename dDensityDotdDensity_type, typename dUDotdU_type,
             int density_index         = 0,
@@ -275,7 +278,8 @@ namespace tardigradeBalanceEquations{
             int velocity_index        = 4,
             int temperature_index     = 7,
             int internal_energy_index = 8,
-            int additional_dof_index  = 9
+            int volume_fraction_index = 9,
+            int additional_dof_index  = 10
         >
         inline void computeBalanceOfMass(
             const density_iter &density_begin,                            const density_iter &density_end,
@@ -298,6 +302,7 @@ namespace tardigradeBalanceEquations{
             dRdW_iter dRdW_begin,             dRdW_iter dRdW_end,
             dRdTheta_iter dRdTheta_begin,     dRdTheta_iter dRdTheta_end,
             dRdE_iter dRdE_begin,             dRdE_iter dRdE_end,
+            dRdVF_iter dRdVF_begin,           dRdVF_iter dRdVF_end,
             dRdZ_iter dRdZ_begin,             dRdZ_iter dRdZ_end,
             dRdUMesh_iter dRdUMesh_begin,     dRdUMesh_iter dRdUMesh_end
         );
