@@ -177,7 +177,7 @@ namespace tardigradeBalanceEquations{
             typename dUDotdU_type, typename dVolumeFractionDotdVolumeFraction_type,
             typename result_type,
             class dRdRho_iter, class dRdU_iter, class dRdW_iter, class dRdTheta_iter,
-            class dRdE_iter, class dRdZ_iter, class dRdVolumeFraction_iter, class dRdUMesh_iter,
+            class dRdE_iter, class dRdVolumeFraction_iter, class dRdZ_iter, class dRdUMesh_iter,
             int density_index         = 0,
             int displacement_index    = 1,
             int velocity_index        = 4,
@@ -211,8 +211,8 @@ namespace tardigradeBalanceEquations{
             dRdW_iter     dRdW_begin,                       dRdW_iter              dRdW_end,
             dRdTheta_iter dRdTheta_begin,                   dRdTheta_iter          dRdTheta_end,
             dRdE_iter     dRdE_begin,                       dRdE_iter              dRdE_end,
-            dRdZ_iter     dRdZ_begin,                       dRdZ_iter              dRdZ_end,
             dRdVolumeFraction_iter dRdVolumeFraction_begin, dRdVolumeFraction_iter dRdVolumeFraction_end,
+            dRdZ_iter     dRdZ_begin,                       dRdZ_iter              dRdZ_end,
             dRdUMesh_iter          dRdUMesh_begin,          dRdUMesh_iter          dRdUMesh_end,
             const double volume_fraction_tolerance = 1e-8
         );
@@ -279,7 +279,7 @@ namespace tardigradeBalanceEquations{
             typename dUDotdU_type, typename dVolumeFractionDotdVolumeFraction_type,
             class result_iter,
             class dRdRho_iter, class dRdU_iter, class dRdW_iter, class dRdTheta_iter,
-            class dRdE_iter, class dRdZ_iter, class dRdVolumeFraction_iter, class dRdUMesh_iter,
+            class dRdE_iter, class dRdVolumeFraction_iter, class dRdZ_iter, class dRdUMesh_iter,
             int density_index         = 0,
             int displacement_index    = 1,
             int velocity_index        = 4,
@@ -312,8 +312,8 @@ namespace tardigradeBalanceEquations{
             dRdW_iter     dRdW_begin,                       dRdW_iter              dRdW_end,
             dRdTheta_iter dRdTheta_begin,                   dRdTheta_iter          dRdTheta_end,
             dRdE_iter     dRdE_begin,                       dRdE_iter              dRdE_end,
-            dRdZ_iter     dRdZ_begin,                       dRdZ_iter              dRdZ_end,
             dRdVolumeFraction_iter dRdVolumeFraction_begin, dRdVolumeFraction_iter dRdVolumeFraction_end,
+            dRdZ_iter     dRdZ_begin,                       dRdZ_iter              dRdZ_end,
             dRdUMesh_iter          dRdUMesh_begin,          dRdUMesh_iter          dRdUMesh_end,
             const double volume_fraction_tolerance = 1e-8
         );

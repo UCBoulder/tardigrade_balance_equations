@@ -325,7 +325,7 @@ namespace tardigradeBalanceEquations{
             typename dUDotdU_type, typename dVolumeFractionDotdVolumeFraction_type,
             typename result_type,
             class dRdRho_iter, class dRdU_iter, class dRdW_iter, class dRdTheta_iter,
-            class dRdE_iter, class dRdZ_iter, class dRdVolumeFraction_iter, class dRdUMesh_iter,
+            class dRdE_iter, class dRdVolumeFraction_iter, class dRdZ_iter, class dRdUMesh_iter,
             int density_index        ,
             int displacement_index   ,
             int velocity_index       ,
@@ -359,8 +359,8 @@ namespace tardigradeBalanceEquations{
             dRdW_iter     dRdW_begin,                       dRdW_iter              dRdW_end,
             dRdTheta_iter dRdTheta_begin,                   dRdTheta_iter          dRdTheta_end,
             dRdE_iter     dRdE_begin,                       dRdE_iter              dRdE_end,
-            dRdZ_iter     dRdZ_begin,                       dRdZ_iter              dRdZ_end,
             dRdVolumeFraction_iter dRdVolumeFraction_begin, dRdVolumeFraction_iter dRdVolumeFraction_end,
+            dRdZ_iter     dRdZ_begin,                       dRdZ_iter              dRdZ_end,
             dRdUMesh_iter          dRdUMesh_begin,          dRdUMesh_iter          dRdUMesh_end,
             const double volume_fraction_tolerance
         ){
@@ -399,10 +399,10 @@ namespace tardigradeBalanceEquations{
              * \param &dRdTheta_end: The stopping iterator of the derivative of the residual w.r.t. the phase temperature
              * \param &dRdE_begin: The starting iterator of the derivative of the residual w.r.t. the phase internal energy
              * \param &dRdE_end: The stopping iterator of the derivative of the residual w.r.t. the phase internal energy
-             * \param &dRdZ_begin: The starting iterator of the derivative of the residual w.r.t. the phase additional dof
-             * \param &dRdZ_end: The stopping iterator of the derivative of the residual w.r.t. the phase additional dof
              * \param &dRdVolumeFraction_begin: The starting iterator of the derivative of the residual w.r.t. the volume fraction
              * \param &dRdVolumeFraction_end: The stopping iterator of the derivative of the residual w.r.t. the volume fraction
+             * \param &dRdZ_begin: The starting iterator of the derivative of the residual w.r.t. the phase additional dof
+             * \param &dRdZ_end: The stopping iterator of the derivative of the residual w.r.t. the phase additional dof
              * \param &dRdUMesh_begin: The starting iterator of the derivative of the residual w.r.t. the mesh displacement
              * \param &dRdUMesh_end: The stopping iterator of the derivative of the residual w.r.t. the mesh displacement
              * \param volume_fraction_tolerance: The tolerance of the volume fraction where if it is less than the tolerance, the
@@ -1097,7 +1097,7 @@ namespace tardigradeBalanceEquations{
             typename dUDotdU_type, typename dVolumeFractionDotdVolumeFraction_type,
             class result_iter,
             class dRdRho_iter, class dRdU_iter, class dRdW_iter, class dRdTheta_iter,
-            class dRdE_iter, class dRdZ_iter, class dRdVolumeFraction_iter, class dRdUMesh_iter,
+            class dRdE_iter, class dRdVolumeFraction_iter, class dRdZ_iter, class dRdUMesh_iter,
             int density_index        ,
             int displacement_index   ,
             int velocity_index       ,
@@ -1130,8 +1130,8 @@ namespace tardigradeBalanceEquations{
             dRdW_iter     dRdW_begin,                       dRdW_iter              dRdW_end,
             dRdTheta_iter dRdTheta_begin,                   dRdTheta_iter          dRdTheta_end,
             dRdE_iter     dRdE_begin,                       dRdE_iter              dRdE_end,
-            dRdZ_iter     dRdZ_begin,                       dRdZ_iter              dRdZ_end,
             dRdVolumeFraction_iter dRdVolumeFraction_begin, dRdVolumeFraction_iter dRdVolumeFraction_end,
+            dRdZ_iter     dRdZ_begin,                       dRdZ_iter              dRdZ_end,
             dRdUMesh_iter          dRdUMesh_begin,          dRdUMesh_iter          dRdUMesh_end,
             const double volume_fraction_tolerance
         ){
@@ -1174,10 +1174,10 @@ namespace tardigradeBalanceEquations{
              * \param &dRdTheta_end: The stopping iterator of the derivative of the residual w.r.t. the phase temperature
              * \param &dRdE_begin: The starting iterator of the derivative of the residual w.r.t. the phase internal energy
              * \param &dRdE_end: The stopping iterator of the derivative of the residual w.r.t. the phase internal energy
-             * \param &dRdZ_begin: The starting iterator of the derivative of the residual w.r.t. the phase additional dof
-             * \param &dRdZ_end: The stopping iterator of the derivative of the residual w.r.t. the phase additional dof
              * \param &dRdVolumeFraction_begin: The starting iterator of the derivative of the residual w.r.t. the volume fraction
              * \param &dRdVolumeFraction_end: The stopping iterator of the derivative of the residual w.r.t. the volume fraction
+             * \param &dRdZ_begin: The starting iterator of the derivative of the residual w.r.t. the phase additional dof
+             * \param &dRdZ_end: The stopping iterator of the derivative of the residual w.r.t. the phase additional dof
              * \param &dRdUMesh_begin: The starting iterator of the derivative of the residual w.r.t. the mesh displacement
              * \param &dRdUMesh_end: The stopping iterator of the derivative of the residual w.r.t. the mesh displacement
              * \param volume_fraction_tolerance: The tolerance of the volume fraction where if it is less than the tolerance, the
@@ -1273,7 +1273,7 @@ namespace tardigradeBalanceEquations{
                     dUDotdU_type, dVolumeFractionDotdVolumeFraction_type,
                     result_type,
                     dRdRho_iter, dRdU_iter, dRdW_iter, dRdTheta_iter,
-                    dRdE_iter, dRdZ_iter, dRdVolumeFraction_iter, dRdUMesh_iter,
+                    dRdE_iter, dRdVolumeFraction_iter, dRdZ_iter, dRdUMesh_iter,
                     density_index,
                     displacement_index,
                     velocity_index,
@@ -1303,8 +1303,8 @@ namespace tardigradeBalanceEquations{
                     dRdW_begin              +      nphases * dim * v.first, dRdW_begin              +      nphases * dim * ( v.first + 1 ),
                     dRdTheta_begin          +            nphases * v.first, dRdTheta_begin          +            nphases * ( v.first + 1 ),
                     dRdE_begin              +            nphases * v.first, dRdE_begin              +            nphases * ( v.first + 1 ),
-                    dRdZ_begin              + num_additional_dof * v.first, dRdZ_begin              + num_additional_dof * ( v.first + 1 ),
                     dRdVolumeFraction_begin +            nphases * v.first, dRdVolumeFraction_begin +            nphases * ( v.first + 1 ),
+                    dRdZ_begin              + num_additional_dof * v.first, dRdZ_begin              + num_additional_dof * ( v.first + 1 ),
                     dRdUMesh_begin          +                dim * v.first, dRdUMesh_begin          +                dim * ( v.first + 1 ),
                     volume_fraction_tolerance
                 );
