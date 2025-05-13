@@ -752,6 +752,7 @@ namespace tardigradeBalanceEquations{
             int velocity_index       ,
             int temperature_index    ,
             int internal_energy_index,
+            int volume_fraction_index,
             int additional_dof_index 
         >
         void computeBalanceOfEnergy(
@@ -877,7 +878,7 @@ namespace tardigradeBalanceEquations{
             result -= test_function * ( *( material_response_begin + interphasic_heat_transfer_index ) );
 
             const unsigned int nphases = ( unsigned int )( dRdRho_end - dRdRho_begin );
-            constexpr unsigned int num_phase_dof = 3 + 2 * material_response_dim;
+            constexpr unsigned int num_phase_dof = 4 + 2 * material_response_dim;
             constexpr unsigned int num_additional_dof = material_response_num_dof - num_phase_dof;
 
             // Scale the volume fraction by the interpolation function
@@ -946,6 +947,19 @@ namespace tardigradeBalanceEquations{
                     for ( unsigned int a = 0; a < material_response_dim; ++a ){
 
                         *p.second += dRdCauchy_phase[ j ] * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( cauchy_stress_index + j ) + ( nphases * num_phase_dof + num_additional_dof ) + material_response_dim * ( nphases * internal_energy_index + p.first ) + a ) ) * ( *( interpolation_function_gradient_begin + a ) );
+
+                    }
+
+                }
+
+                // volume fraction
+                for ( auto p = std::pair< unsigned int, dRdVolumeFraction_iter >( 0, dRdVolumeFraction_begin ); p.second != dRdVolumeFraction_end; ++p.first, ++p.second ){
+
+                    *p.second += dRdCauchy_phase[ j ] * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( cauchy_stress_index + j ) + nphases * volume_fraction_index + p.first ) ) * interpolation_function;
+
+                    for ( unsigned int a = 0; a < material_response_dim; ++a ){
+
+                        *p.second += dRdCauchy_phase[ j ] * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( cauchy_stress_index + j ) + ( nphases * num_phase_dof + num_additional_dof ) + material_response_dim * ( nphases * volume_fraction_index + p.first ) + a ) ) * ( *( interpolation_function_gradient_begin + a ) );
 
                     }
 
@@ -1051,6 +1065,19 @@ namespace tardigradeBalanceEquations{
 
             }
 
+            // volume fraction
+            for ( auto p = std::pair< unsigned int, dRdVolumeFraction_iter >( 0, dRdVolumeFraction_begin ); p.second != dRdVolumeFraction_end; ++p.first, ++p.second ){
+
+                *p.second += dRdr_phase * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( internal_heat_generation_index ) + nphases * volume_fraction_index + p.first ) ) * interpolation_function;
+
+                for ( unsigned int a = 0; a < material_response_dim; ++a ){
+
+                    *p.second += dRdr_phase * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( internal_heat_generation_index ) + ( nphases * num_phase_dof + num_additional_dof ) + material_response_dim * ( nphases * volume_fraction_index + p.first ) + a ) ) * ( *( interpolation_function_gradient_begin + a ) );
+
+                }
+
+            }
+
             // additional dof
             for ( auto p = std::pair< unsigned int, dRdZ_iter >( 0, dRdZ_begin ); p.second != dRdZ_end; ++p.first, ++p.second ){
 
@@ -1146,6 +1173,19 @@ namespace tardigradeBalanceEquations{
                     for ( unsigned int a = 0; a < material_response_dim; ++a ){
 
                         *p.second += dRdpi_phase[ j ] * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( interphasic_force_index + j ) + ( nphases * num_phase_dof + num_additional_dof ) + material_response_dim * ( nphases * internal_energy_index + p.first ) + a ) ) * ( *( interpolation_function_gradient_begin + a ) );
+
+                    }
+
+                }
+
+                // volume fraction
+                for ( auto p = std::pair< unsigned int, dRdVolumeFraction_iter >( 0, dRdVolumeFraction_begin ); p.second != dRdVolumeFraction_end; ++p.first, ++p.second ){
+
+                    *p.second += dRdpi_phase[ j ] * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( interphasic_force_index + j ) + nphases * volume_fraction_index + p.first ) ) * interpolation_function;
+
+                    for ( unsigned int a = 0; a < material_response_dim; ++a ){
+
+                        *p.second += dRdpi_phase[ j ] * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( interphasic_force_index + j ) + ( nphases * num_phase_dof + num_additional_dof ) + material_response_dim * ( nphases * volume_fraction_index + p.first ) + a ) ) * ( *( interpolation_function_gradient_begin + a ) );
 
                     }
 
@@ -1253,6 +1293,19 @@ namespace tardigradeBalanceEquations{
 
                 }
 
+                // volume fraction
+                for ( auto p = std::pair< unsigned int, dRdVolumeFraction_iter >( 0, dRdVolumeFraction_begin ); p.second != dRdVolumeFraction_end; ++p.first, ++p.second ){
+
+                    *p.second += dRdq_phase[ j ] * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( heat_flux_index + j ) + nphases * volume_fraction_index + p.first ) ) * interpolation_function;
+
+                    for ( unsigned int a = 0; a < material_response_dim; ++a ){
+
+                        *p.second += dRdq_phase[ j ] * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( heat_flux_index + j ) + ( nphases * num_phase_dof + num_additional_dof ) + material_response_dim * ( nphases * volume_fraction_index + p.first ) + a ) ) * ( *( interpolation_function_gradient_begin + a ) );
+
+                    }
+
+                }
+
                 // additional dof
                 for ( auto p = std::pair< unsigned int, dRdZ_iter >( 0, dRdZ_begin ); p.second != dRdZ_end; ++p.first, ++p.second ){
 
@@ -1348,6 +1401,19 @@ namespace tardigradeBalanceEquations{
                 for ( unsigned int a = 0; a < material_response_dim; ++a ){
 
                     *p.second -= test_function * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( interphasic_heat_transfer_index ) + ( nphases * num_phase_dof + num_additional_dof ) + material_response_dim * ( nphases * internal_energy_index + p.first ) + a ) ) * ( *( interpolation_function_gradient_begin + a ) );
+
+                }
+
+            }
+
+            // volume fraction
+            for ( auto p = std::pair< unsigned int, dRdVolumeFraction_iter >( 0, dRdVolumeFraction_begin ); p.second != dRdVolumeFraction_end; ++p.first, ++p.second ){
+
+                *p.second -= test_function * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( interphasic_heat_transfer_index ) + nphases * volume_fraction_index + p.first ) ) * interpolation_function;
+
+                for ( unsigned int a = 0; a < material_response_dim; ++a ){
+
+                    *p.second -= test_function * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( interphasic_heat_transfer_index ) + ( nphases * num_phase_dof + num_additional_dof ) + material_response_dim * ( nphases * volume_fraction_index + p.first ) + a ) ) * ( *( interpolation_function_gradient_begin + a ) );
 
                 }
 
@@ -1548,6 +1614,7 @@ namespace tardigradeBalanceEquations{
             int velocity_index       ,
             int temperature_index    ,
             int internal_energy_index,
+            int volume_fraction_index,
             int additional_dof_index 
         >
         void computeBalanceOfEnergy(
@@ -1638,7 +1705,7 @@ namespace tardigradeBalanceEquations{
 
             const unsigned int nphases = ( unsigned int )( density_end - density_begin );
             const unsigned int material_response_size = ( unsigned int )( material_response_end - material_response_begin ) / nphases;
-            constexpr unsigned int num_phase_dof = 3 + 2 * material_response_dim;
+            constexpr unsigned int num_phase_dof = 4 + 2 * material_response_dim;
             constexpr unsigned int num_additional_dof = material_response_num_dof - num_phase_dof;
 
             using density_type             = typename std::iterator_traits<density_iter>::value_type;
@@ -1763,6 +1830,7 @@ namespace tardigradeBalanceEquations{
                     velocity_index       ,
                     temperature_index    ,
                     internal_energy_index,
+                    volume_fraction_index,
                     additional_dof_index 
                 >
                 (
@@ -1888,10 +1956,12 @@ namespace tardigradeBalanceEquations{
                     + std::inner_product( net_interphase_force_begin, net_interphase_force_end, velocity_begin, 0. )
                     - density * internal_heat_generation;
 
+            double t5 = 0;
             for ( unsigned int i = 0; i < dim; i++ ){
 
                 for ( unsigned int j = 0; j < dim; j++ ){
 
+                    t5     -= volume_fraction * ( *( cauchy_stress_begin + dim * j + i ) ) * ( *( velocity_gradient_begin + dim * i + j ) );
                     result -= volume_fraction * ( *( cauchy_stress_begin + dim * j + i ) ) * ( *( velocity_gradient_begin + dim * i + j ) );
 
                 }
