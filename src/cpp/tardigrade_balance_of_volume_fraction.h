@@ -183,7 +183,8 @@ namespace tardigradeBalanceEquations{
             int velocity_index        = 4,
             int temperature_index     = 7,
             int internal_energy_index = 8,
-            int additional_dof_index  = 9
+            int volume_fraction_index = 9,
+            int additional_dof_index  = 10
         >
         inline void computeBalanceOfVolumeFraction(
             const density_type                  &density,
@@ -284,7 +285,8 @@ namespace tardigradeBalanceEquations{
             int velocity_index        = 4,
             int temperature_index     = 7,
             int internal_energy_index = 8,
-            int additional_dof_index  = 9
+            int volume_fraction_index = 9,
+            int additional_dof_index  = 10
         >
         void computeBalanceOfVolumeFraction(
             const density_iter                  &density_begin,                  const density_iter                  &density_end,
