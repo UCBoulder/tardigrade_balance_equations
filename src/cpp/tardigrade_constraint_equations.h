@@ -98,14 +98,15 @@ namespace tardigradeBalanceEquations{
             typename dUDotdU_type,
             typename result_type,
             class dRdRho_iter, class dRdU_iter, class dRdW_iter,
-            class dRdTheta_iter, class dRdE_iter, class dRdZ_iter,
-            class dRdUMesh_iter,
+            class dRdTheta_iter, class dRdE_iter, class dRdVF_iter,
+            class dRdZ_iter, class dRdUMesh_iter,
             int density_index         = 0,
             int displacement_index    = 1,
             int velocity_index        = 4,
             int temperature_index     = 7,
             int internal_energy_index = 8,
-            int additional_dof_index  = 9
+            int volume_fraction_index = 9,
+            int additional_dof_index  = 10
         >
         inline void computeInternalEnergyConstraint(
             const internal_energy_type &internal_energy,
@@ -127,6 +128,7 @@ namespace tardigradeBalanceEquations{
             dRdW_iter dRdW_begin, dRdW_iter dRdW_end,
             dRdTheta_iter dRdTheta_begin, dRdTheta_iter dRdTheta_end,
             dRdE_iter     dRdE_begin,     dRdE_iter     dRdE_end,
+            dRdVF_iter    dRdVF_begin,    dRdVF_iter    dRdVF_end,
             dRdZ_iter     dRdZ_begin,     dRdZ_iter     dRdZ_end,
             dRdUMesh_iter dRdUMesh_begin, dRdUMesh_iter dRdUMesh_end
         );
@@ -144,14 +146,15 @@ namespace tardigradeBalanceEquations{
             typename dUDotdU_type,
             class result_iter,
             class dRdRho_iter, class dRdU_iter, class dRdW_iter,
-            class dRdTheta_iter, class dRdE_iter, class dRdZ_iter,
-            class dRdUMesh_iter,
+            class dRdTheta_iter, class dRdE_iter, class dRdVF_iter,
+            class dRdZ_iter, class dRdUMesh_iter,
             int density_index         = 0,
             int displacement_index    = 1,
             int velocity_index        = 4,
             int temperature_index     = 7,
             int internal_energy_index = 8,
-            int additional_dof_index  = 9
+            int volume_fraction_index = 9,
+            int additional_dof_index  = 10
         >
         inline void computeInternalEnergyConstraint(
             const internal_energy_iter &internal_energy_begin,
@@ -174,6 +177,7 @@ namespace tardigradeBalanceEquations{
             dRdW_iter dRdW_begin, dRdW_iter dRdW_end,
             dRdTheta_iter dRdTheta_begin, dRdTheta_iter dRdTheta_end,
             dRdE_iter     dRdE_begin,     dRdE_iter     dRdE_end,
+            dRdVF_iter    dRdVF_begin,    dRdVF_iter    dRdVF_end,
             dRdZ_iter     dRdZ_begin,     dRdZ_iter     dRdZ_end,
             dRdUMesh_iter dRdUMesh_begin, dRdUMesh_iter dRdUMesh_end
         );
@@ -276,6 +280,29 @@ namespace tardigradeBalanceEquations{
             dRdUMesh_iter dRdUMesh_begin, dRdUMesh_iter dRdUMesh_end
         );
 
+//        template<
+//            int material_response_num_dof,
+//            class density_iter,
+//            class volume_fraction_iter,
+//            class material_response_iter,
+//            class material_response_jacobian_iter,
+//            class mixture_response_iter,
+//            class mixture_jacobian_iter
+//        >
+//        inline void assembleMixtureMaterialResponse(
+//            const density_iter &density_begin,
+//            const density_iter &density_end,
+//            const volume_fraction_iter &volume_fraction_begin,
+//            const volume_fraction_iter &volume_fraction_end,
+//            const material_response_iter &material_response_begin,
+//            const material_response_iter &material_response_end,
+//            const material_response_jacobian_iter &material_response_jacobian_begin,
+//            const material_response_jacobian_iter &material_response_jacobian_end,
+//            const mixture_response_iter &mixture_response_begin,
+//            const mixture_response_iter &mixture_response_end,
+//            const mixture_jacobian_iter &mixture_jacobian_begin,
+//            const mixture_jacobian_iter &mixture_jacobian_end
+//        );
 
     }
 
