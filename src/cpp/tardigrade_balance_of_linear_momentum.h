@@ -292,13 +292,14 @@ namespace tardigradeBalanceEquations{
             typename dDensityDotdDensity_type, typename dUDotdU_type, typename dUDDotdU_type,
             class result_iter,
             class dRdRho_iter, class dRdU_iter, class dRdW_iter, class dRdTheta_iter,
-            class dRdE_iter, class dRdZ_iter, class dRdVolumeFraction_iter, class dRdUMesh_iter,
+            class dRdE_iter, class dRdVolumeFraction_iter, class dRdZ_iter, class dRdUMesh_iter,
             int density_index         = 0,
             int displacement_index    = 1,
             int velocity_index        = 4,
             int temperature_index     = 7,
             int internal_energy_index = 8,
-            int additional_dof_index  = 9
+            int volume_fraction_index = 9,
+            int additional_dof_index  = 10
         >
         void computeBalanceOfLinearMomentum(
             const density_type &density, const density_dot_type &density_dot,
@@ -326,8 +327,8 @@ namespace tardigradeBalanceEquations{
             dRdW_iter dRdW_begin,                                  dRdW_iter dRdW_end,
             dRdTheta_iter dRdTheta_begin,                          dRdTheta_iter dRdTheta_end,
             dRdE_iter dRdE_begin,                                  dRdE_iter dRdE_end,
-            dRdZ_iter dRdZ_begin,                                  dRdZ_iter dRdZ_end,
             dRdVolumeFraction_iter dRdVolumeFraction_begin,        dRdVolumeFraction_iter dRdVolumeFraction_end,
+            dRdZ_iter dRdZ_begin,                                  dRdZ_iter dRdZ_end,
             dRdUMesh_iter dRdUMesh_begin,                          dRdUMesh_iter dRdUMesh_end
         );
 
@@ -368,13 +369,14 @@ namespace tardigradeBalanceEquations{
             typename dDensityDotdDensity_type, typename dUDotdU_type, typename dUDDotdU_type,
             class result_iter,
             class dRdRho_iter, class dRdU_iter, class dRdW_iter, class dRdTheta_iter,
-            class dRdE_iter, class dRdZ_iter, class dRdVolumeFraction_iter, class dRdUMesh_iter,
+            class dRdE_iter, class dRdVolumeFraction_iter, class dRdZ_iter, class dRdUMesh_iter,
             int density_index         = 0,
             int displacement_index    = 1,
             int velocity_index        = 4,
             int temperature_index     = 7,
             int internal_energy_index = 8,
-            int additional_dof_index  = 9
+            int volume_fraction_index = 9,
+            int additional_dof_index  = 10
         >
         void computeBalanceOfLinearMomentum(
             const density_iter &density_begin,                     const density_iter &density_end,
@@ -402,8 +404,8 @@ namespace tardigradeBalanceEquations{
             dRdW_iter dRdW_begin,                                  dRdW_iter dRdW_end,
             dRdTheta_iter dRdTheta_begin,                          dRdTheta_iter dRdTheta_end,
             dRdE_iter dRdE_begin,                                  dRdE_iter dRdE_end,
-            dRdZ_iter dRdZ_begin,                                  dRdZ_iter dRdZ_end,
             dRdVolumeFraction_iter dRdVolumeFraction_begin,        dRdVolumeFraction_iter dRdVolumeFraction_end,
+            dRdZ_iter dRdZ_begin,                                  dRdZ_iter dRdZ_end,
             dRdUMesh_iter dRdUMesh_begin,                          dRdUMesh_iter dRdUMesh_end
         );
 
