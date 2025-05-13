@@ -8788,8 +8788,8 @@ void evaluate_at_nodes(
                     std::begin( dRdW_n )              + nphases * 3 * j,        std::begin( dRdW_n )              + nphases * 3 * ( j + 1 ),
                     std::begin( dRdTheta_n )          + nphases * 1 * j,        std::begin( dRdTheta_n )          + nphases * 1 * ( j + 1 ),
                     std::begin( dRdE_n )              + nphases * 1 * j,        std::begin( dRdE_n )              + nphases * 1 * ( j + 1 ),
-                    std::begin( dRdZ_n )              + num_additional_dof * j, std::begin( dRdZ_n )              + num_additional_dof * ( j + 1 ),
                     std::begin( dRdVolumeFraction_n ) + nphases * 1 * j,        std::begin( dRdVolumeFraction_n ) + nphases * 1 * ( j + 1 ),
+                    std::begin( dRdZ_n )              + num_additional_dof * j, std::begin( dRdZ_n )              + num_additional_dof * ( j + 1 ),
                     std::begin( dRdUMesh_n )          + dim * j,                std::begin( dRdUMesh_n )          + dim * ( j + 1 )
                 );
 
@@ -8830,8 +8830,8 @@ void evaluate_at_nodes(
                     std::begin( dRdW_n )               , std::end( dRdW_n )             ,
                     std::begin( dRdTheta_n )           , std::end( dRdTheta_n )         ,
                     std::begin( dRdE_n )               , std::end( dRdE_n )             ,
-                    std::begin( dRdZ_n )               , std::end( dRdZ_n )             ,
                     std::begin( dRdVolumeFraction_n )  , std::end( dRdVolumeFraction_n ),
+                    std::begin( dRdZ_n )               , std::end( dRdZ_n )             ,
                     std::begin( dRdUMesh_n )           , std::end( dRdUMesh_n )         
                 );
 
