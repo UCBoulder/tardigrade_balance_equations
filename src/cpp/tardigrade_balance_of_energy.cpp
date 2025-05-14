@@ -2098,6 +2098,7 @@ namespace tardigradeBalanceEquations{
                     - density * internal_heat_generation;
 
             dRdRho = dRdRhoDot = dRdE = dRdEDot = 0;
+            std::fill( dRdGradE_begin, dRdGradE_end, 0 );
             if ( !is_per_unit_volume ){
 
                 dRdRho = internal_energy_dot + internal_energy * trace_velocity_gradient + std::inner_product( velocity_begin, velocity_end, internal_energy_gradient_begin, 0. );

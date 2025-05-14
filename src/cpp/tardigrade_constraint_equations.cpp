@@ -911,7 +911,7 @@ namespace tardigradeBalanceEquations{
 
             TARDIGRADE_ERROR_TOOLS_CHECK(
                 material_response_dim * ( nphases * num_phase_dof + num_additional_dof ) == ( unsigned int )( full_material_response_dof_gradient_end - full_material_response_dof_gradient_begin ),
-                "The full material response dof gradient have a size of the material response dimension times the number of dof in the material resionse"
+                "The full material response dof gradient have a size of the material response dimension times the number of dof in the material response"
             )
 
             TARDIGRADE_ERROR_TOOLS_CHECK(
