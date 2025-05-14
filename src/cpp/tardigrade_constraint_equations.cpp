@@ -1419,7 +1419,6 @@ namespace tardigradeBalanceEquations{
              */
 
             using density_type         = typename std::iterator_traits<density_iter>::value_type;
-            using volume_fraction_type = typename std::iterator_traits<volume_fraction_iter>::value_type;
 
             const unsigned int material_response_size = ( unsigned int )( mixture_response_end - mixture_response_begin );
 
@@ -1448,6 +1447,9 @@ namespace tardigradeBalanceEquations{
                 mixture_response_jacobian_end,
                 0
             );
+
+            density_type density_sum = 0;
+            for ( auto v = density_begin; v != density_end; ++v ){ density_sum += *v; };
 
             for ( unsigned int phase = 0; phase < num_phases; ++phase ){
 
@@ -1502,6 +1504,53 @@ namespace tardigradeBalanceEquations{
                     for ( unsigned int j = 0; j < num_dof; ++j ){
 
                         *( mixture_response_jacobian + num_dof * ( i + interphasic_heat_transfer_index ) + j ) += *( material_response_jacobian + phase * material_response_size * num_dof + num_dof * ( i + interphasic_heat_transfer_index ) + j );
+
+                    }
+
+                }
+
+                //
+                // Incorporate volume-fraction summations
+                //
+
+                // Cauchy stress
+                for ( unsigned int i = 0; i < dim * dim; ++i ){
+
+                    *( mixture_response_begin + cauchy_stress_index + i ) += ( *( volume_fraction_begin + phase ) ) * ( *( material_response_begin + phase * num_dof + cauchy_stress_index + i ) );
+
+                    for ( unsigned int j = 0; j < num_dof; ++j ){
+
+                        *( mixture_response_jacobian + num_dof * ( i + cauchy_stress_index ) + j ) += ( *( volume_fraction_begin + phase ) ) * ( *( material_response_jacobian + phase * material_response_size * num_dof + num_dof * ( i + cauchy_stress_index ) + j ) );
+
+                    }
+
+                }
+
+                // trace mass change velocity gradient
+                for ( unsigned int i = 0; i < 1; ++i ){
+
+                    *( mixture_response_begin + trace_mass_change_velocity_gradient_index + i ) += ( *( volume_fraction_begin + phase ) ) * ( *( material_response_begin + phase * num_dof + trace_mass_change_velocity_gradient_index + i ) );
+
+                    for ( unsigned int j = 0; j < num_dof; ++j ){
+
+                        *( mixture_response_jacobian + num_dof * ( i + trace_mass_change_velocity_gradient_index ) + j ) += ( *( volume_fraction_begin + phase ) ) * ( *( material_response_jacobian + phase * material_response_size * num_dof + num_dof * ( i + trace_mass_change_velocity_gradient_index ) + j ) );
+
+                    }
+
+                }
+
+                //
+                // Incorporate density-weighted summations
+                //
+
+                // body force
+                for ( unsigned int i = 0; i < dim; ++i ){
+
+                    *( mixture_response_begin + body_force_index + i ) += ( *( density_begin + phase ) ) * ( *( material_response_begin + phase * num_dof + body_force_index + i ) ) / density_sum;
+
+                    for ( unsigned int j = 0; j < num_dof; ++j ){
+
+                        *( mixture_response_jacobian + num_dof * ( i + body_force_index ) + j ) += ( *( density_begin + phase ) ) * ( *( material_response_jacobian + phase * material_response_size * num_dof + num_dof * ( i + body_force_index ) + j ) ) / density_sum;
 
                     }
 
