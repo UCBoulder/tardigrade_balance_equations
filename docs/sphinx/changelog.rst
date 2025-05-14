@@ -34,6 +34,7 @@ Internal Changes
 - Corrected uninitialized warning in balance of mass. (:pull:`24`). By `Nathan Miller`_.
 - Moved balance of volume fraction declaration to the header file (:pull:`26`). By `Nathan Miller`_.
 - Allow users to perform a complete build of the tardigrade stack (:pull:`27`). By `Nathan Miller`_.
+- Corrected typo in error message (:pull:`30`). By `Nathan Miller`_.
 
 Breaking Changes
 ================
