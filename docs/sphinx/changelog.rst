@@ -35,6 +35,7 @@ Internal Changes
 - Moved balance of volume fraction declaration to the header file (:pull:`26`). By `Nathan Miller`_.
 - Allow users to perform a complete build of the tardigrade stack (:pull:`27`). By `Nathan Miller`_.
 - Corrected typo in error message (:pull:`30`). By `Nathan Miller`_.
+- Corrected typo in error message and compile-time warning (:pull:`31`). By `Nathan Miller`_.
 
 Breaking Changes
 ================
