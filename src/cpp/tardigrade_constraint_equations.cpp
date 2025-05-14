@@ -1368,6 +1368,149 @@ namespace tardigradeBalanceEquations{
 
         }
 
+        template<
+            int cauchy_stress_index,
+            int internal_energy_index,
+            int mass_change_index,
+            int body_force_index,
+            int interphasic_force_index,
+            int heat_flux_index,
+            int internal_heat_generation_index,
+            int interphasic_heat_transfer_index,
+            int trace_mass_change_velocity_gradient_index,
+            class density_iter,
+            class volume_fraction_iter,
+            class material_response_iter,
+            class material_response_jacobian_iter,
+            class mixture_response_iter,
+            class mixture_jacobian_iter
+            int density_index                = 0,
+            int volume_fraction_index        = 9
+        >
+        inline void assembleMixtureMaterialResponse(
+            const density_iter &density_begin,
+            const density_iter &density_end,
+            const volume_fraction_iter &volume_fraction_begin,
+            const volume_fraction_iter &volume_fraction_end,
+            const material_response_iter &material_response_begin,
+            const material_response_iter &material_response_end,
+            const material_response_jacobian_iter &material_response_jacobian_begin,
+            const material_response_jacobian_iter &material_response_jacobian_end,
+            const mixture_response_iter &mixture_response_begin,
+            const mixture_response_iter &mixture_response_end,
+            const mixture_jacobian_iter &mixture_jacobian_begin,
+            const mixture_jacobian_iter &mixture_jacobian_end
+        ){
+            /*!
+             * Assemble the mixture material response from the behavior of each phase
+             *
+             * Some of the material responses are assembled using a volume fraction approach (e.g., the Cauchy stress),
+             * others are assembled with a density-weighted approach (e.g., the body force), and others are summed
+             * directly (e.g., the interphasic heat transfer). The difference is based on the balance equations.
+             *
+             * Direct Sum:
+             * mass change, interphasic force, heat flux, interphasic heat transfer
+             *
+             * Volume Fraction Weighted:
+             * Cauchy stress, trace mass change velocity gradient
+             *
+             * Density weighted
+             * internal energy, body force
+             */
+
+            using density_type         = typename std::iterator_traits<density_iter>::value_type;
+            using volume_fraction_type = typename std::iterator_traits<volume_fraction_iter>::value_type;
+
+            const unsigned int material_response_size = ( unsigned int )( mixture_response_end - mixture_response_begin );
+
+            const unsigned int num_dof = ( unsigned int )( mixture_response_jacobian_end - mixture_response_jacobian_begin );
+
+            const unsigned int num_phases = ( unsigned int )( material_response_end - material_response_begin ) / material_response_size;
+
+            TARDIGRADE_ERROR_TOOLS_CHECK(
+                material_response_size * num_phases == ( unsigned int )( material_response_end - material_response_begin ),
+                "The material response size must be an integer multiple of the mixture response size (i.e., the number of phases)"
+            )
+
+            TARDIGRADE_ERROR_TOOLS_CHECK(
+                material_response_size * num_phases * num_dof == ( unsigned int )( material_response_end - material_response_begin ),
+                "The material response jacobian size must be an integer multiple of the mixture response jacobian size (i.e., the number of phases)"
+            )
+
+            std::fill(
+                mixture_response_begin,
+                mixture_response_end,
+                0
+            );
+
+            std::fill(
+                mixture_response_jacobian_begin,
+                mixture_response_jacobian_end,
+                0
+            );
+
+            for ( unsigned int phase = 0; phase < num_phases; ++phase ){
+
+                //
+                // Incorporate the direct summations
+                //
+
+                // mass change rate
+                for ( unsigned int i = 0; i < 1; ++i ){
+
+                    *( mixture_response_begin + mass_change_index + i ) += *( material_response_begin + phase * num_dof + mass_change_index + i );
+
+                    for ( unsigned int j = 0; j < num_dof; ++j ){
+
+                        *( mixture_response_jacobian + num_dof * ( i + mass_change_index ) + j ) += *( material_response_jacobian + phase * material_response_size * num_dof + num_dof * ( i + mass_change_index ) + j );
+
+                    }
+
+                }
+
+                // interphasic force
+                for ( unsigned int i = 0; i < dim; ++i ){
+
+                    *( mixture_response_begin + interphasic_force_index + i ) += *( material_response_begin + phase * num_dof + interphasic_force_index + i );
+
+                    for ( unsigned int j = 0; j < num_dof; ++j ){
+
+                        *( mixture_response_jacobian + num_dof * ( i + interphasic_force_index ) + j ) += *( material_response_jacobian + phase * material_response_size * num_dof + num_dof * ( i + interphasic_force_index ) + j );
+
+                    }
+
+                }
+
+                // heat flux
+                for ( unsigned int i = 0; i < dim; ++i ){
+
+                    *( mixture_response_begin + heat_flux_index + i ) += *( material_response_begin + phase * num_dof + heat_flux_index + i );
+
+                    for ( unsigned int j = 0; j < num_dof; ++j ){
+
+                        *( mixture_response_jacobian + num_dof * ( i + heat_flux_index ) + j ) += *( material_response_jacobian + phase * material_response_size * num_dof + num_dof * ( i + heat_flux_index ) + j );
+
+                    }
+
+                }
+
+                // interphasic heat transfer
+                for ( unsigned int i = 0; i < dim; ++i ){
+
+                    *( mixture_response_begin + interphasic_heat_transfer_index + i ) += *( material_response_begin + phase * num_dof + interphasic_heat_transfer_index + i );
+
+                    for ( unsigned int j = 0; j < num_dof; ++j ){
+
+                        *( mixture_response_jacobian + num_dof * ( i + interphasic_heat_transfer_index ) + j ) += *( material_response_jacobian + phase * material_response_size * num_dof + num_dof * ( i + interphasic_heat_transfer_index ) + j );
+
+                    }
+
+                }
+
+            }
+
+        }
+
     }
 
 }
