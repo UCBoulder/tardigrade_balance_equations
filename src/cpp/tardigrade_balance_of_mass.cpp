@@ -783,7 +783,8 @@ namespace tardigradeBalanceEquations{
             class material_response_iter, class material_response_jacobian_iter,
             class interpolationFunctionGradient_iter,
             class full_material_response_dof_gradient_iter,
-            class dRdRho_iter, class dRdU_iter, class dRdW_iter, class dRdTheta_iter, class dRdE_iter, class dRdZ_iter,
+            class dRdRho_iter, class dRdU_iter, class dRdW_iter, class dRdTheta_iter, class dRdE_iter,
+            class dRdVF_iter, class dRdZ_iter,
             class dRdUMesh_iter,
             typename dDensityDotdDensity_type, typename dUDotdU_type,
             int density_index,
@@ -791,6 +792,7 @@ namespace tardigradeBalanceEquations{
             int velocity_index,
             int temperature_index,
             int internal_energy_index,
+            int volume_fraction_index,
             int additional_dof_index
         >
         void computeBalanceOfMass(
@@ -809,13 +811,14 @@ namespace tardigradeBalanceEquations{
             const dDensityDotdDensity_type &dDensityDotdDensity,          const dUDotdU_type &dUDotdU,
             const unsigned int phase,
             result_type &result,
-            dRdRho_iter dRdRho_begin,         dRdRho_iter dRdRho_end,
-            dRdU_iter dRdU_begin,             dRdU_iter dRdU_end,
-            dRdW_iter dRdW_begin,             dRdW_iter dRdW_end,
-            dRdTheta_iter dRdTheta_begin,     dRdTheta_iter dRdTheta_end,
-            dRdE_iter dRdE_begin,             dRdE_iter dRdE_end,
-            dRdZ_iter dRdZ_begin,             dRdZ_iter dRdZ_end,
-            dRdUMesh_iter dRdUMesh_begin,     dRdUMesh_iter dRdUMesh_end
+            dRdRho_iter dRdRho_begin,     dRdRho_iter dRdRho_end,
+            dRdU_iter dRdU_begin,         dRdU_iter dRdU_end,
+            dRdW_iter dRdW_begin,         dRdW_iter dRdW_end,
+            dRdTheta_iter dRdTheta_begin, dRdTheta_iter dRdTheta_end,
+            dRdE_iter dRdE_begin,         dRdE_iter dRdE_end,
+            dRdVF_iter dRdVF_begin,       dRdVF_iter dRdVF_end,
+            dRdZ_iter dRdZ_begin,         dRdZ_iter dRdZ_end,
+            dRdUMesh_iter dRdUMesh_begin, dRdUMesh_iter dRdUMesh_end
         ){
 
             /*!
@@ -890,6 +893,8 @@ namespace tardigradeBalanceEquations{
              * \param &dRdTheta_end: The stopping iterator of the derivative of the mass change rate w.r.t. the temperature
              * \param &dRdE_begin: The starting iterator of the derivative of the mass change rate w.r.t. the internal energy
              * \param &dRdE_end: The stopping iterator of the derivative of the mass change rate w.r.t. the internal energy
+             * \param &dRdVF_begin: The starting iterator of the derivative of the mass change rate w.r.t. the volume fraction
+             * \param &dRdVF_end: The stopping iterator of the derivative of the mass change rate w.r.t. the volume fraction
              * \param &dRdZ_begin: The starting iterator of the derivative of the mass change rate w.r.t. the additional dof
              * \param &dRdZ_end: The stopping iterator of the derivative of the mass change rate w.r.t. the additional dof
              * \param &dRdUMesh_begin: The starting iterator of the derivative of the mass change rate w.r.t. the mesh displacement
@@ -927,10 +932,11 @@ namespace tardigradeBalanceEquations{
             std::fill( dRdTheta_begin, dRdTheta_end, 0 );
             std::fill( dRdE_begin,     dRdE_end,     0 );
             std::fill( dRdZ_begin,     dRdZ_end,     0 );
+            std::fill( dRdVF_begin,    dRdVF_end,    0 );
 
             // Set the number of phases
             const unsigned int nphases = ( unsigned int )( dRdRho_end - dRdRho_begin );
-            constexpr unsigned int num_phase_dof = 3 + 2 * material_response_dim;
+            constexpr unsigned int num_phase_dof = 4 + 2 * material_response_dim;
             const unsigned int num_additional_dof = ( material_response_num_dof - num_phase_dof );
 
             // Add the material response contributions to the density Jacobian
@@ -1016,6 +1022,21 @@ namespace tardigradeBalanceEquations{
 
             }
 
+            // Add the material response contributions to the volume fraction
+            for ( auto p = std::pair< unsigned int, dRdVF_iter >( 0, dRdVF_begin ); p.second != dRdVF_end; ++p.first, ++p.second ){
+
+                // DOF value contributions
+                *p.second -= test_function * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * mass_change_index + nphases * volume_fraction_index + p.first ) ) * interpolation_function;
+
+                // DOF spatial gradient contributions
+                for ( unsigned int a = 0; a < material_response_dim; ++a ){
+
+                    *p.second -= test_function * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * mass_change_index + ( nphases * num_phase_dof + num_additional_dof ) + material_response_dim * ( nphases * volume_fraction_index + p.first ) + a ) ) * ( *( interpolation_function_gradient_begin + a ) );
+
+                }
+
+            }
+
             // Add the material response contributions to the additional degrees of freedom
             for ( auto p = std::pair< unsigned int, dRdZ_iter >( 0, dRdZ_begin ); p.second != dRdZ_end; ++p.first, ++p.second ){
 
@@ -1067,7 +1088,8 @@ namespace tardigradeBalanceEquations{
             class material_response_iter, class material_response_jacobian_iter,
             class interpolationFunctionGradient_iter,
             class full_material_response_dof_gradient_iter,
-            class dRdRho_iter, class dRdU_iter, class dRdW_iter, class dRdTheta_iter, class dRdE_iter, class dRdZ_iter,
+            class dRdRho_iter, class dRdU_iter, class dRdW_iter, class dRdTheta_iter, class dRdE_iter,
+            class dRdVF_iter,  class dRdZ_iter,
             class dRdUMesh_iter,
             typename dDensityDotdDensity_type, typename dUDotdU_type,
             int density_index,
@@ -1075,6 +1097,7 @@ namespace tardigradeBalanceEquations{
             int velocity_index,
             int temperature_index,
             int internal_energy_index,
+            int volume_fraction_index,
             int additional_dof_index
         >
         void computeBalanceOfMass(
@@ -1092,14 +1115,15 @@ namespace tardigradeBalanceEquations{
             const full_material_response_dof_gradient_iter &full_material_response_dof_gradient_begin,
             const full_material_response_dof_gradient_iter &full_material_response_dof_gradient_end,
             const dDensityDotdDensity_type &dDensityDotdDensity,          const dUDotdU_type &dUDotdU,
-            result_iter result_begin,         result_iter result_end,
-            dRdRho_iter dRdRho_begin,         dRdRho_iter dRdRho_end,
-            dRdU_iter dRdU_begin,             dRdU_iter dRdU_end,
-            dRdW_iter dRdW_begin,             dRdW_iter dRdW_end,
-            dRdTheta_iter dRdTheta_begin,     dRdTheta_iter dRdTheta_end,
-            dRdE_iter dRdE_begin,             dRdE_iter dRdE_end,
-            dRdZ_iter dRdZ_begin,             dRdZ_iter dRdZ_end,
-            dRdUMesh_iter dRdUMesh_begin,     dRdUMesh_iter dRdUMesh_end
+            result_iter result_begin,     result_iter result_end,
+            dRdRho_iter dRdRho_begin,     dRdRho_iter dRdRho_end,
+            dRdU_iter dRdU_begin,         dRdU_iter dRdU_end,
+            dRdW_iter dRdW_begin,         dRdW_iter dRdW_end,
+            dRdTheta_iter dRdTheta_begin, dRdTheta_iter dRdTheta_end,
+            dRdE_iter dRdE_begin,         dRdE_iter dRdE_end,
+            dRdVF_iter dRdVF_begin,       dRdVF_iter dRdVF_end,
+            dRdZ_iter dRdZ_begin,         dRdZ_iter dRdZ_end,
+            dRdUMesh_iter dRdUMesh_begin, dRdUMesh_iter dRdUMesh_end
         ){
 
             /*!
@@ -1174,6 +1198,8 @@ namespace tardigradeBalanceEquations{
              * \param &dRdTheta_end: The stopping iterator of the derivative of the mass change rate w.r.t. the temperature
              * \param &dRdE_begin: The starting iterator of the derivative of the mass change rate w.r.t. the internal energy
              * \param &dRdE_end: The stopping iterator of the derivative of the mass change rate w.r.t. the internal energy
+             * \param &dRdVF_begin: The starting iterator of the derivative of the mass change rate w.r.t. the volume fraction
+             * \param &dRdVF_end: The stopping iterator of the derivative of the mass change rate w.r.t. the volume fraction
              * \param &dRdZ_begin: The starting iterator of the derivative of the mass change rate w.r.t. the additional dof
              * \param &dRdZ_end: The stopping iterator of the derivative of the mass change rate w.r.t. the additional dof
              * \param &dRdUMesh_begin: The starting iterator of the derivative of the mass change rate w.r.t. the mesh displacement
@@ -1190,7 +1216,7 @@ namespace tardigradeBalanceEquations{
 
             const unsigned int material_response_size = ( unsigned int )( material_response_end - material_response_begin ) / nphases;
 
-            constexpr unsigned int num_phase_dof = 3 + 2 * material_response_dim;
+            constexpr unsigned int num_phase_dof = 4 + 2 * material_response_dim;
 
             constexpr unsigned int num_additional_dof = material_response_num_dof - num_phase_dof;
 
@@ -1255,6 +1281,11 @@ namespace tardigradeBalanceEquations{
             )
 
             TARDIGRADE_ERROR_TOOLS_CHECK(
+                nphases * nphases * 1 == ( unsigned int )( dRdVF_end - dRdVF_begin ),
+                "dRdVF must have a consistent size with the density vector"
+            )
+
+            TARDIGRADE_ERROR_TOOLS_CHECK(
                 nphases * num_additional_dof == ( unsigned int )( dRdZ_end - dRdZ_begin ),
                 "dRdZ must have a consistent size with the density vector"
             )
@@ -1280,7 +1311,7 @@ namespace tardigradeBalanceEquations{
                     material_response_iter, material_response_jacobian_iter,
                     interpolationFunctionGradient_iter,
                     full_material_response_dof_gradient_iter,
-                    dRdRho_iter, dRdU_iter, dRdW_iter, dRdTheta_iter, dRdE_iter, dRdZ_iter,
+                    dRdRho_iter, dRdU_iter, dRdW_iter, dRdTheta_iter, dRdE_iter, dRdVF_iter, dRdZ_iter,
                     dRdUMesh_iter,
                     dDensityDotdDensity_type, dUDotdU_type,
                     density_index,
@@ -1288,6 +1319,7 @@ namespace tardigradeBalanceEquations{
                     velocity_index,
                     temperature_index,
                     internal_energy_index,
+                    volume_fraction_index,
                     additional_dof_index
                 >
                 (
@@ -1310,6 +1342,7 @@ namespace tardigradeBalanceEquations{
                     dRdW_begin     + nphases * dim * v.first, dRdW_begin     + nphases * dim * ( v.first + 1 ),
                     dRdTheta_begin + nphases *   1 * v.first, dRdTheta_begin + nphases *   1 * ( v.first + 1 ),
                     dRdE_begin     + nphases *   1 * v.first, dRdE_begin     + nphases *   1 * ( v.first + 1 ),
+                    dRdVF_begin    + nphases *   1 * v.first, dRdVF_begin    + nphases *   1 * ( v.first + 1 ),
                     dRdZ_begin     + num_additional_dof * v.first,
                     dRdZ_begin     + num_additional_dof * ( v.first + 1 ),
                     dRdUMesh_begin +       1 * dim * v.first, dRdUMesh_begin +       1 * dim * ( v.first + 1 )

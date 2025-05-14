@@ -271,12 +271,13 @@ namespace tardigradeBalanceEquations{
             typename dDensityDotdDensity_type, typename dUDotdU_type, typename dUDDotdU_type,
             class result_iter,
             class dRdRho_iter, class dRdU_iter, class dRdW_iter, class dRdTheta_iter,
-            class dRdE_iter, class dRdZ_iter, class dRdVolumeFraction_iter, class dRdUMesh_iter,
+            class dRdE_iter, class dRdVolumeFraction_iter, class dRdZ_iter, class dRdUMesh_iter,
             int density_index,
             int displacement_index,
             int velocity_index,
             int temperature_index,
             int internal_energy_index,
+            int volume_fraction_index,
             int additional_dof_index 
         >
         void computeBalanceOfLinearMomentum(
@@ -305,8 +306,8 @@ namespace tardigradeBalanceEquations{
             dRdW_iter dRdW_begin,                                  dRdW_iter dRdW_end,
             dRdTheta_iter dRdTheta_begin,                          dRdTheta_iter dRdTheta_end,
             dRdE_iter dRdE_begin,                                  dRdE_iter dRdE_end,
-            dRdZ_iter dRdZ_begin,                                  dRdZ_iter dRdZ_end,
             dRdVolumeFraction_iter dRdVolumeFraction_begin,        dRdVolumeFraction_iter dRdVolumeFraction_end,
+            dRdZ_iter dRdZ_begin,                                  dRdZ_iter dRdZ_end,
             dRdUMesh_iter dRdUMesh_begin,                          dRdUMesh_iter dRdUMesh_end
         ){
             /*!
@@ -357,10 +358,10 @@ namespace tardigradeBalanceEquations{
              * \param &dRdTheta_end: The stopping iterator of the Jacobian of the result w.r.t. the temperature
              * \param &dRdE_begin: The starting iterator of the Jacobian of the result w.r.t. the internal energy
              * \param &dRdE_end: The stopping iterator of the Jacobian of the result w.r.t. the internal energy
-             * \param &dRdZ_begin: The starting iterator of the Jacobian of the result w.r.t. the additional dof
-             * \param &dRdZ_end: The stopping iterator of the Jacobian of the result w.r.t. the additional dof
              * \param &dRdVolumeFraction_begin: The starting iterator of the Jacobian of the result w.r.t. the volume fraction
              * \param &dRdVolumeFraction_end: The stopping iterator of the Jacobian of the result w.r.t. the volume fraction
+             * \param &dRdZ_begin: The starting iterator of the Jacobian of the result w.r.t. the additional dof
+             * \param &dRdZ_end: The stopping iterator of the Jacobian of the result w.r.t. the additional dof
              * \param &dRdUMesh_begin: The starting iterator of the Jacobian of the result w.r.t. the mesh displacement
              * \param &dRdUMesh_end: The stopping iterator of the Jacobian of the result w.r.t. the mesh displacement
              */
@@ -403,7 +404,7 @@ namespace tardigradeBalanceEquations{
 
             // Set the number of phases
             const unsigned int nphases = ( unsigned int )( dRdRho_end - dRdRho_begin ) / dim;
-            constexpr unsigned int num_phase_dof = 3 + 2 * material_response_dim;
+            constexpr unsigned int num_phase_dof = 4 + 2 * material_response_dim;
             constexpr unsigned int num_additional_dof = material_response_num_dof - num_phase_dof;
 
             std::fill( dRdRho_begin,            dRdRho_end,              0 );
@@ -411,8 +412,8 @@ namespace tardigradeBalanceEquations{
             std::fill( dRdW_begin,              dRdW_end,                0 );
             std::fill( dRdTheta_begin,          dRdTheta_end,            0 );
             std::fill( dRdE_begin,              dRdE_end,                0 );
-            std::fill( dRdZ_begin,              dRdZ_end,                0 );
             std::fill( dRdVolumeFraction_begin, dRdVolumeFraction_end,   0 );
+            std::fill( dRdZ_begin,              dRdZ_end,                0 );
 
             for ( unsigned int i = 0; i < dim; ++i ){
 
@@ -479,6 +480,19 @@ namespace tardigradeBalanceEquations{
                         for ( unsigned int a = 0; a < material_response_dim; ++a ){
                         
                             *p.second += dRdB_phase[ dim * i + j ] * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( body_force_index + j ) + ( nphases * num_phase_dof + num_additional_dof ) + material_response_dim * ( nphases * internal_energy_index + p.first ) + a ) ) * ( *( interpolation_function_gradient_begin + a ) );
+
+                        }
+
+                    }
+
+                    // volume fraction
+                    for ( auto p = std::pair< unsigned int, dRdVolumeFraction_iter >( 0, dRdVolumeFraction_begin + nphases * i ); p.second != dRdVolumeFraction_begin + nphases * ( i + 1 ); ++p.first, ++p.second ){
+
+                        *p.second += dRdB_phase[ dim * i + j ] * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( body_force_index + j ) + nphases * volume_fraction_index + p.first ) ) * interpolation_function;
+
+                        for ( unsigned int a = 0; a < material_response_dim; ++a ){
+                        
+                            *p.second += dRdB_phase[ dim * i + j ] * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( body_force_index + j ) + ( nphases * num_phase_dof + num_additional_dof ) + material_response_dim * ( nphases * volume_fraction_index + p.first ) + a ) ) * ( *( interpolation_function_gradient_begin + a ) );
 
                         }
 
@@ -581,6 +595,19 @@ namespace tardigradeBalanceEquations{
                         for ( unsigned int a = 0; a < material_response_dim; ++a ){
                         
                             *p.second += dRdCauchy_phase[ dim * dim * i + j ] * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( cauchy_stress_index + j ) + ( nphases * num_phase_dof + num_additional_dof ) + material_response_dim * ( nphases * internal_energy_index + p.first ) + a ) ) * ( *( interpolation_function_gradient_begin + a ) );
+
+                        }
+
+                    }
+
+                    // volume fraction
+                    for ( auto p = std::pair< unsigned int, dRdVolumeFraction_iter >( 0, dRdVolumeFraction_begin + nphases * i ); p.second != dRdVolumeFraction_begin + nphases * ( i + 1 ); ++p.first, ++p.second ){
+
+                        *p.second += dRdCauchy_phase[ dim * dim * i + j ] * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( cauchy_stress_index + j ) + nphases * volume_fraction_index + p.first ) ) * interpolation_function;
+
+                        for ( unsigned int a = 0; a < material_response_dim; ++a ){
+                        
+                            *p.second += dRdCauchy_phase[ dim * dim * i + j ] * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( cauchy_stress_index + j ) + ( nphases * num_phase_dof + num_additional_dof ) + material_response_dim * ( nphases * volume_fraction_index + p.first ) + a ) ) * ( *( interpolation_function_gradient_begin + a ) );
 
                         }
 
@@ -706,6 +733,22 @@ namespace tardigradeBalanceEquations{
 
                 }
 
+                // volume fraction
+                for ( auto p = std::pair< unsigned int, dRdVolumeFraction_iter >( 0, dRdVolumeFraction_begin + nphases * i ); p.second != dRdVolumeFraction_begin + nphases * ( i + 1 ); ++p.first, ++p.second ){
+
+                    // DOF value contributions
+                    *p.second += test_function * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( interphasic_force_index + i ) + nphases * volume_fraction_index + p.first ) ) * interpolation_function;
+
+                    // DOF spatial gradient contributions
+                    for ( unsigned int a = 0; a < material_response_dim; ++a ){
+
+                        *p.second += test_function * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( interphasic_force_index + i ) + ( nphases * num_phase_dof + num_additional_dof ) + material_response_dim * ( nphases * volume_fraction_index + p.first ) + a ) ) * ( *( interpolation_function_gradient_begin + a ) );
+
+                    }
+
+                }
+                *( dRdVolumeFraction_begin + nphases * i + phase ) += dRdVF_phase[ i ] * interpolation_function;
+
                 // additional dof
                 for ( auto p = std::pair< unsigned int, dRdZ_iter >( 0, dRdZ_begin + num_additional_dof * i ); p.second != dRdZ_begin + num_additional_dof * ( i + 1 ); ++p.first, ++p.second ){
 
@@ -720,9 +763,6 @@ namespace tardigradeBalanceEquations{
                     }
 
                 }
-
-                // volume fraction
-                *( dRdVolumeFraction_begin + nphases * i + phase ) += dRdVF_phase[ i ] * interpolation_function;
 
                 // mesh displacement
                 for ( unsigned int I = 0; I < ( nphases * num_phase_dof + num_additional_dof ); ++I ){
@@ -766,12 +806,13 @@ namespace tardigradeBalanceEquations{
             typename dDensityDotdDensity_type, typename dUDotdU_type, typename dUDDotdU_type,
             class result_iter,
             class dRdRho_iter, class dRdU_iter, class dRdW_iter, class dRdTheta_iter,
-            class dRdE_iter, class dRdZ_iter, class dRdVolumeFraction_iter, class dRdUMesh_iter,
+            class dRdE_iter, class dRdVolumeFraction_iter, class dRdZ_iter, class dRdUMesh_iter,
             int density_index        ,
             int displacement_index   ,
             int velocity_index       ,
             int temperature_index    ,
             int internal_energy_index,
+            int volume_fraction_index,
             int additional_dof_index 
         >
         void computeBalanceOfLinearMomentum(
@@ -800,8 +841,8 @@ namespace tardigradeBalanceEquations{
             dRdW_iter dRdW_begin,                                  dRdW_iter dRdW_end,
             dRdTheta_iter dRdTheta_begin,                          dRdTheta_iter dRdTheta_end,
             dRdE_iter dRdE_begin,                                  dRdE_iter dRdE_end,
-            dRdZ_iter dRdZ_begin,                                  dRdZ_iter dRdZ_end,
             dRdVolumeFraction_iter dRdVolumeFraction_begin,        dRdVolumeFraction_iter dRdVolumeFraction_end,
+            dRdZ_iter dRdZ_begin,                                  dRdZ_iter dRdZ_end,
             dRdUMesh_iter dRdUMesh_begin,                          dRdUMesh_iter dRdUMesh_end
         ){
             /*!
@@ -855,10 +896,10 @@ namespace tardigradeBalanceEquations{
              * \param &dRdTheta_end: The stopping iterator of the Jacobian of the result w.r.t. the temperature
              * \param &dRdE_begin: The starting iterator of the Jacobian of the result w.r.t. the internal energy
              * \param &dRdE_end: The stopping iterator of the Jacobian of the result w.r.t. the internal energy
-             * \param &dRdZ_begin: The starting iterator of the Jacobian of the result w.r.t. the additional dof
-             * \param &dRdZ_end: The stopping iterator of the Jacobian of the result w.r.t. the additional dof
              * \param &dRdVolumeFraction_begin: The starting iterator of the Jacobian of the result w.r.t. the volume fraction
              * \param &dRdVolumeFraction_end: The stopping iterator of the Jacobian of the result w.r.t. the volume fraction
+             * \param &dRdZ_begin: The starting iterator of the Jacobian of the result w.r.t. the additional dof
+             * \param &dRdZ_end: The stopping iterator of the Jacobian of the result w.r.t. the additional dof
              * \param &dRdUMesh_begin: The starting iterator of the Jacobian of the result w.r.t. the mesh displacement
              * \param &dRdUMesh_end: The stopping iterator of the Jacobian of the result w.r.t. the mesh displacement
              */
@@ -871,7 +912,7 @@ namespace tardigradeBalanceEquations{
 
             const unsigned int material_response_size = ( unsigned int )( material_response_end - material_response_begin ) / nphases;
 
-            constexpr unsigned int num_phase_dof = 3 + 2 * material_response_dim;
+            constexpr unsigned int num_phase_dof = 4 + 2 * material_response_dim;
 
             constexpr unsigned int num_additional_dof = material_response_num_dof - num_phase_dof;
 
@@ -982,12 +1023,13 @@ namespace tardigradeBalanceEquations{
                     dDensityDotdDensity_type, dUDotdU_type, dUDDotdU_type,
                     result_iter,
                     dRdRho_iter, dRdU_iter, dRdW_iter, dRdTheta_iter,
-                    dRdE_iter, dRdZ_iter, dRdVolumeFraction_iter, dRdUMesh_iter,
+                    dRdE_iter, dRdVolumeFraction_iter, dRdZ_iter, dRdUMesh_iter,
                     density_index,
                     displacement_index,
                     velocity_index,
                     temperature_index,
                     internal_energy_index,
+                    volume_fraction_index,
                     additional_dof_index 
                 >
                 (
@@ -1013,8 +1055,8 @@ namespace tardigradeBalanceEquations{
                     dRdW_begin              +      dim * dim * nphases * v.first, dRdW_begin              +      dim * dim * nphases * ( v.first + 1 ),
                     dRdTheta_begin          +            dim * nphases * v.first, dRdTheta_begin          +            dim * nphases * ( v.first + 1 ),
                     dRdE_begin              +            dim * nphases * v.first, dRdE_begin              +            dim * nphases * ( v.first + 1 ),
-                    dRdZ_begin              + dim * num_additional_dof * v.first, dRdZ_begin              + dim * num_additional_dof * ( v.first + 1 ),
                     dRdVolumeFraction_begin +            dim * nphases * v.first, dRdVolumeFraction_begin +            dim * nphases * ( v.first + 1 ),
+                    dRdZ_begin              + dim * num_additional_dof * v.first, dRdZ_begin              + dim * num_additional_dof * ( v.first + 1 ),
                     dRdUMesh_begin          +                dim * dim * v.first, dRdUMesh_begin          +                dim * dim * ( v.first + 1 )
                 );
 

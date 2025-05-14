@@ -38,6 +38,7 @@ Internal Changes
 Breaking Changes
 ================
 - Changed the order of the templates for the balance of mass to be consistent with the other balance equations. (:pull:`25`). By `Nathan Miller`_.
+- Added the volume fraction as a required dof variable and derivative output (:pull:`29`). By `Nathan Miller`_.
 
 ******************
 0.1.0 (11-07-2024)
