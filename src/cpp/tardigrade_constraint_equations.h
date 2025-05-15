@@ -285,6 +285,7 @@ namespace tardigradeBalanceEquations{
         );
 
         template<
+            int dim,
             int cauchy_stress_index,
             int internal_energy_index,
             int mass_change_index,
@@ -299,11 +300,11 @@ namespace tardigradeBalanceEquations{
             class material_response_iter,
             class material_response_jacobian_iter,
             class mixture_response_iter,
-            class mixture_jacobian_iter
+            class mixture_jacobian_iter,
             int density_index                = 0,
             int volume_fraction_index        = 9
         >
-        inline void assembleMixtureMaterialResponse(
+        inline void computeMixtureMaterialResponse(
             const density_iter &density_begin,
             const density_iter &density_end,
             const volume_fraction_iter &volume_fraction_begin,
