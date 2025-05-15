@@ -6486,8 +6486,57 @@ BOOST_AUTO_TEST_CASE( test_computeMixtureMaterialResponse, * boost::unit_test::t
         std::begin( jacobian ), std::end( jacobian )
     );
 
-    std::cerr << "result: "; for ( auto v = std::cbegin( result ); v != std::cend( result ); ++v ){ std::cerr << *v << " "; } std::cerr << "\n";
-
     BOOST_TEST( result == answer, CHECK_PER_ELEMENT );
+
+    {
+
+        constexpr floatType eps = 1e-5;
+        constexpr unsigned int VAR_DIM = ( nphases * num_phase_dof + num_additional_dof ) * 4;
+        constexpr unsigned int OUT_DIM = num_material_responses;
+
+        std::array< floatType, VAR_DIM > x = dof_vector;
+
+        for ( unsigned int i = 0; i < VAR_DIM; ++i ){
+
+            auto delta = eps * std::fabs( x[ i ] ) + eps;
+
+            std::array< floatType, VAR_DIM > xp = x;
+            std::array< floatType, VAR_DIM > xm = x;
+
+            xp[ i ] += delta;
+            xm[ i ] -= delta;
+
+            std::array< floatType, OUT_DIM > rp, rm;
+            std::array< floatType, OUT_DIM * VAR_DIM > _J;
+
+            evaluate_mixture_response<
+                nphases - 1, num_phase_dof, num_additional_dof
+            >
+            (
+                std::cbegin( xp ),                  std::cend( xp ),
+                std::cbegin( previous_dof_vector ), std::cend( previous_dof_vector ),
+                std::begin( rp ),                   std::end( rp ),
+                std::begin( _J ),                   std::end( _J )
+            );
+
+            evaluate_mixture_response<
+                nphases - 1, num_phase_dof, num_additional_dof
+            >
+            (
+                std::cbegin( xm ),                  std::cend( xm ),
+                std::cbegin( previous_dof_vector ), std::cend( previous_dof_vector ),
+                std::begin( rm ),                   std::end( rm ),
+                std::begin( _J ),                   std::end( _J )
+            );
+
+            for ( unsigned int j = 0; j < OUT_DIM; ++j ){
+
+                BOOST_TEST( jacobian[ VAR_DIM * j + i ] == ( rp[ j ] - rm[ j ] ) / ( 2 * delta ) );
+
+            }
+
+        }
+
+    }
 
 }
