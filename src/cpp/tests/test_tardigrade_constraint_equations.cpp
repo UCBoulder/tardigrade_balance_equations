@@ -6340,3 +6340,203 @@ BOOST_AUTO_TEST_CASE( test_computeDisplacementConstraint, * boost::unit_test::to
     }
 
 }
+
+template<
+    int ntruephases,
+    int phase_dof,
+    int num_additional_dof,
+    class dof_vector_iter,
+    class previous_dof_vector_iter,
+    class result_iter,
+    class jacobian_iter,
+    int material_response_size=23
+>
+void evaluate_mixture_response(
+    const dof_vector_iter &dof_vector_begin,                   const dof_vector_iter &dof_vector_end,
+    const previous_dof_vector_iter &previous_dof_vector_begin, const previous_dof_vector_iter &previous_dof_vector_end,
+    result_iter   result_begin,   result_iter   result_end,
+    jacobian_iter jacobian_begin, jacobian_iter jacobian_end
+){
+
+    try{
+    constexpr unsigned int dof_vector_size = ( ( ntruephases + 1 ) * phase_dof + num_additional_dof ) * 4;
+
+    std::array< floatType, material_response_size * ntruephases > material_responses;
+    std::array< floatType, material_response_size * ntruephases * dof_vector_size > material_response_jacobians;
+
+    std::array< floatType, ntruephases > densities;
+    std::array< floatType, ntruephases > volume_fractions;
+
+    std::vector<floatType> dof_vector( dof_vector_begin, dof_vector_end );
+    std::vector<floatType> previous_dof_vector( previous_dof_vector_begin, previous_dof_vector_end );
+
+    for ( unsigned int phase = 0; phase < ntruephases; ++phase ){
+
+        densities[ phase ] = *( dof_vector_begin + phase );
+        volume_fractions[ phase ] = *( dof_vector_begin + ( ntruephases + 1 ) * ( 1 + 3 + 3 + 1 + 1 ) + phase );
+
+        hydraLinearTest linearTest(
+            ntruephases + 1, phase, phase_dof, num_additional_dof,
+            0, 0.1, dof_vector, previous_dof_vector
+        );
+
+        linearTest.evaluate( );
+
+        std::copy(
+            std::begin( *linearTest.getUnknownVector( ) ),
+            std::end(   *linearTest.getUnknownVector( ) ),
+            std::begin( material_responses ) + material_response_size * phase
+        );
+
+        std::vector full_jacobian = linearTest.getFullTangent( );
+
+        std::copy(
+            std::begin( full_jacobian ),
+            std::end(   full_jacobian ),
+            std::begin( material_response_jacobians ) + material_response_size * dof_vector_size * phase
+        );
+
+    }
+
+    tardigradeBalanceEquations::constraintEquations::computeMixtureMaterialResponse
+    <
+        3, 0, 9, 10, 11, 14, 17, 20, 21, 22
+    >
+    (
+        std::cbegin( densities ),                   std::cend( densities ),
+        std::cbegin( volume_fractions ),            std::cend( volume_fractions ),
+        std::cbegin( material_responses ),          std::cend( material_responses ),
+        std::cbegin( material_response_jacobians ), std::cend( material_response_jacobians ),
+        result_begin,   result_end,
+        jacobian_begin, jacobian_end
+    );
+    }catch(std::exception &e){tardigradeErrorTools::printNestedExceptions(e); throw;}
+
+}
+
+BOOST_AUTO_TEST_CASE( test_computeMixtureMaterialResponse, * boost::unit_test::tolerance( 1e-5 ) ){
+    /*!
+     * Test computing the mixture material response in a finite element context
+     */
+
+    constexpr unsigned int nphases = 4;
+
+    constexpr unsigned int num_phase_dof = 1 + 3 + 3 + 1 + 1 + 1;
+
+    constexpr unsigned int num_additional_dof = 5;
+
+    constexpr unsigned int num_material_responses = 23;
+
+    std::array< floatType, ( nphases * num_phase_dof + num_additional_dof ) * 4 > dof_vector = {
+        +0.392, -0.428, -0.546, +0.102, +0.438, -0.154,
+        +0.962, +0.370, -0.038, -0.216, -0.314, +0.458,
+        -0.122, -0.880, -0.204, +0.476, -0.636, -0.650,
+        +0.064, +0.064, +0.268, +0.698, +0.448, +0.222,
+        +0.444, -0.354, -0.276, -0.544, -0.412, +0.262,
+        -0.816, -0.132, -0.138, -0.012, -0.148, -0.376,
+        -0.148, +0.786, +0.888, +0.004, +0.248, -0.768,
+        -0.366, -0.170, +0.732, -0.500, -0.034, +0.972,
+        +0.038, +0.226, -0.758, +0.652, +0.206, +0.090,
+        -0.314, -0.392, -0.166, +0.362, +0.750, +0.020,
+        +0.338, +0.172, +0.250, +0.350, +0.684, -0.834,
+        +0.528, -0.512, -0.612, +0.144, -0.808, +0.770,
+        +0.254, +0.446, -0.968, +0.188, +0.114, -0.682,
+        -0.694, +0.392, -0.362, +0.384, +0.108, -0.222,
+        +0.850, +0.684, -0.286, -0.912, -0.390, -0.204,
+        +0.410, +0.990, -0.288, +0.526, +0.186, +0.384,
+        -0.698, -0.202, -0.518, -0.314, +0.026, +0.334,
+        -0.788, -0.738, -0.356, +0.324, +0.694, +0.106,
+        +0.708, -0.230, -0.366, -0.292, -0.658, +0.658,
+        -0.322, +0.104, +0.158, +0.044, -0.994, +0.976,
+        +0.810, -0.584, -0.416, +0.040, +0.804, +0.968,
+        -0.484, +0.128, +0.614, -0.212, +0.462, -0.678,
+        +0.202, +0.732, +0.968, -0.842, -0.144, -0.590,
+        -0.098, +0.096, -0.814, -0.406, +0.856, +0.138,
+        -0.086, +0.508, +0.484, -0.902, +0.418, +0.678,
+        -0.668, +0.562, -0.426, -0.388, +0.330, -0.778,
+        +0.330, +0.776, +0.392, -0.120, -0.124, +0.530,
+        +0.132, -0.830, +0.166, +0.630, -0.326, +0.856,
+        +0.502, +0.148, +0.504, -0.842, +0.718, +0.644,
+        +0.820, -0.742, -0.836, -0.724, -0.202, -0.152
+    };
+
+    std::array< floatType, ( nphases * num_phase_dof + num_additional_dof ) * 4 > previous_dof_vector;
+    std::fill(
+            std::begin( previous_dof_vector ),
+            std::end( previous_dof_vector ),
+            0
+    );
+
+    std::array< floatType, num_material_responses > answer = {
+        +7.531098255e+00, -1.281222042e+00, +4.062190229e+00, -1.382899836e+00, +4.009143610e+00, +1.233358675e+00,
+        +4.536665363e+00, +5.505830379e+00, +3.686025015e-01, -2.554158831e+00, +2.001051963e+01, -3.414200002e+00,
+        -5.276835086e+00, -3.531407322e+00, +1.348075789e+01, +1.635220692e+01, +1.965343109e+01, +2.035800092e+01,
+        +1.927842942e+01, +2.215208791e+01, -5.499118688e+00, +9.050081528e+00, +5.329965027e+00
+    };
+    std::array< floatType, num_material_responses > result;
+    std::array< floatType, num_material_responses * ( num_phase_dof * nphases + num_additional_dof ) * 4 > jacobian;
+
+    evaluate_mixture_response<
+        nphases - 1, num_phase_dof, num_additional_dof
+    >
+    (
+        std::cbegin( dof_vector ),          std::cend( dof_vector ),
+        std::cbegin( previous_dof_vector ), std::cend( previous_dof_vector ),
+        std::begin( result ),   std::end( result ),
+        std::begin( jacobian ), std::end( jacobian )
+    );
+
+    BOOST_TEST( result == answer, CHECK_PER_ELEMENT );
+
+    {
+
+        constexpr floatType eps = 1e-5;
+        constexpr unsigned int VAR_DIM = ( nphases * num_phase_dof + num_additional_dof ) * 4;
+        constexpr unsigned int OUT_DIM = num_material_responses;
+
+        std::array< floatType, VAR_DIM > x = dof_vector;
+
+        for ( unsigned int i = 0; i < VAR_DIM; ++i ){
+
+            auto delta = eps * std::fabs( x[ i ] ) + eps;
+
+            std::array< floatType, VAR_DIM > xp = x;
+            std::array< floatType, VAR_DIM > xm = x;
+
+            xp[ i ] += delta;
+            xm[ i ] -= delta;
+
+            std::array< floatType, OUT_DIM > rp, rm;
+            std::array< floatType, OUT_DIM * VAR_DIM > _J;
+
+            evaluate_mixture_response<
+                nphases - 1, num_phase_dof, num_additional_dof
+            >
+            (
+                std::cbegin( xp ),                  std::cend( xp ),
+                std::cbegin( previous_dof_vector ), std::cend( previous_dof_vector ),
+                std::begin( rp ),                   std::end( rp ),
+                std::begin( _J ),                   std::end( _J )
+            );
+
+            evaluate_mixture_response<
+                nphases - 1, num_phase_dof, num_additional_dof
+            >
+            (
+                std::cbegin( xm ),                  std::cend( xm ),
+                std::cbegin( previous_dof_vector ), std::cend( previous_dof_vector ),
+                std::begin( rm ),                   std::end( rm ),
+                std::begin( _J ),                   std::end( _J )
+            );
+
+            for ( unsigned int j = 0; j < OUT_DIM; ++j ){
+
+                BOOST_TEST( jacobian[ VAR_DIM * j + i ] == ( rp[ j ] - rm[ j ] ) / ( 2 * delta ) );
+
+            }
+
+        }
+
+    }
+
+}

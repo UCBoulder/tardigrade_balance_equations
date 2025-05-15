@@ -284,29 +284,40 @@ namespace tardigradeBalanceEquations{
             dRdUMesh_iter dRdUMesh_begin, dRdUMesh_iter dRdUMesh_end
         );
 
-//        template<
-//            int material_response_num_dof,
-//            class density_iter,
-//            class volume_fraction_iter,
-//            class material_response_iter,
-//            class material_response_jacobian_iter,
-//            class mixture_response_iter,
-//            class mixture_jacobian_iter
-//        >
-//        inline void assembleMixtureMaterialResponse(
-//            const density_iter &density_begin,
-//            const density_iter &density_end,
-//            const volume_fraction_iter &volume_fraction_begin,
-//            const volume_fraction_iter &volume_fraction_end,
-//            const material_response_iter &material_response_begin,
-//            const material_response_iter &material_response_end,
-//            const material_response_jacobian_iter &material_response_jacobian_begin,
-//            const material_response_jacobian_iter &material_response_jacobian_end,
-//            const mixture_response_iter &mixture_response_begin,
-//            const mixture_response_iter &mixture_response_end,
-//            const mixture_jacobian_iter &mixture_jacobian_begin,
-//            const mixture_jacobian_iter &mixture_jacobian_end
-//        );
+        template<
+            int dim,
+            int cauchy_stress_index,
+            int internal_energy_index,
+            int mass_change_index,
+            int body_force_index,
+            int interphasic_force_index,
+            int heat_flux_index,
+            int internal_heat_generation_index,
+            int interphasic_heat_transfer_index,
+            int trace_mass_change_velocity_gradient_index,
+            class density_iter,
+            class volume_fraction_iter,
+            class material_response_iter,
+            class material_response_jacobian_iter,
+            class mixture_response_iter,
+            class mixture_jacobian_iter,
+            int density_index                = 0,
+            int volume_fraction_index        = 9
+        >
+        inline void computeMixtureMaterialResponse(
+            const density_iter &density_begin,
+            const density_iter &density_end,
+            const volume_fraction_iter &volume_fraction_begin,
+            const volume_fraction_iter &volume_fraction_end,
+            const material_response_iter &material_response_begin,
+            const material_response_iter &material_response_end,
+            const material_response_jacobian_iter &material_response_jacobian_begin,
+            const material_response_jacobian_iter &material_response_jacobian_end,
+            const mixture_response_iter &mixture_response_begin,
+            const mixture_response_iter &mixture_response_end,
+            const mixture_jacobian_iter &mixture_jacobian_begin,
+            const mixture_jacobian_iter &mixture_jacobian_end
+        );
 
     }
 

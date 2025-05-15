@@ -1368,6 +1368,269 @@ namespace tardigradeBalanceEquations{
 
         }
 
+        template<
+            int dim,
+            int cauchy_stress_index,
+            int internal_energy_index,
+            int mass_change_index,
+            int body_force_index,
+            int interphasic_force_index,
+            int heat_flux_index,
+            int internal_heat_generation_index,
+            int interphasic_heat_transfer_index,
+            int trace_mass_change_velocity_gradient_index,
+            class density_iter,
+            class volume_fraction_iter,
+            class material_response_iter,
+            class material_response_jacobian_iter,
+            class mixture_response_iter,
+            class mixture_jacobian_iter,
+            int density_index,
+            int volume_fraction_index
+        >
+        inline void computeMixtureMaterialResponse(
+            const density_iter &density_begin,
+            const density_iter &density_end,
+            const volume_fraction_iter &volume_fraction_begin,
+            const volume_fraction_iter &volume_fraction_end,
+            const material_response_iter &material_response_begin,
+            const material_response_iter &material_response_end,
+            const material_response_jacobian_iter &material_response_jacobian_begin,
+            const material_response_jacobian_iter &material_response_jacobian_end,
+            const mixture_response_iter &mixture_response_begin,
+            const mixture_response_iter &mixture_response_end,
+            const mixture_jacobian_iter &mixture_jacobian_begin,
+            const mixture_jacobian_iter &mixture_jacobian_end
+        ){
+            /*!
+             * Assemble the mixture material response from the behavior of each phase
+             *
+             * We assume that the mixture model's DOF are included in the full Jacobian as the final "phase" but
+             * the number of phases passed in (i.e., the number of densities) is the number of each of the true
+             * phases. If there are \f$ n \f$ true phases, then there are \f$n+1\f$ phases defined in the DOF
+             * vector. Similarly, there should be \f$n\f$ volume fractions, material responses, and material response jacobians
+             * passed in.
+             *
+             * Some of the material responses are assembled using a volume fraction approach (e.g., the Cauchy stress),
+             * others are assembled with a density-weighted approach (e.g., the body force), and others are summed
+             * directly (e.g., the interphasic heat transfer). The difference is based on the balance equations.
+             *
+             * Direct Sum:
+             * mass change, interphasic force, heat flux, interphasic heat transfer
+             *
+             * Volume Fraction Weighted:
+             * Cauchy stress, trace mass change velocity gradient
+             *
+             * Density weighted
+             * internal energy, body force, internal heat generation
+             */
+
+            using density_type          = typename std::iterator_traits<density_iter>::value_type;
+
+            auto material_response_size = ( mixture_response_end - mixture_response_begin );
+
+            auto num_dof = ( mixture_jacobian_end - mixture_jacobian_begin ) / material_response_size;
+
+            auto num_phases = ( material_response_end - material_response_begin ) / material_response_size;
+
+            TARDIGRADE_ERROR_TOOLS_CHECK(
+                material_response_size * num_dof == ( unsigned int )( mixture_jacobian_end - mixture_jacobian_begin ),
+                "The mixture jacobian size must be an integer multiple of the material response size (i.e., the number of degrees of freedom)"
+            )
+
+            TARDIGRADE_ERROR_TOOLS_CHECK(
+                material_response_size * num_phases == ( unsigned int )( material_response_end - material_response_begin ),
+                "The material response size must be an integer multiple of the mixture response size (i.e., the number of true phases) )"
+            )
+
+            TARDIGRADE_ERROR_TOOLS_CHECK(
+                material_response_size * num_phases * num_dof == ( unsigned int )( material_response_jacobian_end - material_response_jacobian_begin ),
+                "The material response jacobian size must be an integer multiple of the mixture response jacobian size (i.e., the number of true phases)"
+            )
+
+            std::fill(
+                mixture_response_begin,
+                mixture_response_end,
+                0
+            );
+
+            std::fill(
+                mixture_jacobian_begin,
+                mixture_jacobian_end,
+                0
+            );
+
+            density_type density_sum = 0;
+            for ( auto v = density_begin; v != density_end; ++v ){ density_sum += *v; };
+
+            for ( unsigned int phase = 0; phase < num_phases; ++phase ){
+
+                //
+                // Incorporate the direct summations
+                //
+
+                // mass change rate
+                for ( unsigned int i = 0; i < 1; ++i ){
+
+                    *( mixture_response_begin + mass_change_index + i ) += *( material_response_begin + phase * material_response_size + mass_change_index + i );
+
+                    for ( unsigned int j = 0; j < num_dof; ++j ){
+
+                        *( mixture_jacobian_begin + num_dof * ( i + mass_change_index ) + j ) += *( material_response_jacobian_begin + material_response_size * num_dof * phase + num_dof * ( i + mass_change_index ) + j );
+
+                    }
+
+                }
+
+                // interphasic force
+                for ( unsigned int i = 0; i < dim; ++i ){
+
+                    *( mixture_response_begin + interphasic_force_index + i ) += *( material_response_begin + phase * material_response_size + interphasic_force_index + i );
+
+                    for ( unsigned int j = 0; j < num_dof; ++j ){
+
+                        *( mixture_jacobian_begin + num_dof * ( i + interphasic_force_index ) + j ) += *( material_response_jacobian_begin + material_response_size * num_dof * phase + num_dof * ( i + interphasic_force_index ) + j );
+
+                    }
+
+                }
+
+                // heat flux
+                for ( unsigned int i = 0; i < dim; ++i ){
+
+                    *( mixture_response_begin + heat_flux_index + i ) += *( material_response_begin + phase * material_response_size + heat_flux_index + i );
+
+                    for ( unsigned int j = 0; j < num_dof; ++j ){
+
+                        *( mixture_jacobian_begin + num_dof * ( i + heat_flux_index ) + j ) += *( material_response_jacobian_begin + material_response_size * num_dof * phase + num_dof * ( i + heat_flux_index ) + j );
+
+                    }
+
+                }
+
+                // interphasic heat transfer
+                for ( unsigned int i = 0; i < 1; ++i ){
+
+                    *( mixture_response_begin + interphasic_heat_transfer_index + i ) += *( material_response_begin + phase * material_response_size + interphasic_heat_transfer_index + i );
+
+                    for ( unsigned int j = 0; j < num_dof; ++j ){
+
+                        *( mixture_jacobian_begin + num_dof * ( i + interphasic_heat_transfer_index ) + j ) += *( material_response_jacobian_begin + material_response_size * num_dof * phase + num_dof * ( i + interphasic_heat_transfer_index ) + j );
+
+                    }
+
+                }
+
+                //
+                // Incorporate volume-fraction summations
+                //
+
+                // Cauchy stress
+                for ( unsigned int i = 0; i < dim * dim; ++i ){
+
+                    *( mixture_response_begin + cauchy_stress_index + i ) += ( *( volume_fraction_begin + phase ) ) * ( *( material_response_begin + phase * material_response_size + cauchy_stress_index + i ) );
+
+                    for ( unsigned int j = 0; j < num_dof; ++j ){
+
+                        *( mixture_jacobian_begin + num_dof * ( i + cauchy_stress_index ) + j ) += ( *( volume_fraction_begin + phase ) ) * ( *( material_response_jacobian_begin + material_response_size * num_dof * phase + num_dof * ( i + cauchy_stress_index ) + j ) );
+
+                    }
+
+                    // Add contributions due to dependence on the volume fraction
+                    *( mixture_jacobian_begin + num_dof * ( i + cauchy_stress_index ) + ( num_phases + 1 ) * volume_fraction_index + phase ) += ( *( material_response_begin + material_response_size * phase + cauchy_stress_index + i ) );
+
+                }
+
+                // trace mass change velocity gradient
+                for ( unsigned int i = 0; i < 1; ++i ){
+
+                    *( mixture_response_begin + trace_mass_change_velocity_gradient_index + i ) += ( *( volume_fraction_begin + phase ) ) * ( *( material_response_begin + phase * material_response_size + trace_mass_change_velocity_gradient_index + i ) );
+
+                    for ( unsigned int j = 0; j < num_dof; ++j ){
+
+                        *( mixture_jacobian_begin + num_dof * ( i + trace_mass_change_velocity_gradient_index ) + j ) += ( *( volume_fraction_begin + phase ) ) * ( *( material_response_jacobian_begin + material_response_size * num_dof * phase + num_dof * ( i + trace_mass_change_velocity_gradient_index ) + j ) );
+
+                    }
+
+                    // Add contributions due to dependence on the volume fraction
+                    *( mixture_jacobian_begin + num_dof * ( i + trace_mass_change_velocity_gradient_index ) + ( num_phases + 1 ) * volume_fraction_index + phase ) += ( *( material_response_begin + material_response_size * phase + trace_mass_change_velocity_gradient_index + i ) );
+
+                }
+
+                //
+                // Incorporate density-weighted summations
+                //
+
+                // body force
+                for ( unsigned int i = 0; i < dim; ++i ){
+
+                    *( mixture_response_begin + body_force_index + i ) += ( *( density_begin + phase ) ) * ( *( material_response_begin + phase * material_response_size + body_force_index + i ) ) / density_sum;
+
+                    for ( unsigned int j = 0; j < num_dof; ++j ){
+
+                        *( mixture_jacobian_begin + num_dof * ( i + body_force_index ) + j ) += ( *( density_begin + phase ) ) * ( *( material_response_jacobian_begin + material_response_size * num_dof * phase + num_dof * ( i + body_force_index ) + j ) ) / density_sum;
+
+                    }
+
+                    // Add contributions due to dependence on the density
+                    *( mixture_jacobian_begin + num_dof * ( i + body_force_index ) + ( num_phases + 1 ) * density_index + phase ) += ( *( material_response_begin + material_response_size * phase + body_force_index + i ) ) / density_sum;
+
+                    for ( unsigned int j = 0; j < num_phases; ++j ){
+
+                        *( mixture_jacobian_begin + num_dof * ( i + body_force_index ) + ( num_phases + 1 ) * density_index + j ) += -( *( density_begin + phase ) ) * ( *( material_response_begin + material_response_size * phase + body_force_index + i ) ) / ( density_sum * density_sum );
+
+                    }
+
+                }
+
+                // internal energy
+                for ( unsigned int i = 0; i < 1; ++i ){
+
+                    *( mixture_response_begin + internal_energy_index + i ) += ( *( density_begin + phase ) ) * ( *( material_response_begin + phase * material_response_size + internal_energy_index + i ) ) / density_sum;
+
+                    for ( unsigned int j = 0; j < num_dof; ++j ){
+
+                        *( mixture_jacobian_begin + num_dof * ( i + internal_energy_index ) + j ) += ( *( density_begin + phase ) ) * ( *( material_response_jacobian_begin + material_response_size * num_dof * phase + num_dof * ( i + internal_energy_index ) + j ) ) / density_sum;
+
+                    }
+
+                    // Add contributions due to dependence on the density
+                    *( mixture_jacobian_begin + num_dof * ( i + internal_energy_index ) + ( num_phases + 1 ) * density_index + phase ) += ( *( material_response_begin + material_response_size * phase + internal_energy_index + i ) ) / density_sum;
+
+                    for ( unsigned int j = 0; j < num_phases; ++j ){
+
+                        *( mixture_jacobian_begin + num_dof * ( i + internal_energy_index ) + ( num_phases + 1 ) * density_index + j ) += -( *( density_begin + phase ) ) * ( *( material_response_begin + material_response_size * phase + internal_energy_index + i ) ) / ( density_sum * density_sum );
+
+                    }
+
+                }
+
+                // internal heat generation
+                for ( unsigned int i = 0; i < 1; ++i ){
+
+                    *( mixture_response_begin + internal_heat_generation_index + i ) += ( *( density_begin + phase ) ) * ( *( material_response_begin + phase * material_response_size + internal_heat_generation_index + i ) ) / density_sum;
+
+                    for ( unsigned int j = 0; j < num_dof; ++j ){
+
+                        *( mixture_jacobian_begin + num_dof * ( i + internal_heat_generation_index ) + j ) += ( *( density_begin + phase ) ) * ( *( material_response_jacobian_begin + phase * material_response_size * num_dof + num_dof * ( i + internal_heat_generation_index ) + j ) ) / density_sum;
+
+                    }
+
+                    // Add contributions due to dependence on the density
+                    *( mixture_jacobian_begin + num_dof * ( i + internal_heat_generation_index ) + ( num_phases + 1 ) * density_index + phase ) += ( *( material_response_begin + material_response_size * phase + internal_heat_generation_index + i ) ) / density_sum;
+
+                    for ( unsigned int j = 0; j < num_phases; ++j ){
+
+                        *( mixture_jacobian_begin + num_dof * ( i + internal_heat_generation_index ) + ( num_phases + 1 ) * density_index + j ) += -( *( density_begin + phase ) ) * ( *( material_response_begin + material_response_size * phase + internal_heat_generation_index + i ) ) / ( density_sum * density_sum );
+
+                    }
+
+                }
+
+            }
+
+        }
+
     }
 
 }

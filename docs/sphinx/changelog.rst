@@ -26,6 +26,7 @@ New Features
 - Marked all equations as inline and corrected documentation build errors. (:pull:`21`). By `Nathan Miller`_.
 - Changed the definition of the template parameter material_response_num_dof from being the total number of dof (which would change with phase count)
   to just being the number of dof per phase (including the additional dof). (:pull:`22`). By `Nathan Miller`_.
+- Added computation of the material response of the mixture (:pull:`32`). By `Nathan Miller`_.
 
 Internal Changes
 ================
