@@ -6,8 +6,50 @@ Changelog
 #########
 
 ******************
-0.1.0 (unreleased)
+0.2.0 (11-07-2024)
 ******************
+
+New Features
+============
+- Added iterator based calculation of the balance of mass (:pull:`9`). By `Nathan Miller`_.
+- Added a multiphase balance of mass calculation (:pull:`10`). By `Nathan Miller`_.
+- Added the calculation of the non-divergence part of the balance of linear momentum (:pull:`11`). By `Nathan Miller`_.
+- Added the calculation of the divergence part of the balance of linear momentum (:pull:`11`). By `Nathan Miller`_.
+- Added the multiphase balance of linear momentum (:pull:`12`). By `Nathan Miller`_.
+- Added the calculation of the balance of energy for single and multiphase reacting continuum (:pull:`13`). By `Nathan Miller`_.
+- Added a hexahedral finite element to test the balance equations in a FEA context (:pull:`15`). By `Nathan Miller`_.
+- Added the FEA Jacobians for the balance of mass, linear momentum, and energy (:pull:`16`). By `Nathan Miller`_.
+- Added the balance of volume fraction (:pull:`17`). By `Nathan Miller`_.
+- Added material model version for the balance equations. (:pull:`18`). By `Nathan Miller`_.
+- Added a constraint equation enabling complex relationships between the material state and the internal energy. (:pull:`19`). By `Nathan Miller`_.
+- Added a constraint equation for the displacement. (:pull:`20`). by `Nathan Miller`_.
+- Marked all equations as inline and corrected documentation build errors. (:pull:`21`). By `Nathan Miller`_.
+- Changed the definition of the template parameter material_response_num_dof from being the total number of dof (which would change with phase count)
+  to just being the number of dof per phase (including the additional dof). (:pull:`22`). By `Nathan Miller`_.
+- Added computation of the material response of the mixture (:pull:`32`). By `Nathan Miller`_.
+
+Internal Changes
+================
+- Corrected the nomenclature for the derivative of gradient quantities (:pull:`14`). By `Nathan Miller`_.
+- Moved the declarations of the balance of linear momentum to the header file. (:pull:`23`). By `Nathan Miller`_.
+- Corrected uninitialized warning in balance of mass. (:pull:`24`). By `Nathan Miller`_.
+- Moved balance of volume fraction declaration to the header file (:pull:`26`). By `Nathan Miller`_.
+- Allow users to perform a complete build of the tardigrade stack (:pull:`27`). By `Nathan Miller`_.
+- Corrected typo in error message (:pull:`30`). By `Nathan Miller`_.
+- Corrected typo in error message and compile-time warning (:pull:`31`). By `Nathan Miller`_.
+
+Breaking Changes
+================
+- Changed the order of the templates for the balance of mass to be consistent with the other balance equations. (:pull:`25`). By `Nathan Miller`_.
+- Added the volume fraction as a required dof variable and derivative output (:pull:`29`). By `Nathan Miller`_.
+
+******************
+0.1.0 (11-07-2024)
+******************
+
+Release
+=======
+- Released version 0.1.0 (:pull:`8`). By `Nathan Miller`_.
 
 New Features
 ============
