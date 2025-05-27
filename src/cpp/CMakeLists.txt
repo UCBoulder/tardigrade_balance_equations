@@ -22,3 +22,6 @@ foreach(package ${ADDITIONAL_HEADER_ONLY_LIBRARIES})
     install(FILES ${package}.h ${package}.cpp
             DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 endforeach(package)
+
+install(FILES ${PROJECT_NAME}.h ${PROJECT_NAME}.cpp
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
