@@ -6,8 +6,28 @@ Changelog
 #########
 
 ******************
-0.2.0 (11-07-2024)
+0.2.1 (unreleased)
 ******************
+
+******************
+0.2.1 (05-27-2025)
+******************
+
+Release
+=======
+- Released version 0.2.1 (:pull:`35`). By `Nathan Miller`_.
+
+Internal Changes
+================
+- Enabled conda packaging (:pull:`34`). By `Nathan Miller`_.
+
+******************
+0.2.0 (05-15-2025)
+******************
+
+Release
+=======
+- Released version 0.2.0 (:pull:`33`). By `Nathan Miller`_.
 
 New Features
 ============

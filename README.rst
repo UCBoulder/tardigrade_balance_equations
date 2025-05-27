@@ -38,24 +38,12 @@ A C++ framework containing balance equation terms and their Jacobians
 Information
 ===========
 
-* Documentation (``main`` branch): https://aea.re-pages.lanl.gov/stub-repositories/tardigrade-balance-equations/
-
-* Wiki: https://re-git.lanl.gov/aea/stub-repositories/tardigrade-balance-equations/-/wikis/home
+TODO
 
 Developers
 ==========
 
 * Nathan Miller: nathan.a.miller@colorado.edu
-
-************
-Gitlab CI/CD
-************
-
-    **NOTE**
-
-    The repository setup has moved out of the README and into the HTML
-    documentation. You can find the Gitlab project setup guide here:
-    https://aea.re-pages.lanl.gov/stub-repositories/tardigrade-balance-equations/gitlab_setup.html
 
 ************
 Dependencies
@@ -99,14 +87,18 @@ documentation with `Doxygen`_ + `Breathe`_ for the c++ API.
 Environment variables
 =====================
 
-This project's `CMake`_ configuration accepts two build type strings: 'Release' and 'conda-test'. The first is used
-during the Gitlab-CI ``fast-test`` job to ensure that the project uses installed libraries correctly. The latter is used
-during the Gitlab-CI ``conda-build`` job to limit the test phase to the as-installed project files.
+This project's `CMake`_ configuration accepts two build type strings: 'Release' and 'conda-test'.
 
 The build type can be set with the ``-DCMAKE_BUILD_TYPE=<build type string>`` during project configuration. Both build
 types will require the upstream dependent libraries
 
-* ``error_tools``: https://re-git.lanl.gov/aea/material-models/error_tools
+* ``error_tools``: https://github.com/UCBoulder/tardigrade_error_tools
+* ``vector_tools``: https://github.com/UCBoulder/tardigrade_vector_tools
+
+and the 'conda-test' build type also depends upon
+
+* ``constitutive_tools``: https://github.com/UCBoulder/tardigrade_constitutive_tools
+* ``hydra``: https://github.com/UCBoulder/tardigrade_hydra
 
 to be installed and found in the user's environment. If the build type string doesn't match those previously listed, the
 CMake project will build missing upstream libraries with the `CMake fetch_content`_ feature. The 'conda-test' build type
@@ -115,12 +107,6 @@ environment to perform the project unit and integration tests against the as-ins
 
 Building the documentation
 ==========================
-
-    **HEALTH WARNING**
-
-    The sphinx API docs are a work-in-progress. The doxygen API is much more useful.
-
-    * Documentation (``main`` branch): https://aea.re-pages.lanl.gov/stub-repositories/tardigrade-balance-equations/doxygen
 
 To build just the documentation pick up the steps here:
 
