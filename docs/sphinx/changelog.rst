@@ -9,17 +9,21 @@ Changelog
 0.2.1 (unreleased)
 ******************
 
+Internal Changes
+================
+- Improved error handling messages for inconsistent material response jacobian sizes (:pull:`37`). By `Nathan Miller`_.
+
 ******************
 0.2.1 (05-27-2025)
 ******************
 
 Release
 =======
-- Released version 0.2.1 (:pull:`35`). By `Nathan Miller`_.
+- Released version 0.2.1 (:pull:`36`). By `Nathan Miller`_.
 
 Internal Changes
 ================
-- Enabled conda packaging (:pull:`34`). By `Nathan Miller`_.
+- Enabled conda packaging (:pull:`35`). By `Nathan Miller`_.
 
 ******************
 0.2.0 (05-15-2025)

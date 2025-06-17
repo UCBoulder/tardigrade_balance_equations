@@ -1242,7 +1242,13 @@ namespace tardigradeBalanceEquations{
 
             TARDIGRADE_ERROR_TOOLS_CHECK(
                 nphases * material_response_size * ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) == ( unsigned int )( material_response_jacobian_end - material_response_jacobian_begin ),
-                "The material response jacobian must have a consistent size with the material response vector and the material_response_num_dof"
+                "The material response jacobian must have a consistent size with the material response vector and the material_response_num_dof\n  number of phases           : " + std::to_string( nphases )
+              + "\n  material_response_size     : " + std::to_string( material_response_size )
+              + "\n  dof per phase              : " + std::to_string( num_phase_dof )
+              + "\n  additional dof             : " + std::to_string( num_additional_dof )
+              + "\n  material response dimension: " + std::to_string( material_response_dim )
+              + "\n  expected jacobian size     : " + std::to_string( nphases * material_response_size * ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) )
+              + "\n  actual jacobian size       : " + std::to_string( ( unsigned int )( material_response_jacobian_end - material_response_jacobian_begin ) )
             )
 
             TARDIGRADE_ERROR_TOOLS_CHECK(
