@@ -1,14 +1,14 @@
 /**
   ******************************************************************************
-  * \file tardigrade_surface_erosion_balance.h
+  * \file tardigrade_balance_surface_growth.h
   ******************************************************************************
   * The header file for the equations associated with calculating the surface
-  * erosion velocity
+  * growth velocity
   ******************************************************************************
   */
 
-#ifndef TARDIGRADE_SURFACE_EROSION_BALANCE_H
-#define TARDIGRADE_SURFACE_EROSION_BALANCE_H
+#ifndef TARDIGRADE_SURFACE_GROWTH_BALANCE_H
+#define TARDIGRADE_SURFACE_GROWTH_BALANCE_H
 
 #include<array>
 
@@ -17,18 +17,18 @@
 
 namespace tardigradeBalanceEquations{
 
-    namespace surfaceErosion{
+    namespace surfaceGrowth{
 
         template<
-            class surfaceErosionVelocity_iter,
+            class surfaceGrowthVelocity_iter,
             typename lagrangeMultiplier_type,
             class lagrangeMultiplierGradient_iter,
             typename testFunction_type,
             class testFunctionGradient_iter,
             class result_iter
         >
-        void computeSurfaceErosionBalance(
-            const surfaceErosionVelocity_iter &surfaceErosionVelocity_begin, const surfaceErosionVelocity_iter &surfaceErosionVelocity_end,
+        void computeSurfaceGrowthBalance(
+            const surfaceGrowthVelocity_iter &surfaceGrowthVelocity_begin, const surfaceGrowthVelocity_iter &surfaceGrowthVelocity_end,
             const lagrangeMultiplier_type &lagrangeMultiplier,
             const lagrangeMultiplierGradient_iter &lagrangeMultiplierGradient_begin, const lagrangeMultiplierGradient_iter &lagrangeMultiplierGradient_end,
             const testFunction_type &testFunction,
@@ -37,7 +37,7 @@ namespace tardigradeBalanceEquations{
         );
 
         template<
-            class surfaceErosionVelocity_iter,
+            class surfaceGrowthVelocity_iter,
             typename lagrangeMultiplier_type,
             class lagrangeMultiplierGradient_iter,
             typename testFunction_type,
@@ -47,8 +47,8 @@ namespace tardigradeBalanceEquations{
             class interpolationFunctionGradient_iter,
             class dRdV_iter, class dRdL_iter, class dRdUMesh_iter
         >
-        void computeSurfaceErosionBalance(
-            const surfaceErosionVelocity_iter &surfaceErosionVelocity_begin, const surfaceErosionVelocity_iter &surfaceErosionVelocity_end,
+        void computeSurfaceGrowthBalance(
+            const surfaceGrowthVelocity_iter &surfaceGrowthVelocity_begin, const surfaceGrowthVelocity_iter &surfaceGrowthVelocity_end,
             const lagrangeMultiplier_type &lagrangeMultiplier,
             const lagrangeMultiplierGradient_iter &lagrangeMultiplierGradient_begin, const lagrangeMultiplierGradient_iter &lagrangeMultiplierGradient_end,
             const testFunction_type &testFunction,
@@ -62,23 +62,23 @@ namespace tardigradeBalanceEquations{
         );
 
         template<
-            class surfaceErosionVelocity_iter,
-            class surfaceErosionVelocityGradient_iter,
+            class surfaceGrowthVelocity_iter,
+            class surfaceGrowthVelocityGradient_iter,
             typename testFunction_type,
             class testFunctionGradient_iter,
             typename result_type
         >
         void computeLagrangeMultiplierBalance(
-            const surfaceErosionVelocity_iter &surfaceErosionVelocity_begin, const surfaceErosionVelocity_iter &surfaceErosionVelocity_end,
-            const surfaceErosionVelocityGradient_iter &surfaceErosionVelocityGradient_begin, const surfaceErosionVelocityGradient_iter &surfaceErosionVelocityGradient_end,
+            const surfaceGrowthVelocity_iter &surfaceGrowthVelocity_begin, const surfaceGrowthVelocity_iter &surfaceGrowthVelocity_end,
+            const surfaceGrowthVelocityGradient_iter &surfaceGrowthVelocityGradient_begin, const surfaceGrowthVelocityGradient_iter &surfaceGrowthVelocityGradient_end,
             const testFunction_type &testFunction,
             const testFunctionGradient_iter &testFunctionGradient_begin, const testFunctionGradient_iter &testFunctionGradient_end,
             result_type &result
         );
 
         template<
-            class surfaceErosionVelocity_iter,
-            class surfaceErosionVelocityGradient_iter,
+            class surfaceGrowthVelocity_iter,
+            class surfaceGrowthVelocityGradient_iter,
             typename testFunction_type,
             class testFunctionGradient_iter,
             typename result_type,
@@ -87,8 +87,8 @@ namespace tardigradeBalanceEquations{
             class dRdV_iter, class dRdUMesh_iter
         >
         void computeLagrangeMultiplierBalance(
-            const surfaceErosionVelocity_iter &surfaceErosionVelocity_begin, const surfaceErosionVelocity_iter &surfaceErosionVelocity_end,
-            const surfaceErosionVelocityGradient_iter &surfaceErosionVelocityGradient_begin, const surfaceErosionVelocityGradient_iter &surfaceErosionVelocityGradient_end,
+            const surfaceGrowthVelocity_iter &surfaceGrowthVelocity_begin, const surfaceGrowthVelocity_iter &surfaceGrowthVelocity_end,
+            const surfaceGrowthVelocityGradient_iter &surfaceGrowthVelocityGradient_begin, const surfaceGrowthVelocityGradient_iter &surfaceGrowthVelocityGradient_end,
             const testFunction_type &testFunction,
             const testFunctionGradient_iter &testFunctionGradient_begin, const testFunctionGradient_iter &testFunctionGradient_end,
             const interpolationFunction_type &interpolationFunction,
@@ -102,6 +102,6 @@ namespace tardigradeBalanceEquations{
 
 }
 
-#include "tardigrade_surface_erosion_balance.cpp"
+#include "tardigrade_surface_growth_balance.cpp"
 
 #endif

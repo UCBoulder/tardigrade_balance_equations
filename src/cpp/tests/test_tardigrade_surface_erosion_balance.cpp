@@ -1,10 +1,10 @@
 /**
-  * \file test_tardigrade_surface_erosion_balance.cpp
+  * \file test_tardigrade_balance_of_surface_growth.cpp
   *
-  * Tests for tardigrade_surface_erosion_balance.cpp
+  * Tests for tardigrade_balance_of_surface_growth.cpp
   */
 
-#include<tardigrade_surface_erosion_balance.h>
+#include<tardigrade_balance_of_surface_growth.h>
 #include<tardigrade_finite_element_utilities.h>
 #include<tardigrade_constitutive_tools.h>
 #include<tardigrade_hydraLinearTestMaterial.h>
@@ -14,7 +14,7 @@
 #include<fstream>
 #include<iostream>
 
-#define BOOST_TEST_MODULE test_tardigrade_balance_equations_balance_of_energy
+#define BOOST_TEST_MODULE test_tardigrade_balance_equations_balance_of_surface_growth
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/tools/output_test_stream.hpp>
 
@@ -138,7 +138,7 @@ void evaluate_at_nodes(
 
     for ( unsigned int i = 0; i < num_nodes; ++i ){
 
-        tardigradeBalanceEquations::surfaceErosion::computeSurfaceErosionBalance(
+        tardigradeBalanceEquations::surfaceGrowth::computeSurfaceGrowthBalance(
             std::cbegin( v_tp1_p ), std::cend( v_tp1_p ),
             l_tp1_p[ 0 ], std::cbegin( grad_l_tp1_p ), std::cend( grad_l_tp1_p ),
             Ns[ i ], std::cbegin( dNdx ) + dim * i, std::cbegin( dNdx ) + dim * ( i + 1 ),
@@ -269,7 +269,7 @@ void evaluate_at_nodes(
 
     for ( unsigned int i = 0; i < num_nodes; ++i ){
 
-        tardigradeBalanceEquations::surfaceErosion::computeSurfaceErosionBalance(
+        tardigradeBalanceEquations::surfaceGrowth::computeSurfaceGrowthBalance(
             std::cbegin( v_tp1_p ), std::cend( v_tp1_p ),
             l_tp1_p[ 0 ], std::cbegin( grad_l_tp1_p ), std::cend( grad_l_tp1_p ),
             Ns[ i ], std::cbegin( dNdx ) + dim * i, std::cbegin( dNdx ) + dim * ( i + 1 ),
@@ -293,7 +293,7 @@ void evaluate_at_nodes(
 
         for ( unsigned int j = 0; j < num_nodes; ++j ){
 
-            tardigradeBalanceEquations::surfaceErosion::computeSurfaceErosionBalance(
+            tardigradeBalanceEquations::surfaceGrowth::computeSurfaceGrowthBalance(
                 std::cbegin( v_tp1_p ), std::cend( v_tp1_p ),
                 l_tp1_p[ 0 ], std::cbegin( grad_l_tp1_p ), std::cend( grad_l_tp1_p ),
                 Ns[ i ], std::cbegin( dNdx ) + dim * i, std::cbegin( dNdx ) + dim * ( i + 1 ),
@@ -415,7 +415,7 @@ void evaluate_at_nodes(
 
     for ( unsigned int i = 0; i < num_nodes; ++i ){
 
-        tardigradeBalanceEquations::surfaceErosion::computeLagrangeMultiplierBalance(
+        tardigradeBalanceEquations::surfaceGrowth::computeLagrangeMultiplierBalance(
             std::cbegin( v_tp1_p ), std::cend( v_tp1_p ),
             std::cbegin( grad_v_tp1_p ), std::cend( grad_v_tp1_p ),
             Ns[ i ], std::cbegin( dNdx ) + dim * i, std::cbegin( dNdx ) + dim * ( i + 1 ),
@@ -529,7 +529,7 @@ void evaluate_at_nodes(
 
     for ( unsigned int i = 0; i < num_nodes; ++i ){
 
-        tardigradeBalanceEquations::surfaceErosion::computeLagrangeMultiplierBalance(
+        tardigradeBalanceEquations::surfaceGrowth::computeLagrangeMultiplierBalance(
             std::cbegin( v_tp1_p ), std::cend( v_tp1_p ),
             std::cbegin( grad_v_tp1_p ), std::cend( grad_v_tp1_p ),
             Ns[ i ], std::cbegin( dNdx ) + dim * i, std::cbegin( dNdx ) + dim * ( i + 1 ),
@@ -553,7 +553,7 @@ void evaluate_at_nodes(
 
         for ( unsigned int j = 0; j < num_nodes; ++j ){
 
-            tardigradeBalanceEquations::surfaceErosion::computeLagrangeMultiplierBalance(
+            tardigradeBalanceEquations::surfaceGrowth::computeLagrangeMultiplierBalance(
                 std::cbegin( v_tp1_p ), std::cend( v_tp1_p ),
                 std::cbegin( grad_v_tp1_p ), std::cend( grad_v_tp1_p ),
                 Ns[ i ], std::cbegin( dNdx ) + dim * i, std::cbegin( dNdx ) + dim * ( i + 1 ),
@@ -589,9 +589,9 @@ void evaluate_at_nodes(
 }
 
 
-BOOST_AUTO_TEST_CASE( test_computeSurfaceErosionBalance, * boost::unit_test::tolerance( DEFAULT_TEST_TOLERANCE ) ){
+BOOST_AUTO_TEST_CASE( test_computeSurfaceGrowthBalance, * boost::unit_test::tolerance( DEFAULT_TEST_TOLERANCE ) ){
     /*!
-     * Test the computation of the surface erosion balance
+     * Test the computation of the surface growth balance
      */
 
     std::array< floatType, 3 > v = { 1, 2, 3 };
@@ -608,7 +608,7 @@ BOOST_AUTO_TEST_CASE( test_computeSurfaceErosionBalance, * boost::unit_test::tol
 
     std::array< floatType, 3 > result;
 
-    tardigradeBalanceEquations::surfaceErosion::computeSurfaceErosionBalance(
+    tardigradeBalanceEquations::surfaceGrowth::computeSurfaceGrowthBalance(
         std::begin( v ), std::end( v ),
         lambda, std::begin( grad_lambda ), std::end( grad_lambda ),
         test,   std::begin( grad_test ),   std::end( grad_test ),
@@ -619,9 +619,9 @@ BOOST_AUTO_TEST_CASE( test_computeSurfaceErosionBalance, * boost::unit_test::tol
 
 }
 
-BOOST_AUTO_TEST_CASE( test_computeSurfaceErosionBalance2, * boost::unit_test::tolerance( DEFAULT_TEST_TOLERANCE ) ){
+BOOST_AUTO_TEST_CASE( test_computeSurfaceGrowthBalance2, * boost::unit_test::tolerance( DEFAULT_TEST_TOLERANCE ) ){
     /*!
-     * Test the computation of the surface erosion balance
+     * Test the computation of the surface growth balance
      */
 
     constexpr unsigned int dim = 3;
@@ -857,7 +857,7 @@ BOOST_AUTO_TEST_CASE( test_computeLagrangeMultiplierBalance, * boost::unit_test:
 
     floatType result;
 
-    tardigradeBalanceEquations::surfaceErosion::computeLagrangeMultiplierBalance(
+    tardigradeBalanceEquations::surfaceGrowth::computeLagrangeMultiplierBalance(
         std::begin( v ), std::end( v ), std::begin( grad_v ), std::end( grad_v ),
         test,   std::begin( grad_test ),   std::end( grad_test ),
         result
@@ -870,7 +870,7 @@ BOOST_AUTO_TEST_CASE( test_computeLagrangeMultiplierBalance, * boost::unit_test:
 
 BOOST_AUTO_TEST_CASE( test_computeLagrangeMultiplierBalance2, * boost::unit_test::tolerance( DEFAULT_TEST_TOLERANCE ) ){
     /*!
-     * Test the computation of the surface erosion balance
+     * Test the computation of the surface growth balance
      */
 
     constexpr unsigned int dim = 3;
