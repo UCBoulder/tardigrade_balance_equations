@@ -102,6 +102,6 @@ namespace tardigradeBalanceEquations{
 
 }
 
-#include "tardigrade_surface_growth_balance.cpp"
+#include "tardigrade_balance_of_surface_growth.cpp"
 
 #endif

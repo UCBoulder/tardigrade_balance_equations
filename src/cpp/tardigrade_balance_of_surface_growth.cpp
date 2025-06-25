@@ -7,7 +7,7 @@
   ******************************************************************************
   */
 
-#include "tardigrade_balance_surface_growth.h"
+#include "tardigrade_balance_of_surface_growth.h"
 
 namespace tardigradeBalanceEquations{
 
