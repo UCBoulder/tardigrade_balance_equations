@@ -244,7 +244,7 @@ namespace tardigradeBalanceEquations{
              * \param &testFunction: The value of the test function
              * \param &testFunctionGradient_begin: The starting iterator for the gradient of the test function
              * \param &testFunctionGradient_end: The stopping iterator for the gradient of the test function
-             * \param &result
+             * \param &result: The result
              */
 
             const unsigned int surface_erosion_velocity_size = ( unsigned int )( surfaceErosionVelocity_end - surfaceErosionVelocity_begin );
@@ -274,6 +274,119 @@ namespace tardigradeBalanceEquations{
 
                 result += testFunction * ( *( surfaceErosionVelocityGradient_begin + surface_erosion_velocity_size * v.first + v.first ) )
                         + ( *( testFunctionGradient_begin + v.first ) ) * ( *v.second );
+
+            }
+
+        }
+
+        template<
+            class surfaceErosionVelocity_iter,
+            class surfaceErosionVelocityGradient_iter,
+            typename testFunction_type,
+            class testFunctionGradient_iter,
+            typename result_type,
+            typename interpolationFunction_type,
+            class interpolationFunctionGradient_iter,
+            class dRdV_iter, class dRdUMesh_iter
+        >
+        void computeLagrangeMultiplierBalance(
+            const surfaceErosionVelocity_iter &surfaceErosionVelocity_begin, const surfaceErosionVelocity_iter &surfaceErosionVelocity_end,
+            const surfaceErosionVelocityGradient_iter &surfaceErosionVelocityGradient_begin, const surfaceErosionVelocityGradient_iter &surfaceErosionVelocityGradient_end,
+            const testFunction_type &testFunction,
+            const testFunctionGradient_iter &testFunctionGradient_begin, const testFunctionGradient_iter &testFunctionGradient_end,
+            const interpolationFunction_type &interpolationFunction,
+            const interpolationFunctionGradient_iter &interpolationFunctionGradient_begin, const interpolationFunctionGradient_iter &interpolationFunctionGradient_end,
+            result_type &result,
+            dRdV_iter dRdV_begin, dRdV_iter dRdV_end,
+            dRdUMesh_iter dRdUMesh_begin, dRdUMesh_iter dRdUMesh_end
+        ){
+            /*!
+             * Compute the Lagrange Multiplier balance equation
+             *
+             * This equation arises from trying to minimize the magnitude of the surface erosion velocity subject
+             * to the surface normal constraint on the velocity
+             * 
+             * \param &surfaceErosionVelocity_begin: The starting iterator for the surface erosion velocity
+             * \param &surfaceErosionVelocity_end: The stopping iterator for the surface erosion velocity
+             * \param &surfaceErosionVelocityGradient_begin: The starting iterator for the surface erosion velocity gradient
+             * \param &surfaceErosionVelocityGradient_end: The stopping iterator for the surface erosion velocity gradient
+             * \param &testFunction: The value of the test function
+             * \param &testFunctionGradient_begin: The starting iterator for the gradient of the test function
+             * \param &testFunctionGradient_end: The stopping iterator for the gradient of the test function
+             * \param &interpolationFunction: The value of the interpolation function
+             * \param &interpolationFunctionGradient_begin: The starting iterator for the gradient of the interpolation function
+             * \param &interpolationFunctionGradient_end: The stopping iterator for the gradient of the interpolation function
+             * \param &result: The result
+             * \param &dRdV_begin: The starting iterator of the derivative of the result w.r.t. the surface erosion velocity
+             * \param &dRdV_end: The stopping iterator of the derivative of the result w.r.t. the surface erosion velocity
+             * \param &dRdUMesh_begin: The starting iterator of the derivative of the result w.r.t. the mesh displacement.
+             *     Includes the derivative of the current differential volume
+             * \param &dRdUMesh_end: The stopping iterator of the derivative of the result w.r.t. the mesh displacement
+             *     Includes the derivative of the current differential volume
+             */
+
+            const unsigned int surface_erosion_velocity_size = ( unsigned int )( surfaceErosionVelocity_end - surfaceErosionVelocity_begin );
+            const unsigned int interpolation_function_gradient_size = ( unsigned int )( interpolationFunctionGradient_end - interpolationFunctionGradient_begin );
+
+            // Definitions only used for error handling
+            TARDIGRADE_ERROR_TOOLS_EVAL(
+                const unsigned int test_function_gradient_size = ( unsigned int )( testFunctionGradient_end - testFunctionGradient_begin );
+                const unsigned int result_size = 1;
+                const unsigned int dRdV_size = ( unsigned int )( dRdV_end - dRdV_begin );
+                const unsigned int dRdUMesh_size = ( unsigned int )( dRdUMesh_end - dRdUMesh_begin );
+                
+            )
+
+            TARDIGRADE_ERROR_TOOLS_CHECK(
+                interpolation_function_gradient_size == test_function_gradient_size,
+                "dRdV must have a size of " + std::to_string( result_size * surface_erosion_velocity_size ) + " rather than " + std::to_string( dRdV_size )
+            )
+
+            TARDIGRADE_ERROR_TOOLS_CHECK(
+                dRdV_size == result_size * surface_erosion_velocity_size,
+                "dRdV must have a size of " + std::to_string( result_size * surface_erosion_velocity_size ) + " rather than " + std::to_string( dRdV_size )
+            )
+
+            TARDIGRADE_ERROR_TOOLS_CHECK(
+                dRdUMesh_size == result_size * interpolation_function_gradient_size,
+                "dRdUMesh must have a size of " + std::to_string( result_size * interpolation_function_gradient_size ) + " rather than " + std::to_string( dRdUMesh_size )
+            )
+
+            computeLagrangeMultiplierBalance(
+                surfaceErosionVelocity_begin,         surfaceErosionVelocity_end,
+                surfaceErosionVelocityGradient_begin, surfaceErosionVelocityGradient_end,
+                testFunction, testFunctionGradient_begin, testFunctionGradient_end,
+                result
+            );
+
+            std::fill( dRdV_begin, dRdV_end, 0 );
+
+            std::fill( dRdUMesh_begin, dRdUMesh_end, 0 );
+
+            for (
+                auto v = std::pair< unsigned int, surfaceErosionVelocity_iter >( 0, surfaceErosionVelocity_begin );
+                v.second != surfaceErosionVelocity_end;
+                ++v.first, ++v.second
+            ){
+
+                *( dRdV_begin + v.first ) += ( *( testFunctionGradient_begin + v.first ) ) * interpolationFunction
+                                           + testFunction * ( *( interpolationFunctionGradient_begin + v.first ) );
+
+                *( dRdUMesh_begin + v.first ) += result * ( *( interpolationFunctionGradient_begin + v.first ) );
+
+                for (
+                    auto w = std::pair< unsigned int, interpolationFunctionGradient_iter >( 0, interpolationFunctionGradient_begin );
+                    w.second != interpolationFunctionGradient_end;
+                    ++w.first, ++w.second
+                ){
+
+                    *( dRdUMesh_begin + v.first ) -= (
+                                                         ( *( testFunctionGradient_begin + v.first ) ) * ( *( surfaceErosionVelocity_begin + w.first ) )
+                                                   +     testFunction * ( *( surfaceErosionVelocityGradient_begin + test_function_gradient_size * w.first + v.first ) )
+                                                     ) * ( *( interpolationFunctionGradient_begin + w.first ) );
+
+
+                }
 
             }
 

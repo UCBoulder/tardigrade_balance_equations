@@ -76,6 +76,28 @@ namespace tardigradeBalanceEquations{
             result_type &result
         );
 
+        template<
+            class surfaceErosionVelocity_iter,
+            class surfaceErosionVelocityGradient_iter,
+            typename testFunction_type,
+            class testFunctionGradient_iter,
+            typename result_type,
+            typename interpolationFunction_type,
+            class interpolationFunctionGradient_iter,
+            class dRdV_iter, class dRdUMesh_iter
+        >
+        void computeLagrangeMultiplierBalance(
+            const surfaceErosionVelocity_iter &surfaceErosionVelocity_begin, const surfaceErosionVelocity_iter &surfaceErosionVelocity_end,
+            const surfaceErosionVelocityGradient_iter &surfaceErosionVelocityGradient_begin, const surfaceErosionVelocityGradient_iter &surfaceErosionVelocityGradient_end,
+            const testFunction_type &testFunction,
+            const testFunctionGradient_iter &testFunctionGradient_begin, const testFunctionGradient_iter &testFunctionGradient_end,
+            const interpolationFunction_type &interpolationFunction,
+            const interpolationFunctionGradient_iter &interpolationFunctionGradient_begin, const interpolationFunctionGradient_iter &interpolationFunctionGradient_end,
+            result_type &result,
+            dRdV_iter dRdV_begin, dRdV_iter dRdV_end,
+            dRdUMesh_iter dRdUMesh_begin, dRdUMesh_iter dRdUMesh_end
+        );
+
     }
 
 }
