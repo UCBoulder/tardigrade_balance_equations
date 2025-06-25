@@ -13,6 +13,10 @@ Internal Changes
 ================
 - Improved error handling messages for inconsistent material response jacobian sizes (:pull:`37`). By `Nathan Miller`_.
 
+New Features
+============
+- Added a series of balance equations to solve for a mesh growth term (:pull:`38`). By `Nathan Miller`_.
+
 ******************
 0.2.1 (05-27-2025)
 ******************

@@ -19,7 +19,7 @@ set(TARDIGRADE_FULL_BUILD OFF CACHE BOOL "Flag for whether a full build of Tardi
 
 # Set the internal support libraries
 set(INTERNAL_SUPPORT_LIBRARIES )
-set(ADDITIONAL_HEADER_ONLY_LIBRARIES "tardigrade_balance_of_mass" "tardigrade_balance_of_linear_momentum" "tardigrade_balance_of_energy" "tardigrade_balance_of_volume_fraction" "tardigrade_finite_element_utilities" "tardigrade_constraint_equations")
+set(ADDITIONAL_HEADER_ONLY_LIBRARIES "tardigrade_balance_of_mass" "tardigrade_balance_of_linear_momentum" "tardigrade_balance_of_energy" "tardigrade_balance_of_volume_fraction" "tardigrade_finite_element_utilities" "tardigrade_constraint_equations" "tardigrade_balance_of_surface_growth")
 set(PROJECT_SOURCE_FILES ${PROJECT_NAME}.cpp ${PROJECT_NAME}.h)
 set(PROJECT_PRIVATE_HEADERS "")
 foreach(package ${INTERNAL_SUPPORT_LIBRARIES})
