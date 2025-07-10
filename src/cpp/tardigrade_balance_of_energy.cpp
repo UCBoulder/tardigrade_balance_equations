@@ -70,8 +70,8 @@ namespace tardigradeBalanceEquations{
              * \param &cauchy_stress_end: The stopping iterator of the true Cauchy stress \f$ \bar{\bf{\sigma}} \f$ where \f$ \bf{\sigma} = \phi \bar{\bf{\sigma}} \f$
              * \param &volume_fraction: The starting iterator of the volume fraction of phase \f$ \alpha \f$ \f$ \left(\phi^{\alpha}\right) \f$
              * \param &internal_heat_generation: The internal heat generation per unit mass of phase \f$ \alpha \f$ \f$\left( r^{\alpha} \right)\f$
-             * \param &net_interphase_force_begin: The starting iterator of the net interphase force acting on phase \f$ \alpha \f$ \f$\left( \sum_{\beta} \phi^{\alpha \beta}_i \right) \f$
-             * \param &net_interphase_force_end: The stopping iterator of the net interphase force acting on phase \f$ \alpha \f$ \f$\left( \sum_{\beta} \phi^{\alpha \beta}_i \right) \f$
+             * \param &net_interphase_force_begin: The starting iterator of the net interphase force acting on phase \f$ \alpha \f$ \f$\left( \sum_{\beta} \pi^{\alpha \beta}_i \right) \f$
+             * \param &net_interphase_force_end: The stopping iterator of the net interphase force acting on phase \f$ \alpha \f$ \f$\left( \sum_{\beta} \pi^{\alpha \beta}_i \right) \f$
              * \param &heat_flux_begin: The starting iterator of the heat flux vector \f$ \left( q_i \right) \f$
              * \param &heat_flux_end: The stopping iterator of the heat flux vector \f$ \left( q_i \right) \f$
              * \param &test_function: The value of the test function \f$ \left( \psi \right) \f$
@@ -177,16 +177,16 @@ namespace tardigradeBalanceEquations{
              * \param &cauchy_stress_end: The stopping iterator of the true Cauchy stress \f$ \bar{\bf{\sigma}} \f$ where \f$ \bf{\sigma} = \phi \bar{\bf{\sigma}} \f$
              * \param &volume_fraction: The starting iterator of the volume fraction of phase \f$ \alpha \f$ \f$ \left(\phi^{\alpha}\right) \f$
              * \param &internal_heat_generation: The internal heat generation per unit mass of phase \f$ \alpha \f$ \f$\left( r^{\alpha} \right)\f$
-             * \param &net_interphase_force_begin: The starting iterator of the net interphase force acting on phase \f$ \alpha \f$ \f$\left( \sum_{\beta} \phi^{\alpha \beta}_i \right) \f$
-             * \param &net_interphase_force_end: The stopping iterator of the net interphase force acting on phase \f$ \alpha \f$ \f$\left( \sum_{\beta} \phi^{\alpha \beta}_i \right) \f$
+             * \param &net_interphase_force_begin: The starting iterator of the net interphase force acting on phase \f$ \alpha \f$ \f$\left( \sum_{\beta} \pi^{\alpha \beta}_i \right) \f$
+             * \param &net_interphase_force_end: The stopping iterator of the net interphase force acting on phase \f$ \alpha \f$ \f$\left( \sum_{\beta} \pi^{\alpha \beta}_i \right) \f$
              * \param &heat_flux_begin: The starting iterator of the heat flux vector \f$ \left( q_i \right) \f$
              * \param &heat_flux_end: The stopping iterator of the heat flux vector \f$ \left( q_i \right) \f$
              * \param &test_function: The value of the test function \f$ \left( \psi \right) \f$
              * \param &test_function_gradient_begin: The starting iterator of the spatial gradient of the test function \f$ \left( \psi_{,i} \right) \f$
              * \param &test_function_gradient_end: The stopping iterator of the spatial gradient of the test function \f$ \left( \psi_{,i} \right) \f$
-             * \param &interpolation_function: The value of the interpolation function \f$ \left( \phi \right) \f$
-             * \param &interpolation_function_gradient_begin: The starting iterator of the spatial gradient of the interpolation function \f$ \left( \phi_{,i} \right) \f$
-             * \param &interpolation_function_gradient_end: The stopping iterator of the spatial gradient of the interpolation function \f$ \left( \phi_{,i} \right) \f$
+             * \param &interpolation_function: The value of the interpolation function \f$ \left( N \right) \f$
+             * \param &interpolation_function_gradient_begin: The starting iterator of the spatial gradient of the interpolation function \f$ \left( N_{,i} \right) \f$
+             * \param &interpolation_function_gradient_end: The stopping iterator of the spatial gradient of the interpolation function \f$ \left( N_{,i} \right) \f$
              * \param &dRhoDotdRho: The derivative of the time rate of change of the density w.r.t. the density
              * \param &dEDotdE: The derivative of the time rate of change of the internal energy w.r.t. the internal energy
              * \param &dUDotdU: The derivative of the time rate of change of the displacement degree of freedom w.r.t. the displacement degree of freedom
@@ -403,8 +403,8 @@ namespace tardigradeBalanceEquations{
              * \param &volume_fraction_end: The stopping iterator of the volume fraction of phase \f$ \alpha \f$ \f$ \left(\phi^{\alpha}\right) \f$
              * \param &internal_heat_generation_begin: The starting iterator of the internal heat generation per unit mass of phase \f$ \alpha \f$ \f$\left( r^{\alpha} \right)\f$
              * \param &internal_heat_generation_end: The stopping iterator of the internal heat generation per unit mass of phase \f$ \alpha \f$ \f$\left( r^{\alpha} \right)\f$
-             * \param &net_interphase_force_begin: The starting iterator of the net interphase force acting on phase \f$ \alpha \f$ \f$\left( \sum_{\beta} \phi^{\alpha \beta}_i \right) \f$
-             * \param &net_interphase_force_end: The stopping iterator of the net interphase force acting on phase \f$ \alpha \f$ \f$\left( \sum_{\beta} \phi^{\alpha \beta}_i \right) \f$
+             * \param &net_interphase_force_begin: The starting iterator of the net interphase force acting on phase \f$ \alpha \f$ \f$\left( \sum_{\beta} \pi^{\alpha \beta}_i \right) \f$
+             * \param &net_interphase_force_end: The stopping iterator of the net interphase force acting on phase \f$ \alpha \f$ \f$\left( \sum_{\beta} \pi^{\alpha \beta}_i \right) \f$
              * \param &heat_flux_begin: The starting iterator of the heat flux vector \f$ \left( q_i \right) \f$
              * \param &heat_flux_end: The stopping iterator of the heat flux vector \f$ \left( q_i \right) \f$
              * \param &test_function: The value of the test function \f$ \left( \psi \right) \f$
@@ -542,8 +542,8 @@ namespace tardigradeBalanceEquations{
              * \param &volume_fraction_end: The stopping iterator of the volume fraction of phase \f$ \alpha \f$ \f$ \left(\phi^{\alpha}\right) \f$
              * \param &internal_heat_generation_begin: The starting iterator of the internal heat generation per unit mass of phase \f$ \alpha \f$ \f$\left( r^{\alpha} \right)\f$
              * \param &internal_heat_generation_end: The stopping iterator of the internal heat generation per unit mass of phase \f$ \alpha \f$ \f$\left( r^{\alpha} \right)\f$
-             * \param &net_interphase_force_begin: The starting iterator of the net interphase force acting on phase \f$ \alpha \f$ \f$\left( \sum_{\beta} \phi^{\alpha \beta}_i \right) \f$
-             * \param &net_interphase_force_end: The stopping iterator of the net interphase force acting on phase \f$ \alpha \f$ \f$\left( \sum_{\beta} \phi^{\alpha \beta}_i \right) \f$
+             * \param &net_interphase_force_begin: The starting iterator of the net interphase force acting on phase \f$ \alpha \f$ \f$\left( \sum_{\beta} \pi^{\alpha \beta}_i \right) \f$
+             * \param &net_interphase_force_end: The stopping iterator of the net interphase force acting on phase \f$ \alpha \f$ \f$\left( \sum_{\beta} \pi^{\alpha \beta}_i \right) \f$
              * \param &heat_flux_begin: The starting iterator of the heat flux vector \f$ \left( q_i \right) \f$
              * \param &heat_flux_end: The stopping iterator of the heat flux vector \f$ \left( q_i \right) \f$
              * \param &test_function: The value of the test function \f$ \left( \psi \right) \f$
@@ -807,9 +807,9 @@ namespace tardigradeBalanceEquations{
              * \param &test_function: The value of the test function \f$ \left( \psi \right) \f$
              * \param &test_function_gradient_begin: The starting iterator of the spatial gradient of the test function \f$ \left( \psi_{,i} \right) \f$
              * \param &test_function_gradient_end: The stopping iterator of the spatial gradient of the test function \f$ \left( \psi_{,i} \right) \f$
-             * \param &interpolation_function: The value of the interpolation function \f$ \left( \phi \right) \f$
-             * \param &interpolation_function_gradient_begin: The starting iterator of the spatial gradient of the interpolation function \f$ \left( \phi_{,i} \right) \f$
-             * \param &interpolation_function_gradient_end: The stopping iterator of the spatial gradient of the interpolation function \f$ \left( \phi_{,i} \right) \f$
+             * \param &interpolation_function: The value of the interpolation function \f$ \left( N \right) \f$
+             * \param &interpolation_function_gradient_begin: The starting iterator of the spatial gradient of the interpolation function \f$ \left( N_{,i} \right) \f$
+             * \param &interpolation_function_gradient_end: The stopping iterator of the spatial gradient of the interpolation function \f$ \left( N_{,i} \right) \f$
              * \param &full_material_response_dof_gradient_begin: The starting iterator of the spatial gradient of the material response dof vector
              * \param &full_material_response_dof_gradient_end: The stopping iterator of the spatial gradient of the material response dof vector
              * \param &dRhoDotdRho: The derivative of the time rate of change of the density w.r.t. the density
@@ -1675,9 +1675,9 @@ namespace tardigradeBalanceEquations{
              * \param &test_function: The value of the test function \f$ \left( \psi \right) \f$
              * \param &test_function_gradient_begin: The starting iterator of the spatial gradient of the test function \f$ \left( \psi_{,i} \right) \f$
              * \param &test_function_gradient_end: The stopping iterator of the spatial gradient of the test function \f$ \left( \psi_{,i} \right) \f$
-             * \param &interpolation_function: The value of the interpolation function \f$ \left( \phi \right) \f$
-             * \param &interpolation_function_gradient_begin: The starting iterator of the spatial gradient of the interpolation function \f$ \left( \phi_{,i} \right) \f$
-             * \param &interpolation_function_gradient_end: The stopping iterator of the spatial gradient of the interpolation function \f$ \left( \phi_{,i} \right) \f$
+             * \param &interpolation_function: The value of the interpolation function \f$ \left( N \right) \f$
+             * \param &interpolation_function_gradient_begin: The starting iterator of the spatial gradient of the interpolation function \f$ \left( N_{,i} \right) \f$
+             * \param &interpolation_function_gradient_end: The stopping iterator of the spatial gradient of the interpolation function \f$ \left( N_{,i} \right) \f$
              * \param &full_material_response_dof_gradient_begin: The starting iterator of the spatial gradient of the material response dof vector
              * \param &full_material_response_dof_gradient_end: The stopping iterator of the spatial gradient of the material response dof vector
              * \param &dRhoDotdRho: The derivative of the time rate of change of the density w.r.t. the density
@@ -1928,8 +1928,8 @@ namespace tardigradeBalanceEquations{
              * \param &cauchy_stress_end: The stopping iterator of the true Cauchy stress \f$ \bar{\bf{\sigma}} \f$ where \f$ \bf{\sigma} = \phi \bar{\bf{\sigma}} \f$
              * \param &volume_fraction: The volume fraction of phase \f$ \alpha \f$ \f$ \left(\phi^{\alpha}\right) \f$
              * \param &internal_heat_generation: The internal heat generation per unit mass of phase \f$ \alpha \f$ \f$\left( r^{\alpha} \right)\f$
-             * \param &net_interphase_force_begin: The starting iterator of the net interphase force acting on phase \f$ \alpha \f$ \f$\left( \sum_{\beta} \phi^{\alpha \beta}_i \right) \f$
-             * \param &net_interphase_force_end: The stopping iterator of the net interphase force acting on phase \f$ \alpha \f$ \f$\left( \sum_{\beta} \phi^{\alpha \beta}_i \right) \f$
+             * \param &net_interphase_force_begin: The starting iterator of the net interphase force acting on phase \f$ \alpha \f$ \f$\left( \sum_{\beta} \pi^{\alpha \beta}_i \right) \f$
+             * \param &net_interphase_force_end: The stopping iterator of the net interphase force acting on phase \f$ \alpha \f$ \f$\left( \sum_{\beta} \pi^{\alpha \beta}_i \right) \f$
              * \param &result: The result of the non-divergence part of the balance of energy
              */
             
@@ -2041,8 +2041,8 @@ namespace tardigradeBalanceEquations{
              * \param &cauchy_stress_end: The stopping iterator of the true Cauchy stress \f$ \bar{\bf{\sigma}} \f$ where \f$ \bf{\sigma} = \phi \bar{\bf{\sigma}} \f$
              * \param &volume_fraction: The volume fraction of phase \f$ \alpha \f$ \f$ \left(\phi^{\alpha}\right) \f$
              * \param &internal_heat_generation: The internal heat generation per unit mass of phase \f$ \alpha \f$ \f$\left( r^{\alpha} \right)\f$
-             * \param &net_interphase_force_begin: The starting iterator of the net interphase force acting on phase \f$ \alpha \f$ \f$\left( \sum_{\beta} \phi^{\alpha \beta}_i \right) \f$
-             * \param &net_interphase_force_end: The stopping iterator of the net interphase force acting on phase \f$ \alpha \f$ \f$\left( \sum_{\beta} \phi^{\alpha \beta}_i \right) \f$
+             * \param &net_interphase_force_begin: The starting iterator of the net interphase force acting on phase \f$ \alpha \f$ \f$\left( \sum_{\beta} \pi^{\alpha \beta}_i \right) \f$
+             * \param &net_interphase_force_end: The stopping iterator of the net interphase force acting on phase \f$ \alpha \f$ \f$\left( \sum_{\beta} \pi^{\alpha \beta}_i \right) \f$
              * \param &result: The result of the non-divergence part of the balance of energy
              * \param &dRdRho: The Jacobian w.r.t. the apparent density
              * \param &dRdRhoDot: The Jacobian w.r.t. the partial temporal derivative of the apparent density
@@ -2236,8 +2236,8 @@ namespace tardigradeBalanceEquations{
              * \param &volume_fraction_end: The stopping iterator of the volume fraction of phase \f$ \alpha \f$ \f$ \left(\phi^{\alpha}\right) \f$
              * \param &internal_heat_generation_begin: The starting iterator of the internal heat generation per unit mass of phase \f$ \alpha \f$ \f$\left( r^{\alpha} \right)\f$
              * \param &internal_heat_generation_end: The stopping iterator of the internal heat generation per unit mass of phase \f$ \alpha \f$ \f$\left( r^{\alpha} \right)\f$
-             * \param &net_interphase_force_begin: The starting iterator of the net interphase force acting on phase \f$ \alpha \f$ \f$\left( \sum_{\beta} \phi^{\alpha \beta}_i \right) \f$
-             * \param &net_interphase_force_end: The stopping iterator of the net interphase force acting on phase \f$ \alpha \f$ \f$\left( \sum_{\beta} \phi^{\alpha \beta}_i \right) \f$
+             * \param &net_interphase_force_begin: The starting iterator of the net interphase force acting on phase \f$ \alpha \f$ \f$\left( \sum_{\beta} \pi^{\alpha \beta}_i \right) \f$
+             * \param &net_interphase_force_end: The stopping iterator of the net interphase force acting on phase \f$ \alpha \f$ \f$\left( \sum_{\beta} \pi^{\alpha \beta}_i \right) \f$
              * \param &result_begin: The starting iterator of the result of the non-divergence part of the balance of energy
              * \param &result_end: The stopping iterator of the result of the non-divergence part of the balance of energy
              */
@@ -2341,8 +2341,8 @@ namespace tardigradeBalanceEquations{
              * \param &volume_fraction_end: The stopping iterator of the volume fraction of phase \f$ \alpha \f$ \f$ \left(\phi^{\alpha}\right) \f$
              * \param &internal_heat_generation_begin: The starting iterator of the internal heat generation per unit mass of phase \f$ \alpha \f$ \f$\left( r^{\alpha} \right)\f$
              * \param &internal_heat_generation_end: The stopping iterator of the internal heat generation per unit mass of phase \f$ \alpha \f$ \f$\left( r^{\alpha} \right)\f$
-             * \param &net_interphase_force_begin: The starting iterator of the net interphase force acting on phase \f$ \alpha \f$ \f$\left( \sum_{\beta} \phi^{\alpha \beta}_i \right) \f$
-             * \param &net_interphase_force_end: The stopping iterator of the net interphase force acting on phase \f$ \alpha \f$ \f$\left( \sum_{\beta} \phi^{\alpha \beta}_i \right) \f$
+             * \param &net_interphase_force_begin: The starting iterator of the net interphase force acting on phase \f$ \alpha \f$ \f$\left( \sum_{\beta} \pi^{\alpha \beta}_i \right) \f$
+             * \param &net_interphase_force_end: The stopping iterator of the net interphase force acting on phase \f$ \alpha \f$ \f$\left( \sum_{\beta} \pi^{\alpha \beta}_i \right) \f$
              * \param &result_begin: The starting iterator of the result of the non-divergence part of the balance of energy
              * \param &result_end: The stopping iterator of the result of the non-divergence part of the balance of energy
              * \param &dRdRho_begin: The starting iterator of the Jacobian w.r.t. the apparent density
