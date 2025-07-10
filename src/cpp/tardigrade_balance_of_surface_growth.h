@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * \file tardigrade_balance_surface_growth.h
+  * \file tardigrade_balance_of_surface_growth.h
   ******************************************************************************
   * The header file for the equations associated with calculating the surface
   * growth velocity
