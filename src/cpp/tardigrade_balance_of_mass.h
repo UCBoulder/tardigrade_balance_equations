@@ -67,28 +67,28 @@ namespace tardigradeBalanceEquations{
         );
 
         template<
-            int dim, int matresponse_dim, typename density_type, typename densityDot_type, typename result_type,
+            int dim, int mass_change_index, typename density_type, typename densityDot_type, typename result_type,
             typename testFunction_type,
             class densityGradient_iter, class velocity_iter, class velocityGradient_iter,
             class material_response_iter
         >
-        inline void computeBalanceOfMass(
+        void computeBalanceOfMass(
             const density_type &density,  const densityDot_type &density_dot,
             const densityGradient_iter &density_gradient_begin, const densityGradient_iter &density_gradient_end,
             const velocity_iter &velocity_begin, const velocity_iter &velocity_end,
-            const velocityGradient_iter &velocity_gradient_begin, const velocityGradient_iter &velocity_gradient_end,
-            const material_response_iter &material_response_begin,      const material_response_iter &material_response_end,
-            const testFunction_type &psi,
+            const velocityGradient_iter &velocity_gradient_begin,  const velocityGradient_iter &velocity_gradient_end,
+            const material_response_iter &material_response_begin, const material_response_iter &material_response_end,
+            const testFunction_type &test_function,
             result_type &result
         );
 
         template<
-            int dim, int matertial_response_dim, class density_iter, class densityDot_iter, class result_iter,
+            int dim, int mass_change_index, class density_iter, class densityDot_iter, class result_iter,
             typename testFunction_type,
             class densityGradient_iter, class velocity_iter, class velocityGradient_iter,
             class material_response_iter
         >
-        inline void computeBalanceOfMass(
+        void computeBalanceOfMass(
             const density_iter &density_begin,                     const density_iter &density_end,
             const densityDot_iter &density_dot_begin,              const densityDot_iter &density_dot_end,
             const densityGradient_iter &density_gradient_begin,    const densityGradient_iter &density_gradient_end,
@@ -305,6 +305,17 @@ namespace tardigradeBalanceEquations{
             dRdVF_iter dRdVF_begin,           dRdVF_iter dRdVF_end,
             dRdZ_iter dRdZ_begin,             dRdZ_iter dRdZ_end,
             dRdUMesh_iter dRdUMesh_begin,     dRdUMesh_iter dRdUMesh_end
+        );
+
+        template<
+            int diffusion_index, typename result_type,
+            class testFunctionGradient_iter, class material_response_iter
+        >
+        void computeDiffusionTerm(
+            const material_response_iter &material_response_begin, const material_response_iter &material_response_end,
+            const testFunctionGradient_iter &testFunctionGradient_begin,
+            const testFunctionGradient_iter &testFunctionGradient_end,
+            result_type &result
         );
 
     }

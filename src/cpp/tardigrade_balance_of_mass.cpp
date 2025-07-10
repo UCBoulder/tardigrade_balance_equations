@@ -1358,6 +1358,55 @@ namespace tardigradeBalanceEquations{
 
         }
 
+        template<
+            int diffusion_index, typename result_type,
+            class testFunctionGradient_iter, class material_response_iter
+        >
+        void computeDiffusionTerm(
+            const material_response_iter &material_response_begin, const material_response_iter &material_response_end,
+            const testFunctionGradient_iter &testFunctionGradient_begin,
+            const testFunctionGradient_iter &testFunctionGradient_end,
+            result_type &result
+        ){
+            /*!
+             * Compute the diffusion term
+             *
+             * \f$ -\psi_{,i} q_i \f$
+             *
+             * where \f$ \psi_{,i} \f$ is the test function gradient and \f$ q_i \f$ is the
+             * diffusion vector
+             *
+             * \param &material_response_begin: The start of the material response vector
+             * \param &material_response_end: The end of the material response vector
+             * \param &testFunctionGradient_begin: The start of the test function gradient
+             * \param &testFunctionGradient_end: The end of the test function gradient
+             * \param &result: The result
+             */
+
+            TARDIGRADE_ERROR_TOOLS_CHECK(
+                diffusion_index < ( unsigned int )( material_response_end - material_response_begin ),
+                "The diffusion index (" + std::to_string( diffusion_index ) +
+                ") is greater than the material response vector (" + std::to_string( ( unsigned int )( material_response_end - material_response_begin ) ) + ")"
+            )
+
+            TARDIGRADE_ERROR_TOOLS_CHECK(
+                ( unsigned int )( testFunctionGradient_end - testFunctionGradient_begin ) <= ( unsigned int )( material_response_end - ( material_response_begin + diffusion_index ) ),
+                "The material response vector size (" + std::to_string( ( unsigned int )( material_response_end - material_response_begin ) )
+                + ") is inconsistent with the required diffusion term size (" + std::to_string( ( unsigned int )( testFunctionGradient_end - testFunctionGradient_begin ) )
+                + ") and the index of the diffusion term (" + std::to_string( diffusion_index ) + ")"
+            )
+
+            result = std::inner_product(
+                testFunctionGradient_begin,
+                testFunctionGradient_end,
+                material_response_begin + diffusion_index,
+                result_type( )
+            );
+
+            result *= -1;
+
+        }
+
     }
 
 }

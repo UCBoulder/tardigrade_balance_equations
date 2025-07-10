@@ -5093,3 +5093,23 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfMass_hydra_multiphase_fea, * boost::u
     }
 
 }
+
+BOOST_AUTO_TEST_CASE( test_computeDiffusionTerm, * boost::unit_test::tolerance( DEFAULT_TEST_TOLERANCE ) ){
+
+    std::array< double, 5 > material_response = { 0.1, 0.2, 0.3, 0.4, 0.5 };
+
+    std::array< double, 3 > testFunctionGradient = { 0.11, 0.22, 0.33 };
+
+    double answer = -( 0.2 * 0.11 + 0.3 * 0.22 + 0.4 * 0.33 );
+
+    double result;
+
+    tardigradeBalanceEquations::balanceOfMass::computeDiffusionTerm<1>(
+            std::begin( material_response ), std::end( material_response ),
+            std::begin( testFunctionGradient ), std::end( testFunctionGradient ),
+            result
+    );
+
+    BOOST_TEST( result == answer );
+
+}
