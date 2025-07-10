@@ -1376,10 +1376,10 @@ namespace tardigradeBalanceEquations{
              * where \f$ \psi_{,i} \f$ is the test function gradient and \f$ q_i \f$ is the
              * diffusion vector
              *
-             * \param &material_response_begin: The start of the material response vector
-             * \param &material_response_end: The end of the material response vector
-             * \param &testFunctionGradient_begin: The start of the test function gradient
-             * \param &testFunctionGradient_end: The end of the test function gradient
+             * \param &material_response_begin: The starting iterator of the material response vector
+             * \param &material_response_end: The ending iterator of the material response vector
+             * \param &testFunctionGradient_begin: The starting iterator of the test function gradient
+             * \param &testFunctionGradient_end: The ending iterator of the test function gradient
              * \param &result: The result
              */
 
@@ -1404,6 +1404,54 @@ namespace tardigradeBalanceEquations{
             );
 
             result *= -1;
+
+        }
+
+        template<
+            int diffusion_index, class result_iter,
+            class testFunctionGradient_iter, class material_response_iter
+        >
+        void computeDiffusionTerm(
+            const material_response_iter &material_response_begin, const material_response_iter &material_response_end,
+            const testFunctionGradient_iter &testFunctionGradient_begin,
+            const testFunctionGradient_iter &testFunctionGradient_end,
+            result_iter result_begin, result_iter result_end
+        ){
+            /*!
+             * Compute the diffusion term for a multiphasic problem
+             *
+             * \f$ -\psi_{,i} q_i \f$
+             *
+             * where \f$ \psi_{,i} \f$ is the test function gradient and \f$ q_i \f$ is the
+             * diffusion vector
+             *
+             * \param &material_response_begin: The starting iterator of the material response vector
+             * \param &material_response_end: The ending iterator of the material response vector
+             * \param &testFunctionGradient_begin: The starting iterator of the test function gradient
+             * \param &testFunctionGradient_end: The ending iterator of the test function gradient
+             * \param &result_begin: The starting iterator of the result vector
+             * \param &result_end: The ending iterator of the result vector
+             */
+
+            auto num_phases             = ( result_end - result_begin );
+            auto material_response_size = ( material_response_end - material_response_begin ) / num_phases;
+
+            TARDIGRADE_ERROR_TOOLS_CHECK(
+                ( material_response_end - material_response_begin ) == material_response_size * num_phases,
+                "The multiphase material response size (" + std::to_string( material_response_end - material_response_begin )
+                + ") must be an integer multiple of the number of phases (" + std::to_string( num_phases ) + ")"
+            )
+
+            for ( auto v = std::pair< unsigned int, result_iter >( 0, result_begin ); v.second != result_end; ++v.first, ++v.second ){
+
+                computeDiffusionTerm<diffusion_index>(
+                    material_response_begin + material_response_size * v.first,
+                    material_response_begin + material_response_size * ( v.first + 1 ),
+                    testFunctionGradient_begin, testFunctionGradient_end,
+                    *v.second
+                );
+
+            }
 
         }
 

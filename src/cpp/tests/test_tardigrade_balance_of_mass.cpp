@@ -5113,3 +5113,25 @@ BOOST_AUTO_TEST_CASE( test_computeDiffusionTerm, * boost::unit_test::tolerance( 
     BOOST_TEST( result == answer );
 
 }
+
+BOOST_AUTO_TEST_CASE( test_computeDiffusionTerm_multiphase, * boost::unit_test::tolerance( DEFAULT_TEST_TOLERANCE ) ){
+
+    std::array< double, 10 > material_response = { 0.1, 0.2, 0.3, 0.4, 0.5,
+                                                   0.6, 0.7, 0.8, 0.9, 1.0 };
+
+    std::array< double, 3 > testFunctionGradient = { 0.11, 0.22, 0.33 };
+
+    std::array< double, 2 > answer = { -( 0.2 * 0.11 + 0.3 * 0.22 + 0.4 * 0.33 ),
+                                       -( 0.7 * 0.11 + 0.8 * 0.22 + 0.9 * 0.33 ) };
+
+    std::array<double, 2 > result;
+
+    tardigradeBalanceEquations::balanceOfMass::computeDiffusionTerm<1>(
+            std::begin( material_response ), std::end( material_response ),
+            std::begin( testFunctionGradient ), std::end( testFunctionGradient ),
+            std::begin( result ), std::end( result )
+    );
+
+    BOOST_TEST( result == answer, CHECK_PER_ELEMENT );
+
+}

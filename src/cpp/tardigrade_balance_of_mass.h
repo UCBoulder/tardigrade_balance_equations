@@ -318,6 +318,17 @@ namespace tardigradeBalanceEquations{
             result_type &result
         );
 
+        template<
+            int diffusion_index, class result_iter,
+            class testFunctionGradient_iter, class material_response_iter
+        >
+        void computeDiffusionTerm(
+            const material_response_iter &material_response_begin, const material_response_iter &material_response_end,
+            const testFunctionGradient_iter &testFunctionGradient_begin,
+            const testFunctionGradient_iter &testFunctionGradient_end,
+            result_iter result_begin, result_iter result_end
+        );
+
     }
 
 }
