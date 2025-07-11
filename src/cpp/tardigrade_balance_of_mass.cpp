@@ -1408,6 +1408,279 @@ namespace tardigradeBalanceEquations{
         }
 
         template<
+            int material_response_dim, int diffusion_index, int material_response_num_dof,
+            typename dUDotdU_type, typename result_type,
+            class testFunctionGradient_iter, class material_response_iter,
+            typename interpolationFunction_type,
+            class interpolationFunctionGradient_iter, class material_response_jacobian_iter,
+            class full_material_response_dof_gradient_iter,
+            class dRdRho_iter, class dRdU_iter, class dRdW_iter,
+            class dRdTheta_iter, class dRdE_iter, class dRdVF_iter,
+            class dRdZ_iter, class dRdUMesh_iter,
+            int density_index        ,
+            int displacement_index   ,
+            int velocity_index       ,
+            int temperature_index    ,
+            int internal_energy_index,
+            int volume_fraction_index,
+            int additional_dof_index
+        >
+        void computeDiffusionTerm(
+            const material_response_iter &material_response_begin, const material_response_iter &material_response_end,
+            const material_response_jacobian_iter &material_response_jacobian_begin,
+            const material_response_jacobian_iter &material_response_jacobian_end,
+            const testFunctionGradient_iter &testFunctionGradient_begin,
+            const testFunctionGradient_iter &testFunctionGradient_end,
+            const interpolationFunction_type &interpolation_function,
+            const interpolationFunctionGradient_iter &interpolation_function_gradient_begin,
+            const interpolationFunctionGradient_iter &interpolation_function_gradient_end,
+            const full_material_response_dof_gradient_iter &full_material_response_dof_gradient_begin,
+            const full_material_response_dof_gradient_iter &full_material_response_dof_gradient_end,
+            const dUDotdU_type &dUDotdU,
+            result_type &result,
+            dRdRho_iter dRdRho_begin,         dRdRho_iter dRdRho_end,
+            dRdU_iter dRdU_begin,             dRdU_iter dRdU_end,
+            dRdW_iter dRdW_begin,             dRdW_iter dRdW_end,
+            dRdTheta_iter dRdTheta_begin,     dRdTheta_iter dRdTheta_end,
+            dRdE_iter dRdE_begin,             dRdE_iter dRdE_end,
+            dRdVF_iter dRdVF_begin,           dRdVF_iter dRdVF_end,
+            dRdZ_iter dRdZ_begin,             dRdZ_iter dRdZ_end,
+            dRdUMesh_iter dRdUMesh_begin,     dRdUMesh_iter dRdUMesh_end
+        ){
+            /*!
+             * Compute the diffusion term
+             *
+             * \f$ -\psi_{,i} q_i \f$
+             *
+             * where \f$ \psi_{,i} \f$ is the test function gradient and \f$ q_i \f$ is the
+             * diffusion vector
+             *
+             * \param &material_response_begin: The starting iterator of the material response vector
+             * \param &material_response_end: The ending iterator of the material response vector
+             * \param &material_response_jacobian_begin: The starting iterator of the material response Jacobian vector
+             * \param &material_response_jacobian_end: The ending iterator of the material response Jacobian vector
+             * \param &testFunctionGradient_begin: The starting iterator of the test function gradient
+             * \param &testFunctionGradient_end: The ending iterator of the test function gradient
+             * \param &interpolation_function: The value of the interpolation function
+             * \param &interpolation_function_gradient_begin: The starting iterator of the interpolation function gradient
+             * \param &interpolation_function_gradient_end: The ending iterator of the interpolation function gradient
+             * \param &full_material_response_dof_gradient_begin: The starting iterator of the spatial gradient of all of the degrees of freedom used by the material response
+             * \param &full_material_response_dof_gradient_end: The stopping iterator of the spatial gradient of all of the degrees of freedom used by the material response
+             * \param &dUDotdU: The derivative of the time-derivative of the displacement w.r.t. the displacement (may not be mesh displacement)
+             * \param &result: The result
+             * \param &dRdRho_begin: The starting iterator of the derivative of the diffusion term w.r.t. density \f$ \rho \f$
+             * \param &dRdRho_end: The stopping iterator of the derivative of the diffusion term w.r.t. density \f$ \rho \f$
+             * \param &dRdU_begin: The starting iterator of the derivative of the diffusion term w.r.t. the spatial dof (may not be displacement)
+             * \param &dRdU_end: The stopping iterator of the derivative of the diffusion term w.r.t. the spatial dof (may not be displacement)
+             * \param &dRdW_begin: The starting iterator of the derivative of the diffusion term w.r.t. the displacement (may not be mesh displacement)
+             * \param &dRdW_end: The stopping iterator of the derivative of the diffusion term w.r.t. the displacement (may not be mesh displacement)
+             * \param &dRdTheta_begin: The starting iterator of the derivative of the diffusion term w.r.t. the temperature
+             * \param &dRdTheta_end: The stopping iterator of the derivative of the diffusion term w.r.t. the temperature
+             * \param &dRdE_begin: The starting iterator of the derivative of the diffusion term w.r.t. the internal energy
+             * \param &dRdE_end: The stopping iterator of the derivative of the diffusion term w.r.t. the internal energy
+             * \param &dRdVF_begin: The starting iterator of the derivative of the diffusion term w.r.t. the volume fraction
+             * \param &dRdVF_end: The stopping iterator of the derivative of the diffusion term w.r.t. the volume fraction
+             * \param &dRdZ_begin: The starting iterator of the derivative of the diffusion term w.r.t. the additional dof
+             * \param &dRdZ_end: The stopping iterator of the derivative of the diffusion term w.r.t. the additional dof
+             * \param &dRdUMesh_begin: The starting iterator of the derivative of the diffusion term w.r.t. the mesh displacement
+             * \param &dRdUMesh_end: The stopping iterator of the derivative of the diffusion term w.r.t. the mesh displacement
+             */
+
+            // Set the number of phases
+            const unsigned int nphases = ( unsigned int )( dRdRho_end - dRdRho_begin );
+            constexpr unsigned int num_phase_dof = 4 + 2 * material_response_dim;
+            const unsigned int num_additional_dof = ( material_response_num_dof - num_phase_dof );
+
+            TARDIGRADE_ERROR_TOOLS_CHECK(
+                ( unsigned int )( testFunctionGradient_end - testFunctionGradient_begin ) == ( unsigned int )( testFunctionGradient_end - testFunctionGradient_begin ),
+                "The test function gradient size (" + std::to_string( ( unsigned int )( testFunctionGradient_end - testFunctionGradient_begin ) )
+                + ") must be the same size as the interpolation function gradient size (" + std::to_string( ( unsigned int )( interpolation_function_gradient_end - interpolation_function_gradient_begin ) )
+                + ")"
+            )
+
+            TARDIGRADE_ERROR_TOOLS_CHECK(
+                ( unsigned int )( dRdU_end - dRdU_begin ) == nphases * material_response_dim,
+                "dRdU is an inconsistent size ("  + std::to_string( dRdU_end - dRdU_begin )
+                + ") with the number of phases (" + std::to_string( nphases )
+                + ") and the material response dimension (" + std::to_string( material_response_dim ) + ")"
+            )
+
+            TARDIGRADE_ERROR_TOOLS_CHECK(
+                ( unsigned int )( dRdW_end - dRdW_begin ) == nphases * material_response_dim,
+                "dRdW is an inconsistent size ("  + std::to_string( dRdW_end - dRdW_begin )
+                + ") with the number of phases (" + std::to_string( nphases )
+                + ") and the material response dimension (" + std::to_string( material_response_dim ) + ")"
+            )
+
+            TARDIGRADE_ERROR_TOOLS_CHECK(
+                ( unsigned int )( dRdTheta_end - dRdTheta_begin ) == nphases,
+                "dRdTheta is an inconsistent size ("  + std::to_string( dRdTheta_end - dRdTheta_begin )
+                + ") with the number of phases (" + std::to_string( nphases ) + ")"
+            )
+
+            TARDIGRADE_ERROR_TOOLS_CHECK(
+                ( unsigned int )( dRdE_end - dRdE_begin ) == nphases,
+                "dRdE is an inconsistent size ("  + std::to_string( dRdE_end - dRdE_begin )
+                + ") with the number of phases (" + std::to_string( nphases ) + ")"
+            )
+
+            TARDIGRADE_ERROR_TOOLS_CHECK(
+                ( unsigned int )( dRdVF_end - dRdVF_begin ) == nphases,
+                "dRdVF is an inconsistent size ("  + std::to_string( dRdVF_end - dRdVF_begin )
+                + ") with the number of phases (" + std::to_string( nphases ) + ")"
+            )
+
+            TARDIGRADE_ERROR_TOOLS_CHECK(
+                ( unsigned int )( dRdZ_end - dRdZ_begin ) == num_additional_dof,
+                "dRdZ is an inconsistent size ("  + std::to_string( dRdZ_end - dRdZ_begin )
+                + ") with the number of additional degrees of freedom (" + std::to_string( num_additional_dof ) + ")"
+            )
+
+            TARDIGRADE_ERROR_TOOLS_CHECK(
+                ( unsigned int )( dRdUMesh_end - dRdUMesh_begin ) == ( unsigned int )( testFunctionGradient_end - testFunctionGradient_begin ),
+                "dRdUMesh is an inconsistent size ("  + std::to_string( dRdUMesh_end - dRdUMesh_begin )
+                + ") with the spatial dimension (" + std::to_string( testFunctionGradient_end - testFunctionGradient_begin ) + ")"
+            )
+
+            computeDiffusionTerm<diffusion_index>(
+                material_response_begin, material_response_end,
+                testFunctionGradient_begin, testFunctionGradient_end,
+                result
+            );
+
+            // Zero out the Jacobians
+            std::fill( dRdRho_begin,   dRdRho_end,   0 );
+            std::fill( dRdU_begin,     dRdU_end,     0 );
+            std::fill( dRdW_begin,     dRdW_end,     0 );
+            std::fill( dRdTheta_begin, dRdTheta_end, 0 );
+            std::fill( dRdE_begin,     dRdE_end,     0 );
+            std::fill( dRdZ_begin,     dRdZ_end,     0 );
+            std::fill( dRdVF_begin,    dRdVF_end,    0 );
+            std::fill( dRdUMesh_begin, dRdUMesh_end, 0 );
+
+            for ( unsigned int j = 0; j < material_response_dim; ++j ){
+
+                // density
+                for ( auto p = std::pair< unsigned int, dRdRho_iter >( 0, dRdRho_begin ); p.second != dRdRho_end; ++p.first, ++p.second ){
+
+                    *p.second -= ( *( interpolation_function_gradient_begin + j ) ) * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( diffusion_index + j ) + nphases * density_index + p.first ) ) * interpolation_function;
+
+                    for ( unsigned int a = 0; a < material_response_dim; ++a ){
+
+                        *p.second -= ( *( interpolation_function_gradient_begin + j ) ) * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( diffusion_index + j ) + ( nphases * num_phase_dof + num_additional_dof ) + material_response_dim * ( nphases * density_index + p.first ) + a ) ) * ( *( interpolation_function_gradient_begin + a ) );
+
+                    }
+
+                }
+
+                // velocity
+                for ( auto p = std::pair< unsigned int, dRdU_iter >( 0, dRdU_begin ); p.second != dRdU_end; ++p.first, ++p.second ){
+
+                    *p.second -= ( *( interpolation_function_gradient_begin + j ) ) * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( diffusion_index + j ) + nphases * velocity_index + p.first ) ) * interpolation_function * dUDotdU;
+
+                    for ( unsigned int a = 0; a < material_response_dim; ++a ){
+
+                        *p.second -= ( *( interpolation_function_gradient_begin + j ) ) * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( diffusion_index + j ) + ( nphases * num_phase_dof + num_additional_dof ) + material_response_dim * ( nphases * velocity_index + p.first ) + a ) ) * ( *( interpolation_function_gradient_begin + a ) ) * dUDotdU;
+
+                    }
+
+                }
+
+                // displacement
+                for ( auto p = std::pair< unsigned int, dRdW_iter >( 0, dRdW_begin ); p.second != dRdW_end; ++p.first, ++p.second ){
+
+                    *p.second -= ( *( interpolation_function_gradient_begin + j ) ) * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( diffusion_index + j ) + nphases * displacement_index + p.first ) ) * interpolation_function;
+
+                    for ( unsigned int a = 0; a < material_response_dim; ++a ){
+
+                        *p.second -= ( *( interpolation_function_gradient_begin + j ) ) * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( diffusion_index + j ) + ( nphases * num_phase_dof + num_additional_dof ) + material_response_dim * ( nphases * displacement_index + p.first ) + a ) ) * ( *( interpolation_function_gradient_begin + a ) );
+
+                    }
+
+                }
+
+                // temperature
+                for ( auto p = std::pair< unsigned int, dRdTheta_iter >( 0, dRdTheta_begin ); p.second != dRdTheta_end; ++p.first, ++p.second ){
+
+                    *p.second -= ( *( interpolation_function_gradient_begin + j ) ) * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( diffusion_index + j ) + nphases * temperature_index + p.first ) ) * interpolation_function;
+
+                    for ( unsigned int a = 0; a < material_response_dim; ++a ){
+
+                        *p.second -= ( *( interpolation_function_gradient_begin + j ) ) * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( diffusion_index + j ) + ( nphases * num_phase_dof + num_additional_dof ) + material_response_dim * ( nphases * temperature_index + p.first ) + a ) ) * ( *( interpolation_function_gradient_begin + a ) );
+
+                    }
+
+                }
+
+                // internal energy
+                for ( auto p = std::pair< unsigned int, dRdE_iter >( 0, dRdE_begin ); p.second != dRdE_end; ++p.first, ++p.second ){
+
+                    *p.second -= ( *( interpolation_function_gradient_begin + j ) ) * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( diffusion_index + j ) + nphases * internal_energy_index + p.first ) ) * interpolation_function;
+
+                    for ( unsigned int a = 0; a < material_response_dim; ++a ){
+
+                        *p.second -= ( *( interpolation_function_gradient_begin + j ) ) * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( diffusion_index + j ) + ( nphases * num_phase_dof + num_additional_dof ) + material_response_dim * ( nphases * internal_energy_index + p.first ) + a ) ) * ( *( interpolation_function_gradient_begin + a ) );
+
+                    }
+
+                }
+
+                // volume fraction
+                for ( auto p = std::pair< unsigned int, dRdVF_iter >( 0, dRdVF_begin ); p.second != dRdVF_end; ++p.first, ++p.second ){
+
+                    *p.second -= ( *( interpolation_function_gradient_begin + j ) ) * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( diffusion_index + j ) + nphases * volume_fraction_index + p.first ) ) * interpolation_function;
+
+                    for ( unsigned int a = 0; a < material_response_dim; ++a ){
+
+                        *p.second -= ( *( interpolation_function_gradient_begin + j ) ) * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( diffusion_index + j ) + ( nphases * num_phase_dof + num_additional_dof ) + material_response_dim * ( nphases * volume_fraction_index + p.first ) + a ) ) * ( *( interpolation_function_gradient_begin + a ) );
+
+                    }
+
+                }
+
+                // additional dof
+                for ( auto p = std::pair< unsigned int, dRdZ_iter >( 0, dRdZ_begin ); p.second != dRdZ_end; ++p.first, ++p.second ){
+
+                    *p.second -= ( *( interpolation_function_gradient_begin + j ) ) * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( diffusion_index + j ) + nphases * additional_dof_index + p.first ) ) * interpolation_function;
+
+                    for ( unsigned int a = 0; a < material_response_dim; ++a ){
+
+                        *p.second -= ( *( interpolation_function_gradient_begin + j ) ) * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( diffusion_index + j ) + ( nphases * num_phase_dof + num_additional_dof ) + material_response_dim * ( nphases * additional_dof_index + p.first ) + a ) ) * ( *( interpolation_function_gradient_begin + a ) );
+
+                    }
+
+                }
+
+                // mesh displacement
+                for ( unsigned int I = 0; I < ( nphases * num_phase_dof + num_additional_dof ); ++I ){
+
+                    for ( unsigned int k = 0; k < material_response_dim; ++k ){
+
+                        for ( unsigned int a = 0; a < material_response_dim; ++a ){
+
+                            *( dRdUMesh_begin + a ) +=
+                                ( *( interpolation_function_gradient_begin + j ) )
+                                * ( *( material_response_jacobian_begin + ( nphases * num_phase_dof + num_additional_dof ) * ( 1 + material_response_dim ) * ( diffusion_index + j ) + ( nphases * num_phase_dof + num_additional_dof ) + material_response_dim * I + k ) )
+                                * ( *( full_material_response_dof_gradient_begin + material_response_dim * I + a ) )
+                                * ( *( interpolation_function_gradient_begin + k ) );
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+            for ( unsigned int a = 0; a < material_response_dim; ++a ){
+
+                *( dRdUMesh_begin + a ) += result * ( *( interpolation_function_gradient_begin + a ) );
+
+            }
+
+        }
+
+        template<
             int diffusion_index, class result_iter,
             class testFunctionGradient_iter, class material_response_iter
         >

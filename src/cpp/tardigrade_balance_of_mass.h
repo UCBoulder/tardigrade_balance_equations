@@ -311,7 +311,7 @@ namespace tardigradeBalanceEquations{
             int diffusion_index, typename result_type,
             class testFunctionGradient_iter, class material_response_iter
         >
-        void computeDiffusionTerm(
+        inline void computeDiffusionTerm(
             const material_response_iter &material_response_begin, const material_response_iter &material_response_end,
             const testFunctionGradient_iter &testFunctionGradient_begin,
             const testFunctionGradient_iter &testFunctionGradient_end,
@@ -320,8 +320,9 @@ namespace tardigradeBalanceEquations{
 
         template<
             int material_response_dim, int diffusion_index, int material_response_num_dof,
-            typename result_type,
+            typename dUDotdU_type, typename result_type,
             class testFunctionGradient_iter, class material_response_iter,
+            typename interpolationFunction_type,
             class interpolationFunctionGradient_iter, class material_response_jacobian_iter,
             class full_material_response_dof_gradient_iter,
             class dRdRho_iter, class dRdU_iter, class dRdW_iter,
@@ -337,8 +338,16 @@ namespace tardigradeBalanceEquations{
         >
         void computeDiffusionTerm(
             const material_response_iter &material_response_begin, const material_response_iter &material_response_end,
+            const material_response_jacobian_iter &material_response_jacobian_begin,
+            const material_response_jacobian_iter &material_response_jacobian_end,
             const testFunctionGradient_iter &testFunctionGradient_begin,
             const testFunctionGradient_iter &testFunctionGradient_end,
+            const interpolationFunction_type &interpolation_function,
+            const interpolationFunctionGradient_iter &interpolation_function_gradient_begin,
+            const interpolationFunctionGradient_iter &interpolation_function_gradient_end,
+            const full_material_response_dof_gradient_iter &full_material_response_dof_gradient_begin,
+            const full_material_response_dof_gradient_iter &full_material_response_dof_gradient_end,
+            const dUDotdU_type &dUDotdU,
             result_type &result,
             dRdRho_iter dRdRho_begin,         dRdRho_iter dRdRho_end,
             dRdU_iter dRdU_begin,             dRdU_iter dRdU_end,
@@ -354,7 +363,7 @@ namespace tardigradeBalanceEquations{
             int diffusion_index, class result_iter,
             class testFunctionGradient_iter, class material_response_iter
         >
-        void computeDiffusionTerm(
+        inline void computeDiffusionTerm(
             const material_response_iter &material_response_begin, const material_response_iter &material_response_end,
             const testFunctionGradient_iter &testFunctionGradient_begin,
             const testFunctionGradient_iter &testFunctionGradient_end,
