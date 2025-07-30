@@ -5762,7 +5762,6 @@ void evaluate_at_nodes_diffusion(
 
     for ( unsigned int j = low_bound; j < high_bound; ++j ){
 
-       try{
         hydraLinearTest2 linearTest(
             nphases, j, 10, num_additional_dof,
             0, 0.1, dof_vector, previous_dof_vector
@@ -5775,7 +5774,6 @@ void evaluate_at_nodes_diffusion(
             std::end(   *linearTest.getUnknownVector( ) ),
             std::begin( material_response ) + material_response_size * j
         );
-        }catch(std::exception &e){tardigradeErrorTools::printNestedExceptions(e); throw;}
 
     }
 
