@@ -6550,60 +6550,69 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfMass_hydra_diffusionTerm_fea, * boost
         }
     }
 
-//    std::fill( std::begin( result ), std::end( result ), 0 );
-//
-//    std::array< floatType, 8 * 1 * nphases * 8 * 1 * nphases > dRdRho;
-//
-//    std::array< floatType, 8 * 1 * nphases * 8 * 3 * nphases > dRdU;
-//
-//    std::array< floatType, 8 * 1 * nphases * 8 * 3 * nphases > dRdW;
-//
-//    std::array< floatType, 8 * 1 * nphases * 8 * 1 * nphases > dRdTheta;
-//
-//    std::array< floatType, 8 * 1 * nphases * 8 * 1 * nphases > dRdE;
-//
-//    std::array< floatType, 8 * 1 * nphases * 8 * 1 * nphases > dRdVF;
-//
-//    std::array< floatType, 8 * 1 * nphases * 8 * num_additional_dof * nphases > dRdZ;
-//
-//    std::array< floatType, 8 * 1 * nphases * 8 * 3 > dRdUMesh;
-//
-//    evaluate_at_nodes_diffusion< 3, 8, nphases, num_additional_dof >(
-//        std::cbegin( local_point ),   std::cend( local_point ),
-//        dt,
-//        std::cbegin( density_t ),     std::cend( density_t ),
-//        std::cbegin( density_tp1 ),   std::cend( density_tp1 ),
-//        std::cbegin( u_t ),           std::cend( u_t ),
-//        std::cbegin( u_tp1 ),         std::cend( u_tp1 ),
-//        std::cbegin( w_t ),           std::cend( w_t ),
-//        std::cbegin( w_tp1 ),         std::cend( w_tp1 ),
-//        std::cbegin( theta_t ),       std::cend( theta_t ),
-//        std::cbegin( theta_tp1 ),     std::cend( theta_tp1 ),
-//        std::cbegin( e_t ),           std::cend( e_t ),
-//        std::cbegin( e_tp1 ),         std::cend( e_tp1 ),
-//        std::cbegin( vf_t ),          std::cend( vf_t ),
-//        std::cbegin( vf_tp1 ),        std::cend( vf_tp1 ),
-//        std::cbegin( z_t ),           std::cend( z_t ),
-//        std::cbegin( z_tp1 ),         std::cend( z_tp1 ),
-//        std::cbegin( umesh_t ),       std::cend( umesh_t ),
-//        std::cbegin( umesh_tp1 ),     std::cend( umesh_tp1 ),
-//        std::cbegin( density_dot_t ), std::cend( density_dot_t ),
-//        std::cbegin( u_dot_t ),       std::cend( u_dot_t ),
-//        std::cbegin( X ),             std::cend( X ),
-//        alpha, std::begin( result ),  std::end( result ),
-//        std::begin( dRdRho ),         std::end( dRdRho ),
-//        std::begin( dRdU ),           std::end( dRdU ),
-//        std::begin( dRdW ),           std::end( dRdW ),
-//        std::begin( dRdTheta ),       std::end( dRdTheta ),
-//        std::begin( dRdE ),           std::end( dRdE ),
-//        std::begin( dRdVF ),          std::end( dRdVF ),
-//        std::begin( dRdZ ),           std::end( dRdZ ),
-//        std::begin( dRdUMesh ),       std::end( dRdUMesh )
-//        active_phase
-//    );
-//
-//    BOOST_TEST( result == answer, CHECK_PER_ELEMENT );
-//
+    std::fill( std::begin( result ), std::end( result ), 0 );
+
+    std::array< floatType, 8 * 1 * nphases * 8 * 1 * nphases > dRdRho;
+
+    std::array< floatType, 8 * 1 * nphases * 8 * 3 * nphases > dRdU;
+
+    std::array< floatType, 8 * 1 * nphases * 8 * 3 * nphases > dRdW;
+
+    std::array< floatType, 8 * 1 * nphases * 8 * 1 * nphases > dRdTheta;
+
+    std::array< floatType, 8 * 1 * nphases * 8 * 1 * nphases > dRdE;
+
+    std::array< floatType, 8 * 1 * nphases * 8 * 1 * nphases > dRdVF;
+
+    std::array< floatType, 8 * 1 * nphases * 8 * num_additional_dof * nphases > dRdZ;
+
+    std::array< floatType, 8 * 1 * nphases * 8 * 3 > dRdUMesh;
+
+    evaluate_at_nodes_diffusion< 3, 8, nphases, num_additional_dof >(
+        std::cbegin( local_point ),   std::cend( local_point ),
+        dt,
+        std::cbegin( density_t ),     std::cend( density_t ),
+        std::cbegin( density_tp1 ),   std::cend( density_tp1 ),
+        std::cbegin( u_t ),           std::cend( u_t ),
+        std::cbegin( u_tp1 ),         std::cend( u_tp1 ),
+        std::cbegin( w_t ),           std::cend( w_t ),
+        std::cbegin( w_tp1 ),         std::cend( w_tp1 ),
+        std::cbegin( theta_t ),       std::cend( theta_t ),
+        std::cbegin( theta_tp1 ),     std::cend( theta_tp1 ),
+        std::cbegin( e_t ),           std::cend( e_t ),
+        std::cbegin( e_tp1 ),         std::cend( e_tp1 ),
+        std::cbegin( vf_t ),          std::cend( vf_t ),
+        std::cbegin( vf_tp1 ),        std::cend( vf_tp1 ),
+        std::cbegin( z_t ),           std::cend( z_t ),
+        std::cbegin( z_tp1 ),         std::cend( z_tp1 ),
+        std::cbegin( umesh_t ),       std::cend( umesh_t ),
+        std::cbegin( umesh_tp1 ),     std::cend( umesh_tp1 ),
+        std::cbegin( density_dot_t ), std::cend( density_dot_t ),
+        std::cbegin( u_dot_t ),       std::cend( u_dot_t ),
+        std::cbegin( X ),             std::cend( X ),
+        alpha, std::begin( result ),  std::end( result ),
+        std::begin( dRdRho ),         std::end( dRdRho ),
+        std::begin( dRdU ),           std::end( dRdU ),
+        std::begin( dRdW ),           std::end( dRdW ),
+        std::begin( dRdTheta ),       std::end( dRdTheta ),
+        std::begin( dRdE ),           std::end( dRdE ),
+        std::begin( dRdVF ),          std::end( dRdVF ),
+        std::begin( dRdZ ),           std::end( dRdZ ),
+        std::begin( dRdUMesh ),       std::end( dRdUMesh ),
+        active_phase
+    );
+
+    for ( unsigned int i = 0; i < 8; ++i ){
+        for ( unsigned int j = 0; j < nphases; ++j ){
+            if ( j == active_phase ){
+                BOOST_TEST( result[ nphases * i + active_phase ] == answer[ nphases * i + active_phase ] );
+            }
+            else{
+                BOOST_TEST( result[ nphases * i + j ] == 0 );
+            }
+        }
+    }
+
 //    floatType eps = 7e-6;
 //
 //    // Check the derivatives w.r.t. the density
@@ -6646,7 +6655,8 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfMass_hydra_diffusionTerm_fea, * boost
 //                std::cbegin( density_dot_t ), std::cend( density_dot_t ),
 //                std::cbegin( u_dot_t ),       std::cend( u_dot_t ),
 //                std::cbegin( X ),             std::cend( X ),
-//                alpha, std::begin( vp ),  std::end( vp )
+//                alpha, std::begin( vp ),  std::end( vp ),
+//                active_phase
 //            );
 //
 //            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
@@ -6671,7 +6681,8 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfMass_hydra_diffusionTerm_fea, * boost
 //                std::cbegin( density_dot_t ), std::cend( density_dot_t ),
 //                std::cbegin( u_dot_t ),       std::cend( u_dot_t ),
 //                std::cbegin( X ),             std::cend( X ),
-//                alpha, std::begin( vm ),  std::end( vm )
+//                alpha, std::begin( vm ),  std::end( vm ),
+//                active_phase
 //            );
 //
 //            for ( unsigned int j = 0; j < outdim; ++j ){
@@ -6724,7 +6735,8 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfMass_hydra_diffusionTerm_fea, * boost
 //                std::cbegin( density_dot_t ), std::cend( density_dot_t ),
 //                std::cbegin( u_dot_t ),       std::cend( u_dot_t ),
 //                std::cbegin( X ),             std::cend( X ),
-//                alpha, std::begin( vp ),  std::end( vp )
+//                alpha, std::begin( vp ),  std::end( vp ),
+//                active_phase
 //            );
 //
 //            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
@@ -6749,7 +6761,8 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfMass_hydra_diffusionTerm_fea, * boost
 //                std::cbegin( density_dot_t ), std::cend( density_dot_t ),
 //                std::cbegin( u_dot_t ),       std::cend( u_dot_t ),
 //                std::cbegin( X ),             std::cend( X ),
-//                alpha, std::begin( vm ),  std::end( vm )
+//                alpha, std::begin( vm ),  std::end( vm ),
+//                active_phase
 //            );
 //
 //            for ( unsigned int j = 0; j < outdim; ++j ){
@@ -6802,7 +6815,8 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfMass_hydra_diffusionTerm_fea, * boost
 //                std::cbegin( density_dot_t ), std::cend( density_dot_t ),
 //                std::cbegin( u_dot_t ),       std::cend( u_dot_t ),
 //                std::cbegin( X ),             std::cend( X ),
-//                alpha, std::begin( vp ),  std::end( vp )
+//                alpha, std::begin( vp ),  std::end( vp ),
+//                active_phase
 //            );
 //
 //            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
@@ -6827,7 +6841,8 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfMass_hydra_diffusionTerm_fea, * boost
 //                std::cbegin( density_dot_t ), std::cend( density_dot_t ),
 //                std::cbegin( u_dot_t ),       std::cend( u_dot_t ),
 //                std::cbegin( X ),             std::cend( X ),
-//                alpha, std::begin( vm ),  std::end( vm )
+//                alpha, std::begin( vm ),  std::end( vm ),
+//                active_phase
 //            );
 //
 //            for ( unsigned int j = 0; j < outdim; ++j ){
@@ -6880,7 +6895,8 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfMass_hydra_diffusionTerm_fea, * boost
 //                std::cbegin( density_dot_t ), std::cend( density_dot_t ),
 //                std::cbegin( u_dot_t ),       std::cend( u_dot_t ),
 //                std::cbegin( X ),             std::cend( X ),
-//                alpha, std::begin( vp ),  std::end( vp )
+//                alpha, std::begin( vp ),  std::end( vp ),
+//                active_phase
 //            );
 //
 //            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
@@ -6905,7 +6921,8 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfMass_hydra_diffusionTerm_fea, * boost
 //                std::cbegin( density_dot_t ), std::cend( density_dot_t ),
 //                std::cbegin( u_dot_t ),       std::cend( u_dot_t ),
 //                std::cbegin( X ),             std::cend( X ),
-//                alpha, std::begin( vm ),  std::end( vm )
+//                alpha, std::begin( vm ),  std::end( vm ),
+//                active_phase
 //            );
 //
 //            for ( unsigned int j = 0; j < outdim; ++j ){
@@ -6958,7 +6975,8 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfMass_hydra_diffusionTerm_fea, * boost
 //                std::cbegin( density_dot_t ), std::cend( density_dot_t ),
 //                std::cbegin( u_dot_t ),       std::cend( u_dot_t ),
 //                std::cbegin( X ),             std::cend( X ),
-//                alpha, std::begin( vp ),  std::end( vp )
+//                alpha, std::begin( vp ),  std::end( vp ),
+//                active_phase
 //            );
 //
 //            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
@@ -6983,7 +7001,8 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfMass_hydra_diffusionTerm_fea, * boost
 //                std::cbegin( density_dot_t ), std::cend( density_dot_t ),
 //                std::cbegin( u_dot_t ),       std::cend( u_dot_t ),
 //                std::cbegin( X ),             std::cend( X ),
-//                alpha, std::begin( vm ),  std::end( vm )
+//                alpha, std::begin( vm ),  std::end( vm ),
+//                active_phase
 //            );
 //
 //            for ( unsigned int j = 0; j < outdim; ++j ){
@@ -7036,7 +7055,8 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfMass_hydra_diffusionTerm_fea, * boost
 //                std::cbegin( density_dot_t ), std::cend( density_dot_t ),
 //                std::cbegin( u_dot_t ),       std::cend( u_dot_t ),
 //                std::cbegin( X ),             std::cend( X ),
-//                alpha, std::begin( vp ),  std::end( vp )
+//                alpha, std::begin( vp ),  std::end( vp ),
+//                active_phase
 //            );
 //
 //            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
@@ -7061,7 +7081,8 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfMass_hydra_diffusionTerm_fea, * boost
 //                std::cbegin( density_dot_t ), std::cend( density_dot_t ),
 //                std::cbegin( u_dot_t ),       std::cend( u_dot_t ),
 //                std::cbegin( X ),             std::cend( X ),
-//                alpha, std::begin( vm ),  std::end( vm )
+//                alpha, std::begin( vm ),  std::end( vm ),
+//                active_phase
 //            );
 //
 //            for ( unsigned int j = 0; j < outdim; ++j ){
@@ -7113,7 +7134,8 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfMass_hydra_diffusionTerm_fea, * boost
 //                std::cbegin( density_dot_t ), std::cend( density_dot_t ),
 //                std::cbegin( u_dot_t ),       std::cend( u_dot_t ),
 //                std::cbegin( X ),             std::cend( X ),
-//                alpha, std::begin( vp ),  std::end( vp )
+//                alpha, std::begin( vp ),  std::end( vp ),
+//                active_phase
 //            );
 //
 //            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
@@ -7138,7 +7160,8 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfMass_hydra_diffusionTerm_fea, * boost
 //                std::cbegin( density_dot_t ), std::cend( density_dot_t ),
 //                std::cbegin( u_dot_t ),       std::cend( u_dot_t ),
 //                std::cbegin( X ),             std::cend( X ),
-//                alpha, std::begin( vm ),  std::end( vm )
+//                alpha, std::begin( vm ),  std::end( vm ),
+//                active_phase
 //            );
 //
 //            for ( unsigned int j = 0; j < outdim; ++j ){
@@ -7191,7 +7214,8 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfMass_hydra_diffusionTerm_fea, * boost
 //                std::cbegin( density_dot_t ), std::cend( density_dot_t ),
 //                std::cbegin( u_dot_t ),       std::cend( u_dot_t ),
 //                std::cbegin( X ),             std::cend( X ),
-//                alpha, std::begin( vp ),  std::end( vp )
+//                alpha, std::begin( vp ),  std::end( vp ),
+//                active_phase
 //            );
 //
 //            evaluate_at_nodes< 3, 8, nphases, num_additional_dof >(
@@ -7216,7 +7240,8 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfMass_hydra_diffusionTerm_fea, * boost
 //                std::cbegin( density_dot_t ), std::cend( density_dot_t ),
 //                std::cbegin( u_dot_t ),       std::cend( u_dot_t ),
 //                std::cbegin( X ),             std::cend( X ),
-//                alpha, std::begin( vm ),  std::end( vm )
+//                alpha, std::begin( vm ),  std::end( vm ),
+//                active_phase
 //            );
 //
 //            for ( unsigned int j = 0; j < outdim; ++j ){
