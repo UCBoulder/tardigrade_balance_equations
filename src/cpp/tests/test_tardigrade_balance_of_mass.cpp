@@ -5820,6 +5820,379 @@ void evaluate_at_nodes_diffusion(
 
 }
 
+template<
+    int dim, int node_count, int nphases, int num_additional_dof,
+    class xi_in, typename dt_type,
+    class density_t_in, class density_tp1_in,
+    class u_t_in,       class u_tp1_in,
+    class w_t_in,       class w_tp1_in,
+    class theta_t_in,   class theta_tp1_in,
+    class e_t_in,       class e_tp1_in,
+    class vf_t_in,      class vf_tp1_in,
+    class z_t_in,       class z_tp1_in,
+    class umesh_t_in, class umesh_tp1_in, class density_dot_t_in, class v_t_in,
+    class X_in, typename alpha_type, class value_out,
+    class dRdRho_iter,   class dRdU_iter, class dRdW_iter,
+    class dRdTheta_iter, class dRdE_iter, class dRdZ_iter,
+    class dRdVF_iter,    class dRdUMesh_iter,
+    int material_response_size = 22
+>
+void evaluate_at_nodes_diffusion(
+    const xi_in &xi_begin, const xi_in &xi_end, dt_type dt,
+    const density_t_in &density_t_begin,     const density_t_in &density_t_end,
+    const density_tp1_in &density_tp1_begin, const density_tp1_in &density_tp1_end,
+    const u_t_in       &u_t_begin,           const u_t_in       &u_t_end,
+    const u_tp1_in     &u_tp1_begin,         const u_tp1_in     &u_tp1_end,
+    const w_t_in       &w_t_begin,           const w_t_in       &w_t_end,
+    const w_tp1_in     &w_tp1_begin,         const w_tp1_in     &w_tp1_end,
+    const theta_t_in   &theta_t_begin,       const theta_t_in   &theta_t_end,
+    const theta_tp1_in &theta_tp1_begin,     const theta_tp1_in &theta_tp1_end,
+    const e_t_in       &e_t_begin,           const e_t_in       &e_t_end,
+    const e_tp1_in     &e_tp1_begin,         const e_tp1_in     &e_tp1_end,
+    const vf_t_in      &vf_t_begin,          const vf_t_in      &vf_t_end,
+    const vf_tp1_in    &vf_tp1_begin,        const vf_tp1_in    &vf_tp1_end,
+    const z_t_in       &z_t_begin,           const z_t_in       &z_t_end,
+    const z_tp1_in     &z_tp1_begin,         const z_tp1_in     &z_tp1_end,
+    const umesh_t_in &umesh_t_begin, const umesh_t_in &umesh_t_end,
+    const umesh_tp1_in &umesh_tp1_begin, const umesh_tp1_in &umesh_tp1_end,
+    const density_dot_t_in &density_dot_t_begin, const density_dot_t_in &density_dot_t_end,
+    const v_t_in &v_t_begin, const v_t_in &v_t_end, const X_in &X_begin, const X_in &X_end,
+    const alpha_type &alpha, value_out value_begin, value_out value_end,
+    dRdRho_iter   dRdRho_begin,   dRdRho_iter   dRdRho_end,
+    dRdU_iter     dRdU_begin,     dRdU_iter     dRdU_end,
+    dRdW_iter     dRdW_begin,     dRdW_iter     dRdW_end,
+    dRdTheta_iter dRdTheta_begin, dRdTheta_iter dRdTheta_end,
+    dRdE_iter     dRdE_begin,     dRdE_iter     dRdE_end,
+    dRdVF_iter    dRdVF_begin,    dRdVF_iter    dRdVF_end,
+    dRdZ_iter     dRdZ_begin,     dRdZ_iter     dRdZ_end,
+    dRdUMesh_iter dRdUMesh_begin, dRdUMesh_iter dRdUMesh_end,
+    const int active_phase = -1
+){
+
+    // Update the mesh nodes
+    std::array< typename std::iterator_traits<umesh_t_in  >::value_type, dim * node_count > x_t;
+    std::array< typename std::iterator_traits<umesh_tp1_in>::value_type, dim * node_count > x_tp1;
+
+    std::transform( X_begin, X_end,   umesh_t_begin,   std::begin( x_t ), std::plus<typename std::iterator_traits<umesh_t_in  >::value_type>( ) );
+    std::transform( X_begin, X_end, umesh_tp1_begin, std::begin( x_tp1 ), std::plus<typename std::iterator_traits<umesh_tp1_in>::value_type>( ) );
+
+    // Calculate the current rates of change
+    std::array< typename std::iterator_traits<density_tp1_in>::value_type, node_count * nphases > density_dot_tp1;
+    std::array< typename std::iterator_traits<u_tp1_in>::value_type, dim * node_count * nphases > v_tp1;
+
+    floatType dDensityDotdDensity;
+
+    compute_current_rate_of_change(
+        dt, density_t_begin, density_t_end, density_tp1_begin, density_tp1_end,
+        density_dot_t_begin, density_dot_t_end, alpha,
+        std::begin( density_dot_tp1 ), std::end( density_dot_tp1 ),
+        dDensityDotdDensity
+    );
+
+    floatType dUDotdU;
+
+    compute_current_rate_of_change(
+        dt, u_t_begin, u_t_end, u_tp1_begin, u_tp1_end,
+        v_t_begin, v_t_end, alpha,
+        std::begin( v_tp1 ), std::end( v_tp1 ),
+        dUDotdU
+    );
+
+    // Instantiate the element
+    tardigradeBalanceEquations::finiteElementUtilities::LinearHex<
+        floatType, typename std::array< floatType, 24 >::const_iterator,
+        typename std::array< floatType, 3>::const_iterator,
+        typename std::array< floatType, 8>::iterator,
+        typename std::array< floatType, 24>::iterator
+    > e(
+        std::cbegin( x_tp1 ), std::cend( x_tp1 ), X_begin, X_end
+    );
+
+    std::array<
+        typename std::iterator_traits<density_tp1_in>::value_type, nphases
+    > density_tp1_p, density_dot_tp1_p, theta_tp1_p, e_tp1_p, vf_tp1_p;
+
+    std::array<
+        typename std::iterator_traits<u_tp1_in>::value_type, dim * nphases
+    > v_tp1_p, w_tp1_p;
+
+    std::array<
+         typename std::iterator_traits<z_tp1_in>::value_type, num_additional_dof
+    > z_tp1_p;
+
+    // Interpolate quantities to the local point
+    e.InterpolateQuantity(
+        xi_begin, xi_end, density_tp1_begin, density_tp1_end,
+        std::begin( density_tp1_p ), std::end( density_tp1_p )
+    );
+
+    e.InterpolateQuantity(
+        xi_begin, xi_end, std::cbegin( density_dot_tp1 ), std::cend( density_dot_tp1 ),
+        std::begin( density_dot_tp1_p ), std::end( density_dot_tp1_p )
+    );
+
+    e.InterpolateQuantity(
+        xi_begin, xi_end, std::cbegin( v_tp1 ), std::cend( v_tp1 ),
+        std::begin( v_tp1_p ), std::end( v_tp1_p )
+    );
+
+    e.InterpolateQuantity(
+        xi_begin, xi_end, w_tp1_begin, w_tp1_end,
+        std::begin( w_tp1_p ), std::end( w_tp1_p )
+    );
+
+    e.InterpolateQuantity(
+        xi_begin, xi_end, theta_tp1_begin, theta_tp1_end,
+        std::begin( theta_tp1_p ), std::end( theta_tp1_p )
+    );
+
+    e.InterpolateQuantity(
+        xi_begin, xi_end, e_tp1_begin, e_tp1_end,
+        std::begin( e_tp1_p ), std::end( e_tp1_p )
+    );
+
+    e.InterpolateQuantity(
+        xi_begin, xi_end, vf_tp1_begin, vf_tp1_end,
+        std::begin( vf_tp1_p ), std::end( vf_tp1_p )
+    );
+
+    e.InterpolateQuantity(
+        xi_begin, xi_end, z_tp1_begin, z_tp1_end,
+        std::begin( z_tp1_p ), std::end( z_tp1_p )
+    );
+
+    // Compute the gradients at the local point
+    std::array<
+        typename std::iterator_traits<density_tp1_in>::value_type, dim * nphases
+    > grad_density_tp1, grad_theta_tp1, grad_e_tp1, grad_vf_tp1;
+
+    std::array<
+        typename std::iterator_traits<u_tp1_in>::value_type, dim * dim * nphases
+    > grad_velocity_tp1, grad_w_tp1;
+
+    std::array<
+        typename std::iterator_traits<u_tp1_in>::value_type,dim * num_additional_dof
+    > grad_z_tp1;
+
+    e.GetGlobalQuantityGradient(
+        xi_begin, xi_end, density_tp1_begin, density_tp1_end,
+        std::begin( grad_density_tp1 ), std::end( grad_density_tp1 )
+    );
+
+    e.GetGlobalQuantityGradient(
+        xi_begin, xi_end, std::cbegin( v_tp1 ), std::cend( v_tp1 ),
+        std::begin( grad_velocity_tp1 ), std::end( grad_velocity_tp1 )
+    );
+
+    e.GetGlobalQuantityGradient(
+        xi_begin, xi_end, w_tp1_begin, w_tp1_end,
+        std::begin( grad_w_tp1 ), std::end( grad_w_tp1 )
+    );
+
+    e.GetGlobalQuantityGradient(
+        xi_begin, xi_end, theta_tp1_begin, theta_tp1_end,
+        std::begin( grad_theta_tp1 ), std::end( grad_theta_tp1 )
+    );
+
+    e.GetGlobalQuantityGradient(
+        xi_begin, xi_end, e_tp1_begin, e_tp1_end,
+        std::begin( grad_e_tp1 ), std::end( grad_e_tp1 )
+    );
+
+    e.GetGlobalQuantityGradient(
+        xi_begin, xi_end, vf_tp1_begin, vf_tp1_end,
+        std::begin( grad_vf_tp1 ), std::end( grad_vf_tp1 )
+    );
+
+    e.GetGlobalQuantityGradient(
+        xi_begin, xi_end, z_tp1_begin, z_tp1_end,
+        std::begin( grad_z_tp1 ), std::end( grad_z_tp1 )
+    );
+
+    // Get the Jacobian of transformation
+    std::array< floatType, dim * dim > dxdxi;
+    e.GetLocalQuantityGradient(
+        xi_begin, xi_end, std::cbegin( x_tp1 ), std::cend( x_tp1 ),
+        std::begin( dxdxi ), std::end( dxdxi )
+    );
+
+    floatType J = tardigradeVectorTools::determinant
+    <
+        typename std::array< floatType, dim * dim >::const_iterator,
+        floatType, 3, 3
+    >(
+        std::cbegin( dxdxi ), std::cend( dxdxi ),
+        3, 3
+    );
+
+    std::vector< floatType > dof_vector( nphases * ( 1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3 ) + num_additional_dof + 3 * num_additional_dof, 0 );
+
+    std::copy(
+        std::begin( density_tp1_p ),
+        std::end(   density_tp1_p ),
+        std::begin( dof_vector ) + nphases * 0
+    );
+
+    std::copy(
+        std::begin( w_tp1_p ),
+        std::end(   w_tp1_p ),
+        std::begin( dof_vector ) + nphases * 1
+    );
+
+    std::copy(
+        std::begin( v_tp1_p ),
+        std::end(   v_tp1_p ),
+        std::begin( dof_vector ) + nphases * ( 1 + 3 )
+    );
+
+    std::copy(
+        std::begin( theta_tp1_p ),
+        std::end(   theta_tp1_p ),
+        std::begin( dof_vector ) + nphases * ( 1 + 3 + 3 )
+    );
+
+    std::copy(
+        std::begin( e_tp1_p ),
+        std::end(   e_tp1_p ),
+        std::begin( dof_vector ) + nphases * ( 1 + 3 + 3 + 1 )
+    );
+
+    std::copy(
+        std::begin( vf_tp1_p ),
+        std::end(   vf_tp1_p ),
+        std::begin( dof_vector ) + nphases * ( 1 + 3 + 3 + 1 + 1 )
+    );
+
+    std::copy(
+        std::begin( z_tp1_p ),
+        std::end(   z_tp1_p ),
+        std::begin( dof_vector ) + nphases * ( 1 + 3 + 3 + 1 + 1 + 1 )
+    );
+
+    std::copy(
+        std::begin( grad_density_tp1 ),
+        std::end(   grad_density_tp1 ),
+        std::begin( dof_vector ) + nphases * ( 1 + 3 + 3 + 1 + 1 + 1 ) + num_additional_dof
+    );
+
+    std::copy(
+        std::begin( grad_w_tp1 ),
+        std::end(   grad_w_tp1 ),
+        std::begin( dof_vector ) + nphases * ( 1 + 3 + 3 + 1 + 1 + 1 + 3 ) + num_additional_dof
+    );
+
+    std::copy(
+        std::begin( grad_velocity_tp1 ),
+        std::end(   grad_velocity_tp1 ),
+        std::begin( dof_vector ) + nphases * ( 1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 ) + num_additional_dof
+    );
+
+    std::copy(
+        std::begin( grad_theta_tp1 ),
+        std::end(   grad_theta_tp1 ),
+        std::begin( dof_vector ) + nphases * ( 1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 ) + num_additional_dof
+    );
+
+    std::copy(
+        std::begin( grad_e_tp1 ),
+        std::end(   grad_e_tp1 ),
+        std::begin( dof_vector ) + nphases * ( 1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 ) + num_additional_dof
+    );
+
+    std::copy(
+        std::begin( grad_vf_tp1 ),
+        std::end(   grad_vf_tp1 ),
+        std::begin( dof_vector ) + nphases * ( 1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 ) + num_additional_dof
+    );
+
+    std::copy(
+        std::begin( grad_z_tp1 ),
+        std::end(   grad_z_tp1 ),
+        std::begin( dof_vector ) + nphases * ( 1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3 ) + num_additional_dof
+    );
+
+    std::vector< floatType > previous_dof_vector( dof_vector.size( ) );
+
+    std::array< floatType, node_count> Ns;
+    e.GetShapeFunctions( xi_begin, xi_end, std::begin( Ns ), std::end( Ns ) );
+
+    std::array< floatType, dim * node_count> dNdxs;
+    e.GetGlobalShapeFunctionGradients( xi_begin, xi_end, std::begin( x_tp1 ), std::end( x_tp1 ), std::begin( dNdxs ), std::end( dNdxs ) );
+
+    unsigned int low_bound  = 0;
+    unsigned int high_bound = nphases;
+
+    if ( active_phase >= 0 ){
+
+        low_bound  = active_phase;
+        high_bound = active_phase + 1;
+
+    }
+
+    // Assemble the material response
+    std::array< floatType, nphases * material_response_size > material_response;
+    std::fill( std::begin( material_response ), std::end( material_response ), 0 );
+
+    for ( unsigned int j = low_bound; j < high_bound; ++j ){
+
+        hydraLinearTest2 linearTest(
+            nphases, j, 10, num_additional_dof,
+            0, 0.1, dof_vector, previous_dof_vector
+        );
+
+        linearTest.evaluate( );
+
+        std::copy(
+            std::begin( *linearTest.getUnknownVector( ) ),
+            std::end(   *linearTest.getUnknownVector( ) ),
+            std::begin( material_response ) + material_response_size * j
+        );
+
+    }
+
+    std::fill( value_begin, value_end, 0 );
+
+    for ( unsigned int i = 0; i < node_count; ++i ){
+
+        if ( active_phase >= 0 ){
+
+            unsigned int j = active_phase;
+
+            // Single phase evaluation
+            tardigradeBalanceEquations::balanceOfMass::computeDiffusionTerm<10>(
+                std::cbegin( material_response ) + material_response_size * j,
+                std::cend( material_response ) + material_response_size * ( j + 1 ),
+                std::begin( dNdxs ) + dim * i, std::begin( dNdxs ) + dim * ( i + 1 ),
+                *( value_begin + nphases * i + j )
+            );
+    
+            *( value_begin + nphases * i + j ) *= J;
+
+        }
+        else{
+
+            // Multiphase evaluation
+            tardigradeBalanceEquations::balanceOfMass::computeDiffusionTerm<10>(
+                std::cbegin( material_response ), std::cend( material_response ),
+                std::begin( dNdxs ) + dim * i, std::begin( dNdxs ) + dim * ( i + 1 ),
+                value_begin + nphases * i, value_begin + nphases * ( i + 1 )
+            );
+
+            std::transform(
+                value_begin + nphases * i, value_begin + nphases * ( i + 1 ), value_begin + nphases * i,
+                std::bind(
+                    std::multiplies< typename std::iterator_traits< value_out >::value_type >( ),
+                    std::placeholders::_1,
+                    J
+                )
+            );
+
+        }
+
+    }
+
+}
+
 BOOST_AUTO_TEST_CASE( test_computeDiffusionTerm, * boost::unit_test::tolerance( DEFAULT_TEST_TOLERANCE ) ){
 
     std::array< double, 5 > material_response = { 0.1, 0.2, 0.3, 0.4, 0.5 };
