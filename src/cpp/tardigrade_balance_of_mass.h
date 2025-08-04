@@ -336,7 +336,7 @@ namespace tardigradeBalanceEquations{
             int volume_fraction_index = 9,
             int additional_dof_index  = 10
         >
-        void computeDiffusionTerm(
+        inline void computeDiffusionTerm(
             const material_response_iter &material_response_begin, const material_response_iter &material_response_end,
             const material_response_jacobian_iter &material_response_jacobian_begin,
             const material_response_jacobian_iter &material_response_jacobian_end,
