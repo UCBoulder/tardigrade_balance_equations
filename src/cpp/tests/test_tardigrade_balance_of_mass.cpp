@@ -5788,7 +5788,7 @@ void evaluate_at_nodes_diffusion(
             // Single phase evaluation
             tardigradeBalanceEquations::balanceOfMass::computeDiffusionTerm<10>(
                 std::cbegin( material_response ) + material_response_size * j,
-                std::cend( material_response ) + material_response_size * ( j + 1 ),
+                std::cbegin( material_response ) + material_response_size * ( j + 1 ),
                 std::begin( dNdxs ) + dim * i, std::begin( dNdxs ) + dim * ( i + 1 ),
                 *( value_begin + nphases * i + j )
             );
@@ -6025,7 +6025,13 @@ void evaluate_at_nodes_diffusion(
         3, 3
     );
 
-    std::vector< floatType > dof_vector( nphases * ( 1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3 ) + num_additional_dof + 3 * num_additional_dof, 0 );
+    constexpr unsigned int num_phase_dof = 10;
+
+    constexpr unsigned int num_dof = ( 1 + 3 + 3 + 1 + 1 + 1 ) + num_additional_dof;
+
+    constexpr unsigned int dof_vector_size = ( nphases * ( 1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3 ) + num_additional_dof + 3 * num_additional_dof );
+
+    std::vector< floatType > dof_vector( dof_vector_size, 0 );
 
     std::copy(
         std::begin( density_tp1_p ),
@@ -6133,6 +6139,9 @@ void evaluate_at_nodes_diffusion(
     std::array< floatType, nphases * material_response_size > material_response;
     std::fill( std::begin( material_response ), std::end( material_response ), 0 );
 
+    std::array< floatType, nphases * material_response_size * dof_vector_size > material_response_jacobian;
+    std::fill( std::begin( material_response_jacobian ), std::end( material_response_jacobian ), 0 );
+
     for ( unsigned int j = low_bound; j < high_bound; ++j ){
 
         hydraLinearTest2 linearTest(
@@ -6148,9 +6157,48 @@ void evaluate_at_nodes_diffusion(
             std::begin( material_response ) + material_response_size * j
         );
 
+        std::vector full_jacobian = linearTest.getFullTangent( );
+
+        std::copy(
+            std::begin( full_jacobian ),
+            std::end(   full_jacobian ),
+            std::begin( material_response_jacobian ) + material_response_size * dof_vector_size * j
+        );
+
     }
 
     std::fill( value_begin, value_end, 0 );
+
+    std::array< floatType, node_count * nphases > value_n;
+
+    std::array< floatType, nphases * 1 * nphases * 1 > dRdRho_n, dRdTheta_n, dRdE_n, dRdVF_n;
+
+    std::array< floatType, nphases * 1 * nphases * 3 > dRdU_n;
+
+    std::array< floatType, nphases * 1 * nphases * 3 > dRdW_n;
+
+    std::array< floatType, nphases * 1 * num_additional_dof > dRdZ_n;
+
+    std::array< floatType, nphases * 1 * 3 > dRdUMesh_n;
+
+    std::fill( std::begin( value_n ),    std::end( value_n ),    0 );
+    std::fill( dRdRho_begin,   dRdRho_end,   0 );
+    std::fill( dRdU_begin,     dRdU_end,     0 );
+    std::fill( dRdW_begin,     dRdW_end,     0 );
+    std::fill( dRdTheta_begin, dRdTheta_end, 0 );
+    std::fill( dRdE_begin,     dRdE_end,     0 );
+    std::fill( dRdVF_begin,    dRdVF_end,    0 );
+    std::fill( dRdZ_begin,     dRdZ_end,     0 );
+    std::fill( dRdUMesh_begin, dRdUMesh_end, 0 );
+
+    std::fill( std::begin( dRdRho_n ),   std::end( dRdRho_n ),   0 );
+    std::fill( std::begin( dRdU_n ),     std::end( dRdU_n ),     0 );
+    std::fill( std::begin( dRdW_n ),     std::end( dRdW_n ),     0 );
+    std::fill( std::begin( dRdTheta_n ), std::end( dRdTheta_n ), 0 );
+    std::fill( std::begin( dRdE_n ),     std::end( dRdE_n ),     0 );
+    std::fill( std::begin( dRdVF_n ),    std::end( dRdVF_n ),    0 );
+    std::fill( std::begin( dRdZ_n ),     std::end( dRdZ_n ),     0 );
+    std::fill( std::begin( dRdUMesh_n ), std::end( dRdUMesh_n ), 0 );
 
     for ( unsigned int i = 0; i < node_count; ++i ){
 
@@ -6161,7 +6209,7 @@ void evaluate_at_nodes_diffusion(
             // Single phase evaluation
             tardigradeBalanceEquations::balanceOfMass::computeDiffusionTerm<10>(
                 std::cbegin( material_response ) + material_response_size * j,
-                std::cend( material_response ) + material_response_size * ( j + 1 ),
+                std::cbegin( material_response ) + material_response_size * ( j + 1 ),
                 std::begin( dNdxs ) + dim * i, std::begin( dNdxs ) + dim * ( i + 1 ),
                 *( value_begin + nphases * i + j )
             );
@@ -6186,6 +6234,141 @@ void evaluate_at_nodes_diffusion(
                     J
                 )
             );
+
+        }
+        for ( unsigned int k = 0; k < node_count; ++k ){
+
+            if ( active_phase >= 0 ){
+    
+                unsigned int j = active_phase;
+    
+                // Single phase evaluation
+                tardigradeBalanceEquations::balanceOfMass::computeDiffusionTerm<dim,10,num_dof>(
+                    std::cbegin( material_response ) + material_response_size * j,
+                    std::cbegin( material_response ) + material_response_size * ( j + 1 ),
+                    std::cbegin( material_response_jacobian ) + material_response_size * dof_vector_size * j,
+                    std::cbegin( material_response_jacobian ) + material_response_size * dof_vector_size * ( j + 1 ),
+                    std::begin( dNdxs ) + dim * i, std::begin( dNdxs ) + dim * ( i + 1 ),
+                    Ns[ k ],
+                    std::cbegin( dNdxs ) + dim * k, std::cbegin( dNdxs ) + dim * ( k + 1 ),
+                    std::begin( dof_vector ) + ( nphases * num_phase_dof + num_additional_dof ), std::end( dof_vector ),
+                    dUDotdU,
+                    value_n[ nphases * i + j ],
+                    std::begin( dRdRho_n )   + nphases * 1 * j,        std::begin( dRdRho_n )   + nphases * 1 * ( j + 1 ),
+                    std::begin( dRdU_n )     + nphases * 3 * j,        std::begin( dRdU_n )     + nphases * 3 * ( j + 1 ),
+                    std::begin( dRdW_n )     + nphases * 3 * j,        std::begin( dRdW_n )     + nphases * 3 * ( j + 1 ),
+                    std::begin( dRdTheta_n ) + nphases * 1 * j,        std::begin( dRdTheta_n ) + nphases * 1 * ( j + 1 ),
+                    std::begin( dRdE_n )     + nphases * 1 * j,        std::begin( dRdE_n )     + nphases * 1 * ( j + 1 ),
+                    std::begin( dRdVF_n )    + nphases * 1 * j,        std::begin( dRdVF_n )    + nphases * 1 * ( j + 1 ),
+                    std::begin( dRdZ_n )     + num_additional_dof * j, std::begin( dRdZ_n )     + num_additional_dof * ( j + 1 ),
+                    std::begin( dRdUMesh_n ) + 3 * j,                  std::begin( dRdUMesh_n ) + 3 * ( j + 1 )
+                );
+        
+                value_n[ nphases * i + j ] *= J;
+
+            }
+            else{
+    
+//                // Multiphase evaluation
+//                tardigradeBalanceEquations::balanceOfMass::computeDiffusionTerm<dim,10,num_dof>(
+//                    std::cbegin( density_tp1_p ),              std::cend( density_tp1_p ),
+//                    std::cbegin( density_dot_tp1_p ),          std::cend( density_dot_tp1_p ),
+//                    std::cbegin( grad_density_tp1 ),           std::cend( grad_density_tp1 ),
+//                    std::cbegin( v_tp1_p ),                    std::cend( v_tp1_p ),
+//                    std::cbegin( grad_velocity_tp1 ),          std::cend( grad_velocity_tp1 ),
+//                    std::cbegin( material_response ),          std::cend( material_response ),
+//                    std::cbegin( material_response_jacobian ), std::cend( material_response_jacobian ),
+//                    Ns[ i ],
+//                    Ns[ k ],
+//                    std::cbegin( dNdxs ) + dim * k,               std::cbegin( dNdxs ) + dim * ( k + 1 ),
+//                    std::begin( dof_vector ) + ( nphases * num_phase_dof + num_additional_dof ), std::end( dof_vector ),
+//                    dDensityDotdDensity,                          dUDotdU,
+//                    std::begin( value_n ) + nphases * i,          std::begin( value_n ) + nphases * ( i + 1 ),
+//                    std::begin( dRdRho_n ),                       std::end( dRdRho_n ),
+//                    std::begin( dRdU_n ),                         std::end( dRdU_n ),
+//                    std::begin( dRdW_n ),                         std::end( dRdW_n ),
+//                    std::begin( dRdTheta_n ),                     std::end( dRdTheta_n ),
+//                    std::begin( dRdE_n ),                         std::end( dRdE_n ),
+//                    std::begin( dRdVF_n ),                        std::end( dRdVF_n ),
+//                    std::begin( dRdZ_n ),                         std::end( dRdZ_n ),
+//                    std::begin( dRdUMesh_n ),                     std::end( dRdUMesh_n )
+//                );
+//
+//                std::transform(
+//                    std::begin( value_n ) + nphases * i, std::begin( value_n ) + nphases * ( i + 1 ), std::begin( value_n ) + nphases * i,
+//                    std::bind(
+//                        std::multiplies< typename std::iterator_traits< value_out >::value_type >( ),
+//                        std::placeholders::_1,
+//                        J
+//                    )
+//                );
+
+            }
+
+            for ( unsigned int j = 0; j < nphases; ++j ){
+
+                BOOST_CHECK( value_n[ nphases * i + j ] == *( value_begin + nphases * i + j ) );
+
+                // node, phase, node, x
+                //    i,     j,    k, l
+
+                for ( unsigned int l = 0; l < nphases; ++l ){
+
+                    *( dRdRho_begin + nphases * node_count * nphases * 1 * i + node_count * nphases * 1 * j + nphases * 1 * k + l )
+                        += dRdRho_n[ nphases * j + l ] * J;
+
+                }
+
+                for ( unsigned int l = 0; l < nphases * dim; ++l ){
+
+                    *( dRdU_begin + nphases * node_count * nphases * dim * i + node_count * nphases * dim * j + nphases * dim * k + l )
+                        += dRdU_n[ nphases * dim * j + l ] * J;
+
+                }
+
+                for ( unsigned int l = 0; l < nphases * dim; ++l ){
+
+                    *( dRdW_begin + nphases * node_count * nphases * dim * i + node_count * nphases * dim * j + nphases * dim * k + l )
+                        += dRdW_n[ nphases * dim * j + l ] * J;
+
+                }
+
+                for ( unsigned int l = 0; l < nphases; ++l ){
+
+                    *( dRdTheta_begin + nphases * node_count * nphases * 1 * i + node_count * nphases * 1 * j + nphases * 1 * k + l )
+                        += dRdTheta_n[ nphases * 1 * j + l ] * J;
+
+                }
+
+                for ( unsigned int l = 0; l < nphases; ++l ){
+
+                    *( dRdE_begin + nphases * node_count * nphases * 1 * i + node_count * nphases * 1 * j + nphases * 1 * k + l )
+                        += dRdE_n[ nphases * 1 * j + l ] * J;
+
+                }
+
+                for ( unsigned int l = 0; l < nphases; ++l ){
+
+                    *( dRdVF_begin + nphases * node_count * nphases * 1 * i + node_count * nphases * 1 * j + nphases * 1 * k + l )
+                        += dRdVF_n[ nphases * 1 * j + l ] * J;
+
+                }
+
+                for ( unsigned int l = 0; l < num_additional_dof; ++l ){
+
+                    *( dRdZ_begin + nphases * node_count * num_additional_dof * 1 * i + node_count * num_additional_dof * 1 * j + num_additional_dof * 1 * k + l )
+                        += dRdZ_n[ num_additional_dof * 1 * j + l ] * J;
+
+                }
+
+                for ( unsigned int l = 0; l < dim; ++l ){
+
+                    *( dRdUMesh_begin + nphases * node_count * 3 * i + node_count * 3 * j + 3 * k + l )
+                        += dRdUMesh_n[ 3 * j + l ] * J;
+
+                }
+
+            }
 
         }
 
