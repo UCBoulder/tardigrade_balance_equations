@@ -313,8 +313,8 @@ namespace tardigradeBalanceEquations{
         >
         inline void computeDiffusionTerm(
             const material_response_iter &material_response_begin, const material_response_iter &material_response_end,
-            const testFunctionGradient_iter &testFunctionGradient_begin,
-            const testFunctionGradient_iter &testFunctionGradient_end,
+            const testFunctionGradient_iter &test_function_gradient_begin,
+            const testFunctionGradient_iter &test_function_gradient_end,
             result_type &result
         );
 
@@ -340,8 +340,8 @@ namespace tardigradeBalanceEquations{
             const material_response_iter &material_response_begin, const material_response_iter &material_response_end,
             const material_response_jacobian_iter &material_response_jacobian_begin,
             const material_response_jacobian_iter &material_response_jacobian_end,
-            const testFunctionGradient_iter &testFunctionGradient_begin,
-            const testFunctionGradient_iter &testFunctionGradient_end,
+            const testFunctionGradient_iter &test_function_gradient_begin,
+            const testFunctionGradient_iter &test_function_gradient_end,
             const interpolationFunction_type &interpolation_function,
             const interpolationFunctionGradient_iter &interpolation_function_gradient_begin,
             const interpolationFunctionGradient_iter &interpolation_function_gradient_end,
@@ -365,8 +365,8 @@ namespace tardigradeBalanceEquations{
         >
         inline void computeDiffusionTerm(
             const material_response_iter &material_response_begin, const material_response_iter &material_response_end,
-            const testFunctionGradient_iter &testFunctionGradient_begin,
-            const testFunctionGradient_iter &testFunctionGradient_end,
+            const testFunctionGradient_iter &test_function_gradient_begin,
+            const testFunctionGradient_iter &test_function_gradient_end,
             result_iter result_begin, result_iter result_end
         );
 
