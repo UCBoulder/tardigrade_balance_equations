@@ -370,6 +370,47 @@ namespace tardigradeBalanceEquations{
             result_iter result_begin, result_iter result_end
         );
 
+        template<
+            int material_response_dim, int diffusion_index, int material_response_num_dof,
+            typename dUDotdU_type, class result_iter,
+            class testFunctionGradient_iter, class material_response_iter,
+            typename interpolationFunction_type,
+            class interpolationFunctionGradient_iter, class material_response_jacobian_iter,
+            class full_material_response_dof_gradient_iter,
+            class dRdRho_iter, class dRdU_iter, class dRdW_iter,
+            class dRdTheta_iter, class dRdE_iter, class dRdVF_iter,
+            class dRdZ_iter, class dRdUMesh_iter,
+            int density_index         = 0,
+            int displacement_index    = 1,
+            int velocity_index        = 4,
+            int temperature_index     = 7,
+            int internal_energy_index = 8,
+            int volume_fraction_index = 9,
+            int additional_dof_index  = 10
+        >
+        inline void computeDiffusionTerm(
+            const material_response_iter &material_response_begin, const material_response_iter &material_response_end,
+            const material_response_jacobian_iter &material_response_jacobian_begin,
+            const material_response_jacobian_iter &material_response_jacobian_end,
+            const testFunctionGradient_iter &test_function_gradient_begin,
+            const testFunctionGradient_iter &test_function_gradient_end,
+            const interpolationFunction_type &interpolation_function,
+            const interpolationFunctionGradient_iter &interpolation_function_gradient_begin,
+            const interpolationFunctionGradient_iter &interpolation_function_gradient_end,
+            const full_material_response_dof_gradient_iter &full_material_response_dof_gradient_begin,
+            const full_material_response_dof_gradient_iter &full_material_response_dof_gradient_end,
+            const dUDotdU_type &dUDotdU,
+            result_iter result_begin,         result_iter result_end,
+            dRdRho_iter dRdRho_begin,         dRdRho_iter dRdRho_end,
+            dRdU_iter dRdU_begin,             dRdU_iter dRdU_end,
+            dRdW_iter dRdW_begin,             dRdW_iter dRdW_end,
+            dRdTheta_iter dRdTheta_begin,     dRdTheta_iter dRdTheta_end,
+            dRdE_iter dRdE_begin,             dRdE_iter dRdE_end,
+            dRdVF_iter dRdVF_begin,           dRdVF_iter dRdVF_end,
+            dRdZ_iter dRdZ_begin,             dRdZ_iter dRdZ_end,
+            dRdUMesh_iter dRdUMesh_begin,     dRdUMesh_iter dRdUMesh_end
+        );
+
     }
 
 }
