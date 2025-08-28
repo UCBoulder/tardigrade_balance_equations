@@ -75,9 +75,9 @@ namespace tardigradeBalanceEquations{
                 v.second != result_end;
                 ++v.first, ++v.second ){
 
-                *v.second = testFunction * ( *( surfaceGrowthVelocity_begin + v.first ) )
-                          - lagrangeMultiplier * ( *( testFunctionGradient_begin + v.first ) )
-                          - testFunction * ( *( lagrangeMultiplierGradient_begin + v.first ) );
+                *v.second = testFunction * ( *( surfaceGrowthVelocity_begin + v.first ) );
+//                          - lagrangeMultiplier * ( *( testFunctionGradient_begin + v.first ) )
+//                          - testFunction * ( *( lagrangeMultiplierGradient_begin + v.first ) );
 
             }
 
@@ -196,8 +196,8 @@ namespace tardigradeBalanceEquations{
 
                 *( dRdV_begin + surface_growth_velocity_size * v.first + v.first ) += testFunction * interpolationFunction; 
 
-                *( dRdL_begin + v.first ) -= testFunction * ( *( interpolationFunctionGradient_begin + v.first ) )
-                                           + ( *( testFunctionGradient_begin + v.first ) ) * interpolationFunction;
+//                *( dRdL_begin + v.first ) -= testFunction * ( *( interpolationFunctionGradient_begin + v.first ) )
+//                                           + ( *( testFunctionGradient_begin + v.first ) ) * interpolationFunction;
 
                 for (
                     auto w = std::pair< unsigned int, interpolationFunctionGradient_iter >( 0, interpolationFunctionGradient_begin );
@@ -206,10 +206,10 @@ namespace tardigradeBalanceEquations{
                 ){
 
                     *( dRdUMesh_begin + interpolation_function_gradient_size * v.first + w.first )
-                    += (
-                           ( *( testFunctionGradient_begin + w.first ) ) * lagrangeMultiplier + ( *( lagrangeMultiplierGradient_begin + w.first ) ) * testFunction
-                       ) * ( *( interpolationFunctionGradient_begin + v.first ) )
-                     + ( *( result_begin + v.first ) ) * ( *w.second );
+//                    += (
+//                           ( *( testFunctionGradient_begin + w.first ) ) * lagrangeMultiplier + ( *( lagrangeMultiplierGradient_begin + w.first ) ) * testFunction
+//                       ) * ( *( interpolationFunctionGradient_begin + v.first ) )
+                     += ( *( result_begin + v.first ) ) * ( *w.second );
 
                 }
 
@@ -272,8 +272,8 @@ namespace tardigradeBalanceEquations{
                 ++v.first, ++v.second
             ){
 
-                result += testFunction * ( *( surfaceGrowthVelocityGradient_begin + surface_growth_velocity_size * v.first + v.first ) )
-                        + ( *( testFunctionGradient_begin + v.first ) ) * ( *v.second );
+                result += testFunction * ( *( surfaceGrowthVelocityGradient_begin + surface_growth_velocity_size * v.first + v.first ) );
+//                        + ( *( testFunctionGradient_begin + v.first ) ) * ( *v.second );
 
             }
 
@@ -369,8 +369,8 @@ namespace tardigradeBalanceEquations{
                 ++v.first, ++v.second
             ){
 
-                *( dRdV_begin + v.first ) += ( *( testFunctionGradient_begin + v.first ) ) * interpolationFunction
-                                           + testFunction * ( *( interpolationFunctionGradient_begin + v.first ) );
+                *( dRdV_begin + v.first )// += ( *( testFunctionGradient_begin + v.first ) ) * interpolationFunction
+                                          += testFunction * ( *( interpolationFunctionGradient_begin + v.first ) );
 
                 *( dRdUMesh_begin + v.first ) += result * ( *( interpolationFunctionGradient_begin + v.first ) );
 
@@ -381,8 +381,8 @@ namespace tardigradeBalanceEquations{
                 ){
 
                     *( dRdUMesh_begin + v.first ) -= (
-                                                         ( *( testFunctionGradient_begin + v.first ) ) * ( *( surfaceGrowthVelocity_begin + w.first ) )
-                                                   +     testFunction * ( *( surfaceGrowthVelocityGradient_begin + test_function_gradient_size * w.first + v.first ) )
+//                                                         ( *( testFunctionGradient_begin + v.first ) ) * ( *( surfaceGrowthVelocity_begin + w.first ) )
+                                                        testFunction * ( *( surfaceGrowthVelocityGradient_begin + test_function_gradient_size * w.first + v.first ) )
                                                      ) * ( *( interpolationFunctionGradient_begin + w.first ) );
 
 
