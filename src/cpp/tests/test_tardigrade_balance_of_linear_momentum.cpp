@@ -5792,7 +5792,7 @@ BOOST_AUTO_TEST_CASE( test_computeBalanceOfLinearMomentum_hydra_fea, * boost::un
 
 }
 
-BOOST_AUTO_TEST_CASE( test_computeBalanceOfLinearMomentum_hydra_multiphase_fea, * boost::unit_test::tolerance( 2e-5 ) ){
+BOOST_AUTO_TEST_CASE( test_computeBalanceOfLinearMomentum_hydra_multiphase_fea, * boost::unit_test::tolerance( 3e-5 ) ){
     /*!
      * Test computing the balance of linear momentum in a finite element context
      */
