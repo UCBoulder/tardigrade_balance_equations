@@ -208,7 +208,6 @@ namespace tardigradeBalanceEquations{
 
         }
 
-        // QUADRATIC ELEMENT
         template<
             typename T, class node_in, class local_point_in, class shape_functions_out, class grad_shape_functions_out
         >
