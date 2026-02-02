@@ -17,6 +17,11 @@ set(TARDIGRADE_BALANCE_EQUATIONS_USE_LIBXSMM OFF CACHE BOOL "Flag for whether to
 # Add a flag for if a full build of all tardigrade repositories should be performed
 set(TARDIGRADE_FULL_BUILD OFF CACHE BOOL "Flag for whether a full build of Tardigrade should be performed (i.e., all repos pulled from git and built)")
 
+if(${TARDIGRADE_ERROR_TOOLS_OPT})
+    add_compile_definitions(TARDIGRADE_ERROR_TOOLS_OPT)
+    message(WARNING "BUILDING OPTIMIZED ERROR TOOLS. NO ERRORS WILL BE CAUGHT")
+endif()
+
 # Set the internal support libraries
 set(INTERNAL_SUPPORT_LIBRARIES )
 set(ADDITIONAL_HEADER_ONLY_LIBRARIES "tardigrade_balance_of_mass" "tardigrade_balance_of_linear_momentum" "tardigrade_balance_of_energy" "tardigrade_balance_of_volume_fraction" "tardigrade_finite_element_utilities" "tardigrade_constraint_equations" "tardigrade_balance_of_surface_growth")
