@@ -81,6 +81,10 @@ if(${not_conda_test} STREQUAL "true")
     endforeach(package)
 endif()
 
+if(CMAKE_EXPORT_COMPILE_COMMANDS)
+    set(CMAKE_CXX_STANDARD_INCLUDE_DIRECTORIES ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES})
+endif()
+
 # Get version number from Git
 if(${not_conda_test} STREQUAL "true")
     if(DEFINED ENV{PREFIX})
@@ -112,7 +116,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic")
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lrt -O3 -DNDEBUG -ggdb")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -DNDEBUG -ggdb")
 endif()
 
 # Enable CTest
@@ -286,10 +290,6 @@ endif()
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     get_property(CLANG_FORMAT_SOURCE_FILES_VALUE GLOBAL PROPERTY CLANG_FORMAT_SOURCE_FILES)
 
-    message("CLANG_FORMAT_SOURCE_FILES_VALUE:")
-    foreach(source_file ${CLANG_FORMAT_SOURCE_FILES_VALUE})
-        message("  ${source_file}")
-    endforeach(source_file)
     add_custom_target(
         cpp-format-check
         COMMAND ${CLANG_FORMAT_EXECUTABLE} -style=file --dry-run -Werror -i ${CLANG_FORMAT_SOURCE_FILES_VALUE}
