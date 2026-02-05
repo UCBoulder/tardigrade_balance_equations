@@ -1976,7 +1976,7 @@ class hydraLinearTest : public tardigradeHydra::hydraBase{
              * Set the vector of residual classes (in this case, a single residual)
              */
 
-            std::vector< tardigradeHydra::residualBase*  > residuals( 1 );
+            std::vector< tardigradeHydra::ResidualBase<>*  > residuals( 1 );
 
             TARDIGRADE_ERROR_TOOLS_CATCH( residual = tardigradeHydra::linearTestMaterial::residual( this, 22, linear_test_params ) );
 
@@ -5446,7 +5446,7 @@ class hydraLinearTest2 : public tardigradeHydra::hydraBase{
              * Set the vector of residual classes (in this case, a single residual)
              */
 
-            std::vector< tardigradeHydra::residualBase*  > residuals( 1 );
+            std::vector< tardigradeHydra::ResidualBase<>*  > residuals( 1 );
 
             TARDIGRADE_ERROR_TOOLS_CATCH( residual = tardigradeHydra::linearTestMaterial::residual( this, 22, linear_test_params2 ) );
 
