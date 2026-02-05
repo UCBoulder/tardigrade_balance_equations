@@ -10,6 +10,10 @@ foreach(package ${PROJECT_NAME})
             LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
             INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
             PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+    get_target_property(target_sources ${package} SOURCES)
+    foreach(source ${target_sources})
+        set_property(GLOBAL APPEND PROPERTY CLANG_FORMAT_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${source}")
+    endforeach(source)
 endforeach(package)
 install(FILES ${PROJECT_PRIVATE_HEADERS}
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
@@ -21,7 +25,16 @@ foreach(package ${ADDITIONAL_HEADER_ONLY_LIBRARIES})
             ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
     install(FILES ${package}.h ${package}.cpp
             DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+    get_target_property(target_sources ${package} SOURCES)
+    foreach(source ${target_sources})
+        set_property(GLOBAL APPEND PROPERTY CLANG_FORMAT_SOURCE_FILES "${PROJECT_SOURCE_DIR}/${source}")
+    endforeach(source)
 endforeach(package)
 
 install(FILES ${PROJECT_NAME}.h ${PROJECT_NAME}.cpp
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+get_target_property(target_sources ${PROJECT_NAME} SOURCES)
+foreach(source ${target_sources})
+    set_property(GLOBAL APPEND PROPERTY CLANG_FORMAT_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${source}")
+endforeach(source)
