@@ -11,11 +11,19 @@ set(DOXYGEN_SRC_PATH "docs/doxygen")
 set(SPHINX_SRC_PATH "docs/sphinx")
 
 # Add a flag for whether the python bindings should be built or not
-set(TARDIGRADE_BALANCE_EQUATIONS_BUILD_PYTHON_BINDINGS ON CACHE BOOL "Flag for whether the python bindings should be built for hydra")
+set(TARDIGRADE_BALANCE_EQUATIONS_BUILD_PYTHON_BINDINGS
+    ON
+    CACHE BOOL
+    "Flag for whether the python bindings should be built for hydra"
+)
 set(TARDIGRADE_BALANCE_EQUATIONS_USE_LIBXSMM OFF CACHE BOOL "Flag for whether to use libxsmm for matrix math")
 
 # Add a flag for if a full build of all tardigrade repositories should be performed
-set(TARDIGRADE_FULL_BUILD OFF CACHE BOOL "Flag for whether a full build of Tardigrade should be performed (i.e., all repos pulled from git and built)")
+set(TARDIGRADE_FULL_BUILD
+    OFF
+    CACHE BOOL
+    "Flag for whether a full build of Tardigrade should be performed (i.e., all repos pulled from git and built)"
+)
 
 if(${TARDIGRADE_ERROR_TOOLS_OPT})
     add_compile_definitions(TARDIGRADE_ERROR_TOOLS_OPT)
@@ -23,8 +31,16 @@ if(${TARDIGRADE_ERROR_TOOLS_OPT})
 endif()
 
 # Set the internal support libraries
-set(INTERNAL_SUPPORT_LIBRARIES )
-set(ADDITIONAL_HEADER_ONLY_LIBRARIES "tardigrade_balance_of_mass" "tardigrade_balance_of_linear_momentum" "tardigrade_balance_of_energy" "tardigrade_balance_of_volume_fraction" "tardigrade_finite_element_utilities" "tardigrade_constraint_equations" "tardigrade_balance_of_surface_growth")
+set(INTERNAL_SUPPORT_LIBRARIES)
+set(ADDITIONAL_HEADER_ONLY_LIBRARIES
+    "tardigrade_balance_of_mass"
+    "tardigrade_balance_of_linear_momentum"
+    "tardigrade_balance_of_energy"
+    "tardigrade_balance_of_volume_fraction"
+    "tardigrade_finite_element_utilities"
+    "tardigrade_constraint_equations"
+    "tardigrade_balance_of_surface_growth"
+)
 set(PROJECT_SOURCE_FILES ${PROJECT_NAME}.cpp ${PROJECT_NAME}.h)
 set(PROJECT_PRIVATE_HEADERS "")
 foreach(package ${INTERNAL_SUPPORT_LIBRARIES})
@@ -34,7 +50,7 @@ endforeach(package)
 if(TARDIGRADE_BALANCE_EQUATIONS_USE_LIBXSMM)
     message(STATUS "Using libxsmm for matrix math")
     find_library(libxsmm_DIR xsmm REQUIRED PATHS "$ENV{CONDA_PREFIX}/lib")
-    add_definitions(-DTARDIGRADE_BALANCE_EQUATIONS_USE_LLXSMM )
+    add_definitions(-DTARDIGRADE_BALANCE_EQUATIONS_USE_LLXSMM)
     set(PROJECT_LINK_LIBRARIES ${PROJECT_LINK_LIBRARIES} "xsmm" "blas")
 endif()
 
@@ -67,18 +83,20 @@ endif()
 
 # Get version number from Git
 if(${not_conda_test} STREQUAL "true")
-    if (DEFINED ENV{PREFIX})
+    if(DEFINED ENV{PREFIX})
         set(Python_ROOT_DIR "$ENV{BUILD_PREFIX}/bin")
     endif()
     set(Python_FIND_STRATEGY LOCATION)
     find_package(Python COMPONENTS Interpreter REQUIRED)
-    execute_process(COMMAND ${Python_EXECUTABLE} -m setuptools_scm
-                            OUTPUT_VARIABLE ${PROJECT_NAME}_VERSION_STRING_FULL
-                    OUTPUT_STRIP_TRAILING_WHITESPACE)
+    execute_process(
+        COMMAND ${Python_EXECUTABLE} -m setuptools_scm
+        OUTPUT_VARIABLE ${PROJECT_NAME}_VERSION_STRING_FULL
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
     if(${${PROJECT_NAME}_VERSION_STRING_FULL} STREQUAL "")
         set(${PROJECT_NAME}_VERSION 0.0.0)
     else()
-         string(REGEX MATCH "[0-9]+\.[0-9]+\.[0-9]+" ${PROJECT_NAME}_VERSION ${${PROJECT_NAME}_VERSION_STRING_FULL})
+        string(REGEX MATCH "[0-9]+\.[0-9]+\.[0-9]+" ${PROJECT_NAME}_VERSION ${${PROJECT_NAME}_VERSION_STRING_FULL})
     endif()
     project(${PROJECT_NAME} VERSION ${${PROJECT_NAME}_VERSION})
 endif()
@@ -93,7 +111,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic")
-if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lrt -O3 -DNDEBUG -ggdb")
 endif()
 
@@ -134,7 +152,11 @@ endif()
 set(LOCAL_BUILD_INCLUDE_DIRECTORIES "")
 foreach(package ${upstream_packages})
     string(TOUPPER "${package}" package_upper)
-    set(${package_upper}_BUILD_PYTHON_BINDINGS ${TARDIGRADE_BALANCE_EQUATIONS_BUILD_PYTHON_BINDINGS} CACHE INTERNAL "Setting ${package}'s python binding flag to the global value")
+    set(${package_upper}_BUILD_PYTHON_BINDINGS
+        ${TARDIGRADE_BALANCE_EQUATIONS_BUILD_PYTHON_BINDINGS}
+        CACHE INTERNAL
+        "Setting ${package}'s python binding flag to the global value"
+    )
     if(TARDIGRADE_FULL_BUILD)
         message("Not attempting to find ${package}")
     else()
@@ -152,7 +174,7 @@ foreach(package ${upstream_packages})
         FetchContent_Declare(
             ${package}
             GIT_REPOSITORY https://github.com/UCBoulder/${package}.git
-            GIT_TAG        ${${package_upper}_FETCHCONTENT_VERSION}
+            GIT_TAG ${${package_upper}_FETCHCONTENT_VERSION}
         )
         FetchContent_MakeAvailable(${package})
         set(LOCAL_BUILD_INCLUDE_DIRECTORIES ${LOCAL_BUILD_INCLUDE_DIRECTORIES} ${${package}_SOURCE_DIR}/${CPP_SRC_PATH})
@@ -163,8 +185,7 @@ foreach(package ${upstream_packages})
     if(NOT cmake_build_type_lower STREQUAL "release")
         string(TOLOWER "${package}" lower_package)
         foreach(sub_package ${${upper_package}_UPSTREAM_LIBRARIES})
-            target_include_directories(${package} PUBLIC
-                                       ${${sub_package}_SOURCE_DIR}/${CPP_SRC_PATH})
+            target_include_directories(${package} PUBLIC ${${sub_package}_SOURCE_DIR}/${CPP_SRC_PATH})
         endforeach(sub_package)
     endif()
 endforeach(package)
@@ -176,7 +197,11 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 
     foreach(package ${test_upstream_packages})
         string(TOUPPER "${package}" package_upper)
-        set(${package_upper}_BUILD_PYTHON_BINDINGS ${TARDIGRADE_BALANCE_EQUATIONS_BUILD_PYTHON_BINDINGS} CACHE INTERNAL "Setting ${package}'s python binding flag to the global value")
+        set(${package_upper}_BUILD_PYTHON_BINDINGS
+            ${TARDIGRADE_BALANCE_EQUATIONS_BUILD_PYTHON_BINDINGS}
+            CACHE INTERNAL
+            "Setting ${package}'s python binding flag to the global value"
+        )
         if(TARDIGRADE_FULL_BUILD)
             message("Not attempting to find ${package}")
         else()
@@ -194,10 +219,13 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
             FetchContent_Declare(
                 ${package}
                 GIT_REPOSITORY https://github.com/UCBoulder/${package}.git
-                GIT_TAG        ${${package_upper}_FETCHCONTENT_VERSION}
+                GIT_TAG ${${package_upper}_FETCHCONTENT_VERSION}
             )
             FetchContent_MakeAvailable(${package})
-            set(LOCAL_BUILD_INCLUDE_DIRECTORIES ${LOCAL_BUILD_INCLUDE_DIRECTORIES} ${${package}_SOURCE_DIR}/${CPP_SRC_PATH})
+            set(LOCAL_BUILD_INCLUDE_DIRECTORIES
+                ${LOCAL_BUILD_INCLUDE_DIRECTORIES}
+                ${${package}_SOURCE_DIR}/${CPP_SRC_PATH}
+            )
         endif()
     endforeach(package)
 endif()
@@ -226,25 +254,30 @@ endif()
 if(${not_conda_test} STREQUAL "true")
     foreach(package ${PROJECT_NAME})
         include(CMakePackageConfigHelpers)
-        write_basic_package_version_file("${package}ConfigVersion.cmake"
-                                         VERSION ${PROJECT_VERSION}
-                                         COMPATIBILITY SameMajorVersion)
+        write_basic_package_version_file(
+            "${package}ConfigVersion.cmake"
+            VERSION ${PROJECT_VERSION}
+            COMPATIBILITY SameMajorVersion
+        )
         configure_package_config_file(
-          "${PROJECT_SOURCE_DIR}/${CMAKE_SRC_PATH}/Config.cmake.in"
-          "${PROJECT_BINARY_DIR}/${package}Config.cmake"
-          INSTALL_DESTINATION
-          ${CMAKE_INSTALL_DATAROOTDIR}/${package}/cmake)
+            "${PROJECT_SOURCE_DIR}/${CMAKE_SRC_PATH}/Config.cmake.in"
+            "${PROJECT_BINARY_DIR}/${package}Config.cmake"
+            INSTALL_DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${package}/cmake
+        )
 
         # CMake won't build the targets for local builds of upstream projects
         if(cmake_build_type_lower STREQUAL release)
-            install(EXPORT ${package}_Targets
-                    FILE ${package}Targets.cmake
-                    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${package}/cmake)
+            install(
+                EXPORT ${package}_Targets
+                FILE ${package}Targets.cmake
+                DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${package}/cmake
+            )
         endif()
 
-        install(FILES "${PROJECT_BINARY_DIR}/${package}Config.cmake"
-                      "${PROJECT_BINARY_DIR}/${package}ConfigVersion.cmake"
-                DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${package}/cmake)
+        install(
+            FILES "${PROJECT_BINARY_DIR}/${package}Config.cmake" "${PROJECT_BINARY_DIR}/${package}ConfigVersion.cmake"
+            DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${package}/cmake
+        )
     endforeach(package)
 endif()
 
@@ -253,6 +286,10 @@ endif()
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     get_property(CLANG_FORMAT_SOURCE_FILES_VALUE GLOBAL PROPERTY CLANG_FORMAT_SOURCE_FILES)
 
+    message("CLANG_FORMAT_SOURCE_FILES_VALUE:")
+    foreach(source_file ${CLANG_FORMAT_SOURCE_FILES_VALUE})
+        message("  ${source_file}")
+    endforeach(source_file)
     add_custom_target(
         cpp-format-check
         COMMAND ${CLANG_FORMAT_EXECUTABLE} -style=file --dry-run -Werror -i ${CLANG_FORMAT_SOURCE_FILES_VALUE}
