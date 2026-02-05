@@ -1938,7 +1938,7 @@ class hydraLinearTest : public tardigradeHydra::hydraBase{
         virtual floatType _getAdditionalDOFTemperature(
             const unsigned int _nphases, const unsigned int _active_phase,
             const std::vector< floatType > &additional_dof
-        ){
+        ) final {
 
             unsigned int offset = _nphases * ( 1 + 3 + 3 ) + _active_phase;
 
@@ -1950,7 +1950,7 @@ class hydraLinearTest : public tardigradeHydra::hydraBase{
             const unsigned int _nphases, const unsigned int _active_phase,
             const unsigned int _num_phase_dof, const unsigned int _num_add_dof,
             const std::vector< floatType > &additional_dof
-        ){
+        ) final {
 
             unsigned int offset = _nphases * _num_phase_dof + _num_add_dof + _nphases * 3 + 9 * _active_phase;
 
@@ -5408,7 +5408,7 @@ class hydraLinearTest2 : public tardigradeHydra::hydraBase{
         virtual floatType _getAdditionalDOFTemperature(
             const unsigned int _nphases, const unsigned int _active_phase,
             const std::vector< floatType > &additional_dof
-        ){
+        ) final {
 
             unsigned int offset = _nphases * ( 1 + 3 + 3 ) + _active_phase;
 
@@ -5420,7 +5420,7 @@ class hydraLinearTest2 : public tardigradeHydra::hydraBase{
             const unsigned int _nphases, const unsigned int _active_phase,
             const unsigned int _num_phase_dof, const unsigned int _num_add_dof,
             const std::vector< floatType > &additional_dof
-        ){
+        ) final {
 
             unsigned int offset = _nphases * _num_phase_dof + _num_add_dof + _nphases * 3 + 9 * _active_phase;
 

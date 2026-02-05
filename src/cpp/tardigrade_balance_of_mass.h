@@ -62,7 +62,7 @@ namespace tardigradeBalanceEquations{
             const densityGradient_iter &density_gradient_begin, const densityGradient_iter &density_gradient_end,
             const velocity_iter &velocity_begin, const velocity_iter &velocity_end,
             const velocityGradient_iter &velocity_gradient_begin, const velocityGradient_iter &velocity_gradient_end,
-            const testFunction_type &psi,
+            const testFunction_type &test_function,
             result_type &result
         );
 
@@ -130,7 +130,7 @@ namespace tardigradeBalanceEquations{
             const densityGradient_iter &density_gradient_begin,           const densityGradient_iter &density_gradient_end,
             const velocity_iter &velocity_begin,                          const velocity_iter &velocity_end,
             const velocityGradient_iter &velocity_gradient_begin,         const velocityGradient_iter &velocity_gradient_end,
-            const testFunction_type &psi,                                 const interpolationFunction_type &interpolation_function,
+            const testFunction_type &test_function,                       const interpolationFunction_type &interpolation_function,
             const interpolationFunctionGradient_iter &interpolation_function_gradient_begin,
             const interpolationFunctionGradient_iter &interpolation_function_gradient_end,
             const dDensityDotdDensity_type &dDensityDotdDensity,          const dUDotdU_type &dUDotdU,
@@ -150,7 +150,7 @@ namespace tardigradeBalanceEquations{
             const densityGradient_iter &density_gradient_begin,         const densityGradient_iter &density_gradient_end,
             const velocity_iter &velocity_begin,                        const velocity_iter &velocity_end,
             const velocityGradient_iter &velocity_gradient_begin,       const velocityGradient_iter &velocity_gradient_end,
-            result_iter result_start,                               result_iter result_stop
+            result_iter result_begin,                               result_iter result_end
         );
 
         template<
@@ -164,8 +164,8 @@ namespace tardigradeBalanceEquations{
             const densityGradient_iter &density_gradient_begin,         const densityGradient_iter &density_gradient_end,
             const velocity_iter &velocity_begin,                        const velocity_iter &velocity_end,
             const velocityGradient_iter &velocity_gradient_begin,       const velocityGradient_iter &velocity_gradient_end,
-            const testFunction_type &psi,
-            result_iter result_start,                               result_iter result_stop
+            const testFunction_type &test_function,
+            result_iter result_begin,                               result_iter result_end
         );
 
         template<
@@ -203,7 +203,7 @@ namespace tardigradeBalanceEquations{
             const densityGradient_iter &density_gradient_begin,           const densityGradient_iter &density_gradient_end,
             const velocity_iter &velocity_begin,                          const velocity_iter &velocity_end,
             const velocityGradient_iter &velocity_gradient_begin,         const velocityGradient_iter &velocity_gradient_end,
-            const testFunction_type &psi,                                 const interpolationFunction_type &interpolation_function,
+            const testFunction_type &test_function,                       const interpolationFunction_type &interpolation_function,
             const interpolationFunctionGradient_iter &interpolation_function_gradient_begin,
             const interpolationFunctionGradient_iter &interpolation_function_gradient_end,
             const dDensityDotdDensity_iter &dDensityDotdDensity_begin,    const dDensityDotdDensity_iter &dDensityDotdDensity_end,
