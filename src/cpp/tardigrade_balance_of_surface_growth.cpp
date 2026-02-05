@@ -304,13 +304,12 @@ namespace tardigradeBalanceEquations {
                 (unsigned int)(interpolationFunctionGradient_end - interpolationFunctionGradient_begin);
 
             // Definitions only used for error handling
-            TARDIGRADE_ERROR_TOOLS_EVAL(const unsigned int test_function_gradient_size =
+            const unsigned int test_function_gradient_size =
                                             (unsigned int)(testFunctionGradient_end - testFunctionGradient_begin);
-                                        const unsigned int result_size = 1;
+            TARDIGRADE_ERROR_TOOLS_EVAL(const unsigned int result_size = 1;
                                         const unsigned int dRdV_size   = (unsigned int)(dRdV_end - dRdV_begin);
                                         const unsigned int dRdUMesh_size =
                                             (unsigned int)(dRdUMesh_end - dRdUMesh_begin);
-
             )
 
             TARDIGRADE_ERROR_TOOLS_CHECK(interpolation_function_gradient_size == test_function_gradient_size,
