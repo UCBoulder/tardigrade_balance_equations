@@ -300,17 +300,16 @@ namespace tardigradeBalanceEquations {
 
             // Definitions only used for error handling
             const unsigned int test_function_gradient_size =
-                                            (unsigned int)(testFunctionGradient_end - testFunctionGradient_begin);
-            TARDIGRADE_ERROR_TOOLS_EVAL(
-                                        const unsigned int surface_growth_velocity_size =
+                (unsigned int)(testFunctionGradient_end - testFunctionGradient_begin);
+            TARDIGRADE_ERROR_TOOLS_EVAL(const unsigned int surface_growth_velocity_size =
                                             (unsigned int)(surfaceGrowthVelocity_end - surfaceGrowthVelocity_begin);
                                         const unsigned int interpolation_function_gradient_size =
-                                            (unsigned int)(interpolationFunctionGradient_end - interpolationFunctionGradient_begin);
+                                            (unsigned int)(interpolationFunctionGradient_end -
+                                                           interpolationFunctionGradient_begin);
                                         const unsigned int result_size = 1;
                                         const unsigned int dRdV_size   = (unsigned int)(dRdV_end - dRdV_begin);
                                         const unsigned int dRdUMesh_size =
-                                            (unsigned int)(dRdUMesh_end - dRdUMesh_begin);
-            )
+                                            (unsigned int)(dRdUMesh_end - dRdUMesh_begin);)
 
             TARDIGRADE_ERROR_TOOLS_CHECK(interpolation_function_gradient_size == test_function_gradient_size,
                                          "dRdV must have a size of " +
