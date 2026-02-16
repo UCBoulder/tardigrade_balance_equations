@@ -12,12 +12,14 @@ Changelog
 Internal Changes
 ================
 - Improved error handling messages for inconsistent material response jacobian sizes (:pull:`37`). By `Nathan Miller`_.
+- Brought the library up to date with upstream conda packaging (:pull:`42`). By `Nathan Miller`_.
 
 New Features
 ============
 - Added a series of balance equations to solve for a mesh growth term (:pull:`38`). By `Nathan Miller`_.
 - Added the contributions to the balance of mass from the mass diffusion (:pull:`39`). By `Nathan Miller`_.
 - Added a quadratic finite element (:pull:`40`). By `Nathan Miller`_.
+- Enabled setting the flag to turn on TARDIGRADE_ERROR_TOOLS_OPT (:pull:`42`). By `Nathan Miller`_.
 
 ******************
 0.2.1 (05-27-2025)
