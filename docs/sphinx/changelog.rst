@@ -6,13 +6,19 @@ Changelog
 #########
 
 ******************
-0.2.1 (unreleased)
+0.2.3 (unreleased)
+******************
+
+******************
+0.2.2 (02-17-2025)
 ******************
 
 Internal Changes
 ================
 - Improved error handling messages for inconsistent material response jacobian sizes (:pull:`37`). By `Nathan Miller`_.
 - Brought the library up to date with upstream conda packaging (:pull:`42`). By `Nathan Miller`_.
+- Set the run_export to use the minor version (:pull:`43`). By `Nathan Miller`_.
+- Updated to reflect changes in tardigrade_hydra API (:pull:`44`). By `Nathan Miller`_.
 
 New Features
 ============
@@ -20,6 +26,10 @@ New Features
 - Added the contributions to the balance of mass from the mass diffusion (:pull:`39`). By `Nathan Miller`_.
 - Added a quadratic finite element (:pull:`40`). By `Nathan Miller`_.
 - Enabled setting the flag to turn on TARDIGRADE_ERROR_TOOLS_OPT (:pull:`42`). By `Nathan Miller`_.
+
+Release
+=======
+- Released version 0.2.2 (:pull:`45`). By `Nathan Miller`_.
 
 ******************
 0.2.1 (05-27-2025)
