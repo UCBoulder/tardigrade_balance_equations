@@ -296,14 +296,15 @@ class hydraLinearTest : public tardigradeHydra::hydraBase {
                     const std::vector<double> &additionalDOF, const std::vector<double> &previousAdditionalDOF)
         : tardigradeHydra::hydraBase(dof_storage_class, model_configuration_class),
           dof_storage_class(tardigradeHydra::DOFStorageBase(
-                                         t, dt, _getAdditionalDOFTemperature(_nphases, _active_phase, additionalDOF),
-                                         _getAdditionalDOFTemperature(_nphases, _active_phase, additionalDOF),
-                                         _getAdditionalDOFDeformationGradient(_nphases, _active_phase, _num_phase_dof,
-                                                                              _num_add_dof, additionalDOF),
-                                         _getAdditionalDOFDeformationGradient(_nphases, _active_phase, _num_phase_dof,
-                                                                              _num_add_dof, previousAdditionalDOF),
-                                         additionalDOF, previousAdditionalDOF)),
-          model_configuration_class(tardigradeHydra::ModelConfigurationBase(std::vector<double>(14, 0), linear_test_params, 1, 14)) {
+              t, dt, _getAdditionalDOFTemperature(_nphases, _active_phase, additionalDOF),
+              _getAdditionalDOFTemperature(_nphases, _active_phase, additionalDOF),
+              _getAdditionalDOFDeformationGradient(_nphases, _active_phase, _num_phase_dof, _num_add_dof,
+                                                   additionalDOF),
+              _getAdditionalDOFDeformationGradient(_nphases, _active_phase, _num_phase_dof, _num_add_dof,
+                                                   previousAdditionalDOF),
+              additionalDOF, previousAdditionalDOF)),
+          model_configuration_class(tardigradeHydra::ModelConfigurationBase(std::vector<double>(14, 0),
+                                                                            linear_test_params, 1, 14)) {
         nphases = _nphases;
 
         active_phase = _active_phase;

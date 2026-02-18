@@ -1429,8 +1429,7 @@ class hydraLinearTest : public tardigradeHydra::hydraBase {
               _getAdditionalDOFDeformationGradient(_nphases, _active_phase, _num_phase_dof, _num_add_dof,
                                                    previousAdditionalDOF),
               additionalDOF, previousAdditionalDOF)),
-          model_configuration_class(std::vector<double>(14, 0), linear_test_params, 1, 14){
-
+          model_configuration_class(std::vector<double>(14, 0), linear_test_params, 1, 14) {
         nphases = _nphases;
 
         active_phase = _active_phase;
