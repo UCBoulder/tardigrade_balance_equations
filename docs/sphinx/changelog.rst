@@ -11,7 +11,7 @@ Changelog
 
 Internal Changes
 ================
-- Added minor version pinning to the recipe (:pull:`46`). By `Nathan Miller`_.
+- Corrected typo in environment variable (:pull:`46`). By `Nathan Miller`_.
 - Use pinned minor versions for the runtime requirements (:pull:`47`). By `Nathan Miller`_.
 
 ******************
