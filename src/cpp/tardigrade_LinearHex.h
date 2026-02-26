@@ -58,6 +58,9 @@ namespace tardigradeBalanceEquations {
             virtual void GetVolumeIntegralJacobianOfTransformation(
                 const local_point_in &xi_begin, const local_point_in &xi_end,
                 typename std::iterator_traits<node_in>::value_type &value, const bool configuration = 1) override;
+
+            virtual void GetVolumeIntegrationPointData(const unsigned int i, integration_point_out &xi_begin,
+                                                       integration_point_out &xi_end, weight_type &weight);
         };
 
     }  // namespace finiteElement
