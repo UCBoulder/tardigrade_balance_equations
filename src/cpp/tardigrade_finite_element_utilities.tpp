@@ -17,6 +17,64 @@ namespace tardigradeBalanceEquations {
     namespace finiteElementUtilities {
 
         /*!
+         * Compute the derivative of the spatial gradient of a quantity a
+         * in the current configuration w.r.t. the spatial degrees of freedom
+         *
+         * \f$ \frac{D}{Du_a} \left( a_{i,j} \right) \f$
+         *
+         * \param &grad_a_start: An iterator representing the start of the gradient of the quantity
+         * \param &grad_a_size: The size of the gradient of a
+         * \param &grad_interp: The gradient of the interpolation function
+         * \param &index: The index of the spatial degree of freedom to compute the derivative for (0, 1 or 2)
+         * \param &dgrad_adui_start: An iterator representing the start of the output
+         */
+        template <typename grad_iterator, typename output_iterator>
+        void computeGradientSpatialJacobian(const grad_iterator &grad_a_start, const unsigned int grad_a_size,
+                                            floatVector grad_interp, const unsigned int index,
+                                            output_iterator dgrad_adui_start) {
+
+            TARDIGRADE_ERROR_TOOLS_CHECK((grad_a_size % dim) == 0, "The incoming spatial gradient has a dimension of " +
+                                                                       std::to_string(grad_a_size) +
+                                                                       " which is not a multiple of " +
+                                                                       std::to_string(dim));
+
+            const unsigned int a_size = grad_a_size / dim;
+
+            std::fill(dgrad_adui_start, dgrad_adui_start + a_size, 0);
+
+            for (unsigned int i = 0; i < a_size; ++i) {
+                for (unsigned int j = 0; j < dim; ++j) {
+                    *(dgrad_adui_start + dim * i + j) -= *(grad_a_start + dim * i + index) * grad_interp[j];
+                }
+            }
+        }
+
+        /*!
+         * Constructor for the base finite element class
+         *
+         * \param &_x_begin: The starting iterator for the current node positions
+         * \param &_x_end: The stopping iterator for the current node positions
+         * \param &_X_begin: The starting iterator for the reference node positions
+         * \param &_X_end: The stopping iterator for the reference node positions
+         * \param &_local_node_xi_begin: The starting iterator for the local node positions
+         * \param &_local_node_xi_end: The stopping iterator for the local node positions
+         */
+        template <int dim, int local_dim, int node_count, class node_in, class local_node_in, class local_point_in,
+                  class shape_functions_out, class grad_shape_functions_out>
+        FiniteElementBase<dim, local_dim, node_count, node_in, local_node_in, local_point_in, shape_functions_out,
+                          grad_shape_functions_out>::FiniteElementBase(const node_in &_x_begin, const node_in &_x_end,
+                                                                       const node_in &_X_begin, const node_in &_X_end,
+                                                                       const local_node_in &_local_node_xi_begin,
+                                                                       const local_node_in &_local_node_xi_end)
+            : x_begin(_x_begin),
+              x_end(_x_end),
+              X_begin(_X_begin),
+              X_end(_X_end),
+              local_node_xi_begin(_local_node_xi_begin),
+              local_node_xi_end(_local_node_xi_end) {
+        }
+
+        /*!
          * Get the values of the shape functions
          *
          * \param &xi_begin: The starting iterator of the local point
@@ -225,64 +283,6 @@ namespace tardigradeBalanceEquations {
                     }
                 }
             }
-        }
-
-        /*!
-         * Compute the derivative of the spatial gradient of a quantity a
-         * in the current configuration w.r.t. the spatial degrees of freedom
-         *
-         * \f$ \frac{D}{Du_a} \left( a_{i,j} \right) \f$
-         *
-         * \param &grad_a_start: An iterator representing the start of the gradient of the quantity
-         * \param &grad_a_size: The size of the gradient of a
-         * \param &grad_interp: The gradient of the interpolation function
-         * \param &index: The index of the spatial degree of freedom to compute the derivative for (0, 1 or 2)
-         * \param &dgrad_adui_start: An iterator representing the start of the output
-         */
-        template <typename grad_iterator, typename output_iterator>
-        void computeGradientSpatialJacobian(const grad_iterator &grad_a_start, const unsigned int grad_a_size,
-                                            floatVector grad_interp, const unsigned int index,
-                                            output_iterator dgrad_adui_start) {
-
-            TARDIGRADE_ERROR_TOOLS_CHECK((grad_a_size % dim) == 0, "The incoming spatial gradient has a dimension of " +
-                                                                       std::to_string(grad_a_size) +
-                                                                       " which is not a multiple of " +
-                                                                       std::to_string(dim));
-
-            const unsigned int a_size = grad_a_size / dim;
-
-            std::fill(dgrad_adui_start, dgrad_adui_start + a_size, 0);
-
-            for (unsigned int i = 0; i < a_size; ++i) {
-                for (unsigned int j = 0; j < dim; ++j) {
-                    *(dgrad_adui_start + dim * i + j) -= *(grad_a_start + dim * i + index) * grad_interp[j];
-                }
-            }
-        }
-
-        /*!
-         * Constructor for the base finite element class
-         *
-         * \param &_x_begin: The starting iterator for the current node positions
-         * \param &_x_end: The stopping iterator for the current node positions
-         * \param &_X_begin: The starting iterator for the reference node positions
-         * \param &_X_end: The stopping iterator for the reference node positions
-         * \param &_local_node_xi_begin: The starting iterator for the local node positions
-         * \param &_local_node_xi_end: The stopping iterator for the local node positions
-         */
-        template <int dim, int local_dim, int node_count, class node_in, class local_node_in, class local_point_in,
-                  class shape_functions_out, class grad_shape_functions_out>
-        FiniteElementBase<dim, local_dim, node_count, node_in, local_node_in, local_point_in, shape_functions_out,
-                          grad_shape_functions_out>::FiniteElementBase(const node_in &_x_begin, const node_in &_x_end,
-                                                                       const node_in &_X_begin, const node_in &_X_end,
-                                                                       const local_node_in &_local_node_xi_begin,
-                                                                       const local_node_in &_local_node_xi_end)
-            : x_begin(_x_begin),
-              x_end(_x_end),
-              X_begin(_X_begin),
-              X_end(_X_end),
-              local_node_xi_begin(_local_node_xi_begin),
-              local_node_xi_end(_local_node_xi_end) {
         }
 
         /*!
