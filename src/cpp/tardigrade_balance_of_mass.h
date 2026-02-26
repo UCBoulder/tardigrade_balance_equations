@@ -301,6 +301,6 @@ namespace tardigradeBalanceEquations {
 
 }  // namespace tardigradeBalanceEquations
 
-#include "tardigrade_balance_of_mass.cpp"
+#include "tardigrade_balance_of_mass.tpp"
 
 #endif

@@ -337,6 +337,6 @@ namespace tardigradeBalanceEquations {
 
 }  // namespace tardigradeBalanceEquations
 
-#include "tardigrade_finite_element_utilities.cpp"
+#include "tardigrade_finite_element_utilities.tpp"
 
 #endif

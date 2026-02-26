@@ -40,11 +40,12 @@ set(ADDITIONAL_HEADER_ONLY_LIBRARIES
     "tardigrade_finite_element_utilities"
     "tardigrade_constraint_equations"
     "tardigrade_balance_of_surface_growth"
+    "tardigrade_IntegrationPointBase"
 )
-set(PROJECT_SOURCE_FILES ${PROJECT_NAME}.cpp ${PROJECT_NAME}.h)
+set(PROJECT_SOURCE_FILES ${PROJECT_NAME}.cpp ${PROJECT_NAME}.h ${PROJECT_NAME}.tpp)
 set(PROJECT_PRIVATE_HEADERS "")
 foreach(package ${INTERNAL_SUPPORT_LIBRARIES})
-    set(PROJECT_SOURCE_FILES ${PROJECT_SOURCE_FILES} ${package}.cpp ${package}.h)
+    set(PROJECT_SOURCE_FILES ${PROJECT_SOURCE_FILES} ${package}.cpp ${package}.h ${package}.tpp)
     set(PROJECT_PRIVATE_HEADERS ${PROJECT_PRIVATE_HEADERS} ${package}.h)
 endforeach(package)
 if(TARDIGRADE_BALANCE_EQUATIONS_USE_LIBXSMM)

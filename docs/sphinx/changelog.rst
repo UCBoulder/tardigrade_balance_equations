@@ -13,6 +13,8 @@ Internal Changes
 ================
 - Corrected typo in environment variable (:pull:`46`). By `Nathan Miller`_.
 - Use pinned minor versions for the runtime requirements (:pull:`47`). By `Nathan Miller`_.
+- Moved cpp files to tpp to better reflect that they are template functions (:pull:`48`). By `Nathan Miller`_.
+- Incorporated the IntegrationPointBase class to assist in performing integrations in the elements (:pull:`48`). By `Nathan Miller`_.
 
 ******************
 0.2.2 (02-18-2025)
