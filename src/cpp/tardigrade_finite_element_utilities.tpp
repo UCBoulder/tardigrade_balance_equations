@@ -17,6 +17,39 @@ namespace tardigradeBalanceEquations {
     namespace finiteElementUtilities {
 
         /*!
+         * Get the values of the shape functions
+         *
+         * \param &xi_begin: The starting iterator of the local point
+         * \param &xi_end: The stopping iterator of the local point
+         * \param N_begin: The starting iterator of the shape functions
+         * \param N_end: The stopping iterator of the shape functions
+         */
+        template <int dim, int local_dim, int node_count, class node_in, class local_node_in, class local_point_in,
+                  class shape_functions_out, class grad_shape_functions_out>
+        void FiniteElementBase<dim, local_dim, node_count, node_in, local_node_in, local_point_in,shape_functions_out,grad_shape_functions_out>::GetShapeFunctions(const local_point_in &xi_begin, const local_point_in &xi_end,
+                                       shape_functions_out N_begin, shape_functions_out N_end) {
+
+            throw std::logic_error("Function not implemented");
+        }
+
+        /*!
+         * Get the values of the gradients of the shape functions w.r.t. the local coordinates
+         *
+         * \param &xi_begin: The starting iterator of the local point
+         * \param &xi_end: The stopping iterator of the local point
+         * \param dNdxi_begin: The starting iterator of the shape function gradients
+         * \param dNdxi_end: The stopping iterator of the shape function gradients
+         */
+        template <int dim, int local_dim, int node_count, class node_in, class local_node_in, class local_point_in,
+                  class shape_functions_out, class grad_shape_functions_out>
+        void FiniteElementBase<dim, local_dim, node_count, node_in, local_node_in, local_point_in,shape_functions_out,grad_shape_functions_out>::GetLocalShapeFunctionGradients(const local_point_in &xi_begin, const local_point_in &xi_end,
+                                                    grad_shape_functions_out dNdxi_begin,
+                                                    grad_shape_functions_out dNdxi_end) {
+
+            throw std::logic_error("Function not implemented");
+        }
+
+        /*!
          * Compute the derivative of the spatial gradient of a quantity a
          * in the current configuration w.r.t. the spatial degrees of freedom
          *

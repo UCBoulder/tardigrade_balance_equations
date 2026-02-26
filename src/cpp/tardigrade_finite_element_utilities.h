@@ -47,34 +47,12 @@ namespace tardigradeBalanceEquations {
                               const node_in &_X_end, const local_node_in &_local_node_xi_begin,
                               const local_node_in &_local_node_xi_end);
 
-            /*!
-             * Get the values of the shape functions
-             *
-             * \param &xi_begin: The starting iterator of the local point
-             * \param &xi_end: The stopping iterator of the local point
-             * \param N_begin: The starting iterator of the shape functions
-             * \param N_end: The stopping iterator of the shape functions
-             */
             virtual void GetShapeFunctions(const local_point_in &xi_begin, const local_point_in &xi_end,
-                                           shape_functions_out N_begin, shape_functions_out N_end) {
+                                           shape_functions_out N_begin, shape_functions_out N_end);
 
-                throw std::logic_error("Function not implemented");
-            }
-
-            /*!
-             * Get the values of the gradients of the shape functions w.r.t. the local coordinates
-             *
-             * \param &xi_begin: The starting iterator of the local point
-             * \param &xi_end: The stopping iterator of the local point
-             * \param dNdxi_begin: The starting iterator of the shape function gradients
-             * \param dNdxi_end: The stopping iterator of the shape function gradients
-             */
             virtual void GetLocalShapeFunctionGradients(const local_point_in &xi_begin, const local_point_in &xi_end,
                                                         grad_shape_functions_out dNdxi_begin,
-                                                        grad_shape_functions_out dNdxi_end) {
-
-                throw std::logic_error("Function not implemented");
-            }
+                                                        grad_shape_functions_out dNdxi_end);
 
             /*!
              * Compute the global gradient of the shape functions
