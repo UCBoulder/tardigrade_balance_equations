@@ -91,6 +91,89 @@ namespace tardigradeBalanceEquations {
         }
 
         /*!
+         * Interpolate the provided quantity to the local point
+         *
+         * \param &xi_begin: The starting iterator of the local coordinates
+         * \param &xi_end: The stopping iterator of the local coordinates
+         * \param &quantity_begin: The starting iterator of the quantity at the nodes (row-major)
+         * \param &quantity_end: The stopping iterator of the quantity at the nodes (row-major)
+         * \param value_begin: The starting iterator for the interpolated value
+         * \param value_end: The stopping iterator for the interpolated value
+         */
+        template <int dim, int local_dim, int node_count, class node_in, class local_node_in, class local_point_in,
+                  class shape_functions_out, class grad_shape_functions_out>
+        template <class quantity_in, class quantity_out>
+        void FiniteElementBase<dim, local_dim, node_count, node_in, local_node_in, local_point_in,shape_functions_out,grad_shape_functions_out>::InterpolateQuantity(const local_point_in &xi_begin, const local_point_in &xi_end,
+                                 const quantity_in &quantity_begin, const quantity_in &quantity_end,
+                                 quantity_out value_begin, quantity_out value_end) {
+
+            const size_type quantity_dim = (size_type)(value_end - value_begin);
+
+            TARDIGRADE_ERROR_TOOLS_CHECK(quantity_dim * node_count == (size_type)(quantity_end - quantity_begin),
+                                         "The returned value size (" + std::to_string(quantity_dim) +
+                                             ") and the quantity dimension (" +
+                                             std::to_string((size_type)(quantity_end - quantity_begin)) +
+                                             ") are inconsistent with the node count (" +
+                                             std::to_string(node_count) + ")");
+
+            GetShapeFunctions(xi_begin, xi_end, std::begin(_shapefunctions), std::end(_shapefunctions));
+
+            std::fill(value_begin, value_end, 0);
+
+            for (auto N = std::begin(_shapefunctions); N != std::end(_shapefunctions); ++N) {
+                unsigned int node = (size_type)(N - std::begin(_shapefunctions));
+
+                for (auto v = value_begin; v != value_end; ++v) {
+                    *v += (*N) * (*(quantity_begin + quantity_dim * node + (size_type)(v - value_begin)));
+                }
+            }
+        }
+
+        /*!
+         * Compute the gradient of the quantity at a local point
+         *
+         * \param &xi_begin: The starting iterator of the local coordinates
+         * \param &xi_end: The stopping iterator of the local coordinates
+         * \param &quantity_begin: The starting iterator of the quantity at the nodes (row-major)
+         * \param &quantity_end: The stopping iterator of the quantity at the nodes (row-major)
+         * \param value_begin: The starting iterator for the computed local gradient of the quantity
+         * \param value_end: The stopping iterator for the computed local gradient of the quantity in row-major
+         * form
+         */
+        template <int dim, int local_dim, int node_count, class node_in, class local_node_in, class local_point_in,
+                  class shape_functions_out, class grad_shape_functions_out>
+        template <class quantity_in, class quantity_gradient_out>
+        void FiniteElementBase<dim, local_dim, node_count, node_in, local_node_in, local_point_in,shape_functions_out,grad_shape_functions_out>::GetLocalQuantityGradient(const local_point_in &xi_begin, const local_point_in &xi_end,
+                                      const quantity_in &quantity_begin, const quantity_in &quantity_end,
+                                      quantity_gradient_out value_begin, quantity_gradient_out value_end) {
+
+            const size_type quantity_dim = (size_type)(value_end - value_begin) / local_dim;
+
+            TARDIGRADE_ERROR_TOOLS_CHECK(quantity_dim * node_count == (size_type)(quantity_end - quantity_begin),
+                                         "The returned value size (" + std::to_string(quantity_dim) +
+                                             ") and the quantity dimension (" +
+                                             std::to_string((size_type)(quantity_end - quantity_begin)) +
+                                             ") are inconsistent with the node count (" +
+                                             std::to_string(node_count) + ")");
+
+            TARDIGRADE_ERROR_TOOLS_CATCH(GetLocalShapeFunctionGradients(xi_begin, xi_end,
+                                                                        std::begin(_local_gradshapefunctions),
+                                                                        std::end(_local_gradshapefunctions)));
+
+            std::fill(value_begin, value_end, 0);
+
+            for (unsigned int node = 0; node < node_count; ++node) {
+                for (unsigned int row = 0; row < quantity_dim; ++row) {
+                    for (unsigned int col = 0; col < local_dim; ++col) {
+                        *(value_begin + local_dim * row + col) +=
+                            _local_gradshapefunctions[local_dim * node + col] *
+                            (*(quantity_begin + quantity_dim * node + row));
+                    }
+                }
+            }
+        }
+
+        /*!
          * Compute the derivative of the spatial gradient of a quantity a
          * in the current configuration w.r.t. the spatial degrees of freedom
          *
