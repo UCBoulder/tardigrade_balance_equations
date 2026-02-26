@@ -9,7 +9,7 @@
 #ifndef TARDIGRADE_LINEARHEX_H
 #define TARDIGRADE_LINEARHEX_H
 
-#include "tardigrade_finite_element_utilities.h"
+#include "tardigrade_FiniteElementBase.h"
 
 namespace tardigradeBalanceEquations {
 

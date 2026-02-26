@@ -41,6 +41,7 @@ set(ADDITIONAL_HEADER_ONLY_LIBRARIES
     "tardigrade_constraint_equations"
     "tardigrade_balance_of_surface_growth"
     "tardigrade_IntegrationPointBase"
+    "tardigrade_FiniteElementBase"
     "tardigrade_LinearHex"
     "tardigrade_QuadraticHex"
 )

@@ -9,7 +9,7 @@
 #ifndef TARDIGRADE_QUADRATICHEX_H
 #define TARDIGRADE_QUADRATICHEX_H
 
-#include "tardigrade_finite_element_utilities.h"
+#include "tardigrade_FiniteElementBase.h"
 
 namespace tardigradeBalanceEquations {
 
