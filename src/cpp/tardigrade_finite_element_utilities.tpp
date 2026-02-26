@@ -71,6 +71,26 @@ namespace tardigradeBalanceEquations {
         }
 
         /*!
+         * Compute the value of the Jacobian of transformation from the local coordinates to the configuration
+         * for volume integrals
+         *
+         * \param &xi_begin: The starting iterator of the local coordinates
+         * \param &xi_end: The stopping iterator of the local coordinates
+         * \param value: The Jacobian of transformation going from the local coordinates to the indicated
+         * configuration
+         * \param configuration: Compute the gradient w.r.t. the current configuration ( true ) or reference
+         * configuration ( false )
+         */
+        template <int dim, int local_dim, int node_count, class node_in, class local_node_in, class local_point_in,
+                  class shape_functions_out, class grad_shape_functions_out>
+        void FiniteElementBase<dim, local_dim, node_count, node_in, local_node_in, local_point_in,shape_functions_out,grad_shape_functions_out>::GetVolumeIntegralJacobianOfTransformation(
+            const local_point_in &xi_begin, const local_point_in &xi_end,
+            typename std::iterator_traits<node_in>::value_type &value, const bool configuration) {
+
+            throw std::logic_error("Function not implemented");
+        }
+
+        /*!
          * Compute the derivative of the spatial gradient of a quantity a
          * in the current configuration w.r.t. the spatial degrees of freedom
          *
