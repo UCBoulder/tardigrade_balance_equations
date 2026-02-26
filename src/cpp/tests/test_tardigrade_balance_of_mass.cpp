@@ -6,7 +6,7 @@
 
 #include <tardigrade_balance_of_mass.h>
 #include <tardigrade_constitutive_tools.h>
-#include <tardigrade_finite_element_utilities.h>
+#include <tardigrade_LinearHex.h>
 #include <tardigrade_hydraLinearTestMaterial.h>
 
 #include <fstream>

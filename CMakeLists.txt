@@ -41,6 +41,7 @@ set(ADDITIONAL_HEADER_ONLY_LIBRARIES
     "tardigrade_constraint_equations"
     "tardigrade_balance_of_surface_growth"
     "tardigrade_IntegrationPointBase"
+    "tardigrade_LinearHex"
 )
 set(PROJECT_SOURCE_FILES ${PROJECT_NAME}.cpp ${PROJECT_NAME}.h ${PROJECT_NAME}.tpp)
 set(PROJECT_PRIVATE_HEADERS "")

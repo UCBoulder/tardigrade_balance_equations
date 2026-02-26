@@ -6,7 +6,7 @@
 
 #include <tardigrade_balance_of_surface_growth.h>
 #include <tardigrade_constitutive_tools.h>
-#include <tardigrade_finite_element_utilities.h>
+#include <tardigrade_LinearHex.h>
 #include <tardigrade_hydraLinearTestMaterial.h>
 #define USE_EIGEN
 #include <tardigrade_vector_tools.h>
