@@ -4,9 +4,9 @@
  * Tests for tardigrade_balance_equations_balance_of_linear_momentum
  */
 
+#include <tardigrade_LinearHex.h>
 #include <tardigrade_balance_of_linear_momentum.h>
 #include <tardigrade_constitutive_tools.h>
-#include <tardigrade_LinearHex.h>
 #include <tardigrade_hydraLinearTestMaterial.h>
 #define USE_EIGEN
 #include <tardigrade_vector_tools.h>

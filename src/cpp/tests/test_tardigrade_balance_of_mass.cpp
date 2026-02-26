@@ -4,9 +4,9 @@
  * Tests for tardigrade_balance_equations_balance_of_mass
  */
 
+#include <tardigrade_LinearHex.h>
 #include <tardigrade_balance_of_mass.h>
 #include <tardigrade_constitutive_tools.h>
-#include <tardigrade_LinearHex.h>
 #include <tardigrade_hydraLinearTestMaterial.h>
 
 #include <fstream>

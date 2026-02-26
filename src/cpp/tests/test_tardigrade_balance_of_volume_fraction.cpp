@@ -4,9 +4,9 @@
  * Tests for tardigrade_balance_equations_balance_of_volume_fraction
  */
 
+#include <tardigrade_LinearHex.h>
 #include <tardigrade_balance_of_volume_fraction.h>
 #include <tardigrade_constitutive_tools.h>
-#include <tardigrade_LinearHex.h>
 #include <tardigrade_hydraLinearTestMaterial.h>
 
 #include <fstream>
