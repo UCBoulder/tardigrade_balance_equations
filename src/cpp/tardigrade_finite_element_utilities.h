@@ -274,6 +274,15 @@ namespace tardigradeBalanceEquations {
             constexpr static std::array<T, 3 * 8> local_nodes = {-1, -1, -1, 1, -1, -1, 1, 1, -1, -1, 1, -1,
                                                                  -1, -1, 1,  1, -1, 1,  1, 1, 1,  -1, 1, 1};
 
+            //! The integration points for a fully integrated isoparametric linear hex element
+            constexpr static std::array<T, 3 * 8> integration_points = {
+                -0.57735027, -0.57735027, -0.57735027, 0.57735027,  -0.57735027, -0.57735027, 0.57735027, 0.57735027,
+                -0.57735027, -0.57735027, 0.57735027,  -0.57735027, -0.57735027, -0.57735027, 0.57735027, 0.57735027,
+                -0.57735027, 0.57735027,  0.57735027,  0.57735027,  0.57735027,  -0.57735027, 0.57735027, 0.57735027};
+
+            //! The integration weights for a fully integrated isoparametric linear hex element
+            constexpr static std::array<T, 8> integration_weights = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
+
             LinearHex(const node_in &_x_begin, const node_in &_x_end, const node_in &_X_begin, const node_in &_X_end);
 
             using FiniteElementBase<3, 3, 8, node_in, typename std::array<T, 3 * 8>::const_iterator, local_point_in,

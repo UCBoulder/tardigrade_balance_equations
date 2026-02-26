@@ -13,7 +13,7 @@
 
 namespace tardigradeBalanceEquations {
 
-    namespace finiteElementUtilities{
+    namespace finiteElementUtilities {
 
         namespace unit_test {
 
@@ -95,15 +95,16 @@ namespace tardigradeBalanceEquations {
              */
             IntegrationPointBase(
                 const std::array<typename configuration::test_type, configuration::num_test_functions> &test,
-                const std::array<typename configuration::test_type, configuration::num_test_functions * configuration::dim>
-                    &grad_test,
+                const std::array<typename configuration::test_type,
+                                 configuration::num_test_functions * configuration::dim>               &grad_test,
                 const std::array<typename configuration::test_type, configuration::num_interpolation_functions>
                                                                                                   &interpolation,
                 const std::array<typename configuration::test_type,
                                  configuration::num_interpolation_functions * configuration::dim> &grad_interpolation,
                 const std::array<typename configuration::test_type, configuration::num_dof>       &dof,
-                const std::array<typename configuration::test_type, configuration::num_dof * configuration::dim> &grad_dof,
-                const typename configuration::Jxw_type                                                           &Jxw)
+                const std::array<typename configuration::test_type, configuration::num_dof * configuration::dim>
+                                                       &grad_dof,
+                const typename configuration::Jxw_type &Jxw)
                 : _test(test),
                   _grad_test(grad_test),
                   _interpolation(interpolation),
@@ -186,7 +187,8 @@ namespace tardigradeBalanceEquations {
             std::array<typename configuration::response_type, configuration::num_response_terms> _response_i;
 
             //! The current Jacobian row-major matrix
-            std::array<typename configuration::response_type, configuration::num_response_terms * configuration::num_dof>
+            std::array<typename configuration::response_type,
+                       configuration::num_response_terms * configuration::num_dof>
                 _jacobian_ij;
 
            private:
@@ -205,7 +207,7 @@ namespace tardigradeBalanceEquations {
                 _jacobian;
         };
 
-    }
+    }  // namespace finiteElementUtilities
 
 }  // namespace tardigradeBalanceEquations
 
