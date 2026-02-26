@@ -54,24 +54,11 @@ namespace tardigradeBalanceEquations {
                                                         grad_shape_functions_out dNdxi_begin,
                                                         grad_shape_functions_out dNdxi_end);
 
-            /*!
-             * Compute the global gradient of the shape functions
-             *
-             * \param &xi_begin: The starting iterator of the local point
-             * \param &xi_end: The stopping iterator of the local point
-             * \param &node_positions_begin: The starting iterator of the nodal positions (row major)
-             * \param &node_positions_end: The stopping iterator of the nodal positions (row major)
-             * \param &value_begin: The starting iterator of the shape function global gradient (row major)
-             * \param &value_end: The stopping iterator of the shape function global gradient (row major)
-             */
             virtual void GetGlobalShapeFunctionGradients(const local_point_in &xi_begin, const local_point_in &xi_end,
                                                          const node_in           &node_positions_begin,
                                                          const node_in           &node_positions_end,
                                                          grad_shape_functions_out value_begin,
-                                                         grad_shape_functions_out value_end) {
-
-                throw std::logic_error("Function not implemented");
-            }
+                                                         grad_shape_functions_out value_end);
 
             /*!
              * Compute the value of the Jacobian of transformation from the local coordinates to the configuration

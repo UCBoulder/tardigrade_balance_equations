@@ -50,6 +50,27 @@ namespace tardigradeBalanceEquations {
         }
 
         /*!
+         * Compute the global gradient of the shape functions
+         *
+         * \param &xi_begin: The starting iterator of the local point
+         * \param &xi_end: The stopping iterator of the local point
+         * \param &node_positions_begin: The starting iterator of the nodal positions (row major)
+         * \param &node_positions_end: The stopping iterator of the nodal positions (row major)
+         * \param &value_begin: The starting iterator of the shape function global gradient (row major)
+         * \param &value_end: The stopping iterator of the shape function global gradient (row major)
+         */
+        template <int dim, int local_dim, int node_count, class node_in, class local_node_in, class local_point_in,
+                  class shape_functions_out, class grad_shape_functions_out>
+        void FiniteElementBase<dim, local_dim, node_count, node_in, local_node_in, local_point_in,shape_functions_out,grad_shape_functions_out>::GetGlobalShapeFunctionGradients(const local_point_in &xi_begin, const local_point_in &xi_end,
+                                                     const node_in           &node_positions_begin,
+                                                     const node_in           &node_positions_end,
+                                                     grad_shape_functions_out value_begin,
+                                                     grad_shape_functions_out value_end) {
+
+            throw std::logic_error("Function not implemented");
+        }
+
+        /*!
          * Compute the derivative of the spatial gradient of a quantity a
          * in the current configuration w.r.t. the spatial degrees of freedom
          *
