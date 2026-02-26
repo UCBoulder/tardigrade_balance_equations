@@ -17,9 +17,11 @@ namespace tardigradeBalanceEquations {
 
         //! An implementation of a linear hexahedral element
         template <typename T, class node_in, class local_point_in, class shape_functions_out,
-                  class grad_shape_functions_out>
+                  class grad_shape_functions_out, class integration_point_out = local_point_in,
+                  typename weight_type = double>
         class LinearHex : public FiniteElementBase<3, 3, 8, node_in, typename std::array<T, 3 * 8>::const_iterator,
-                                                   local_point_in, shape_functions_out, grad_shape_functions_out> {
+                                                   local_point_in, shape_functions_out, grad_shape_functions_out,
+                                                   integration_point_out, weight_type> {
            public:
             //! The local nodes for an isoparametric linear hex element
             constexpr static std::array<T, 3 * 8> local_nodes = {-1, -1, -1, 1, -1, -1, 1, 1, -1, -1, 1, -1,
@@ -37,7 +39,8 @@ namespace tardigradeBalanceEquations {
             LinearHex(const node_in &_x_begin, const node_in &_x_end, const node_in &_X_begin, const node_in &_X_end);
 
             using FiniteElementBase<3, 3, 8, node_in, typename std::array<T, 3 * 8>::const_iterator, local_point_in,
-                                    shape_functions_out, grad_shape_functions_out>::FiniteElementBase;
+                                    shape_functions_out, grad_shape_functions_out, integration_point_out,
+                                    weight_type>::FiniteElementBase;
 
             virtual void GetShapeFunctions(const local_point_in &xi_begin, const local_point_in &xi_end,
                                            shape_functions_out N_begin, shape_functions_out N_end) override;
