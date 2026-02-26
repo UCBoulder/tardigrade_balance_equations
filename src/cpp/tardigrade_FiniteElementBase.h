@@ -77,9 +77,9 @@ namespace tardigradeBalanceEquations {
                 _global_gradshapefunctions;  //!< A temporary storage container for global grad shapefunction values
         };
 
-    }
+    }  // namespace finiteElement
 
-}
+}  // namespace tardigradeBalanceEquations
 
 #include "tardigrade_FiniteElementBase.tpp"
 

@@ -59,9 +59,8 @@ BOOST_AUTO_TEST_CASE(test_computeGradientSpatialJacobian, *boost::unit_test::tol
     std::array<floatType, 12> result;
     std::fill(std::begin(result), std::end(result), 0);
 
-    tardigradeBalanceEquations::finiteElement::computeGradientSpatialJacobian(std::begin(grad_a), 12,
-                                                                                       grad_test, 2,
-                                                                                       std::begin(result));
+    tardigradeBalanceEquations::finiteElement::computeGradientSpatialJacobian(std::begin(grad_a), 12, grad_test, 2,
+                                                                              std::begin(result));
 
     BOOST_TEST(answer == result, CHECK_PER_ELEMENT);
 }

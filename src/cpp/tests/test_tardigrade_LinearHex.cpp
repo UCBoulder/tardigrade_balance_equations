@@ -68,10 +68,10 @@ BOOST_AUTO_TEST_CASE(test_LinearHex, *boost::unit_test::tolerance(DEFAULT_TEST_T
         }
     }
 
-    tardigradeBalanceEquations::finiteElement::LinearHex<
-        floatType, typename std::array<floatType, 24>::const_iterator,
-        typename std::array<floatType, 3>::const_iterator, typename std::array<floatType, 8>::iterator,
-        typename std::array<floatType, 24>::iterator>
+    tardigradeBalanceEquations::finiteElement::LinearHex<floatType, typename std::array<floatType, 24>::const_iterator,
+                                                         typename std::array<floatType, 3>::const_iterator,
+                                                         typename std::array<floatType, 8>::iterator,
+                                                         typename std::array<floatType, 24>::iterator>
         e(std::cbegin(x), std::cend(x), std::cbegin(X), std::cend(X));
 
     std::array<floatType, 8> result;
@@ -152,10 +152,10 @@ BOOST_AUTO_TEST_CASE(test_LinearHex2, *boost::unit_test::tolerance(DEFAULT_TEST_
         }
     }
 
-    tardigradeBalanceEquations::finiteElement::LinearHex<
-        floatType, typename std::array<floatType, 24>::const_iterator,
-        typename std::array<floatType, 3>::const_iterator, typename std::array<floatType, 8>::iterator,
-        typename std::array<floatType, 24>::iterator>
+    tardigradeBalanceEquations::finiteElement::LinearHex<floatType, typename std::array<floatType, 24>::const_iterator,
+                                                         typename std::array<floatType, 3>::const_iterator,
+                                                         typename std::array<floatType, 8>::iterator,
+                                                         typename std::array<floatType, 24>::iterator>
         e(std::cbegin(x), std::cend(x), std::cbegin(X), std::cend(X));
 
     std::array<floatType, 3> point = {0.1626388, 0.45020513, 0.22368613};
@@ -220,10 +220,10 @@ BOOST_AUTO_TEST_CASE(test_LinearHex3, *boost::unit_test::tolerance(DEFAULT_TEST_
         }
     }
 
-    tardigradeBalanceEquations::finiteElement::LinearHex<
-        floatType, typename std::array<floatType, 24>::const_iterator,
-        typename std::array<floatType, 3>::const_iterator, typename std::array<floatType, 8>::iterator,
-        typename std::array<floatType, 24>::iterator>
+    tardigradeBalanceEquations::finiteElement::LinearHex<floatType, typename std::array<floatType, 24>::const_iterator,
+                                                         typename std::array<floatType, 3>::const_iterator,
+                                                         typename std::array<floatType, 8>::iterator,
+                                                         typename std::array<floatType, 24>::iterator>
         e(std::cbegin(x), std::cend(x), std::cbegin(X), std::cend(X));
 
     std::array<floatType, 3> point = {0.1626388, 0.45020513, 0.22368613};
@@ -272,10 +272,10 @@ BOOST_AUTO_TEST_CASE(test_LinearHex4, *boost::unit_test::tolerance(DEFAULT_TEST_
         }
     }
 
-    tardigradeBalanceEquations::finiteElement::LinearHex<
-        floatType, typename std::array<floatType, 24>::const_iterator,
-        typename std::array<floatType, 3>::const_iterator, typename std::array<floatType, 8>::iterator,
-        typename std::array<floatType, 24>::iterator>
+    tardigradeBalanceEquations::finiteElement::LinearHex<floatType, typename std::array<floatType, 24>::const_iterator,
+                                                         typename std::array<floatType, 3>::const_iterator,
+                                                         typename std::array<floatType, 8>::iterator,
+                                                         typename std::array<floatType, 24>::iterator>
         e(std::cbegin(x), std::cend(x), std::cbegin(X), std::cend(X));
 
     std::array<floatType, 3> point = {0.1626388, 0.45020513, 0.22368613};
@@ -383,10 +383,10 @@ BOOST_AUTO_TEST_CASE(test_LinearHex5, *boost::unit_test::tolerance(DEFAULT_TEST_
         }
     }
 
-    tardigradeBalanceEquations::finiteElement::LinearHex<
-        floatType, typename std::array<floatType, 24>::const_iterator,
-        typename std::array<floatType, 3>::const_iterator, typename std::array<floatType, 8>::iterator,
-        typename std::array<floatType, 24>::iterator>
+    tardigradeBalanceEquations::finiteElement::LinearHex<floatType, typename std::array<floatType, 24>::const_iterator,
+                                                         typename std::array<floatType, 3>::const_iterator,
+                                                         typename std::array<floatType, 8>::iterator,
+                                                         typename std::array<floatType, 24>::iterator>
         e(std::cbegin(x), std::cend(x), std::cbegin(X), std::cend(X));
 
     std::array<floatType, 3> point = {0.1626388, 0.45020513, 0.22368613};

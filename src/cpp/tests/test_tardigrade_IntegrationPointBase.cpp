@@ -40,8 +40,8 @@ BOOST_AUTO_TEST_CASE(tardigrade_IntegrationPointBase_assembleIntegrationPointRes
     class IntegrationPointConfigurationTest
         : public tardigradeBalanceEquations::finiteElement::IntegrationPointConfiguration<3, 2, 3, 4, 5> {};
 
-    class IntegrationPointBaseMock : public tardigradeBalanceEquations::finiteElement::IntegrationPointBase<
-                                         IntegrationPointConfigurationTest> {
+    class IntegrationPointBaseMock
+        : public tardigradeBalanceEquations::finiteElement::IntegrationPointBase<IntegrationPointConfigurationTest> {
        public:
         using tardigradeBalanceEquations::finiteElement::IntegrationPointBase<
             IntegrationPointConfigurationTest>::IntegrationPointBase;
