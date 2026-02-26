@@ -47,86 +47,86 @@ namespace tardigradeBalanceEquations {
                               const node_in &_X_end, const local_node_in &_local_node_xi_begin,
                               const local_node_in &_local_node_xi_end);
 
+            /*!
+             * Get the values of the shape functions
+             *
+             * \param &xi_begin: The starting iterator of the local point
+             * \param &xi_end: The stopping iterator of the local point
+             * \param N_begin: The starting iterator of the shape functions
+             * \param N_end: The stopping iterator of the shape functions
+             */
             virtual void GetShapeFunctions(const local_point_in &xi_begin, const local_point_in &xi_end,
                                            shape_functions_out N_begin, shape_functions_out N_end) {
-                /*!
-                 * Get the values of the shape functions
-                 *
-                 * \param &xi_begin: The starting iterator of the local point
-                 * \param &xi_end: The stopping iterator of the local point
-                 * \param N_begin: The starting iterator of the shape functions
-                 * \param N_end: The stopping iterator of the shape functions
-                 */
 
                 throw std::logic_error("Function not implemented");
             }
 
+            /*!
+             * Get the values of the gradients of the shape functions w.r.t. the local coordinates
+             *
+             * \param &xi_begin: The starting iterator of the local point
+             * \param &xi_end: The stopping iterator of the local point
+             * \param dNdxi_begin: The starting iterator of the shape function gradients
+             * \param dNdxi_end: The stopping iterator of the shape function gradients
+             */
             virtual void GetLocalShapeFunctionGradients(const local_point_in &xi_begin, const local_point_in &xi_end,
                                                         grad_shape_functions_out dNdxi_begin,
                                                         grad_shape_functions_out dNdxi_end) {
-                /*!
-                 * Get the values of the gradients of the shape functions w.r.t. the local coordinates
-                 *
-                 * \param &xi_begin: The starting iterator of the local point
-                 * \param &xi_end: The stopping iterator of the local point
-                 * \param dNdxi_begin: The starting iterator of the shape function gradients
-                 * \param dNdxi_end: The stopping iterator of the shape function gradients
-                 */
 
                 throw std::logic_error("Function not implemented");
             }
 
+            /*!
+             * Compute the global gradient of the shape functions
+             *
+             * \param &xi_begin: The starting iterator of the local point
+             * \param &xi_end: The stopping iterator of the local point
+             * \param &node_positions_begin: The starting iterator of the nodal positions (row major)
+             * \param &node_positions_end: The stopping iterator of the nodal positions (row major)
+             * \param &value_begin: The starting iterator of the shape function global gradient (row major)
+             * \param &value_end: The stopping iterator of the shape function global gradient (row major)
+             */
             virtual void GetGlobalShapeFunctionGradients(const local_point_in &xi_begin, const local_point_in &xi_end,
                                                          const node_in           &node_positions_begin,
                                                          const node_in           &node_positions_end,
                                                          grad_shape_functions_out value_begin,
                                                          grad_shape_functions_out value_end) {
-                /*!
-                 * Compute the global gradient of the shape functions
-                 *
-                 * \param &xi_begin: The starting iterator of the local point
-                 * \param &xi_end: The stopping iterator of the local point
-                 * \param &node_positions_begin: The starting iterator of the nodal positions (row major)
-                 * \param &node_positions_end: The stopping iterator of the nodal positions (row major)
-                 * \param &value_begin: The starting iterator of the shape function global gradient (row major)
-                 * \param &value_end: The stopping iterator of the shape function global gradient (row major)
-                 */
 
                 throw std::logic_error("Function not implemented");
             }
 
+            /*!
+             * Compute the value of the Jacobian of transformation from the local coordinates to the configuration
+             * for volume integrals
+             *
+             * \param &xi_begin: The starting iterator of the local coordinates
+             * \param &xi_end: The stopping iterator of the local coordinates
+             * \param value: The Jacobian of transformation going from the local coordinates to the indicated
+             * configuration
+             * \param configuration: Compute the gradient w.r.t. the current configuration ( true ) or reference
+             * configuration ( false )
+             */
             virtual void GetVolumeIntegralJacobianOfTransformation(
                 const local_point_in &xi_begin, const local_point_in &xi_end,
                 typename std::iterator_traits<node_in>::value_type &value, const bool configuration = 1) {
-                /*!
-                 * Compute the value of the Jacobian of transformation from the local coordinates to the configuration
-                 * for volume integrals
-                 *
-                 * \param &xi_begin: The starting iterator of the local coordinates
-                 * \param &xi_end: The stopping iterator of the local coordinates
-                 * \param value: The Jacobian of transformation going from the local coordinates to the indicated
-                 * configuration
-                 * \param configuration: Compute the gradient w.r.t. the current configuration ( true ) or reference
-                 * configuration ( false )
-                 */
 
                 throw std::logic_error("Function not implemented");
             }
 
+            /*!
+             * Interpolate the provided quantity to the local point
+             *
+             * \param &xi_begin: The starting iterator of the local coordinates
+             * \param &xi_end: The stopping iterator of the local coordinates
+             * \param &quantity_begin: The starting iterator of the quantity at the nodes (row-major)
+             * \param &quantity_end: The stopping iterator of the quantity at the nodes (row-major)
+             * \param value_begin: The starting iterator for the interpolated value
+             * \param value_end: The stopping iterator for the interpolated value
+             */
             template <class quantity_in, class quantity_out>
             void InterpolateQuantity(const local_point_in &xi_begin, const local_point_in &xi_end,
                                      const quantity_in &quantity_begin, const quantity_in &quantity_end,
                                      quantity_out value_begin, quantity_out value_end) {
-                /*!
-                 * Interpolate the provided quantity to the local point
-                 *
-                 * \param &xi_begin: The starting iterator of the local coordinates
-                 * \param &xi_end: The stopping iterator of the local coordinates
-                 * \param &quantity_begin: The starting iterator of the quantity at the nodes (row-major)
-                 * \param &quantity_end: The stopping iterator of the quantity at the nodes (row-major)
-                 * \param value_begin: The starting iterator for the interpolated value
-                 * \param value_end: The stopping iterator for the interpolated value
-                 */
 
                 const size_type quantity_dim = (size_type)(value_end - value_begin);
 
@@ -150,21 +150,21 @@ namespace tardigradeBalanceEquations {
                 }
             }
 
+            /*!
+             * Compute the gradient of the quantity at a local point
+             *
+             * \param &xi_begin: The starting iterator of the local coordinates
+             * \param &xi_end: The stopping iterator of the local coordinates
+             * \param &quantity_begin: The starting iterator of the quantity at the nodes (row-major)
+             * \param &quantity_end: The stopping iterator of the quantity at the nodes (row-major)
+             * \param value_begin: The starting iterator for the computed local gradient of the quantity
+             * \param value_end: The stopping iterator for the computed local gradient of the quantity in row-major
+             * form
+             */
             template <class quantity_in, class quantity_gradient_out>
             void GetLocalQuantityGradient(const local_point_in &xi_begin, const local_point_in &xi_end,
                                           const quantity_in &quantity_begin, const quantity_in &quantity_end,
                                           quantity_gradient_out value_begin, quantity_gradient_out value_end) {
-                /*!
-                 * Compute the gradient of the quantity at a local point
-                 *
-                 * \param &xi_begin: The starting iterator of the local coordinates
-                 * \param &xi_end: The stopping iterator of the local coordinates
-                 * \param &quantity_begin: The starting iterator of the quantity at the nodes (row-major)
-                 * \param &quantity_end: The stopping iterator of the quantity at the nodes (row-major)
-                 * \param value_begin: The starting iterator for the computed local gradient of the quantity
-                 * \param value_end: The stopping iterator for the computed local gradient of the quantity in row-major
-                 * form
-                 */
 
                 const size_type quantity_dim = (size_type)(value_end - value_begin) / local_dim;
 
@@ -192,24 +192,24 @@ namespace tardigradeBalanceEquations {
                 }
             }
 
+            /*!
+             * Compute the global gradient of the quantity at a local point
+             *
+             * \param &xi_begin: The starting iterator of the local coordinates
+             * \param &xi_end: The stopping iterator of the local coordinates
+             * \param &quantity_begin: The starting iterator of the quantity at the nodes (row-major)
+             * \param &quantity_end: The stopping iterator of the quantity at the nodes (row-major)
+             * \param value_begin: The starting iterator for the computed global gradient of the quantity
+             * \param value_end: The stopping iterator for the computed global gradient of the quantity in row-major
+             * form
+             * \param configuration: Compute the gradient w.r.t. the current configuration ( true ) or reference
+             * configuration ( false )
+             */
             template <class quantity_in, class quantity_gradient_out>
             void GetGlobalQuantityGradient(const local_point_in &xi_begin, const local_point_in &xi_end,
                                            const quantity_in &quantity_begin, const quantity_in &quantity_end,
                                            quantity_gradient_out value_begin, quantity_gradient_out value_end,
                                            const bool configuration = true) {
-                /*!
-                 * Compute the global gradient of the quantity at a local point
-                 *
-                 * \param &xi_begin: The starting iterator of the local coordinates
-                 * \param &xi_end: The stopping iterator of the local coordinates
-                 * \param &quantity_begin: The starting iterator of the quantity at the nodes (row-major)
-                 * \param &quantity_end: The stopping iterator of the quantity at the nodes (row-major)
-                 * \param value_begin: The starting iterator for the computed global gradient of the quantity
-                 * \param value_end: The stopping iterator for the computed global gradient of the quantity in row-major
-                 * form
-                 * \param configuration: Compute the gradient w.r.t. the current configuration ( true ) or reference
-                 * configuration ( false )
-                 */
 
                 const size_type quantity_dim = (size_type)(value_end - value_begin) / dim;
 
