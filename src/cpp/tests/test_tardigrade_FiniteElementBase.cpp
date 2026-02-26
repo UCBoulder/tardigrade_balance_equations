@@ -36,13 +36,13 @@ struct cerr_redirect {
     std::streambuf *old;
 };
 
-typedef tardigradeBalanceEquations::finiteElementUtilities::floatType
+typedef tardigradeBalanceEquations::finiteElement::floatType
     floatType;  //!< Define the float type to be the same as in the balance of mass
 
-typedef tardigradeBalanceEquations::finiteElementUtilities::floatVector
+typedef tardigradeBalanceEquations::finiteElement::floatVector
     floatVector;  //!< Define the float vector type to be the same as in the balance of mass
 
-typedef tardigradeBalanceEquations::finiteElementUtilities::secondOrderTensor
+typedef tardigradeBalanceEquations::finiteElement::secondOrderTensor
     secondOrderTensor;  //!< Define the second order tensor type to be the same as in the balance of mass
 
 BOOST_AUTO_TEST_CASE(test_placeholder, *boost::unit_test::tolerance(DEFAULT_TEST_TOLERANCE)) {}

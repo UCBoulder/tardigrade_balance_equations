@@ -8,7 +8,7 @@
 
 namespace tardigradeBalanceEquations {
 
-    namespace finiteElementUtilities {
+    namespace finiteElement {
 
         /*!
          * Constructor for the linear 8 node hex finite element class

@@ -11,7 +11,7 @@
 
 namespace tardigradeBalanceEquations {
 
-    namespace finiteElementUtilities{
+    namespace finiteElement{
 
         /*!
          * Assemble the response of an integration point

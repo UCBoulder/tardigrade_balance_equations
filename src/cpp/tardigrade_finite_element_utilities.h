@@ -19,7 +19,7 @@
 
 namespace tardigradeBalanceEquations {
 
-    namespace finiteElementUtilities {
+    namespace finiteElement {
 
         typedef unsigned int size_type;  //!< Define unsigned int as the default size type
 
@@ -38,7 +38,7 @@ namespace tardigradeBalanceEquations {
                                             floatVector grad_interp, const unsigned int index,
                                             output_iterator dgrad_adui_start);
 
-    }  // namespace finiteElementUtilities
+    }  // namespace finiteElement
 
 }  // namespace tardigradeBalanceEquations
 

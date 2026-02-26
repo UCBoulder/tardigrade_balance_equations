@@ -14,7 +14,7 @@
 
 namespace tardigradeBalanceEquations {
 
-    namespace finiteElementUtilities {
+    namespace finiteElement {
 
         /*!
          * Compute the derivative of the spatial gradient of a quantity a
@@ -49,6 +49,6 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-    }  // namespace finiteElementUtilities
+    }  // namespace finiteElement
 
 }  // namespace tardigradeBalanceEquations

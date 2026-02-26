@@ -13,7 +13,7 @@
 
 namespace tardigradeBalanceEquations {
 
-    namespace finiteElementUtilities {
+    namespace finiteElement {
 
         namespace unit_test {
 
@@ -207,7 +207,7 @@ namespace tardigradeBalanceEquations {
                 _jacobian;
         };
 
-    }  // namespace finiteElementUtilities
+    }  // namespace finiteElement
 
 }  // namespace tardigradeBalanceEquations
 

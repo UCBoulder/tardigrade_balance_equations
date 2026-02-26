@@ -13,7 +13,7 @@
 
 namespace tardigradeBalanceEquations {
 
-    namespace finiteElementUtilities {
+    namespace finiteElement {
 
         //! A base class for a simple finite element formulation useful for testing
         template <int dim, int local_dim, int node_count, class node_in, class local_node_in, class local_point_in,

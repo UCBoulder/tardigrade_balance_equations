@@ -13,7 +13,7 @@
 
 namespace tardigradeBalanceEquations {
 
-    namespace finiteElementUtilities {
+    namespace finiteElement {
 
         //! An implementation of a linear hexahedral element
         template <typename T, class node_in, class local_point_in, class shape_functions_out,
@@ -57,7 +57,7 @@ namespace tardigradeBalanceEquations {
                 typename std::iterator_traits<node_in>::value_type &value, const bool configuration = 1) override;
         };
 
-    }  // namespace finiteElementUtilities
+    }  // namespace finiteElement
 
 }  // namespace tardigradeBalanceEquations
 

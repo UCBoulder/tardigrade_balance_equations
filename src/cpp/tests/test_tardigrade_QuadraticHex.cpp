@@ -36,13 +36,13 @@ struct cerr_redirect {
     std::streambuf *old;
 };
 
-typedef tardigradeBalanceEquations::finiteElementUtilities::floatType
+typedef tardigradeBalanceEquations::finiteElement::floatType
     floatType;  //!< Define the float type to be the same as in the balance of mass
 
-typedef tardigradeBalanceEquations::finiteElementUtilities::floatVector
+typedef tardigradeBalanceEquations::finiteElement::floatVector
     floatVector;  //!< Define the float vector type to be the same as in the balance of mass
 
-typedef tardigradeBalanceEquations::finiteElementUtilities::secondOrderTensor
+typedef tardigradeBalanceEquations::finiteElement::secondOrderTensor
     secondOrderTensor;  //!< Define the second order tensor type to be the same as in the balance of mass
 
 BOOST_AUTO_TEST_CASE(test_QuadraticHex, *boost::unit_test::tolerance(DEFAULT_TEST_TOLERANCE)) {
@@ -89,7 +89,7 @@ BOOST_AUTO_TEST_CASE(test_QuadraticHex, *boost::unit_test::tolerance(DEFAULT_TES
         }
     }
 
-    tardigradeBalanceEquations::finiteElementUtilities::QuadraticHex<
+    tardigradeBalanceEquations::finiteElement::QuadraticHex<
         floatType, typename std::array<floatType, 60>::const_iterator,
         typename std::array<floatType, 3>::const_iterator, typename std::array<floatType, 20>::iterator,
         typename std::array<floatType, 60>::iterator>
@@ -177,7 +177,7 @@ BOOST_AUTO_TEST_CASE(test_QuadraticHex2, *boost::unit_test::tolerance(DEFAULT_TE
         }
     }
 
-    tardigradeBalanceEquations::finiteElementUtilities::QuadraticHex<
+    tardigradeBalanceEquations::finiteElement::QuadraticHex<
         floatType, typename std::array<floatType, 60>::const_iterator,
         typename std::array<floatType, 3>::const_iterator, typename std::array<floatType, 20>::iterator,
         typename std::array<floatType, 60>::iterator>
@@ -271,7 +271,7 @@ BOOST_AUTO_TEST_CASE(test_QuadraticHex3, *boost::unit_test::tolerance(DEFAULT_TE
         }
     }
 
-    tardigradeBalanceEquations::finiteElementUtilities::QuadraticHex<
+    tardigradeBalanceEquations::finiteElement::QuadraticHex<
         floatType, typename std::array<floatType, 60>::const_iterator,
         typename std::array<floatType, 3>::const_iterator, typename std::array<floatType, 20>::iterator,
         typename std::array<floatType, 60>::iterator>
@@ -348,7 +348,7 @@ BOOST_AUTO_TEST_CASE(test_QuadraticHex4, *boost::unit_test::tolerance(DEFAULT_TE
         }
     }
 
-    tardigradeBalanceEquations::finiteElementUtilities::QuadraticHex<
+    tardigradeBalanceEquations::finiteElement::QuadraticHex<
         floatType, typename std::array<floatType, 60>::const_iterator,
         typename std::array<floatType, 3>::const_iterator, typename std::array<floatType, 20>::iterator,
         typename std::array<floatType, 60>::iterator>
@@ -469,7 +469,7 @@ BOOST_AUTO_TEST_CASE(test_QuadraticHex5, *boost::unit_test::tolerance(DEFAULT_TE
         }
     }
 
-    tardigradeBalanceEquations::finiteElementUtilities::QuadraticHex<
+    tardigradeBalanceEquations::finiteElement::QuadraticHex<
         floatType, typename std::array<floatType, 60>::const_iterator,
         typename std::array<floatType, 3>::const_iterator, typename std::array<floatType, 20>::iterator,
         typename std::array<floatType, 60>::iterator>

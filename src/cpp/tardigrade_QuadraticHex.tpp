@@ -8,7 +8,7 @@
 
 namespace tardigradeBalanceEquations {
 
-    namespace finiteElementUtilities {
+    namespace finiteElement {
 
         /*!
          * Constructor for the quadratic 20 node hex element class

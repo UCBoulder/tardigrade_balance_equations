@@ -38,12 +38,12 @@ struct cerr_redirect {
 BOOST_AUTO_TEST_CASE(tardigrade_IntegrationPointBase_assembleIntegrationPointResponse,
                      *boost::unit_test::tolerance(DEFAULT_TEST_TOLERANCE)) {
     class IntegrationPointConfigurationTest
-        : public tardigradeBalanceEquations::finiteElementUtilities::IntegrationPointConfiguration<3, 2, 3, 4, 5> {};
+        : public tardigradeBalanceEquations::finiteElement::IntegrationPointConfiguration<3, 2, 3, 4, 5> {};
 
-    class IntegrationPointBaseMock : public tardigradeBalanceEquations::finiteElementUtilities::IntegrationPointBase<
+    class IntegrationPointBaseMock : public tardigradeBalanceEquations::finiteElement::IntegrationPointBase<
                                          IntegrationPointConfigurationTest> {
        public:
-        using tardigradeBalanceEquations::finiteElementUtilities::IntegrationPointBase<
+        using tardigradeBalanceEquations::finiteElement::IntegrationPointBase<
             IntegrationPointConfigurationTest>::IntegrationPointBase;
 
         unsigned int num_computeConstantPointResponse = 0;
