@@ -205,6 +205,6 @@ namespace tardigradeBalanceEquations {
 
 }  // namespace tardigradeBalanceEquations
 
-#include "tardigrade_balance_of_volume_fraction.cpp"
+#include "tardigrade_balance_of_volume_fraction.tpp"
 
 #endif

@@ -291,6 +291,6 @@ namespace tardigradeBalanceEquations {
 
 }  // namespace tardigradeBalanceEquations
 
-#include "tardigrade_balance_of_linear_momentum.cpp"
+#include "tardigrade_balance_of_linear_momentum.tpp"
 
 #endif

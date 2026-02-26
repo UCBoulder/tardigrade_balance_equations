@@ -408,6 +408,6 @@ namespace tardigradeBalanceEquations {
 
 }  // namespace tardigradeBalanceEquations
 
-#include "tardigrade_balance_of_energy.cpp"
+#include "tardigrade_balance_of_energy.tpp"
 
 #endif
