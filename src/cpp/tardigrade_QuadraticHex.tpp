@@ -290,6 +290,26 @@ namespace tardigradeBalanceEquations {
 
         }
 
+        /*!
+         * Get the integration point information for a surface
+         *
+         * \param s: The index of the surface
+         * \param i: The index of the integration point
+         * \param xi_begin: The starting iterator of the local coordinates of the integration point
+         * \param xi_end: The stopping iterator of the local coordinates of the integration point
+         * \param &weight: The weight to be applied to the integration point
+         */
+        template <typename T, class node_in, class local_point_in, class shape_functions_out,
+                  class grad_shape_functions_out, class local_point_out, typename weight_type>
+        void QuadraticHex<T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, local_point_out, weight_type>::
+             GetSurfaceIntegrationPointData(const unsigned int s, const unsigned int i, local_point_out xi_begin,
+                                                    local_point_out xi_end, weight_type &weight){
+
+            std::copy(std::begin(surface_integration_points) + 4 * 3 * s + 3 * i, std::begin(surface_integration_points) + 4 * 3 * s + 3 * (i+1), xi_begin);
+
+            weight = surface_integration_weights[4*s+i];
+
+        }
     }
 
 }
