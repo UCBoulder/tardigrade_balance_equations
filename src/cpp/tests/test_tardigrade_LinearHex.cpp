@@ -574,3 +574,48 @@ BOOST_AUTO_TEST_CASE(test_LinearHex8, *boost::unit_test::tolerance(DEFAULT_TEST_
         }
     }
 }
+
+BOOST_AUTO_TEST_CASE(test_LinearHex9, *boost::unit_test::tolerance(DEFAULT_TEST_TOLERANCE)) {
+    std::array<floatType, 24> X = {0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1};
+
+    std::array<floatType, 9> A = {1.01964692,  -0.02138607, -0.02731485, 0.00513148, 1.0219469,
+                                  -0.00768935, 0.04807642,  0.01848297,  0.99809319};
+
+    std::array<floatType, 3> b = {-0.21576496, -0.31364397, 0.45809941};
+
+    std::array<floatType, 24> x;
+
+    std::fill(std::begin(x), std::end(x), 0);
+
+    for (unsigned int i = 0; i < 8; ++i) {
+        for (unsigned int j = 0; j < 3; ++j) {
+            for (unsigned int k = 0; k < 3; ++k) {
+                x[3 * i + j] += X[3 * i + k] * A[3 * j + k];
+            }
+            x[3 * i + j] += b[j];
+        }
+    }
+
+    tardigradeBalanceEquations::finiteElement::LinearHex<
+        floatType, typename std::array<floatType, 24>::const_iterator,
+        typename std::array<floatType, 3>::const_iterator, typename std::array<floatType, 8>::iterator,
+        typename std::array<floatType, 24>::iterator, typename std::array<floatType, 3>::iterator, floatType>
+        e(std::cbegin(x), std::cend(x), std::cbegin(X), std::cend(X));
+
+    std::array<floatType,6> answers = {1, 1, 1, 1, 1, 1};
+    std::array<floatType,6> results;
+
+    for (unsigned int s = 0; s < 6; ++s) {
+        results[s] = 0.;
+        for (unsigned int i = 0; i < 4; ++i) {
+            std::array<floatType, 3> xi;
+            floatType                weight;
+            floatType                J;
+            e.GetSurfaceIntegrationPointData(s, i, std::begin(xi), std::end(xi), weight);
+            e.GetSurfaceIntegralJacobianOfTransformation(s, std::begin(xi), std::end(xi), J, 0);
+
+            results[s] += J * weight;
+        }
+    }
+    BOOST_TEST(results==answers,CHECK_PER_ELEMENT);
+}

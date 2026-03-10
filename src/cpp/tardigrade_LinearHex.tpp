@@ -174,6 +174,73 @@ namespace tardigradeBalanceEquations {
         }
 
         /*!
+         * Compute the value of the Jacobian of transformation from the local coordinates to the configuration
+         * for surface integrals
+         *
+         * \param s: The surface to compute the Jacobian of transformation for
+         * \param &xi_begin: The starting iterator of the local coordinates
+         * \param &xi_end: The stopping iterator of the local coordinates
+         * \param value: The Jacobian of transformation going from the local coordinates to the indicated
+         * configuration
+         * \param configuration: Compute the gradient w.r.t. the current configuration ( true ) or reference
+         * configuration ( false )
+         */
+        template <typename T, class node_in, class local_point_in, class shape_functions_out,
+                  class grad_shape_functions_out, class local_point_out, typename weight_type>
+        void LinearHex<T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, local_point_out, weight_type>
+            ::GetSurfaceIntegralJacobianOfTransformation(
+                const unsigned int s,
+                const local_point_in &xi_begin, const local_point_in &xi_end,
+                typename std::iterator_traits<node_in>::value_type &value, const bool configuration) {
+
+            using dxdxi_type = typename std::iterator_traits<node_in>::value_type;
+
+            std::array<dxdxi_type, 9> dxdxi;
+            std::array<dxdxi_type, 9> A, Ainv;
+
+            if (configuration) {
+                this->GetLocalQuantityGradient(xi_begin, xi_end, this->x_begin, this->x_end, std::begin(dxdxi),
+                                               std::end(dxdxi));
+
+            } else {
+                this->GetLocalQuantityGradient(xi_begin, xi_end, this->X_begin, this->X_end, std::begin(dxdxi),
+                                               std::end(dxdxi));
+            }
+
+            Eigen::Map<const Eigen::Matrix<typename std::iterator_traits<node_in>::value_type, 3, 3, Eigen::RowMajor> >
+                _dxdxi(dxdxi.data());
+
+            auto Jvol = _dxdxi.determinant();
+
+            std::fill(std::begin(A), std::end(A), dxdxi_type());
+            for ( unsigned int i = 0; i < 3; ++i){
+                for ( unsigned int I = 0; I < 3; ++I ){
+                    for ( unsigned int J = 0; J < 3; ++J ){
+                        A[3*I+J] += dxdxi[dim*i+I] * dxdxi[dim*i+J];
+                    }
+                }
+            }
+
+            Eigen::Map<const Eigen::Matrix<typename std::iterator_traits<node_in>::value_type, 3, 3, Eigen::RowMajor> >
+                _A(A.data());
+            Eigen::Map<Eigen::Matrix<typename std::iterator_traits<node_in>::value_type, 3, 3, Eigen::RowMajor> >
+                _Ainv(Ainv.data());
+
+            _Ainv = _A.inverse().eval();
+
+            value = dxdxi_type();
+
+            for (unsigned int I = 0; I < 3; ++I){
+                for (unsigned int J = 0; J < 3; ++J){
+                    value += surface_normals[3*s+I] * Ainv[3*I+J] * surface_normals[3*s+J];
+                }
+            }
+
+            value = std::sqrt(value) * Jvol;
+
+        }
+
+        /*!
          * Get the integration point coordinates and weight for a volume integral
          *
          * \param i: The integration point number
@@ -183,8 +250,8 @@ namespace tardigradeBalanceEquations {
          */
         template <typename T, class node_in, class local_point_in, class shape_functions_out,
                   class grad_shape_functions_out, class local_point_out, typename weight_type>
-        void LinearHex<T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, local_point_out, weight_type>::
-            GetVolumeIntegrationPointData(const unsigned int i, local_point_out xi_begin,
+        void LinearHex<T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, local_point_out, weight_type>
+            ::GetVolumeIntegrationPointData(const unsigned int i, local_point_out xi_begin,
                                                        local_point_out xi_end, weight_type &weight){
 
             TARDIGRADE_ERROR_TOOLS_CHECK(i<8, "The integration point id " + std::to_string(i) + " must be less than the number of integration points " + std::to_string(8));
