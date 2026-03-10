@@ -268,6 +268,28 @@ namespace tardigradeBalanceEquations {
             value = _dxdxi.determinant();
         }
 
+        /*!
+         * Get the integration point coordinates and weight for a volume integral
+         *
+         * \param i: The integration point number
+         * \param xi_begin: The starting iterator of the integration point in local coordinates
+         * \param xi_end: The stopping iterator of the integration point in local coordinates
+         * \param &weight: The weight of the integration point
+         */
+        template <typename T, class node_in, class local_point_in, class shape_functions_out,
+                  class grad_shape_functions_out, class local_point_out, typename weight_type>
+        void QuadraticHex<T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, local_point_out, weight_type>::
+            GetVolumeIntegrationPointData(const unsigned int i, local_point_out xi_begin,
+                                                       local_point_out xi_end, weight_type &weight){
+
+            TARDIGRADE_ERROR_TOOLS_CHECK(i<8, "The integration point id " + std::to_string(i) + " must be less than the number of integration points " + std::to_string(8));
+
+            std::copy(std::begin(integration_points) + 3 * i, std::begin(integration_points) + 3 * (i + 1), xi_begin);
+
+            weight = integration_weights[i];
+
+        }
+
     }
 
 }
