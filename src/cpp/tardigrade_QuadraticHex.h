@@ -63,7 +63,7 @@ namespace tardigradeBalanceEquations {
                 typename std::iterator_traits<node_in>::value_type &value, const bool configuration = 1) override;
 
             virtual void GetVolumeIntegrationPointData(const unsigned int i, local_point_out xi_begin,
-                                                       local_point_out xi_end, weight_type &weight);
+                                                       local_point_out xi_end, weight_type &weight) override;
         };
 
     }  // namespace finiteElement
