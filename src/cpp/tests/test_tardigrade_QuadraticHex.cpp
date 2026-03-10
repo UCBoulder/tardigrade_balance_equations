@@ -592,7 +592,6 @@ BOOST_AUTO_TEST_CASE(test_QuadraticHex7, *boost::unit_test::tolerance(DEFAULT_TE
         }
     }
 
-    try{
     tardigradeBalanceEquations::finiteElement::QuadraticHex<floatType, typename std::array<floatType, 60>::const_iterator,
                                                          typename std::array<floatType, 3>::const_iterator,
                                                          typename std::array<floatType, 20>::iterator,
@@ -617,5 +616,4 @@ BOOST_AUTO_TEST_CASE(test_QuadraticHex7, *boost::unit_test::tolerance(DEFAULT_TE
 
     BOOST_TEST(result == answer);
 
-    }catch(std::exception &e){tardigradeErrorTools::printNestedExceptions(e); throw;}
 }
