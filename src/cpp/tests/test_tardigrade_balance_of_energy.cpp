@@ -2416,12 +2416,10 @@ void evaluate_at_nodes(const xi_in &xi_begin, const xi_in &xi_end, dt_type dt, c
                                    std::begin(u_dot_tp1), std::end(u_dot_tp1), dUDotdU);
 
     // Instantiate the element
-    tardigradeBalanceEquations::finiteElement::LinearHex<floatType, typename std::array<floatType, 24>::const_iterator,
-                                                         typename std::array<floatType, 3>::const_iterator,
-                                                         typename std::array<floatType, 8>::iterator,
-                                                         typename std::array<floatType, 24>::iterator,
-                                                         typename std::array<floatType, 3>::iterator,
-                                                         floatType>
+    tardigradeBalanceEquations::finiteElement::LinearHex<
+        floatType, typename std::array<floatType, 24>::const_iterator,
+        typename std::array<floatType, 3>::const_iterator, typename std::array<floatType, 8>::iterator,
+        typename std::array<floatType, 24>::iterator, typename std::array<floatType, 3>::iterator, floatType>
         e(std::cbegin(x_tp1), std::cend(x_tp1), X_begin, X_end);
 
     std::array<typename std::iterator_traits<density_tp1_in>::value_type, nphases> density_tp1_p, density_dot_tp1_p;
@@ -2569,12 +2567,10 @@ void evaluate_at_nodes(
                                    std::begin(u_dot_tp1), std::end(u_dot_tp1), dUDotdU);
 
     // Instantiate the element
-    tardigradeBalanceEquations::finiteElement::LinearHex<floatType, typename std::array<floatType, 24>::const_iterator,
-                                                         typename std::array<floatType, 3>::const_iterator,
-                                                         typename std::array<floatType, 8>::iterator,
-                                                         typename std::array<floatType, 24>::iterator,
-                                                         typename std::array<floatType, 3>::iterator,
-                                                         floatType>
+    tardigradeBalanceEquations::finiteElement::LinearHex<
+        floatType, typename std::array<floatType, 24>::const_iterator,
+        typename std::array<floatType, 3>::const_iterator, typename std::array<floatType, 8>::iterator,
+        typename std::array<floatType, 24>::iterator, typename std::array<floatType, 3>::iterator, floatType>
         e(std::cbegin(x_tp1), std::cend(x_tp1), X_begin, X_end);
 
     std::array<typename std::iterator_traits<density_tp1_in>::value_type, nphases> density_tp1_p, density_dot_tp1_p;
@@ -5554,12 +5550,10 @@ void evaluate_at_nodes(const xi_in &xi_begin, const xi_in &xi_end, dt_type dt, c
                                    std::begin(e_dot_tp1), std::end(e_dot_tp1), dEDotdE);
 
     // Instantiate the element
-    tardigradeBalanceEquations::finiteElement::LinearHex<floatType, typename std::array<floatType, 24>::const_iterator,
-                                                         typename std::array<floatType, 3>::const_iterator,
-                                                         typename std::array<floatType, 8>::iterator,
-                                                         typename std::array<floatType, 24>::iterator,
-                                                         typename std::array<floatType, 3>::iterator,
-                                                         floatType>
+    tardigradeBalanceEquations::finiteElement::LinearHex<
+        floatType, typename std::array<floatType, 24>::const_iterator,
+        typename std::array<floatType, 3>::const_iterator, typename std::array<floatType, 8>::iterator,
+        typename std::array<floatType, 24>::iterator, typename std::array<floatType, 3>::iterator, floatType>
         e(std::cbegin(x_tp1), std::cend(x_tp1), X_begin, X_end);
 
     std::array<typename std::iterator_traits<density_tp1_in>::value_type, nphases> density_tp1_p, density_dot_tp1_p,
@@ -5797,12 +5791,10 @@ void evaluate_at_nodes(
                                    std::begin(e_dot_tp1), std::end(e_dot_tp1), dEDotdE);
 
     // Instantiate the element
-    tardigradeBalanceEquations::finiteElement::LinearHex<floatType, typename std::array<floatType, 24>::const_iterator,
-                                                         typename std::array<floatType, 3>::const_iterator,
-                                                         typename std::array<floatType, 8>::iterator,
-                                                         typename std::array<floatType, 24>::iterator,
-                                                         typename std::array<floatType, 3>::iterator,
-                                                         floatType>
+    tardigradeBalanceEquations::finiteElement::LinearHex<
+        floatType, typename std::array<floatType, 24>::const_iterator,
+        typename std::array<floatType, 3>::const_iterator, typename std::array<floatType, 8>::iterator,
+        typename std::array<floatType, 24>::iterator, typename std::array<floatType, 3>::iterator, floatType>
         e(std::cbegin(x_tp1), std::cend(x_tp1), X_begin, X_end);
 
     std::array<typename std::iterator_traits<density_tp1_in>::value_type, nphases> density_tp1_p, density_dot_tp1_p,

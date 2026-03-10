@@ -68,12 +68,10 @@ BOOST_AUTO_TEST_CASE(test_LinearHex, *boost::unit_test::tolerance(DEFAULT_TEST_T
         }
     }
 
-    tardigradeBalanceEquations::finiteElement::LinearHex<floatType, typename std::array<floatType, 24>::const_iterator,
-                                                         typename std::array<floatType, 3>::const_iterator,
-                                                         typename std::array<floatType, 8>::iterator,
-                                                         typename std::array<floatType, 24>::iterator,
-                                                         typename std::array<floatType, 3>::iterator,
-                                                         floatType>
+    tardigradeBalanceEquations::finiteElement::LinearHex<
+        floatType, typename std::array<floatType, 24>::const_iterator,
+        typename std::array<floatType, 3>::const_iterator, typename std::array<floatType, 8>::iterator,
+        typename std::array<floatType, 24>::iterator, typename std::array<floatType, 3>::iterator, floatType>
         e(std::cbegin(x), std::cend(x), std::cbegin(X), std::cend(X));
 
     std::array<floatType, 8> result;
@@ -154,12 +152,10 @@ BOOST_AUTO_TEST_CASE(test_LinearHex2, *boost::unit_test::tolerance(DEFAULT_TEST_
         }
     }
 
-    tardigradeBalanceEquations::finiteElement::LinearHex<floatType, typename std::array<floatType, 24>::const_iterator,
-                                                         typename std::array<floatType, 3>::const_iterator,
-                                                         typename std::array<floatType, 8>::iterator,
-                                                         typename std::array<floatType, 24>::iterator,
-                                                         typename std::array<floatType, 3>::iterator,
-                                                         floatType>
+    tardigradeBalanceEquations::finiteElement::LinearHex<
+        floatType, typename std::array<floatType, 24>::const_iterator,
+        typename std::array<floatType, 3>::const_iterator, typename std::array<floatType, 8>::iterator,
+        typename std::array<floatType, 24>::iterator, typename std::array<floatType, 3>::iterator, floatType>
         e(std::cbegin(x), std::cend(x), std::cbegin(X), std::cend(X));
 
     std::array<floatType, 3> point = {0.1626388, 0.45020513, 0.22368613};
@@ -224,12 +220,10 @@ BOOST_AUTO_TEST_CASE(test_LinearHex3, *boost::unit_test::tolerance(DEFAULT_TEST_
         }
     }
 
-    tardigradeBalanceEquations::finiteElement::LinearHex<floatType, typename std::array<floatType, 24>::const_iterator,
-                                                         typename std::array<floatType, 3>::const_iterator,
-                                                         typename std::array<floatType, 8>::iterator,
-                                                         typename std::array<floatType, 24>::iterator,
-                                                         typename std::array<floatType, 3>::iterator,
-                                                         floatType>
+    tardigradeBalanceEquations::finiteElement::LinearHex<
+        floatType, typename std::array<floatType, 24>::const_iterator,
+        typename std::array<floatType, 3>::const_iterator, typename std::array<floatType, 8>::iterator,
+        typename std::array<floatType, 24>::iterator, typename std::array<floatType, 3>::iterator, floatType>
         e(std::cbegin(x), std::cend(x), std::cbegin(X), std::cend(X));
 
     std::array<floatType, 3> point = {0.1626388, 0.45020513, 0.22368613};
@@ -278,12 +272,10 @@ BOOST_AUTO_TEST_CASE(test_LinearHex4, *boost::unit_test::tolerance(DEFAULT_TEST_
         }
     }
 
-    tardigradeBalanceEquations::finiteElement::LinearHex<floatType, typename std::array<floatType, 24>::const_iterator,
-                                                         typename std::array<floatType, 3>::const_iterator,
-                                                         typename std::array<floatType, 8>::iterator,
-                                                         typename std::array<floatType, 24>::iterator,
-                                                         typename std::array<floatType, 3>::iterator,
-                                                         floatType>
+    tardigradeBalanceEquations::finiteElement::LinearHex<
+        floatType, typename std::array<floatType, 24>::const_iterator,
+        typename std::array<floatType, 3>::const_iterator, typename std::array<floatType, 8>::iterator,
+        typename std::array<floatType, 24>::iterator, typename std::array<floatType, 3>::iterator, floatType>
         e(std::cbegin(x), std::cend(x), std::cbegin(X), std::cend(X));
 
     std::array<floatType, 3> point = {0.1626388, 0.45020513, 0.22368613};
@@ -391,12 +383,10 @@ BOOST_AUTO_TEST_CASE(test_LinearHex5, *boost::unit_test::tolerance(DEFAULT_TEST_
         }
     }
 
-    tardigradeBalanceEquations::finiteElement::LinearHex<floatType, typename std::array<floatType, 24>::const_iterator,
-                                                         typename std::array<floatType, 3>::const_iterator,
-                                                         typename std::array<floatType, 8>::iterator,
-                                                         typename std::array<floatType, 24>::iterator,
-                                                         typename std::array<floatType, 3>::iterator,
-                                                         floatType>
+    tardigradeBalanceEquations::finiteElement::LinearHex<
+        floatType, typename std::array<floatType, 24>::const_iterator,
+        typename std::array<floatType, 3>::const_iterator, typename std::array<floatType, 8>::iterator,
+        typename std::array<floatType, 24>::iterator, typename std::array<floatType, 3>::iterator, floatType>
         e(std::cbegin(x), std::cend(x), std::cbegin(X), std::cend(X));
 
     std::array<floatType, 3> point = {0.1626388, 0.45020513, 0.22368613};
@@ -438,40 +428,36 @@ BOOST_AUTO_TEST_CASE(test_LinearHex6, *boost::unit_test::tolerance(DEFAULT_TEST_
         }
     }
 
-    tardigradeBalanceEquations::finiteElement::LinearHex<floatType, typename std::array<floatType, 24>::const_iterator,
-                                                         typename std::array<floatType, 3>::const_iterator,
-                                                         typename std::array<floatType, 8>::iterator,
-                                                         typename std::array<floatType, 24>::iterator,
-                                                         typename std::array<floatType, 3>::iterator,
-                                                         floatType>
+    tardigradeBalanceEquations::finiteElement::LinearHex<
+        floatType, typename std::array<floatType, 24>::const_iterator,
+        typename std::array<floatType, 3>::const_iterator, typename std::array<floatType, 8>::iterator,
+        typename std::array<floatType, 24>::iterator, typename std::array<floatType, 3>::iterator, floatType>
         e(std::cbegin(x), std::cend(x), std::cbegin(X), std::cend(X));
 
     std::vector<std::vector<floatType>> integration_point_answers = {
         {-0.57735027, -0.57735027, -0.57735027},
-        { 0.57735027, -0.57735027, -0.57735027},
-        { 0.57735027,  0.57735027, -0.57735027},
-        {-0.57735027,  0.57735027, -0.57735027},
-        {-0.57735027, -0.57735027,  0.57735027},
-        { 0.57735027, -0.57735027,  0.57735027},
-        { 0.57735027,  0.57735027,  0.57735027},
-        {-0.57735027,  0.57735027,  0.57735027}
+        {0.57735027,  -0.57735027, -0.57735027},
+        {0.57735027,  0.57735027,  -0.57735027},
+        {-0.57735027, 0.57735027,  -0.57735027},
+        {-0.57735027, -0.57735027, 0.57735027 },
+        {0.57735027,  -0.57735027, 0.57735027 },
+        {0.57735027,  0.57735027,  0.57735027 },
+        {-0.57735027, 0.57735027,  0.57735027 }
     };
 
     std::array<floatType, 8> weight_answers = {1, 1, 1, 1, 1, 1, 1, 1};
 
-    for ( unsigned int i = 0; i < 8; ++i){
-
+    for (unsigned int i = 0; i < 8; ++i) {
         std::array<floatType, 3> integration_point_result;
-        floatType weight_result;
+        floatType                weight_result;
 
-        e.GetVolumeIntegrationPointData(i, std::begin(integration_point_result), std::end(integration_point_result), weight_result);
+        e.GetVolumeIntegrationPointData(i, std::begin(integration_point_result), std::end(integration_point_result),
+                                        weight_result);
 
         BOOST_TEST(integration_point_result == integration_point_answers[i], CHECK_PER_ELEMENT);
 
         BOOST_TEST(weight_result == weight_answers[i]);
-
     }
-
 }
 
 BOOST_AUTO_TEST_CASE(test_LinearHex7, *boost::unit_test::tolerance(DEFAULT_TEST_TOLERANCE)) {
@@ -496,28 +482,23 @@ BOOST_AUTO_TEST_CASE(test_LinearHex7, *boost::unit_test::tolerance(DEFAULT_TEST_
         }
     }
 
-    tardigradeBalanceEquations::finiteElement::LinearHex<floatType, typename std::array<floatType, 24>::const_iterator,
-                                                         typename std::array<floatType, 3>::const_iterator,
-                                                         typename std::array<floatType, 8>::iterator,
-                                                         typename std::array<floatType, 24>::iterator,
-                                                         typename std::array<floatType, 3>::iterator,
-                                                         floatType>
+    tardigradeBalanceEquations::finiteElement::LinearHex<
+        floatType, typename std::array<floatType, 24>::const_iterator,
+        typename std::array<floatType, 3>::const_iterator, typename std::array<floatType, 8>::iterator,
+        typename std::array<floatType, 24>::iterator, typename std::array<floatType, 3>::iterator, floatType>
         e(std::cbegin(x), std::cend(x), std::cbegin(X), std::cend(X));
 
     floatType answer = 1.0;
     floatType result = 0.0;
 
-    for ( unsigned int i = 0; i < 8; ++i){
-
+    for (unsigned int i = 0; i < 8; ++i) {
         std::array<floatType, 3> xi;
-        floatType weight;
-        floatType J;
+        floatType                weight;
+        floatType                J;
         e.GetVolumeIntegrationPointData(i, std::begin(xi), std::end(xi), weight);
         e.GetVolumeIntegralJacobianOfTransformation(std::begin(xi), std::end(xi), J, 0);
         result += weight * J;
-
     }
 
     BOOST_TEST(result == answer);
-
 }

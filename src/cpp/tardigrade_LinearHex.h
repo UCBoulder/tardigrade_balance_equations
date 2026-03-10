@@ -17,11 +17,10 @@ namespace tardigradeBalanceEquations {
 
         //! An implementation of a linear hexahedral element
         template <typename T, class node_in, class local_point_in, class shape_functions_out,
-                  class grad_shape_functions_out, class local_point_out,
-                  typename weight_type>
-        class LinearHex : public FiniteElementBase<3, 3, 8, node_in, typename std::array<T, 3 * 8>::const_iterator,
-                                                   local_point_in, shape_functions_out, grad_shape_functions_out,
-                                                   local_point_out, weight_type> {
+                  class grad_shape_functions_out, class local_point_out, typename weight_type>
+        class LinearHex
+            : public FiniteElementBase<3, 3, 8, node_in, typename std::array<T, 3 * 8>::const_iterator, local_point_in,
+                                       shape_functions_out, grad_shape_functions_out, local_point_out, weight_type> {
            public:
             //! The local nodes for an isoparametric linear hex element
             constexpr static std::array<T, 3 * 8> local_nodes = {-1, -1, -1, 1, -1, -1, 1, 1, -1, -1, 1, -1,
