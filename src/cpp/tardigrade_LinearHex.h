@@ -51,6 +51,10 @@ namespace tardigradeBalanceEquations {
             constexpr static std::array<T, 4 * 6> surface_integration_weights = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                                                                                  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 
+            //! The surface normals
+            constexpr static std::array<T, 3 * 6> surface_normals = {-1, 0, 0, 1, 0, 0,  0, -1, 0,
+                                                                     0,  1, 0, 0, 0, -1, 0, 0,  1};
+
             LinearHex(const node_in &_x_begin, const node_in &_x_end, const node_in &_X_begin, const node_in &_X_end);
 
             using FiniteElementBase<3, 3, 8, node_in, typename std::array<T, 3 * 8>::const_iterator, local_point_in,
@@ -72,6 +76,10 @@ namespace tardigradeBalanceEquations {
 
             virtual void GetVolumeIntegralJacobianOfTransformation(
                 const local_point_in &xi_begin, const local_point_in &xi_end,
+                typename std::iterator_traits<node_in>::value_type &value, const bool configuration = 1) override;
+
+            virtual void GetSurfaceIntegralJacobianOfTransformation(
+                const unsigned int s, const local_point_in &xi_begin, const local_point_in &xi_end,
                 typename std::iterator_traits<node_in>::value_type &value, const bool configuration = 1) override;
 
             virtual void GetVolumeIntegrationPointData(const unsigned int i, local_point_out xi_begin,

@@ -693,3 +693,59 @@ BOOST_AUTO_TEST_CASE(test_QuadraticHex8, *boost::unit_test::tolerance(DEFAULT_TE
         }
     }
 }
+
+BOOST_AUTO_TEST_CASE(test_QuadraticHex9, *boost::unit_test::tolerance(DEFAULT_TEST_TOLERANCE)) {
+    std::array<floatType, 60> X = {
+        +0.000000000e+00, +0.000000000e+00, +0.000000000e+00, +1.000000000e+00, +0.000000000e+00, +0.000000000e+00,
+        +1.000000000e+00, +1.000000000e+00, +0.000000000e+00, +0.000000000e+00, +1.000000000e+00, +0.000000000e+00,
+        +0.000000000e+00, +0.000000000e+00, +1.000000000e+00, +1.000000000e+00, +0.000000000e+00, +1.000000000e+00,
+        +1.000000000e+00, +1.000000000e+00, +1.000000000e+00, +0.000000000e+00, +1.000000000e+00, +1.000000000e+00,
+        +5.000000000e-01, +0.000000000e+00, +0.000000000e+00, +1.000000000e+00, +5.000000000e-01, +0.000000000e+00,
+        +5.000000000e-01, +1.000000000e+00, +0.000000000e+00, +0.000000000e+00, +5.000000000e-01, +0.000000000e+00,
+        +5.000000000e-01, +0.000000000e+00, +1.000000000e+00, +1.000000000e+00, +5.000000000e-01, +1.000000000e+00,
+        +5.000000000e-01, +1.000000000e+00, +1.000000000e+00, +0.000000000e+00, +5.000000000e-01, +1.000000000e+00,
+        +0.000000000e+00, +0.000000000e+00, +5.000000000e-01, +1.000000000e+00, +0.000000000e+00, +5.000000000e-01,
+        +1.000000000e+00, +1.000000000e+00, +5.000000000e-01, +0.000000000e+00, +1.000000000e+00, +5.000000000e-01};
+
+    std::array<floatType, 9> A = {+5.309673435e-01, -2.457179268e-01, +4.124004435e-01,
+                                  +4.701741978e-01, +7.466197759e-01, +1.988074143e-01,
+                                  +3.664293192e-01, +1.395218471e-01, +9.568436484e-01};
+
+    std::array<floatType, 3> b = {+4.987947519e-01, +7.204750069e-01, +2.712531897e-01};
+
+    std::array<floatType, 60> x;
+
+    std::fill(std::begin(x), std::end(x), 0);
+
+    for (unsigned int i = 0; i < 20; ++i) {
+        for (unsigned int j = 0; j < 3; ++j) {
+            for (unsigned int k = 0; k < 3; ++k) {
+                x[3 * i + j] += X[3 * i + k] * A[3 * j + k];
+            }
+            x[3 * i + j] += b[j];
+        }
+    }
+
+    tardigradeBalanceEquations::finiteElement::QuadraticHex<
+        floatType, typename std::array<floatType, 60>::const_iterator,
+        typename std::array<floatType, 3>::const_iterator, typename std::array<floatType, 20>::iterator,
+        typename std::array<floatType, 60>::iterator, typename std::array<floatType, 3>::iterator, floatType>
+        e(std::cbegin(x), std::cend(x), std::cbegin(X), std::cend(X));
+
+    std::array<floatType, 6> answers = {1, 1, 1, 1, 1, 1};
+    std::array<floatType, 6> results;
+
+    for (unsigned int s = 0; s < 6; ++s) {
+        results[s] = 0.;
+        for (unsigned int i = 0; i < 4; ++i) {
+            std::array<floatType, 3> xi;
+            floatType                weight;
+            floatType                J;
+            e.GetSurfaceIntegrationPointData(s, i, std::begin(xi), std::end(xi), weight);
+            e.GetSurfaceIntegralJacobianOfTransformation(s, std::begin(xi), std::end(xi), J, 0);
+
+            results[s] += J * weight;
+        }
+    }
+    BOOST_TEST(results == answers, CHECK_PER_ELEMENT);
+}
