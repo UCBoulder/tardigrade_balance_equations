@@ -493,19 +493,29 @@ BOOST_AUTO_TEST_CASE(test_QuadraticHex5, *boost::unit_test::tolerance(DEFAULT_TE
 }
 
 BOOST_AUTO_TEST_CASE(test_QuadraticHex6, *boost::unit_test::tolerance(DEFAULT_TEST_TOLERANCE)) {
-    // Test the calculation of the volume integral Jacobian of transformation
-    std::array<floatType, 24> X = {0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1};
+    std::array<floatType, 60> X = {
+        +0.000000000e+00, +0.000000000e+00, +0.000000000e+00, +1.000000000e+00, +0.000000000e+00, +0.000000000e+00,
+        +1.000000000e+00, +1.000000000e+00, +0.000000000e+00, +0.000000000e+00, +1.000000000e+00, +0.000000000e+00,
+        +0.000000000e+00, +0.000000000e+00, +1.000000000e+00, +1.000000000e+00, +0.000000000e+00, +1.000000000e+00,
+        +1.000000000e+00, +1.000000000e+00, +1.000000000e+00, +0.000000000e+00, +1.000000000e+00, +1.000000000e+00,
+        +5.000000000e-01, +0.000000000e+00, +0.000000000e+00, +1.000000000e+00, +5.000000000e-01, +0.000000000e+00,
+        +5.000000000e-01, +1.000000000e+00, +0.000000000e+00, +0.000000000e+00, +5.000000000e-01, +0.000000000e+00,
+        +5.000000000e-01, +0.000000000e+00, +1.000000000e+00, +1.000000000e+00, +5.000000000e-01, +1.000000000e+00,
+        +5.000000000e-01, +1.000000000e+00, +1.000000000e+00, +0.000000000e+00, +5.000000000e-01, +1.000000000e+00,
+        +0.000000000e+00, +0.000000000e+00, +5.000000000e-01, +1.000000000e+00, +0.000000000e+00, +5.000000000e-01,
+        +1.000000000e+00, +1.000000000e+00, +5.000000000e-01, +0.000000000e+00, +1.000000000e+00, +5.000000000e-01};
 
-    std::array<floatType, 9> A = {1.01964692,  -0.02138607, -0.02731485, 0.00513148, 1.0219469,
-                                  -0.00768935, 0.04807642,  0.01848297,  0.99809319};
+    std::array<floatType, 9> A = {+5.309673435e-01, -2.457179268e-01, +4.124004435e-01,
+                                  +4.701741978e-01, +7.466197759e-01, +1.988074143e-01,
+                                  +3.664293192e-01, +1.395218471e-01, +9.568436484e-01};
 
-    std::array<floatType, 3> b = {-0.21576496, -0.31364397, 0.45809941};
+    std::array<floatType, 3> b = {+4.987947519e-01, +7.204750069e-01, +2.712531897e-01};
 
-    std::array<floatType, 24> x;
+    std::array<floatType, 60> x;
 
     std::fill(std::begin(x), std::end(x), 0);
 
-    for (unsigned int i = 0; i < 8; ++i) {
+    for (unsigned int i = 0; i < 20; ++i) {
         for (unsigned int j = 0; j < 3; ++j) {
             for (unsigned int k = 0; k < 3; ++k) {
                 x[3 * i + j] += X[3 * i + k] * A[3 * j + k];
@@ -514,10 +524,10 @@ BOOST_AUTO_TEST_CASE(test_QuadraticHex6, *boost::unit_test::tolerance(DEFAULT_TE
         }
     }
 
-    tardigradeBalanceEquations::finiteElement::QuadraticHex<floatType, typename std::array<floatType, 24>::const_iterator,
+    tardigradeBalanceEquations::finiteElement::QuadraticHex<floatType, typename std::array<floatType, 60>::const_iterator,
                                                          typename std::array<floatType, 3>::const_iterator,
-                                                         typename std::array<floatType, 8>::iterator,
-                                                         typename std::array<floatType, 24>::iterator,
+                                                         typename std::array<floatType, 20>::iterator,
+                                                         typename std::array<floatType, 60>::iterator,
                                                          typename std::array<floatType, 3>::iterator,
                                                          floatType>
         e(std::cbegin(x), std::cend(x), std::cbegin(X), std::cend(X));
@@ -551,19 +561,29 @@ BOOST_AUTO_TEST_CASE(test_QuadraticHex6, *boost::unit_test::tolerance(DEFAULT_TE
 }
 
 BOOST_AUTO_TEST_CASE(test_QuadraticHex7, *boost::unit_test::tolerance(DEFAULT_TEST_TOLERANCE)) {
-    // Test the calculation of the volume integral Jacobian of transformation
-    std::array<floatType, 24> X = {0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1};
+    std::array<floatType, 60> X = {
+        +0.000000000e+00, +0.000000000e+00, +0.000000000e+00, +1.000000000e+00, +0.000000000e+00, +0.000000000e+00,
+        +1.000000000e+00, +1.000000000e+00, +0.000000000e+00, +0.000000000e+00, +1.000000000e+00, +0.000000000e+00,
+        +0.000000000e+00, +0.000000000e+00, +1.000000000e+00, +1.000000000e+00, +0.000000000e+00, +1.000000000e+00,
+        +1.000000000e+00, +1.000000000e+00, +1.000000000e+00, +0.000000000e+00, +1.000000000e+00, +1.000000000e+00,
+        +5.000000000e-01, +0.000000000e+00, +0.000000000e+00, +1.000000000e+00, +5.000000000e-01, +0.000000000e+00,
+        +5.000000000e-01, +1.000000000e+00, +0.000000000e+00, +0.000000000e+00, +5.000000000e-01, +0.000000000e+00,
+        +5.000000000e-01, +0.000000000e+00, +1.000000000e+00, +1.000000000e+00, +5.000000000e-01, +1.000000000e+00,
+        +5.000000000e-01, +1.000000000e+00, +1.000000000e+00, +0.000000000e+00, +5.000000000e-01, +1.000000000e+00,
+        +0.000000000e+00, +0.000000000e+00, +5.000000000e-01, +1.000000000e+00, +0.000000000e+00, +5.000000000e-01,
+        +1.000000000e+00, +1.000000000e+00, +5.000000000e-01, +0.000000000e+00, +1.000000000e+00, +5.000000000e-01};
 
-    std::array<floatType, 9> A = {1.01964692,  -0.02138607, -0.02731485, 0.00513148, 1.0219469,
-                                  -0.00768935, 0.04807642,  0.01848297,  0.99809319};
+    std::array<floatType, 9> A = {+5.309673435e-01, -2.457179268e-01, +4.124004435e-01,
+                                  +4.701741978e-01, +7.466197759e-01, +1.988074143e-01,
+                                  +3.664293192e-01, +1.395218471e-01, +9.568436484e-01};
 
-    std::array<floatType, 3> b = {-0.21576496, -0.31364397, 0.45809941};
+    std::array<floatType, 3> b = {+4.987947519e-01, +7.204750069e-01, +2.712531897e-01};
 
-    std::array<floatType, 24> x;
+    std::array<floatType, 60> x;
 
     std::fill(std::begin(x), std::end(x), 0);
 
-    for (unsigned int i = 0; i < 8; ++i) {
+    for (unsigned int i = 0; i < 20; ++i) {
         for (unsigned int j = 0; j < 3; ++j) {
             for (unsigned int k = 0; k < 3; ++k) {
                 x[3 * i + j] += X[3 * i + k] * A[3 * j + k];
@@ -572,10 +592,11 @@ BOOST_AUTO_TEST_CASE(test_QuadraticHex7, *boost::unit_test::tolerance(DEFAULT_TE
         }
     }
 
-    tardigradeBalanceEquations::finiteElement::QuadraticHex<floatType, typename std::array<floatType, 24>::const_iterator,
+    try{
+    tardigradeBalanceEquations::finiteElement::QuadraticHex<floatType, typename std::array<floatType, 60>::const_iterator,
                                                          typename std::array<floatType, 3>::const_iterator,
-                                                         typename std::array<floatType, 8>::iterator,
-                                                         typename std::array<floatType, 24>::iterator,
+                                                         typename std::array<floatType, 20>::iterator,
+                                                         typename std::array<floatType, 60>::iterator,
                                                          typename std::array<floatType, 3>::iterator,
                                                          floatType>
         e(std::cbegin(x), std::cend(x), std::cbegin(X), std::cend(X));
@@ -596,4 +617,5 @@ BOOST_AUTO_TEST_CASE(test_QuadraticHex7, *boost::unit_test::tolerance(DEFAULT_TE
 
     BOOST_TEST(result == answer);
 
+    }catch(std::exception &e){tardigradeErrorTools::printNestedExceptions(e); throw;}
 }
