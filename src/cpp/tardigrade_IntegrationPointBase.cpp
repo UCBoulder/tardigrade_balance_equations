@@ -10,4 +10,4 @@
 
 #include "tardigrade_error_tools.h"
 
-namespace tardigradeBalanceEquations {}  // namespace tardigrade
+namespace tardigradeBalanceEquations {}  // namespace tardigradeBalanceEquations

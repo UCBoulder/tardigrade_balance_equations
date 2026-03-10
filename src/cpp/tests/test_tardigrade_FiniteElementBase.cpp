@@ -1,17 +1,17 @@
 /**
- * \file test_tardigrade_finite_element_utilities.cpp
+ * \file test_tardigrade_FiniteElementBase.cpp
  *
- * Tests for tardigrade_finite_element_utilities
+ * Tests for tardigrade_FiniteElementBase
  */
 
-#include <tardigrade_finite_element_utilities.h>
+#include <tardigrade_FiniteElementBase.h>
 
 #include <array>
 #include <fstream>
 #include <iostream>
 #include <sstream>
 
-#define BOOST_TEST_MODULE test_tardigrade_finite_element_utilities
+#define BOOST_TEST_MODULE test_tardigrade_FiniteElementBase
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/tools/output_test_stream.hpp>
 
@@ -45,22 +45,4 @@ typedef tardigradeBalanceEquations::finiteElement::floatVector
 typedef tardigradeBalanceEquations::finiteElement::secondOrderTensor
     secondOrderTensor;  //!< Define the second order tensor type to be the same as in the balance of mass
 
-BOOST_AUTO_TEST_CASE(test_computeGradientSpatialJacobian, *boost::unit_test::tolerance(DEFAULT_TEST_TOLERANCE)) {
-    /*!
-     * Test the computation of the jacobian of the gradient of a quantity w.r.t. the spatial displacement
-     */
-
-    std::array<floatType, 12> grad_a = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
-
-    floatVector grad_test = {0.1, 0.2, 0.3};
-
-    std::array<floatType, 12> answer = {-0.2, -0.4, -0.6, -0.5, -1., -1.5, -0.8, -1.6, -2.4, -1.1, -2.2, -3.3};
-
-    std::array<floatType, 12> result;
-    std::fill(std::begin(result), std::end(result), 0);
-
-    tardigradeBalanceEquations::finiteElement::computeGradientSpatialJacobian(std::begin(grad_a), 12, grad_test, 2,
-                                                                              std::begin(result));
-
-    BOOST_TEST(answer == result, CHECK_PER_ELEMENT);
-}
+BOOST_AUTO_TEST_CASE(test_placeholder, *boost::unit_test::tolerance(DEFAULT_TEST_TOLERANCE)) {}
