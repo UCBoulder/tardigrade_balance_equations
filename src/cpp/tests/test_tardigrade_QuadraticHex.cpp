@@ -732,8 +732,8 @@ BOOST_AUTO_TEST_CASE(test_QuadraticHex9, *boost::unit_test::tolerance(DEFAULT_TE
         typename std::array<floatType, 60>::iterator, typename std::array<floatType, 3>::iterator, floatType>
         e(std::cbegin(x), std::cend(x), std::cbegin(X), std::cend(X));
 
-    std::array<floatType,6> answers = {1, 1, 1, 1, 1, 1};
-    std::array<floatType,6> results;
+    std::array<floatType, 6> answers = {1, 1, 1, 1, 1, 1};
+    std::array<floatType, 6> results;
 
     for (unsigned int s = 0; s < 6; ++s) {
         results[s] = 0.;
@@ -747,5 +747,5 @@ BOOST_AUTO_TEST_CASE(test_QuadraticHex9, *boost::unit_test::tolerance(DEFAULT_TE
             results[s] += J * weight;
         }
     }
-    BOOST_TEST(results==answers,CHECK_PER_ELEMENT);
+    BOOST_TEST(results == answers, CHECK_PER_ELEMENT);
 }

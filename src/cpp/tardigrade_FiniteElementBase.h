@@ -43,8 +43,7 @@ namespace tardigradeBalanceEquations {
                 typename std::iterator_traits<node_in>::value_type &value, const bool configuration = 1);
 
             virtual void GetSurfaceIntegralJacobianOfTransformation(
-                const unsigned int s,
-                const local_point_in &xi_begin, const local_point_in &xi_end,
+                const unsigned int s, const local_point_in &xi_begin, const local_point_in &xi_end,
                 typename std::iterator_traits<node_in>::value_type &value, const bool configuration = 1);
 
             virtual void GetVolumeIntegrationPointData(const unsigned int i, local_point_out xi_begin,
