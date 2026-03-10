@@ -189,9 +189,9 @@ namespace tardigradeBalanceEquations {
 
             TARDIGRADE_ERROR_TOOLS_CHECK(i<8, "The integration point id " + std::to_string(i) + " must be less than the number of integration points " + std::to_string(8));
 
-            std::copy(std::begin(integration_points) + 3 * i, std::begin(integration_points) + 3 * (i + 1), xi_begin);
+            std::copy(std::begin(volume_integration_points) + 3 * i, std::begin(volume_integration_points) + 3 * (i + 1), xi_begin);
 
-            weight = integration_weights[i];
+            weight = volume_integration_weights[i];
 
         }
 
