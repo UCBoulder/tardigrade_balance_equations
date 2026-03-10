@@ -45,6 +45,10 @@ namespace tardigradeBalanceEquations {
             virtual void GetVolumeIntegrationPointData(const unsigned int i, local_point_out xi_begin,
                                                        local_point_out xi_end, weight_type &weight);
 
+            virtual void GetSurfaceIntegrationPointData(const unsigned int s, const unsigned int i,
+                                                        local_point_out xi_begin, local_point_out xi_end,
+                                                        weight_type &weight);
+
             template <class quantity_in, class quantity_out>
             void InterpolateQuantity(const local_point_in &xi_begin, const local_point_in &xi_end,
                                      const quantity_in &quantity_begin, const quantity_in &quantity_end,

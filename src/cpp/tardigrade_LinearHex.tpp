@@ -189,9 +189,30 @@ namespace tardigradeBalanceEquations {
 
             TARDIGRADE_ERROR_TOOLS_CHECK(i<8, "The integration point id " + std::to_string(i) + " must be less than the number of integration points " + std::to_string(8));
 
-            std::copy(std::begin(integration_points) + 3 * i, std::begin(integration_points) + 3 * (i + 1), xi_begin);
+            std::copy(std::begin(volume_integration_points) + 3 * i, std::begin(volume_integration_points) + 3 * (i + 1), xi_begin);
 
-            weight = integration_weights[i];
+            weight = volume_integration_weights[i];
+
+        }
+
+        /*!
+         * Get the integration point information for a surface
+         *
+         * \param s: The index of the surface
+         * \param i: The index of the integration point
+         * \param xi_begin: The starting iterator of the local coordinates of the integration point
+         * \param xi_end: The stopping iterator of the local coordinates of the integration point
+         * \param &weight: The weight to be applied to the integration point
+         */
+        template <typename T, class node_in, class local_point_in, class shape_functions_out,
+                  class grad_shape_functions_out, class local_point_out, typename weight_type>
+        void LinearHex<T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, local_point_out, weight_type>::
+             GetSurfaceIntegrationPointData(const unsigned int s, const unsigned int i, local_point_out xi_begin,
+                                                    local_point_out xi_end, weight_type &weight){
+
+            std::copy(std::begin(surface_integration_points) + 4 * 3 * s + 3 * i, std::begin(surface_integration_points) + 4 * 3 * s + 3 * (i+1), xi_begin);
+
+            weight = surface_integration_weights[4*s+i];
 
         }
 

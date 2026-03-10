@@ -125,6 +125,24 @@ namespace tardigradeBalanceEquations {
         }
 
         /*!
+         * Get the integration point information for a surface
+         *
+         * \param s: The index of the surface
+         * \param i: The index of the integration point
+         * \param xi_begin: The starting iterator of the local coordinates of the integration point
+         * \param xi_end: The stopping iterator of the local coordinates of the integration point
+         * \param &weight: The weight to be applied to the integration point
+         */
+        template <int dim, int local_dim, int node_count, class node_in, class local_node_in, class local_point_in,
+                  class shape_functions_out, class grad_shape_functions_out, class local_point_out, typename weight_type>
+        void FiniteElementBase<dim, local_dim, node_count, node_in, local_node_in, local_point_in, shape_functions_out, grad_shape_functions_out, local_point_out,weight_type>::GetSurfaceIntegrationPointData(const unsigned int s, const unsigned int i, local_point_out xi_begin,
+                                                    local_point_out xi_end, weight_type &weight){
+
+            throw std::logic_error("Function not implemented");
+
+        }
+
+        /*!
          * Interpolate the provided quantity to the local point
          *
          * \param &xi_begin: The starting iterator of the local coordinates

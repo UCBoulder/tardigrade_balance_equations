@@ -26,14 +26,30 @@ namespace tardigradeBalanceEquations {
             constexpr static std::array<T, 3 * 8> local_nodes = {-1, -1, -1, 1, -1, -1, 1, 1, -1, -1, 1, -1,
                                                                  -1, -1, 1,  1, -1, 1,  1, 1, 1,  -1, 1, 1};
 
-            //! The integration points for a fully integrated isoparametric linear hex element
-            constexpr static std::array<T, 3 * 8> integration_points = {
+            //! The volume integration points for a fully integrated isoparametric linear hex element
+            constexpr static std::array<T, 3 * 8> volume_integration_points = {
                 -0.57735027, -0.57735027, -0.57735027, 0.57735027,  -0.57735027, -0.57735027, 0.57735027, 0.57735027,
                 -0.57735027, -0.57735027, 0.57735027,  -0.57735027, -0.57735027, -0.57735027, 0.57735027, 0.57735027,
                 -0.57735027, 0.57735027,  0.57735027,  0.57735027,  0.57735027,  -0.57735027, 0.57735027, 0.57735027};
 
-            //! The integration weights for a fully integrated isoparametric linear hex element
-            constexpr static std::array<T, 8> integration_weights = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
+            //! The volume integration weights for a fully integrated isoparametric linear hex element
+            constexpr static std::array<T, 8> volume_integration_weights = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
+
+            //! The surface integration points for a fully integrated isoparametric linear hex element
+            constexpr static std::array<T, 6 * 4 * 3> surface_integration_points = {
+                -1,          -0.57735027, -0.57735027, -1,         0.57735027,  -0.57735027, -1,          0.57735027,
+                0.57735027,  -1,          -0.57735027, 0.57735027, 1,           -0.57735027, -0.57735027, 1,
+                0.57735027,  -0.57735027, 1,           0.57735027, 0.57735027,  1,           -0.57735027, 0.57735027,
+                -0.57735027, -1,          -0.57735027, 0.57735027, -1,          -0.57735027, 0.57735027,  -1,
+                0.57735027,  -0.57735027, -1,          0.57735027, -0.57735027, 1,           -0.57735027, 0.57735027,
+                1,           -0.57735027, 0.57735027,  1,          0.57735027,  -0.57735027, 1,           0.57735027,
+                -0.57735027, -0.57735027, -1,          0.57735027, -0.57735027, -1,          0.57735027,  0.57735027,
+                -1,          -0.57735027, 0.57735027,  -1,         -0.57735027, -0.57735027, 1,           0.57735027,
+                -0.57735027, 1,           0.57735027,  0.57735027, 1,           -0.57735027, 0.57735027,  1};
+
+            //! The surface integration weights for a fully integrated isoparametric linear hex element
+            constexpr static std::array<T, 4 * 6> surface_integration_weights = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                                                                                 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 
             LinearHex(const node_in &_x_begin, const node_in &_x_end, const node_in &_X_begin, const node_in &_X_end);
 
@@ -60,6 +76,10 @@ namespace tardigradeBalanceEquations {
 
             virtual void GetVolumeIntegrationPointData(const unsigned int i, local_point_out xi_begin,
                                                        local_point_out xi_end, weight_type &weight) override;
+
+            virtual void GetSurfaceIntegrationPointData(const unsigned int s, const unsigned int i,
+                                                        local_point_out xi_begin, local_point_out xi_end,
+                                                        weight_type &weight) override;
         };
 
     }  // namespace finiteElement
