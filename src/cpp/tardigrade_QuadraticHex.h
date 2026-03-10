@@ -17,11 +17,11 @@ namespace tardigradeBalanceEquations {
 
         //! An implementation of a quadratic hexahedral element
         template <typename T, class node_in, class local_point_in, class shape_functions_out,
-                  class grad_shape_functions_out, class integration_point_out = local_point_in,
-                  typename weight_type = double>
+                  class grad_shape_functions_out, class local_point_out,
+                  typename weight_type>
         class QuadraticHex : public FiniteElementBase<3, 3, 20, node_in, typename std::array<T, 3 * 8>::const_iterator,
                                                       local_point_in, shape_functions_out, grad_shape_functions_out,
-                                                      integration_point_out, weight_type> {
+                                                      local_point_out, weight_type> {
            public:
             //! The local nodes for an isoparametric quadratic hex element
             constexpr static std::array<T, 3 * 20> local_nodes = {
@@ -33,7 +33,7 @@ namespace tardigradeBalanceEquations {
                          const node_in &_X_end);
 
             using FiniteElementBase<3, 3, 20, node_in, typename std::array<T, 3 * 8>::const_iterator, local_point_in,
-                                    shape_functions_out, grad_shape_functions_out, integration_point_out,
+                                    shape_functions_out, grad_shape_functions_out, local_point_out,
                                     weight_type>::FiniteElementBase;
 
             virtual void GetShapeFunctions(const local_point_in &xi_begin, const local_point_in &xi_end,

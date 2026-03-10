@@ -19,11 +19,11 @@ namespace tardigradeBalanceEquations {
          * \param &_X_end: The stopping iterator for the reference node positions
          */
         template <typename T, class node_in, class local_point_in, class shape_functions_out,
-                  class grad_shape_functions_out, class integration_point_out, typename weight_type>
-        QuadraticHex<T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, integration_point_out, weight_type>::QuadraticHex(
+                  class grad_shape_functions_out, class local_point_out, typename weight_type>
+        QuadraticHex<T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, local_point_out, weight_type>::QuadraticHex(
             const node_in &_x_begin, const node_in &_x_end, const node_in &_X_begin, const node_in &_X_end)
             : FiniteElementBase<3, 3, 20, node_in, typename std::array<T, 3 * 20>::const_iterator, local_point_in,
-                                shape_functions_out, grad_shape_functions_out, integration_point_out, weight_type>(_x_begin, _x_end, _X_begin, _X_end,
+                                shape_functions_out, grad_shape_functions_out, local_point_out, weight_type>(_x_begin, _x_end, _X_begin, _X_end,
                                                                                std::cbegin(local_nodes),
                                                                                std::cend(local_nodes)) {
         }
@@ -37,8 +37,8 @@ namespace tardigradeBalanceEquations {
          * \param N_end: The stopping iterator of the shape functions (must have dimension 8)
          */
         template <typename T, class node_in, class local_point_in, class shape_functions_out,
-                  class grad_shape_functions_out, class integration_point_out, typename weight_type>
-        void QuadraticHex<T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, integration_point_out, weight_type>::GetShapeFunctions(
+                  class grad_shape_functions_out, class local_point_out, typename weight_type>
+        void QuadraticHex<T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, local_point_out, weight_type>::GetShapeFunctions(
             const local_point_in &xi_begin, const local_point_in &xi_end, shape_functions_out N_begin,
             shape_functions_out N_end) {
 
@@ -86,8 +86,8 @@ namespace tardigradeBalanceEquations {
          * 24)
          */
         template <typename T, class node_in, class local_point_in, class shape_functions_out,
-                  class grad_shape_functions_out, class integration_point_out, typename weight_type>
-        void QuadraticHex<T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, integration_point_out, weight_type>::
+                  class grad_shape_functions_out, class local_point_out, typename weight_type>
+        void QuadraticHex<T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, local_point_out, weight_type>::
             GetLocalShapeFunctionGradients(const local_point_in &xi_begin, const local_point_in &xi_end,
                                            grad_shape_functions_out dNdxi_begin, grad_shape_functions_out dNdxi_end) {
 
@@ -195,8 +195,8 @@ namespace tardigradeBalanceEquations {
          * \param &value_end: The stopping iterator of the shape function global gradient (row major)
          */
         template <typename T, class node_in, class local_point_in, class shape_functions_out,
-                  class grad_shape_functions_out, class integration_point_out, typename weight_type>
-        void QuadraticHex<T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, integration_point_out, weight_type>::
+                  class grad_shape_functions_out, class local_point_out, typename weight_type>
+        void QuadraticHex<T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, local_point_out, weight_type>::
             GetGlobalShapeFunctionGradients(const local_point_in &xi_begin, const local_point_in &xi_end,
                                             const node_in &node_positions_begin, const node_in &node_positions_end,
                                             grad_shape_functions_out value_begin, grad_shape_functions_out value_end) {
@@ -245,8 +245,8 @@ namespace tardigradeBalanceEquations {
          * configuration ( false )
          */
         template <typename T, class node_in, class local_point_in, class shape_functions_out,
-                  class grad_shape_functions_out, class integration_point_out, typename weight_type>
-        void QuadraticHex<T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, integration_point_out, weight_type>::
+                  class grad_shape_functions_out, class local_point_out, typename weight_type>
+        void QuadraticHex<T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, local_point_out, weight_type>::
             GetVolumeIntegralJacobianOfTransformation(const local_point_in &xi_begin, const local_point_in &xi_end,
                                                       typename std::iterator_traits<node_in>::value_type &value,
                                                       const bool configuration) {
