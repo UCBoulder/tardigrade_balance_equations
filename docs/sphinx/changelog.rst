@@ -16,6 +16,7 @@ Internal Changes
 - Moved cpp files to tpp to better reflect that they are template functions (:pull:`48`). By `Nathan Miller`_.
 - Incorporated the IntegrationPointBase class to assist in performing integrations in the elements (:pull:`48`). By `Nathan Miller`_.
 - Incorporated volumetric integration of the LinearHex and QuadraticHex elements (:pull:`49`). By `Nathan Miller`_.
+- Incorporated surface integration of the LinearHex and QuadraticHex elements (:pull:`50`). By `Nathan Miller`_.
 
 ******************
 0.2.2 (02-18-2025)
