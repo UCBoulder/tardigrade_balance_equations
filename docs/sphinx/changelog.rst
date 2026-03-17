@@ -6,7 +6,19 @@ Changelog
 #########
 
 ******************
-0.2.3 (unreleased)
+0.2.4 (03-17-2026)
+******************
+
+Bug Fixes
+=========
+- Fixed bug where Eigen3 version 3.4.0 wasn't being found correctly (:pull:`54`). By `Nathan Miller`_.
+
+Release
+=======
+- Released version (:pull:`55`). By `Nathan Miller`_.
+
+******************
+0.2.3 (03-17-2026)
 ******************
 
 Internal Changes
@@ -20,8 +32,12 @@ Internal Changes
 - Added the Jacobian of transformation for surface integrals (:pull:`51`). By `Nathan Miller`_.
 - Added the previous dof and grad dof inputs to the IntegrationPointBase (:pull:`52`). By `Nathan Miller`_.
 
+Release
+=======
+- Released version (:pull:`53`). By `Nathan Miller`_.
+
 ******************
-0.2.2 (02-18-2025)
+0.2.2 (02-18-2026)
 ******************
 
 Internal Changes
