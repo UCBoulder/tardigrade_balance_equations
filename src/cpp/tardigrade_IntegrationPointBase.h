@@ -80,6 +80,8 @@ namespace tardigradeBalanceEquations {
                   _grad_interpolation({}),
                   _dof({}),
                   _grad_dof({}),
+                  _previous_dof({}),
+                  _previous_grad_dof({}),
                   _Jxw(typename configuration::Jxw_type()) {};
 
             /*!
@@ -91,6 +93,8 @@ namespace tardigradeBalanceEquations {
              * \param &grad_interpolation: The spatial gradient of the interpolation function values
              * \param &dof: The dof values at the integration point
              * \param &grad_dof: The spatial gradient of the dof values at the integration point
+             * \param &previous_dof: The previous dof values at the integration point
+             * \param &previous_grad_dof: The previous spatial gradient of the dof values at the integration point
              * \param &Jxw: The product of the Jacobian of transformation and the integration point weight
              */
             IntegrationPointBase(
@@ -104,6 +108,9 @@ namespace tardigradeBalanceEquations {
                 const std::array<typename configuration::test_type, configuration::num_dof>       &dof,
                 const std::array<typename configuration::test_type, configuration::num_dof * configuration::dim>
                                                        &grad_dof,
+                const std::array<typename configuration::test_type, configuration::num_dof>       &previous_dof,
+                const std::array<typename configuration::test_type, configuration::num_dof * configuration::dim>
+                                                       &previous_grad_dof,
                 const typename configuration::Jxw_type &Jxw)
                 : _test(test),
                   _grad_test(grad_test),
@@ -111,6 +118,8 @@ namespace tardigradeBalanceEquations {
                   _grad_interpolation(grad_interpolation),
                   _dof(dof),
                   _grad_dof(grad_dof),
+                  _previous_dof(previous_dof),
+                  _previous_grad_dof(previous_grad_dof),
                   _Jxw(Jxw) {};
 
             //! Get the net response
@@ -179,6 +188,12 @@ namespace tardigradeBalanceEquations {
 
             //! The DOF gradient vector
             const std::array<typename configuration::dof_type, configuration::num_dof * configuration::dim> _grad_dof;
+
+            //! The previous DOF vector
+            const std::array<typename configuration::dof_type, configuration::num_dof> _previous_dof;
+
+            //! The previous DOF gradient vector
+            const std::array<typename configuration::dof_type, configuration::num_dof * configuration::dim> _previous_grad_dof;
 
             //! The product of the volumetric Jacobian and the integration point weight
             const typename configuration::Jxw_type _Jxw;
