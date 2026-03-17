@@ -135,7 +135,6 @@ set_property(GLOBAL PROPERTY CLANG_FORMAT_SOURCE_FILES)
 
 #=============================================================================================== ADD PROJECT TARGETS ===
 
-
 # Find eigen
 find_package(Eigen3 3.3...5 NO_MODULE)
 if(EIGEN3_FOUND)
