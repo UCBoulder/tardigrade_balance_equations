@@ -18,6 +18,7 @@ Internal Changes
 - Incorporated volumetric integration of the LinearHex and QuadraticHex elements (:pull:`49`). By `Nathan Miller`_.
 - Incorporated surface integration of the LinearHex and QuadraticHex elements (:pull:`50`). By `Nathan Miller`_.
 - Added the Jacobian of transformation for surface integrals (:pull:`51`). By `Nathan Miller`_.
+- Added the previous dof and grad dof inputs to the IntegrationPointBase (:pull:`52`). By `Nathan Miller`_.
 
 ******************
 0.2.2 (02-18-2025)
