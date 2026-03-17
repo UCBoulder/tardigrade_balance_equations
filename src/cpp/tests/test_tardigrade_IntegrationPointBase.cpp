@@ -120,7 +120,8 @@ BOOST_AUTO_TEST_CASE(tardigrade_IntegrationPointBase_assembleIntegrationPointRes
         0.153387, 0.234117, 0.314847, 0.169533, 0.250263, 0.330993, 0.347139, 0.427869, 0.508599, 0.363285, 0.444015,
         0.524745, 0.379431, 0.460161, 0.540891, 0.395577, 0.476307, 0.557037, 0.411723, 0.492453, 0.573183};
 
-    IntegrationPointBaseMock point(test, grad_test, interpolation, grad_interpolation, dof, grad_dof, previous_dof, previous_grad_dof, Jxw);
+    IntegrationPointBaseMock point(test, grad_test, interpolation, grad_interpolation, dof, grad_dof, previous_dof,
+                                   previous_grad_dof, Jxw);
 
     point.public_assembleIntegrationPointResponse();
 
