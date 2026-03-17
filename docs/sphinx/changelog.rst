@@ -9,6 +9,17 @@ Changelog
 0.2.3 (unreleased)
 ******************
 
+Internal Changes
+================
+- Corrected typo in environment variable (:pull:`46`). By `Nathan Miller`_.
+- Use pinned minor versions for the runtime requirements (:pull:`47`). By `Nathan Miller`_.
+- Moved cpp files to tpp to better reflect that they are template functions (:pull:`48`). By `Nathan Miller`_.
+- Incorporated the IntegrationPointBase class to assist in performing integrations in the elements (:pull:`48`). By `Nathan Miller`_.
+- Incorporated volumetric integration of the LinearHex and QuadraticHex elements (:pull:`49`). By `Nathan Miller`_.
+- Incorporated surface integration of the LinearHex and QuadraticHex elements (:pull:`50`). By `Nathan Miller`_.
+- Added the Jacobian of transformation for surface integrals (:pull:`51`). By `Nathan Miller`_.
+- Added the previous dof and grad dof inputs to the IntegrationPointBase (:pull:`52`). By `Nathan Miller`_.
+
 ******************
 0.2.2 (02-18-2025)
 ******************

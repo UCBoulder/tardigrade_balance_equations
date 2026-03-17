@@ -1,9 +1,9 @@
 /**
  ******************************************************************************
- * \file tardigrade_balance_of_mass.cpp
+ * \file tardigrade_FiniteElementBase.cpp
  ******************************************************************************
- * The source file for the equations associated with the balance of mass
+ * The source file for the FiniteElementBase class
  ******************************************************************************
  */
 
-#include "tardigrade_balance_of_mass.h"
+#include "tardigrade_FiniteElementBase.h"

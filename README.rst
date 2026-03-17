@@ -60,14 +60,7 @@ the following commands.
 
 .. code-block:: bash
 
-   $ conda create --name tardigrade-balance-equations-env --file environment.txt --channel file:///projects/aea_compute/aea-conda
-
-If there is difficulty with installing some of the dependencies, a reduced environment is provided that will attempt to
-build some of the repositories from source. This can be invoked using
-
-.. code-block:: bash
-
-   $ conda create --name tardigrade-balance-equations-env --file reduced_environment.txt --channel conda-forge
+   $ conda create --name tardigrade-balance-equations-env --file environment.txt --channel conda-forge
 
 You can learn more about Anaconda Python environment creation and management in
 the `Anaconda Documentation`_.

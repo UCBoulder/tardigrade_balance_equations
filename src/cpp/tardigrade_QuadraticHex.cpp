@@ -1,9 +1,9 @@
 /**
  ******************************************************************************
- * \file tardigrade_balance_of_mass.cpp
+ * \file tardigrade_QuadraticHex.cpp
  ******************************************************************************
- * The source file for the equations associated with the balance of mass
+ * The source file for the Quadratic Hexahedral element
  ******************************************************************************
  */
 
-#include "tardigrade_balance_of_mass.h"
+#include "tardigrade_QuadraticHex.h"

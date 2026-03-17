@@ -168,6 +168,6 @@ namespace tardigradeBalanceEquations {
 
 }  // namespace tardigradeBalanceEquations
 
-#include "tardigrade_constraint_equations.cpp"
+#include "tardigrade_constraint_equations.tpp"
 
 #endif

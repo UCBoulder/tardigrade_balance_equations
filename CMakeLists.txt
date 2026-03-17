@@ -40,11 +40,15 @@ set(ADDITIONAL_HEADER_ONLY_LIBRARIES
     "tardigrade_finite_element_utilities"
     "tardigrade_constraint_equations"
     "tardigrade_balance_of_surface_growth"
+    "tardigrade_IntegrationPointBase"
+    "tardigrade_FiniteElementBase"
+    "tardigrade_LinearHex"
+    "tardigrade_QuadraticHex"
 )
-set(PROJECT_SOURCE_FILES ${PROJECT_NAME}.cpp ${PROJECT_NAME}.h)
+set(PROJECT_SOURCE_FILES ${PROJECT_NAME}.cpp ${PROJECT_NAME}.h ${PROJECT_NAME}.tpp)
 set(PROJECT_PRIVATE_HEADERS "")
 foreach(package ${INTERNAL_SUPPORT_LIBRARIES})
-    set(PROJECT_SOURCE_FILES ${PROJECT_SOURCE_FILES} ${package}.cpp ${package}.h)
+    set(PROJECT_SOURCE_FILES ${PROJECT_SOURCE_FILES} ${package}.cpp ${package}.h ${package}.tpp)
     set(PROJECT_PRIVATE_HEADERS ${PROJECT_PRIVATE_HEADERS} ${package}.h)
 endforeach(package)
 if(TARDIGRADE_BALANCE_EQUATIONS_USE_LIBXSMM)
@@ -132,10 +136,12 @@ set_property(GLOBAL PROPERTY CLANG_FORMAT_SOURCE_FILES)
 #=============================================================================================== ADD PROJECT TARGETS ===
 
 # Find eigen
-find_package(Eigen3 3.3 REQUIRED NO_MODULE)
-include_directories(SYSTEM ${EIGEN3_INCLUDE_DIR})
+find_package(Eigen3 3.3...5 NO_MODULE)
 if(EIGEN3_FOUND)
-    message(STATUS "Found Eigen3: ${EIGEN3_INCLUDE_DIR}")
+    message(STATUS "Found Eigen3 (less than version 5): ${EIGEN3_INCLUDE_DIR}")
+else()
+    find_package(Eigen3 5 REQUIRED NO_MODULE)
+    message(STATUS "Found Eigen3 (version 5): ${EIGEN3_INCLUDE_DIR}")
 endif()
 
 # Find bash (Required for abaqus integration tests)
