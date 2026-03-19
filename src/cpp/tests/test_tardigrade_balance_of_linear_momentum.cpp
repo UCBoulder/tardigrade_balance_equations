@@ -973,7 +973,8 @@ void evaluate_at_nodes(const xi_in &xi_begin, const xi_in &xi_end, dt_type dt, c
                                  std::end(u_ddot_tp1), dUDDotdU);
 
     // Instantiate the element
-    tardigradeBalanceEquations::finiteElement::LinearHex<
+    using element_configuration = typename tardigradeBalanceEquations::finiteElement::LinearHexConfiguration;
+    tardigradeBalanceEquations::finiteElement::LinearHex< element_configuration,
         floatType, typename std::array<floatType, 24>::const_iterator,
         typename std::array<floatType, 3>::const_iterator, typename std::array<floatType, 8>::iterator,
         typename std::array<floatType, 24>::iterator, typename std::array<floatType, 3>::iterator, floatType>
@@ -1111,7 +1112,8 @@ void evaluate_at_nodes(const xi_in &xi_begin, const xi_in &xi_end, dt_type dt, c
                                  std::end(u_ddot_tp1), dUDDotdU);
 
     // Instantiate the element
-    tardigradeBalanceEquations::finiteElement::LinearHex<
+    using element_configuration = typename tardigradeBalanceEquations::finiteElement::LinearHexConfiguration;
+    tardigradeBalanceEquations::finiteElement::LinearHex< element_configuration,
         floatType, typename std::array<floatType, 24>::const_iterator,
         typename std::array<floatType, 3>::const_iterator, typename std::array<floatType, 8>::iterator,
         typename std::array<floatType, 24>::iterator, typename std::array<floatType, 3>::iterator, floatType>
@@ -2612,7 +2614,8 @@ void evaluate_at_nodes(
                                  alpha, beta, std::begin(a_tp1), std::end(a_tp1), dUDDotdU);
 
     // Instantiate the element
-    tardigradeBalanceEquations::finiteElement::LinearHex<
+    using element_configuration = typename tardigradeBalanceEquations::finiteElement::LinearHexConfiguration;
+    tardigradeBalanceEquations::finiteElement::LinearHex< element_configuration,
         floatType, typename std::array<floatType, 24>::const_iterator,
         typename std::array<floatType, 3>::const_iterator, typename std::array<floatType, 8>::iterator,
         typename std::array<floatType, 24>::iterator, typename std::array<floatType, 3>::iterator, floatType>
@@ -2849,7 +2852,8 @@ void evaluate_at_nodes(
                                  alpha, beta, std::begin(a_tp1), std::end(a_tp1), dUDDotdU);
 
     // Instantiate the element
-    tardigradeBalanceEquations::finiteElement::LinearHex<
+    using element_configuration = typename tardigradeBalanceEquations::finiteElement::LinearHexConfiguration;
+    tardigradeBalanceEquations::finiteElement::LinearHex< element_configuration,
         floatType, typename std::array<floatType, 24>::const_iterator,
         typename std::array<floatType, 3>::const_iterator, typename std::array<floatType, 8>::iterator,
         typename std::array<floatType, 24>::iterator, typename std::array<floatType, 3>::iterator, floatType>
