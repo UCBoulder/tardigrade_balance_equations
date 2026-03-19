@@ -18,9 +18,9 @@ namespace tardigradeBalanceEquations {
          * \param &_X_begin: The starting iterator for the reference node positions
          * \param &_X_end: The stopping iterator for the reference node positions
          */
-        template <typename T, class node_in, class local_point_in, class shape_functions_out,
+        template <class element_configuration, typename T, class node_in, class local_point_in, class shape_functions_out,
                   class grad_shape_functions_out, class local_point_out, typename weight_type>
-        LinearHex<T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, local_point_out, weight_type>::LinearHex(
+        LinearHex<element_configuration, T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, local_point_out, weight_type>::LinearHex(
             const node_in &_x_begin, const node_in &_x_end, const node_in &_X_begin, const node_in &_X_end)
             : FiniteElementBase<LinearHexConfiguration, node_in, local_point_in,
                                 shape_functions_out, grad_shape_functions_out,local_point_out,weight_type>(_x_begin, _x_end, _X_begin, _X_end,
@@ -36,9 +36,9 @@ namespace tardigradeBalanceEquations {
          * \param N_begin: The starting iterator of the shape functions (must have dimension 8)
          * \param N_end: The stopping iterator of the shape functions (must have dimension 8)
          */
-        template <typename T, class node_in, class local_point_in, class shape_functions_out,
+        template <class element_configuration, typename T, class node_in, class local_point_in, class shape_functions_out,
                   class grad_shape_functions_out, class local_point_out, typename weight_type>
-        void LinearHex<T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, local_point_out, weight_type>::GetShapeFunctions(
+        void LinearHex<element_configuration, T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, local_point_out, weight_type>::GetShapeFunctions(
             const local_point_in &xi_begin, const local_point_in &xi_end, shape_functions_out N_begin,
             shape_functions_out N_end) {
 
@@ -63,9 +63,9 @@ namespace tardigradeBalanceEquations {
          * \param dNdxi_end: The stopping iterator of the local gradient of the shape functions (must have dimension
          * 24)
          */
-        template <typename T, class node_in, class local_point_in, class shape_functions_out,
+        template <class element_configuration, typename T, class node_in, class local_point_in, class shape_functions_out,
                   class grad_shape_functions_out, class local_point_out, typename weight_type>
-        void LinearHex<T, node_in, local_point_in, shape_functions_out,
+        void LinearHex<element_configuration, T, node_in, local_point_in, shape_functions_out,
                        grad_shape_functions_out, local_point_out, weight_type>::GetLocalShapeFunctionGradients(const local_point_in    &xi_begin,
                                                                                  const local_point_in    &xi_end,
                                                                                  grad_shape_functions_out dNdxi_begin,
@@ -98,9 +98,9 @@ namespace tardigradeBalanceEquations {
          * \param &value_begin: The starting iterator of the shape function global gradient (row major)
          * \param &value_end: The stopping iterator of the shape function global gradient (row major)
          */
-        template <typename T, class node_in, class local_point_in, class shape_functions_out,
+        template <class element_configuration, typename T, class node_in, class local_point_in, class shape_functions_out,
                   class grad_shape_functions_out, class local_point_out, typename weight_type>
-        void LinearHex<T, node_in, local_point_in, shape_functions_out,
+        void LinearHex<element_configuration, T, node_in, local_point_in, shape_functions_out,
                        grad_shape_functions_out, local_point_out, weight_type>::GetGlobalShapeFunctionGradients(const local_point_in &xi_begin,
                                                                                   const local_point_in &xi_end,
                                                                                   const node_in &node_positions_begin,
@@ -149,9 +149,9 @@ namespace tardigradeBalanceEquations {
          * \param configuration: Compute the gradient w.r.t. the current configuration ( true ) or reference
          * configuration ( false )
          */
-        template <typename T, class node_in, class local_point_in, class shape_functions_out,
+        template <class element_configuration, typename T, class node_in, class local_point_in, class shape_functions_out,
                   class grad_shape_functions_out, class local_point_out, typename weight_type>
-        void LinearHex<T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, local_point_out, weight_type>::
+        void LinearHex<element_configuration, T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, local_point_out, weight_type>::
             GetVolumeIntegralJacobianOfTransformation(const local_point_in &xi_begin, const local_point_in &xi_end,
                                                       typename std::iterator_traits<node_in>::value_type &value,
                                                       const bool configuration) {
@@ -185,9 +185,9 @@ namespace tardigradeBalanceEquations {
          * \param configuration: Compute the gradient w.r.t. the current configuration ( true ) or reference
          * configuration ( false )
          */
-        template <typename T, class node_in, class local_point_in, class shape_functions_out,
+        template <class element_configuration, typename T, class node_in, class local_point_in, class shape_functions_out,
                   class grad_shape_functions_out, class local_point_out, typename weight_type>
-        void LinearHex<T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, local_point_out, weight_type>
+        void LinearHex<element_configuration, T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, local_point_out, weight_type>
             ::GetSurfaceIntegralJacobianOfTransformation(
                 const unsigned int s,
                 const local_point_in &xi_begin, const local_point_in &xi_end,
@@ -248,9 +248,9 @@ namespace tardigradeBalanceEquations {
          * \param xi_end: The stopping iterator of the integration point in local coordinates
          * \param &weight: The weight of the integration point
          */
-        template <typename T, class node_in, class local_point_in, class shape_functions_out,
+        template <class element_configuration, typename T, class node_in, class local_point_in, class shape_functions_out,
                   class grad_shape_functions_out, class local_point_out, typename weight_type>
-        void LinearHex<T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, local_point_out, weight_type>
+        void LinearHex<element_configuration, T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, local_point_out, weight_type>
             ::GetVolumeIntegrationPointData(const unsigned int i, local_point_out xi_begin,
                                                        local_point_out xi_end, weight_type &weight){
 
@@ -271,9 +271,9 @@ namespace tardigradeBalanceEquations {
          * \param xi_end: The stopping iterator of the local coordinates of the integration point
          * \param &weight: The weight to be applied to the integration point
          */
-        template <typename T, class node_in, class local_point_in, class shape_functions_out,
+        template <class element_configuration, typename T, class node_in, class local_point_in, class shape_functions_out,
                   class grad_shape_functions_out, class local_point_out, typename weight_type>
-        void LinearHex<T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, local_point_out, weight_type>::
+        void LinearHex<element_configuration, T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, local_point_out, weight_type>::
              GetSurfaceIntegrationPointData(const unsigned int s, const unsigned int i, local_point_out xi_begin,
                                                     local_point_out xi_end, weight_type &weight){
 
