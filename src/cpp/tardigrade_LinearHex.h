@@ -18,9 +18,18 @@ namespace tardigradeBalanceEquations {
         /*!
          * The configuration of the linear hex element
          */
-        class LinearHexConfiguration : public FiniteElementConfigurationBase<3, 3, 8, double, double>{
+        class LinearHexConfiguration : public FiniteElementConfigurationBase<3, 3, 8, double>{
 
             public:
+
+                //! The number of integration points
+                constexpr static unsigned int num_volume_integration_points = 8;
+
+                //! The type for the element local node coordinates
+                using node_value_type = double;
+
+                //! The type for the volume integration point weights
+                using volume_integration_point_weight_value_type = double;
 
         };
 
@@ -32,17 +41,17 @@ namespace tardigradeBalanceEquations {
                                        shape_functions_out, grad_shape_functions_out, local_point_out, weight_type> {
            public:
             //! The local nodes for an isoparametric linear hex element
-            constexpr static std::array<T, 3 * 8> local_nodes = {-1, -1, -1, 1, -1, -1, 1, 1, -1, -1, 1, -1,
+            constexpr static std::array<typename element_configuration::local_node_value_type, element_configuration::local_dim * element_configuration::node_count> local_nodes = {-1, -1, -1, 1, -1, -1, 1, 1, -1, -1, 1, -1,
                                                                  -1, -1, 1,  1, -1, 1,  1, 1, 1,  -1, 1, 1};
 
             //! The volume integration points for a fully integrated isoparametric linear hex element
-            constexpr static std::array<T, 3 * 8> volume_integration_points = {
+            constexpr static std::array<typename element_configuration::local_node_value_type, element_configuration::local_dim * element_configuration::num_volume_integration_points> volume_integration_points = {
                 -0.57735027, -0.57735027, -0.57735027, 0.57735027,  -0.57735027, -0.57735027, 0.57735027, 0.57735027,
                 -0.57735027, -0.57735027, 0.57735027,  -0.57735027, -0.57735027, -0.57735027, 0.57735027, 0.57735027,
                 -0.57735027, 0.57735027,  0.57735027,  0.57735027,  0.57735027,  -0.57735027, 0.57735027, 0.57735027};
 
             //! The volume integration weights for a fully integrated isoparametric linear hex element
-            constexpr static std::array<T, 8> volume_integration_weights = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
+            constexpr static std::array<typename element_configuration::volume_integration_point_weight_value_type, element_configuration::num_volume_integration_points> volume_integration_weights = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
 
             //! The surface integration points for a fully integrated isoparametric linear hex element
             constexpr static std::array<T, 6 * 4 * 3> surface_integration_points = {
@@ -61,7 +70,7 @@ namespace tardigradeBalanceEquations {
                                                                                  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 
             //! The surface normals
-            constexpr static std::array<T, 3 * 6> surface_normals = {-1, 0, 0, 1, 0, 0,  0, -1, 0,
+            constexpr static std::array<typename element_configuration::local_node_value_type, element_configuration::local_dim * 6> surface_normals = {-1, 0, 0, 1, 0, 0,  0, -1, 0,
                                                                      0,  1, 0, 0, 0, -1, 0, 0,  1};
 
             LinearHex(const node_in &_x_begin, const node_in &_x_end, const node_in &_X_begin, const node_in &_X_end);

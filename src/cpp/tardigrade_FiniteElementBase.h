@@ -15,7 +15,10 @@ namespace tardigradeBalanceEquations {
 
     namespace finiteElement {
 
-        template<unsigned int _dim, unsigned int _local_dim, unsigned int _node_count, typename node_in_value_type, typename local_node_in_value_type>
+        /*!
+         * A template class which defines the configuration of a finite element
+         */
+        template<unsigned int _dim, unsigned int _local_dim, unsigned int _node_count, typename _local_node_value_type>
         class FiniteElementConfigurationBase {
 
             public:
@@ -28,11 +31,11 @@ namespace tardigradeBalanceEquations {
                 //! The number of nodes in the element
                 constexpr static unsigned int node_count = _node_count;
 
-                //! The type of the node coordinate storage
-                using node_in = typename std::array<node_in_value_type, local_dim * node_count>::const_iterator;
+                //! The type of the local node coordinate
+                using local_node_value_type = _local_node_value_type;
 
-                //! The type of the local node coordinate storage
-                using local_node_in = typename std::array<local_node_in_value_type, local_dim * node_count>::const_iterator;
+                //! The type of the local node coordinate storage iterator
+                using local_node_in = typename std::array<local_node_value_type, local_dim * node_count>::const_iterator;
 
         };
 

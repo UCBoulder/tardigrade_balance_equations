@@ -18,10 +18,12 @@ namespace tardigradeBalanceEquations {
         /*!
          * The configuration of the linear hex element
          */
-        class QuadraticHexConfiguration : public FiniteElementConfigurationBase<3, 3, 20, double, double>{
+        class QuadraticHexConfiguration : public FiniteElementConfigurationBase<3, 3, 20, double>{
 
             public:
 
+                //! The type for the element local node coordinates
+                using node_value_type = double;
         };
 
         //! An implementation of a quadratic hexahedral element
@@ -32,7 +34,7 @@ namespace tardigradeBalanceEquations {
                                        shape_functions_out, grad_shape_functions_out, local_point_out, weight_type> {
            public:
             //! The local nodes for an isoparametric quadratic hex element
-            constexpr static std::array<T, 3 * 20> local_nodes = {
+            constexpr static std::array<typename element_configuration::local_node_value_type, 3 * 20> local_nodes = {
                 -1, -1, -1, 1, -1, -1, 1,  1, -1, -1, 1, -1, -1, -1, 1, 1,  -1, 1,  1, 1,
                 1,  -1, 1,  1, 0,  -1, -1, 1, 0,  -1, 0, 1,  -1, -1, 0, -1, 0,  -1, 1, 1,
                 0,  1,  0,  1, 1,  -1, 0,  1, -1, -1, 0, 1,  -1, 0,  1, 1,  0,  -1, 1, 0};
