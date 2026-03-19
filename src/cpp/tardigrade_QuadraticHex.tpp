@@ -22,7 +22,7 @@ namespace tardigradeBalanceEquations {
                   class grad_shape_functions_out, class local_point_out, typename weight_type>
         QuadraticHex<T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, local_point_out, weight_type>::QuadraticHex(
             const node_in &_x_begin, const node_in &_x_end, const node_in &_X_begin, const node_in &_X_end)
-            : FiniteElementBase<QuadraticHexConfiguration, node_in, typename std::array<T, 3 * 20>::const_iterator, local_point_in,
+            : FiniteElementBase<QuadraticHexConfiguration, node_in, local_point_in,
                                 shape_functions_out, grad_shape_functions_out, local_point_out, weight_type>(_x_begin, _x_end, _X_begin, _X_end,
                                                                                std::cbegin(local_nodes),
                                                                                std::cend(local_nodes)) {

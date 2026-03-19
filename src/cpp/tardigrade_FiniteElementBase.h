@@ -15,7 +15,7 @@ namespace tardigradeBalanceEquations {
 
     namespace finiteElement {
 
-        template<unsigned int _dim, unsigned int _local_dim, unsigned int _node_count>
+        template<unsigned int _dim, unsigned int _local_dim, unsigned int _node_count, typename node_in_value_type, typename local_node_in_value_type>
         class FiniteElementConfigurationBase {
 
             public:
@@ -28,17 +28,23 @@ namespace tardigradeBalanceEquations {
                 //! The number of nodes in the element
                 constexpr static unsigned int node_count = _node_count;
 
+                //! The type of the node coordinate storage
+                using node_in = typename std::array<node_in_value_type, local_dim * node_count>::const_iterator;
+
+                //! The type of the local node coordinate storage
+                using local_node_in = typename std::array<local_node_in_value_type, local_dim * node_count>::const_iterator;
+
         };
 
         //! A base class for a simple finite element formulation useful for testing
-        template <class element_configuration, class node_in, class local_node_in, class local_point_in,
+        template <class element_configuration, class node_in, class local_point_in,
                   class shape_functions_out, class grad_shape_functions_out, class local_point_out,
                   typename weight_type>
         class FiniteElementBase {
            public:
             FiniteElementBase(const node_in &_x_begin, const node_in &_x_end, const node_in &_X_begin,
-                              const node_in &_X_end, const local_node_in &_local_node_xi_begin,
-                              const local_node_in &_local_node_xi_end);
+                              const node_in &_X_end, const typename element_configuration::local_node_in &_local_node_xi_begin,
+                              const typename element_configuration::local_node_in &_local_node_xi_end);
 
             virtual void GetShapeFunctions(const local_point_in &xi_begin, const local_point_in &xi_end,
                                            shape_functions_out N_begin, shape_functions_out N_end);
@@ -91,8 +97,8 @@ namespace tardigradeBalanceEquations {
             const node_in X_begin;  //!< Starting iterator for the reference position of the nodal coordinates
             const node_in X_end;    //!< Stopping iterator for the reference position of the nodal coordinates
 
-            const local_node_in local_node_xi_begin;  //!< Starting iterator for the local nodal coordinates
-            const local_node_in local_node_xi_end;    //!< Stopping iterator for the local nodal coordinates
+            const typename element_configuration::local_node_in local_node_xi_begin;  //!< Starting iterator for the local nodal coordinates
+            const typename element_configuration::local_node_in local_node_xi_end;    //!< Stopping iterator for the local nodal coordinates
 
             std::array<typename std::iterator_traits<shape_functions_out>::value_type, element_configuration::node_count>
                 _shapefunctions;  //!< A temporary storage container for shapefunction values
