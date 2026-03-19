@@ -20,9 +20,9 @@ namespace tardigradeBalanceEquations {
          * \param &_local_node_xi_begin: The starting iterator for the local node positions
          * \param &_local_node_xi_end: The stopping iterator for the local node positions
          */
-        template <int dim, int local_dim, int node_count, class node_in, class local_node_in, class local_point_in,
+        template <class element_configuration, class node_in, class local_node_in, class local_point_in,
                   class shape_functions_out, class grad_shape_functions_out, class local_point_out, typename weight_type>
-        FiniteElementBase<dim, local_dim, node_count, node_in, local_node_in, local_point_in, shape_functions_out,
+        FiniteElementBase<element_configuration, node_in, local_node_in, local_point_in, shape_functions_out,
                           grad_shape_functions_out, local_point_out, weight_type>::FiniteElementBase(const node_in &_x_begin, const node_in &_x_end,
                                                                        const node_in &_X_begin, const node_in &_X_end,
                                                                        const local_node_in &_local_node_xi_begin,
@@ -43,9 +43,9 @@ namespace tardigradeBalanceEquations {
          * \param N_begin: The starting iterator of the shape functions
          * \param N_end: The stopping iterator of the shape functions
          */
-        template <int dim, int local_dim, int node_count, class node_in, class local_node_in, class local_point_in,
+        template <class element_configuration, class node_in, class local_node_in, class local_point_in,
                   class shape_functions_out, class grad_shape_functions_out, class local_point_out, typename weight_type>
-        void FiniteElementBase<dim, local_dim, node_count, node_in, local_node_in, local_point_in,shape_functions_out,grad_shape_functions_out,local_point_out,weight_type>::GetShapeFunctions(const local_point_in &xi_begin, const local_point_in &xi_end,
+        void FiniteElementBase<element_configuration, node_in, local_node_in, local_point_in,shape_functions_out,grad_shape_functions_out,local_point_out,weight_type>::GetShapeFunctions(const local_point_in &xi_begin, const local_point_in &xi_end,
                                        shape_functions_out N_begin, shape_functions_out N_end) {
 
             throw std::logic_error("Function not implemented");
@@ -59,9 +59,9 @@ namespace tardigradeBalanceEquations {
          * \param dNdxi_begin: The starting iterator of the shape function gradients
          * \param dNdxi_end: The stopping iterator of the shape function gradients
          */
-        template <int dim, int local_dim, int node_count, class node_in, class local_node_in, class local_point_in,
+        template <class element_configuration, class node_in, class local_node_in, class local_point_in,
                   class shape_functions_out, class grad_shape_functions_out, class local_point_out, typename weight_type>
-        void FiniteElementBase<dim, local_dim, node_count, node_in, local_node_in, local_point_in,shape_functions_out,grad_shape_functions_out,local_point_out,weight_type>::GetLocalShapeFunctionGradients(const local_point_in &xi_begin, const local_point_in &xi_end,
+        void FiniteElementBase<element_configuration, node_in, local_node_in, local_point_in,shape_functions_out,grad_shape_functions_out,local_point_out,weight_type>::GetLocalShapeFunctionGradients(const local_point_in &xi_begin, const local_point_in &xi_end,
                                                     grad_shape_functions_out dNdxi_begin,
                                                     grad_shape_functions_out dNdxi_end) {
 
@@ -78,9 +78,9 @@ namespace tardigradeBalanceEquations {
          * \param &value_begin: The starting iterator of the shape function global gradient (row major)
          * \param &value_end: The stopping iterator of the shape function global gradient (row major)
          */
-        template <int dim, int local_dim, int node_count, class node_in, class local_node_in, class local_point_in,
+        template <class element_configuration, class node_in, class local_node_in, class local_point_in,
                   class shape_functions_out, class grad_shape_functions_out, class local_point_out, typename weight_type>
-        void FiniteElementBase<dim, local_dim, node_count, node_in, local_node_in, local_point_in,shape_functions_out,grad_shape_functions_out,local_point_out,weight_type>::GetGlobalShapeFunctionGradients(const local_point_in &xi_begin, const local_point_in &xi_end,
+        void FiniteElementBase<element_configuration, node_in, local_node_in, local_point_in,shape_functions_out,grad_shape_functions_out,local_point_out,weight_type>::GetGlobalShapeFunctionGradients(const local_point_in &xi_begin, const local_point_in &xi_end,
                                                      const node_in           &node_positions_begin,
                                                      const node_in           &node_positions_end,
                                                      grad_shape_functions_out value_begin,
@@ -100,9 +100,9 @@ namespace tardigradeBalanceEquations {
          * \param configuration: Compute the gradient w.r.t. the current configuration ( true ) or reference
          * configuration ( false )
          */
-        template <int dim, int local_dim, int node_count, class node_in, class local_node_in, class local_point_in,
+        template <class element_configuration, class node_in, class local_node_in, class local_point_in,
                   class shape_functions_out, class grad_shape_functions_out, class local_point_out, typename weight_type>
-        void FiniteElementBase<dim, local_dim, node_count, node_in, local_node_in, local_point_in,shape_functions_out,grad_shape_functions_out,local_point_out,weight_type>::GetVolumeIntegralJacobianOfTransformation(
+        void FiniteElementBase<element_configuration, node_in, local_node_in, local_point_in,shape_functions_out,grad_shape_functions_out,local_point_out,weight_type>::GetVolumeIntegralJacobianOfTransformation(
             const local_point_in &xi_begin, const local_point_in &xi_end,
             typename std::iterator_traits<node_in>::value_type &value, const bool configuration) {
 
@@ -121,9 +121,9 @@ namespace tardigradeBalanceEquations {
          * \param configuration: Compute the gradient w.r.t. the current configuration ( true ) or reference
          * configuration ( false )
          */
-        template <int dim, int local_dim, int node_count, class node_in, class local_node_in, class local_point_in,
+        template <class element_configuration, class node_in, class local_node_in, class local_point_in,
                   class shape_functions_out, class grad_shape_functions_out, class local_point_out, typename weight_type>
-        void FiniteElementBase<dim, local_dim, node_count, node_in, local_node_in, local_point_in,shape_functions_out,grad_shape_functions_out,local_point_out,weight_type>::GetSurfaceIntegralJacobianOfTransformation(
+        void FiniteElementBase<element_configuration, node_in, local_node_in, local_point_in,shape_functions_out,grad_shape_functions_out,local_point_out,weight_type>::GetSurfaceIntegralJacobianOfTransformation(
                 const unsigned int s,
                 const local_point_in &xi_begin, const local_point_in &xi_end,
                 typename std::iterator_traits<node_in>::value_type &value, const bool configuration) {
@@ -139,9 +139,9 @@ namespace tardigradeBalanceEquations {
          * \param xi_end: The stopping iterator of the local coordinates of the integration point
          * \param &weight: The weight to be applied to the integration point
          */
-        template <int dim, int local_dim, int node_count, class node_in, class local_node_in, class local_point_in,
+        template <class element_configuration, class node_in, class local_node_in, class local_point_in,
                   class shape_functions_out, class grad_shape_functions_out, class local_point_out, typename weight_type>
-        void FiniteElementBase<dim, local_dim, node_count, node_in, local_node_in, local_point_in,shape_functions_out,grad_shape_functions_out,local_point_out,weight_type>::GetVolumeIntegrationPointData(const unsigned int i, local_point_out xi_begin, local_point_out xi_end, weight_type &weight){
+        void FiniteElementBase<element_configuration, node_in, local_node_in, local_point_in,shape_functions_out,grad_shape_functions_out,local_point_out,weight_type>::GetVolumeIntegrationPointData(const unsigned int i, local_point_out xi_begin, local_point_out xi_end, weight_type &weight){
 
             throw std::logic_error("Function not implemented");
         }
@@ -155,9 +155,9 @@ namespace tardigradeBalanceEquations {
          * \param xi_end: The stopping iterator of the local coordinates of the integration point
          * \param &weight: The weight to be applied to the integration point
          */
-        template <int dim, int local_dim, int node_count, class node_in, class local_node_in, class local_point_in,
+        template <class element_configuration, class node_in, class local_node_in, class local_point_in,
                   class shape_functions_out, class grad_shape_functions_out, class local_point_out, typename weight_type>
-        void FiniteElementBase<dim, local_dim, node_count, node_in, local_node_in, local_point_in, shape_functions_out, grad_shape_functions_out, local_point_out,weight_type>::GetSurfaceIntegrationPointData(const unsigned int s, const unsigned int i, local_point_out xi_begin,
+        void FiniteElementBase<element_configuration, node_in, local_node_in, local_point_in, shape_functions_out, grad_shape_functions_out, local_point_out,weight_type>::GetSurfaceIntegrationPointData(const unsigned int s, const unsigned int i, local_point_out xi_begin,
                                                     local_point_out xi_end, weight_type &weight){
 
             throw std::logic_error("Function not implemented");
@@ -174,21 +174,21 @@ namespace tardigradeBalanceEquations {
          * \param value_begin: The starting iterator for the interpolated value
          * \param value_end: The stopping iterator for the interpolated value
          */
-        template <int dim, int local_dim, int node_count, class node_in, class local_node_in, class local_point_in,
+        template <class element_configuration, class node_in, class local_node_in, class local_point_in,
                   class shape_functions_out, class grad_shape_functions_out, class local_point_out, typename weight_type>
         template <class quantity_in, class quantity_out>
-        void FiniteElementBase<dim, local_dim, node_count, node_in, local_node_in, local_point_in,shape_functions_out,grad_shape_functions_out,local_point_out,weight_type>::InterpolateQuantity(const local_point_in &xi_begin, const local_point_in &xi_end,
+        void FiniteElementBase<element_configuration, node_in, local_node_in, local_point_in,shape_functions_out,grad_shape_functions_out,local_point_out,weight_type>::InterpolateQuantity(const local_point_in &xi_begin, const local_point_in &xi_end,
                                  const quantity_in &quantity_begin, const quantity_in &quantity_end,
                                  quantity_out value_begin, quantity_out value_end) {
 
             const size_type quantity_dim = (size_type)(value_end - value_begin);
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(quantity_dim * node_count == (size_type)(quantity_end - quantity_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(quantity_dim * element_configuration::node_count == (size_type)(quantity_end - quantity_begin),
                                          "The returned value size (" + std::to_string(quantity_dim) +
                                              ") and the quantity dimension (" +
                                              std::to_string((size_type)(quantity_end - quantity_begin)) +
                                              ") are inconsistent with the node count (" +
-                                             std::to_string(node_count) + ")");
+                                             std::to_string(element_configuration::node_count) + ")");
 
             GetShapeFunctions(xi_begin, xi_end, std::begin(_shapefunctions), std::end(_shapefunctions));
 
@@ -214,21 +214,21 @@ namespace tardigradeBalanceEquations {
          * \param value_end: The stopping iterator for the computed local gradient of the quantity in row-major
          * form
          */
-        template <int dim, int local_dim, int node_count, class node_in, class local_node_in, class local_point_in,
+        template <class element_configuration, class node_in, class local_node_in, class local_point_in,
                   class shape_functions_out, class grad_shape_functions_out, class local_point_out, typename weight_type>
         template <class quantity_in, class quantity_gradient_out>
-        void FiniteElementBase<dim, local_dim, node_count, node_in, local_node_in, local_point_in,shape_functions_out,grad_shape_functions_out,local_point_out,weight_type>::GetLocalQuantityGradient(const local_point_in &xi_begin, const local_point_in &xi_end,
+        void FiniteElementBase<element_configuration, node_in, local_node_in, local_point_in,shape_functions_out,grad_shape_functions_out,local_point_out,weight_type>::GetLocalQuantityGradient(const local_point_in &xi_begin, const local_point_in &xi_end,
                                       const quantity_in &quantity_begin, const quantity_in &quantity_end,
                                       quantity_gradient_out value_begin, quantity_gradient_out value_end) {
 
-            const size_type quantity_dim = (size_type)(value_end - value_begin) / local_dim;
+            const size_type quantity_dim = (size_type)(value_end - value_begin) / element_configuration::local_dim;
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(quantity_dim * node_count == (size_type)(quantity_end - quantity_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(quantity_dim * element_configuration::node_count == (size_type)(quantity_end - quantity_begin),
                                          "The returned value size (" + std::to_string(quantity_dim) +
                                              ") and the quantity dimension (" +
                                              std::to_string((size_type)(quantity_end - quantity_begin)) +
                                              ") are inconsistent with the node count (" +
-                                             std::to_string(node_count) + ")");
+                                             std::to_string(element_configuration::node_count) + ")");
 
             TARDIGRADE_ERROR_TOOLS_CATCH(GetLocalShapeFunctionGradients(xi_begin, xi_end,
                                                                         std::begin(_local_gradshapefunctions),
@@ -236,11 +236,11 @@ namespace tardigradeBalanceEquations {
 
             std::fill(value_begin, value_end, 0);
 
-            for (unsigned int node = 0; node < node_count; ++node) {
+            for (unsigned int node = 0; node < element_configuration::node_count; ++node) {
                 for (unsigned int row = 0; row < quantity_dim; ++row) {
-                    for (unsigned int col = 0; col < local_dim; ++col) {
-                        *(value_begin + local_dim * row + col) +=
-                            _local_gradshapefunctions[local_dim * node + col] *
+                    for (unsigned int col = 0; col < element_configuration::local_dim; ++col) {
+                        *(value_begin + element_configuration::local_dim * row + col) +=
+                            _local_gradshapefunctions[element_configuration::local_dim * node + col] *
                             (*(quantity_begin + quantity_dim * node + row));
                     }
                 }
@@ -260,22 +260,22 @@ namespace tardigradeBalanceEquations {
          * \param configuration: Compute the gradient w.r.t. the current configuration ( true ) or reference
          * configuration ( false )
          */
-        template <int dim, int local_dim, int node_count, class node_in, class local_node_in, class local_point_in,
+        template <class element_configuration, class node_in, class local_node_in, class local_point_in,
                   class shape_functions_out, class grad_shape_functions_out, class local_point_out, typename weight_type>
         template <class quantity_in, class quantity_gradient_out>
-        void FiniteElementBase<dim, local_dim, node_count, node_in, local_node_in, local_point_in,shape_functions_out,grad_shape_functions_out,local_point_out,weight_type>::GetGlobalQuantityGradient(const local_point_in &xi_begin, const local_point_in &xi_end,
+        void FiniteElementBase<element_configuration, node_in, local_node_in, local_point_in,shape_functions_out,grad_shape_functions_out,local_point_out,weight_type>::GetGlobalQuantityGradient(const local_point_in &xi_begin, const local_point_in &xi_end,
                                        const quantity_in &quantity_begin, const quantity_in &quantity_end,
                                        quantity_gradient_out value_begin, quantity_gradient_out value_end,
                                        const bool configuration) {
 
-            const size_type quantity_dim = (size_type)(value_end - value_begin) / dim;
+            const size_type quantity_dim = (size_type)(value_end - value_begin) / element_configuration::dim;
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(quantity_dim * node_count == (size_type)(quantity_end - quantity_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(quantity_dim * element_configuration::node_count == (size_type)(quantity_end - quantity_begin),
                                          "The returned value size (" + std::to_string(quantity_dim) +
                                              ") and the quantity dimension (" +
                                              std::to_string((size_type)(quantity_end - quantity_begin)) +
                                              ") are inconsistent with the node count (" +
-                                             std::to_string(node_count) + ")");
+                                             std::to_string(element_configuration::node_count) + ")");
 
             if (configuration) {
                 TARDIGRADE_ERROR_TOOLS_CATCH(GetGlobalShapeFunctionGradients(xi_begin, xi_end, x_begin, x_end,
@@ -290,11 +290,11 @@ namespace tardigradeBalanceEquations {
 
             std::fill(value_begin, value_end, 0);
 
-            for (unsigned int node = 0; node < node_count; ++node) {
+            for (unsigned int node = 0; node < element_configuration::node_count; ++node) {
                 for (unsigned int row = 0; row < quantity_dim; ++row) {
-                    for (unsigned int col = 0; col < local_dim; ++col) {
-                        *(value_begin + local_dim * row + col) +=
-                            _global_gradshapefunctions[local_dim * node + col] *
+                    for (unsigned int col = 0; col < element_configuration::local_dim; ++col) {
+                        *(value_begin + element_configuration::local_dim * row + col) +=
+                            _global_gradshapefunctions[element_configuration::local_dim * node + col] *
                             (*(quantity_begin + quantity_dim * node + row));
                     }
                 }

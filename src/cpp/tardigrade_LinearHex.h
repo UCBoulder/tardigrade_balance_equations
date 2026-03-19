@@ -15,11 +15,18 @@ namespace tardigradeBalanceEquations {
 
     namespace finiteElement {
 
+        /*!
+         * The configuration of the linear hex element
+         */
+        class LinearHexConfiguration : public FiniteElementConfigurationBase<3, 3, 8>{
+
+        };
+
         //! An implementation of a linear hexahedral element
         template <typename T, class node_in, class local_point_in, class shape_functions_out,
                   class grad_shape_functions_out, class local_point_out, typename weight_type>
         class LinearHex
-            : public FiniteElementBase<3, 3, 8, node_in, typename std::array<T, 3 * 8>::const_iterator, local_point_in,
+            : public FiniteElementBase<LinearHexConfiguration, node_in, typename std::array<T, 3 * 8>::const_iterator, local_point_in,
                                        shape_functions_out, grad_shape_functions_out, local_point_out, weight_type> {
            public:
             //! The local nodes for an isoparametric linear hex element
@@ -57,7 +64,7 @@ namespace tardigradeBalanceEquations {
 
             LinearHex(const node_in &_x_begin, const node_in &_x_end, const node_in &_X_begin, const node_in &_X_end);
 
-            using FiniteElementBase<3, 3, 8, node_in, typename std::array<T, 3 * 8>::const_iterator, local_point_in,
+            using FiniteElementBase<LinearHexConfiguration, node_in, typename std::array<T, 3 * 8>::const_iterator, local_point_in,
                                     shape_functions_out, grad_shape_functions_out, local_point_out,
                                     weight_type>::FiniteElementBase;
 

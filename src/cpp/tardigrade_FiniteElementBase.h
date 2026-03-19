@@ -15,8 +15,23 @@ namespace tardigradeBalanceEquations {
 
     namespace finiteElement {
 
+        template<unsigned int _dim, unsigned int _local_dim, unsigned int _node_count>
+        class FiniteElementConfigurationBase {
+
+            public:
+                //! The spatial dimension of the element
+                constexpr static unsigned int dim = _dim;
+
+                //! The local spatial dimension of the element
+                constexpr static unsigned int local_dim = _local_dim;
+
+                //! The number of nodes in the element
+                constexpr static unsigned int node_count = _node_count;
+
+        };
+
         //! A base class for a simple finite element formulation useful for testing
-        template <int dim, int local_dim, int node_count, class node_in, class local_node_in, class local_point_in,
+        template <class element_configuration, class node_in, class local_node_in, class local_point_in,
                   class shape_functions_out, class grad_shape_functions_out, class local_point_out,
                   typename weight_type>
         class FiniteElementBase {
@@ -79,13 +94,13 @@ namespace tardigradeBalanceEquations {
             const local_node_in local_node_xi_begin;  //!< Starting iterator for the local nodal coordinates
             const local_node_in local_node_xi_end;    //!< Stopping iterator for the local nodal coordinates
 
-            std::array<typename std::iterator_traits<shape_functions_out>::value_type, node_count>
+            std::array<typename std::iterator_traits<shape_functions_out>::value_type, element_configuration::node_count>
                 _shapefunctions;  //!< A temporary storage container for shapefunction values
 
-            std::array<typename std::iterator_traits<shape_functions_out>::value_type, local_dim * node_count>
+            std::array<typename std::iterator_traits<shape_functions_out>::value_type, element_configuration::local_dim * element_configuration::node_count>
                 _local_gradshapefunctions;  //!< A temporary storage container for local grad shapefunction values
 
-            std::array<typename std::iterator_traits<shape_functions_out>::value_type, dim * node_count>
+            std::array<typename std::iterator_traits<shape_functions_out>::value_type, element_configuration::dim * element_configuration::node_count>
                 _global_gradshapefunctions;  //!< A temporary storage container for global grad shapefunction values
         };
 

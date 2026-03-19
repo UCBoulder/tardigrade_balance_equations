@@ -15,11 +15,18 @@ namespace tardigradeBalanceEquations {
 
     namespace finiteElement {
 
+        /*!
+         * The configuration of the linear hex element
+         */
+        class QuadraticHexConfiguration : public FiniteElementConfigurationBase<3, 3, 20>{
+
+        };
+
         //! An implementation of a quadratic hexahedral element
         template <typename T, class node_in, class local_point_in, class shape_functions_out,
                   class grad_shape_functions_out, class local_point_out, typename weight_type>
         class QuadraticHex
-            : public FiniteElementBase<3, 3, 20, node_in, typename std::array<T, 3 * 8>::const_iterator, local_point_in,
+            : public FiniteElementBase<QuadraticHexConfiguration, node_in, typename std::array<T, 3 * 8>::const_iterator, local_point_in,
                                        shape_functions_out, grad_shape_functions_out, local_point_out, weight_type> {
            public:
             //! The local nodes for an isoparametric quadratic hex element
@@ -60,7 +67,7 @@ namespace tardigradeBalanceEquations {
             QuadraticHex(const node_in &_x_begin, const node_in &_x_end, const node_in &_X_begin,
                          const node_in &_X_end);
 
-            using FiniteElementBase<3, 3, 20, node_in, typename std::array<T, 3 * 8>::const_iterator, local_point_in,
+            using FiniteElementBase<QuadraticHexConfiguration, node_in, typename std::array<T, 3 * 8>::const_iterator, local_point_in,
                                     shape_functions_out, grad_shape_functions_out, local_point_out,
                                     weight_type>::FiniteElementBase;
 
