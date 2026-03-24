@@ -18,7 +18,7 @@ namespace tardigradeBalanceEquations {
         /*!
          * A template class which defines the configuration of a finite element
          */
-        template<unsigned int _dim, unsigned int _local_dim, unsigned int _node_count, unsigned int _surface_count, typename _local_node_value_type>
+        template<unsigned int _dim, unsigned int _local_dim, unsigned int _node_count, unsigned int _surface_count, typename _local_node_value_type, typename _volume_integration_point_weight_value_type, typename _surface_integration_point_weight_value_type>
         class FiniteElementConfigurationBase {
 
             public:
@@ -40,12 +40,16 @@ namespace tardigradeBalanceEquations {
                 //! The type of the local node coordinate storage iterator
                 using local_node_in = typename std::array<local_node_value_type, local_dim * node_count>::const_iterator;
 
+                //! The type of the volume integration point weight
+                using volume_integration_point_weight_value_type = _volume_integration_point_weight_value_type;
+
+                //! The type of the surface integration point weight
+                using surface_integration_point_weight_value_type = _surface_integration_point_weight_value_type;
         };
 
         //! A base class for a simple finite element formulation useful for testing
         template <class element_configuration, class node_in, class local_point_in,
-                  class shape_functions_out, class grad_shape_functions_out, class local_point_out,
-                  typename weight_type>
+                  class shape_functions_out, class grad_shape_functions_out, class local_point_out>
         class FiniteElementBase {
            public:
             FiniteElementBase(const node_in &_x_begin, const node_in &_x_end, const node_in &_X_begin,
@@ -74,11 +78,11 @@ namespace tardigradeBalanceEquations {
                 typename std::iterator_traits<node_in>::value_type &value, const bool configuration = 1);
 
             virtual void GetVolumeIntegrationPointData(const unsigned int i, local_point_out xi_begin,
-                                                       local_point_out xi_end, weight_type &weight);
+                                                       local_point_out xi_end, typename element_configuration::volume_integration_point_weight_value_type &weight);
 
             virtual void GetSurfaceIntegrationPointData(const unsigned int s, const unsigned int i,
                                                         local_point_out xi_begin, local_point_out xi_end,
-                                                        weight_type &weight);
+                                                        typename element_configuration::surface_integration_point_weight_value_type &weight);
 
             template <class quantity_in, class quantity_out>
             void InterpolateQuantity(const local_point_in &xi_begin, const local_point_in &xi_end,
