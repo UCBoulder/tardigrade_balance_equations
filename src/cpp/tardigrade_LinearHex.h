@@ -35,10 +35,10 @@ namespace tardigradeBalanceEquations {
 
         //! An implementation of a linear hexahedral element
         template <class element_configuration, typename T, class node_in, class local_point_in, class shape_functions_out,
-                  class grad_shape_functions_out, class local_point_out>
+                  class grad_shape_functions_out>
         class LinearHex
             : public FiniteElementBase<element_configuration, node_in, local_point_in,
-                                       shape_functions_out, grad_shape_functions_out, local_point_out> {
+                                       shape_functions_out, grad_shape_functions_out> {
            public:
             //! The local nodes for an isoparametric linear hex element
             constexpr static std::array<typename element_configuration::local_node_value_type, element_configuration::local_dim * element_configuration::node_count> local_nodes = {-1, -1, -1, 1, -1, -1, 1, 1, -1, -1, 1, -1,
@@ -76,7 +76,7 @@ namespace tardigradeBalanceEquations {
             LinearHex(const node_in &_x_begin, const node_in &_x_end, const node_in &_X_begin, const node_in &_X_end);
 
             using FiniteElementBase<element_configuration, node_in, local_point_in,
-                                    shape_functions_out, grad_shape_functions_out, local_point_out>::FiniteElementBase;
+                                    shape_functions_out, grad_shape_functions_out>::FiniteElementBase;
 
             virtual void GetShapeFunctions(const local_point_in &xi_begin, const local_point_in &xi_end,
                                            shape_functions_out N_begin, shape_functions_out N_end) override;
@@ -99,11 +99,11 @@ namespace tardigradeBalanceEquations {
                 const unsigned int s, const local_point_in &xi_begin, const local_point_in &xi_end,
                 typename std::iterator_traits<node_in>::value_type &value, const bool configuration = 1) override;
 
-            virtual void GetVolumeIntegrationPointData(const unsigned int i, local_point_out xi_begin,
-                                                       local_point_out xi_end, typename element_configuration::volume_integration_point_weight_value_type &weight) override;
+            virtual void GetVolumeIntegrationPointData(const unsigned int i, typename element_configuration::local_point_out xi_begin,
+                                                       typename element_configuration::local_point_out xi_end, typename element_configuration::volume_integration_point_weight_value_type &weight) override;
 
             virtual void GetSurfaceIntegrationPointData(const unsigned int s, const unsigned int i,
-                                                        local_point_out xi_begin, local_point_out xi_end,
+                                                        typename element_configuration::local_point_out xi_begin, typename element_configuration::local_point_out xi_end,
                                                         typename element_configuration::surface_integration_point_weight_value_type &weight) override;
         };
 
