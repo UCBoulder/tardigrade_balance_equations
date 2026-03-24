@@ -69,8 +69,8 @@ BOOST_AUTO_TEST_CASE(test_LinearHex, *boost::unit_test::tolerance(DEFAULT_TEST_T
     }
 
     using element_configuration = typename tardigradeBalanceEquations::finiteElement::LinearHexConfiguration;
-    tardigradeBalanceEquations::finiteElement::LinearHex< element_configuration>
-        e(std::cbegin(x), std::cend(x), std::cbegin(X), std::cend(X));
+    tardigradeBalanceEquations::finiteElement::LinearHex<element_configuration> e(std::cbegin(x), std::cend(x),
+                                                                                  std::cbegin(X), std::cend(X));
 
     std::array<floatType, 8> result;
 
@@ -151,8 +151,8 @@ BOOST_AUTO_TEST_CASE(test_LinearHex2, *boost::unit_test::tolerance(DEFAULT_TEST_
     }
 
     using element_configuration = typename tardigradeBalanceEquations::finiteElement::LinearHexConfiguration;
-    tardigradeBalanceEquations::finiteElement::LinearHex< element_configuration>
-        e(std::cbegin(x), std::cend(x), std::cbegin(X), std::cend(X));
+    tardigradeBalanceEquations::finiteElement::LinearHex<element_configuration> e(std::cbegin(x), std::cend(x),
+                                                                                  std::cbegin(X), std::cend(X));
 
     std::array<floatType, 3> point = {0.1626388, 0.45020513, 0.22368613};
 
@@ -217,8 +217,8 @@ BOOST_AUTO_TEST_CASE(test_LinearHex3, *boost::unit_test::tolerance(DEFAULT_TEST_
     }
 
     using element_configuration = typename tardigradeBalanceEquations::finiteElement::LinearHexConfiguration;
-    tardigradeBalanceEquations::finiteElement::LinearHex< element_configuration>
-        e(std::cbegin(x), std::cend(x), std::cbegin(X), std::cend(X));
+    tardigradeBalanceEquations::finiteElement::LinearHex<element_configuration> e(std::cbegin(x), std::cend(x),
+                                                                                  std::cbegin(X), std::cend(X));
 
     std::array<floatType, 3> point = {0.1626388, 0.45020513, 0.22368613};
 
@@ -267,8 +267,8 @@ BOOST_AUTO_TEST_CASE(test_LinearHex4, *boost::unit_test::tolerance(DEFAULT_TEST_
     }
 
     using element_configuration = typename tardigradeBalanceEquations::finiteElement::LinearHexConfiguration;
-    tardigradeBalanceEquations::finiteElement::LinearHex< element_configuration>
-        e(std::cbegin(x), std::cend(x), std::cbegin(X), std::cend(X));
+    tardigradeBalanceEquations::finiteElement::LinearHex<element_configuration> e(std::cbegin(x), std::cend(x),
+                                                                                  std::cbegin(X), std::cend(X));
 
     std::array<floatType, 3> point = {0.1626388, 0.45020513, 0.22368613};
 
@@ -376,8 +376,8 @@ BOOST_AUTO_TEST_CASE(test_LinearHex5, *boost::unit_test::tolerance(DEFAULT_TEST_
     }
 
     using element_configuration = typename tardigradeBalanceEquations::finiteElement::LinearHexConfiguration;
-    tardigradeBalanceEquations::finiteElement::LinearHex< element_configuration>
-        e(std::cbegin(x), std::cend(x), std::cbegin(X), std::cend(X));
+    tardigradeBalanceEquations::finiteElement::LinearHex<element_configuration> e(std::cbegin(x), std::cend(x),
+                                                                                  std::cbegin(X), std::cend(X));
 
     std::array<floatType, 3> point = {0.1626388, 0.45020513, 0.22368613};
 
@@ -418,8 +418,8 @@ BOOST_AUTO_TEST_CASE(test_LinearHex6, *boost::unit_test::tolerance(DEFAULT_TEST_
     }
 
     using element_configuration = typename tardigradeBalanceEquations::finiteElement::LinearHexConfiguration;
-    tardigradeBalanceEquations::finiteElement::LinearHex< element_configuration>
-        e(std::cbegin(x), std::cend(x), std::cbegin(X), std::cend(X));
+    tardigradeBalanceEquations::finiteElement::LinearHex<element_configuration> e(std::cbegin(x), std::cend(x),
+                                                                                  std::cbegin(X), std::cend(X));
 
     std::vector<std::vector<floatType>> integration_point_answers = {
         {-0.57735027, -0.57735027, -0.57735027},
@@ -469,8 +469,8 @@ BOOST_AUTO_TEST_CASE(test_LinearHex7, *boost::unit_test::tolerance(DEFAULT_TEST_
     }
 
     using element_configuration = typename tardigradeBalanceEquations::finiteElement::LinearHexConfiguration;
-    tardigradeBalanceEquations::finiteElement::LinearHex< element_configuration>
-        e(std::cbegin(x), std::cend(x), std::cbegin(X), std::cend(X));
+    tardigradeBalanceEquations::finiteElement::LinearHex<element_configuration> e(std::cbegin(x), std::cend(x),
+                                                                                  std::cbegin(X), std::cend(X));
 
     floatType answer = 1.0;
     floatType result = 0.0;
@@ -509,8 +509,8 @@ BOOST_AUTO_TEST_CASE(test_LinearHex8, *boost::unit_test::tolerance(DEFAULT_TEST_
     }
 
     using element_configuration = typename tardigradeBalanceEquations::finiteElement::LinearHexConfiguration;
-    tardigradeBalanceEquations::finiteElement::LinearHex< element_configuration>
-        e(std::cbegin(x), std::cend(x), std::cbegin(X), std::cend(X));
+    tardigradeBalanceEquations::finiteElement::LinearHex<element_configuration> e(std::cbegin(x), std::cend(x),
+                                                                                  std::cbegin(X), std::cend(X));
 
     std::vector<std::vector<std::vector<floatType>>> integration_point_answers = {
         {{{-1, -0.57735027, -0.57735027},
@@ -581,8 +581,8 @@ BOOST_AUTO_TEST_CASE(test_LinearHex9, *boost::unit_test::tolerance(DEFAULT_TEST_
     }
 
     using element_configuration = typename tardigradeBalanceEquations::finiteElement::LinearHexConfiguration;
-    tardigradeBalanceEquations::finiteElement::LinearHex< element_configuration>
-        e(std::cbegin(x), std::cend(x), std::cbegin(X), std::cend(X));
+    tardigradeBalanceEquations::finiteElement::LinearHex<element_configuration> e(std::cbegin(x), std::cend(x),
+                                                                                  std::cbegin(X), std::cend(X));
 
     std::array<floatType, 6> answers = {1, 1, 1, 1, 1, 1};
     std::array<floatType, 6> results;
