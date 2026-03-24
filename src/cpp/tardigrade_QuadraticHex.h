@@ -34,7 +34,7 @@ namespace tardigradeBalanceEquations {
         };
 
         //! An implementation of a quadratic hexahedral element
-        template <class element_configuration, typename T>
+        template <class element_configuration>
         class QuadraticHex
             : public FiniteElementBase<element_configuration> {
            public:
