@@ -18,18 +18,24 @@ namespace tardigradeBalanceEquations {
         /*!
          * The configuration of the linear hex element
          */
-        class QuadraticHexConfiguration : public FiniteElementConfigurationBase<3, 3, 20, double>{
+        class QuadraticHexConfiguration : public FiniteElementConfigurationBase<3, 3, 20, 6, double>{
 
             public:
 
                 //! The number of integration points
                 constexpr static unsigned int num_volume_integration_points = 8;
 
+                //! The number of integration points on each surface
+                constexpr static unsigned int num_surface_integration_points = 4;
+
                 //! The type for the element local node coordinates
                 using node_value_type = double;
 
                 //! The type for the volume integration point weights
                 using volume_integration_point_weight_value_type = double;
+
+                //! The type for the surface integration point weights
+                using surface_integration_point_weight_value_type = double;
         };
 
         //! An implementation of a quadratic hexahedral element
@@ -55,7 +61,7 @@ namespace tardigradeBalanceEquations {
             constexpr static std::array<typename element_configuration::volume_integration_point_weight_value_type, element_configuration::num_volume_integration_points> volume_integration_weights = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
 
             //! The surface integration points for a fully integrated isoparametric linear hex element
-            constexpr static std::array<T, 6 * 4 * 3> surface_integration_points = {
+            constexpr static std::array<typename element_configuration::local_node_value_type, element_configuration::surface_count * element_configuration::num_surface_integration_points * element_configuration::local_dim> surface_integration_points = {
                 -1,          -0.57735027, -0.57735027, -1,         0.57735027,  -0.57735027, -1,          0.57735027,
                 0.57735027,  -1,          -0.57735027, 0.57735027, 1,           -0.57735027, -0.57735027, 1,
                 0.57735027,  -0.57735027, 1,           0.57735027, 0.57735027,  1,           -0.57735027, 0.57735027,
@@ -67,11 +73,11 @@ namespace tardigradeBalanceEquations {
                 -0.57735027, 1,           0.57735027,  0.57735027, 1,           -0.57735027, 0.57735027,  1};
 
             //! The surface integration weights for a fully integrated isoparametric linear hex element
-            constexpr static std::array<T, 4 * 6> surface_integration_weights = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            constexpr static std::array<typename element_configuration::surface_integration_point_weight_value_type, element_configuration::surface_count * element_configuration::num_surface_integration_points> surface_integration_weights = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                                                                                  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 
             //! The surface normals
-            constexpr static std::array<T, 3 * 6> surface_normals = {-1, 0, 0, 1, 0, 0,  0, -1, 0,
+            constexpr static std::array<typename element_configuration::local_node_value_type, element_configuration::surface_count * element_configuration::local_dim> surface_normals = {-1, 0, 0, 1, 0, 0,  0, -1, 0,
                                                                      0,  1, 0, 0, 0, -1, 0, 0,  1};
 
             QuadraticHex(const node_in &_x_begin, const node_in &_x_end, const node_in &_X_begin,

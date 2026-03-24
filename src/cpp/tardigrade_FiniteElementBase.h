@@ -18,7 +18,7 @@ namespace tardigradeBalanceEquations {
         /*!
          * A template class which defines the configuration of a finite element
          */
-        template<unsigned int _dim, unsigned int _local_dim, unsigned int _node_count, typename _local_node_value_type>
+        template<unsigned int _dim, unsigned int _local_dim, unsigned int _node_count, unsigned int _surface_count, typename _local_node_value_type>
         class FiniteElementConfigurationBase {
 
             public:
@@ -30,6 +30,9 @@ namespace tardigradeBalanceEquations {
 
                 //! The number of nodes in the element
                 constexpr static unsigned int node_count = _node_count;
+
+                //! The number of surfaces in the element
+                constexpr static unsigned int surface_count = _surface_count;
 
                 //! The type of the local node coordinate
                 using local_node_value_type = _local_node_value_type;
