@@ -21,18 +21,19 @@ namespace tardigradeBalanceEquations {
          * \param &_local_node_xi_end: The stopping iterator for the local node positions
          */
         template <class element_configuration>
-        FiniteElementBase<element_configuration
-                          >::FiniteElementBase(const typename element_configuration::node_in &_x_begin, const typename element_configuration::node_in &_x_end,
-                                                                       const typename element_configuration::node_in &_X_begin, const typename element_configuration::node_in &_X_end,
-                                                                       const typename element_configuration::local_node_in &_local_node_xi_begin,
-                                                                       const typename element_configuration::local_node_in &_local_node_xi_end)
+        FiniteElementBase<element_configuration>::FiniteElementBase(
+            const typename element_configuration::node_in       &_x_begin,
+            const typename element_configuration::node_in       &_x_end,
+            const typename element_configuration::node_in       &_X_begin,
+            const typename element_configuration::node_in       &_X_end,
+            const typename element_configuration::local_node_in &_local_node_xi_begin,
+            const typename element_configuration::local_node_in &_local_node_xi_end)
             : x_begin(_x_begin),
               x_end(_x_end),
               X_begin(_X_begin),
               X_end(_X_end),
               local_node_xi_begin(_local_node_xi_begin),
-              local_node_xi_end(_local_node_xi_end) {
-        }
+              local_node_xi_end(_local_node_xi_end) {}
 
         /*!
          * Get the values of the shape functions
@@ -43,9 +44,11 @@ namespace tardigradeBalanceEquations {
          * \param N_end: The stopping iterator of the shape functions
          */
         template <class element_configuration>
-        void FiniteElementBase<element_configuration>::GetShapeFunctions(const typename element_configuration::local_point_in &xi_begin, const typename element_configuration::local_point_in &xi_end,
-                                       typename element_configuration::shape_functions_out N_begin, typename element_configuration::shape_functions_out N_end) {
-
+        void FiniteElementBase<element_configuration>::GetShapeFunctions(
+            const typename element_configuration::local_point_in &xi_begin,
+            const typename element_configuration::local_point_in &xi_end,
+            typename element_configuration::shape_functions_out   N_begin,
+            typename element_configuration::shape_functions_out   N_end) {
             throw std::logic_error("Function not implemented");
         }
 
@@ -58,10 +61,11 @@ namespace tardigradeBalanceEquations {
          * \param dNdxi_end: The stopping iterator of the shape function gradients
          */
         template <class element_configuration>
-        void FiniteElementBase<element_configuration>::GetLocalShapeFunctionGradients(const typename element_configuration::local_point_in &xi_begin, const typename element_configuration::local_point_in &xi_end,
-                                                    typename element_configuration::grad_shape_functions_out dNdxi_begin,
-                                                    typename element_configuration::grad_shape_functions_out dNdxi_end) {
-
+        void FiniteElementBase<element_configuration>::GetLocalShapeFunctionGradients(
+            const typename element_configuration::local_point_in    &xi_begin,
+            const typename element_configuration::local_point_in    &xi_end,
+            typename element_configuration::grad_shape_functions_out dNdxi_begin,
+            typename element_configuration::grad_shape_functions_out dNdxi_end) {
             throw std::logic_error("Function not implemented");
         }
 
@@ -76,12 +80,13 @@ namespace tardigradeBalanceEquations {
          * \param &value_end: The stopping iterator of the shape function global gradient (row major)
          */
         template <class element_configuration>
-        void FiniteElementBase<element_configuration>::GetGlobalShapeFunctionGradients(const typename element_configuration::local_point_in &xi_begin, const typename element_configuration::local_point_in &xi_end,
-                                                     const typename element_configuration::node_in           &node_positions_begin,
-                                                     const typename element_configuration::node_in           &node_positions_end,
-                                                     typename element_configuration::grad_shape_functions_out value_begin,
-                                                     typename element_configuration::grad_shape_functions_out value_end) {
-
+        void FiniteElementBase<element_configuration>::GetGlobalShapeFunctionGradients(
+            const typename element_configuration::local_point_in    &xi_begin,
+            const typename element_configuration::local_point_in    &xi_end,
+            const typename element_configuration::node_in           &node_positions_begin,
+            const typename element_configuration::node_in           &node_positions_end,
+            typename element_configuration::grad_shape_functions_out value_begin,
+            typename element_configuration::grad_shape_functions_out value_end) {
             throw std::logic_error("Function not implemented");
         }
 
@@ -98,9 +103,10 @@ namespace tardigradeBalanceEquations {
          */
         template <class element_configuration>
         void FiniteElementBase<element_configuration>::GetVolumeIntegralJacobianOfTransformation(
-            const typename element_configuration::local_point_in &xi_begin, const typename element_configuration::local_point_in &xi_end,
-            typename std::iterator_traits<typename element_configuration::node_in>::value_type &value, const bool configuration) {
-
+            const typename element_configuration::local_point_in                               &xi_begin,
+            const typename element_configuration::local_point_in                               &xi_end,
+            typename std::iterator_traits<typename element_configuration::node_in>::value_type &value,
+            const bool                                                                          configuration) {
             throw std::logic_error("Function not implemented");
         }
 
@@ -118,10 +124,10 @@ namespace tardigradeBalanceEquations {
          */
         template <class element_configuration>
         void FiniteElementBase<element_configuration>::GetSurfaceIntegralJacobianOfTransformation(
-                const unsigned int s,
-                const typename element_configuration::local_point_in &xi_begin, const typename element_configuration::local_point_in &xi_end,
-                typename std::iterator_traits<typename element_configuration::node_in>::value_type &value, const bool configuration) {
-
+            const unsigned int s, const typename element_configuration::local_point_in &xi_begin,
+            const typename element_configuration::local_point_in                               &xi_end,
+            typename std::iterator_traits<typename element_configuration::node_in>::value_type &value,
+            const bool                                                                          configuration) {
             throw std::logic_error("Function not implemented");
         }
 
@@ -134,8 +140,10 @@ namespace tardigradeBalanceEquations {
          * \param &weight: The weight to be applied to the integration point
          */
         template <class element_configuration>
-        void FiniteElementBase<element_configuration>::GetVolumeIntegrationPointData(const unsigned int i, typename element_configuration::local_point_out xi_begin, typename element_configuration::local_point_out xi_end, typename element_configuration::volume_integration_point_weight_value_type &weight){
-
+        void FiniteElementBase<element_configuration>::GetVolumeIntegrationPointData(
+            const unsigned int i, typename element_configuration::local_point_out xi_begin,
+            typename element_configuration::local_point_out                             xi_end,
+            typename element_configuration::volume_integration_point_weight_value_type &weight) {
             throw std::logic_error("Function not implemented");
         }
 
@@ -149,11 +157,11 @@ namespace tardigradeBalanceEquations {
          * \param &weight: The weight to be applied to the integration point
          */
         template <class element_configuration>
-        void FiniteElementBase<element_configuration>::GetSurfaceIntegrationPointData(const unsigned int s, const unsigned int i, typename element_configuration::local_point_out xi_begin,
-                                                    typename element_configuration::local_point_out xi_end, typename element_configuration::surface_integration_point_weight_value_type &weight){
-
+        void FiniteElementBase<element_configuration>::GetSurfaceIntegrationPointData(
+            const unsigned int s, const unsigned int i, typename element_configuration::local_point_out xi_begin,
+            typename element_configuration::local_point_out                              xi_end,
+            typename element_configuration::surface_integration_point_weight_value_type &weight) {
             throw std::logic_error("Function not implemented");
-
         }
 
         /*!
@@ -168,13 +176,14 @@ namespace tardigradeBalanceEquations {
          */
         template <class element_configuration>
         template <class quantity_in, class quantity_out>
-        void FiniteElementBase<element_configuration>::InterpolateQuantity(const typename element_configuration::local_point_in &xi_begin, const typename element_configuration::local_point_in &xi_end,
-                                 const quantity_in &quantity_begin, const quantity_in &quantity_end,
-                                 quantity_out value_begin, quantity_out value_end) {
-
+        void FiniteElementBase<element_configuration>::InterpolateQuantity(
+            const typename element_configuration::local_point_in &xi_begin,
+            const typename element_configuration::local_point_in &xi_end, const quantity_in &quantity_begin,
+            const quantity_in &quantity_end, quantity_out value_begin, quantity_out value_end) {
             const size_type quantity_dim = (size_type)(value_end - value_begin);
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(quantity_dim * element_configuration::node_count == (size_type)(quantity_end - quantity_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(quantity_dim * element_configuration::node_count ==
+                                             (size_type)(quantity_end - quantity_begin),
                                          "The returned value size (" + std::to_string(quantity_dim) +
                                              ") and the quantity dimension (" +
                                              std::to_string((size_type)(quantity_end - quantity_begin)) +
@@ -207,13 +216,14 @@ namespace tardigradeBalanceEquations {
          */
         template <class element_configuration>
         template <class quantity_in, class quantity_gradient_out>
-        void FiniteElementBase<element_configuration>::GetLocalQuantityGradient(const typename element_configuration::local_point_in &xi_begin, const typename element_configuration::local_point_in &xi_end,
-                                      const quantity_in &quantity_begin, const quantity_in &quantity_end,
-                                      quantity_gradient_out value_begin, quantity_gradient_out value_end) {
-
+        void FiniteElementBase<element_configuration>::GetLocalQuantityGradient(
+            const typename element_configuration::local_point_in &xi_begin,
+            const typename element_configuration::local_point_in &xi_end, const quantity_in &quantity_begin,
+            const quantity_in &quantity_end, quantity_gradient_out value_begin, quantity_gradient_out value_end) {
             const size_type quantity_dim = (size_type)(value_end - value_begin) / element_configuration::local_dim;
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(quantity_dim * element_configuration::node_count == (size_type)(quantity_end - quantity_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(quantity_dim * element_configuration::node_count ==
+                                             (size_type)(quantity_end - quantity_begin),
                                          "The returned value size (" + std::to_string(quantity_dim) +
                                              ") and the quantity dimension (" +
                                              std::to_string((size_type)(quantity_end - quantity_begin)) +
@@ -252,14 +262,15 @@ namespace tardigradeBalanceEquations {
          */
         template <class element_configuration>
         template <class quantity_in, class quantity_gradient_out>
-        void FiniteElementBase<element_configuration>::GetGlobalQuantityGradient(const typename element_configuration::local_point_in &xi_begin, const typename element_configuration::local_point_in &xi_end,
-                                       const quantity_in &quantity_begin, const quantity_in &quantity_end,
-                                       quantity_gradient_out value_begin, quantity_gradient_out value_end,
-                                       const bool configuration) {
-
+        void FiniteElementBase<element_configuration>::GetGlobalQuantityGradient(
+            const typename element_configuration::local_point_in &xi_begin,
+            const typename element_configuration::local_point_in &xi_end, const quantity_in &quantity_begin,
+            const quantity_in &quantity_end, quantity_gradient_out value_begin, quantity_gradient_out value_end,
+            const bool configuration) {
             const size_type quantity_dim = (size_type)(value_end - value_begin) / element_configuration::dim;
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(quantity_dim * element_configuration::node_count == (size_type)(quantity_end - quantity_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(quantity_dim * element_configuration::node_count ==
+                                             (size_type)(quantity_end - quantity_begin),
                                          "The returned value size (" + std::to_string(quantity_dim) +
                                              ") and the quantity dimension (" +
                                              std::to_string((size_type)(quantity_end - quantity_begin)) +
@@ -290,6 +301,6 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-    }
+    }  // namespace finiteElement
 
-}
+}  // namespace tardigradeBalanceEquations
