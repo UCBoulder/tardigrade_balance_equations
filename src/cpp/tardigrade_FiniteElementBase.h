@@ -47,11 +47,14 @@ namespace tardigradeBalanceEquations {
                 using surface_integration_point_weight_value_type = _surface_integration_point_weight_value_type;
 
                 using local_point_out = typename std::array<local_node_value_type, local_dim>::iterator;
+
+                using grad_shape_functions_out = typename std::array<local_node_value_type, node_count * local_dim>::iterator;
+
         };
 
         //! A base class for a simple finite element formulation useful for testing
         template <class element_configuration, class node_in, class local_point_in,
-                  class shape_functions_out, class grad_shape_functions_out>
+                  class shape_functions_out>
         class FiniteElementBase {
            public:
             FiniteElementBase(const node_in &_x_begin, const node_in &_x_end, const node_in &_X_begin,
@@ -62,14 +65,14 @@ namespace tardigradeBalanceEquations {
                                            shape_functions_out N_begin, shape_functions_out N_end);
 
             virtual void GetLocalShapeFunctionGradients(const local_point_in &xi_begin, const local_point_in &xi_end,
-                                                        grad_shape_functions_out dNdxi_begin,
-                                                        grad_shape_functions_out dNdxi_end);
+                                                        typename element_configuration::grad_shape_functions_out dNdxi_begin,
+                                                        typename element_configuration::grad_shape_functions_out dNdxi_end);
 
             virtual void GetGlobalShapeFunctionGradients(const local_point_in &xi_begin, const local_point_in &xi_end,
                                                          const node_in           &node_positions_begin,
                                                          const node_in           &node_positions_end,
-                                                         grad_shape_functions_out value_begin,
-                                                         grad_shape_functions_out value_end);
+                                                         typename element_configuration::grad_shape_functions_out value_begin,
+                                                         typename element_configuration::grad_shape_functions_out value_end);
 
             virtual void GetVolumeIntegralJacobianOfTransformation(
                 const local_point_in &xi_begin, const local_point_in &xi_end,

@@ -34,11 +34,10 @@ namespace tardigradeBalanceEquations {
         };
 
         //! An implementation of a quadratic hexahedral element
-        template <class element_configuration, typename T, class node_in, class local_point_in, class shape_functions_out,
-                  class grad_shape_functions_out>
+        template <class element_configuration, typename T, class node_in, class local_point_in, class shape_functions_out>
         class QuadraticHex
             : public FiniteElementBase<element_configuration, node_in, local_point_in,
-                                       shape_functions_out, grad_shape_functions_out> {
+                                       shape_functions_out> {
            public:
             //! The local nodes for an isoparametric quadratic hex element
             constexpr static std::array<typename element_configuration::local_node_value_type, element_configuration::local_dim * element_configuration::node_count> local_nodes = {
@@ -79,20 +78,20 @@ namespace tardigradeBalanceEquations {
                          const node_in &_X_end);
 
             using FiniteElementBase<element_configuration, node_in, local_point_in,
-                                    shape_functions_out, grad_shape_functions_out>::FiniteElementBase;
+                                    shape_functions_out>::FiniteElementBase;
 
             virtual void GetShapeFunctions(const local_point_in &xi_begin, const local_point_in &xi_end,
                                            shape_functions_out N_begin, shape_functions_out N_end) override;
 
             virtual void GetLocalShapeFunctionGradients(const local_point_in &xi_begin, const local_point_in &xi_end,
-                                                        grad_shape_functions_out dNdxi_begin,
-                                                        grad_shape_functions_out dNdxi_end) override;
+                                                        typename element_configuration::grad_shape_functions_out dNdxi_begin,
+                                                        typename element_configuration::grad_shape_functions_out dNdxi_end) override;
 
             virtual void GetGlobalShapeFunctionGradients(const local_point_in &xi_begin, const local_point_in &xi_end,
                                                          const node_in           &node_positions_begin,
                                                          const node_in           &node_positions_end,
-                                                         grad_shape_functions_out value_begin,
-                                                         grad_shape_functions_out value_end) override;
+                                                         typename element_configuration::grad_shape_functions_out value_begin,
+                                                         typename element_configuration::grad_shape_functions_out value_end) override;
 
             virtual void GetVolumeIntegralJacobianOfTransformation(
                 const local_point_in &xi_begin, const local_point_in &xi_end,
