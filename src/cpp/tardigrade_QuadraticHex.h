@@ -26,9 +26,6 @@ namespace tardigradeBalanceEquations {
 
             //! The number of integration points on each surface
             constexpr static unsigned int num_surface_integration_points = 4;
-
-            //! The type for the element local node coordinates
-            using node_value_type = double;
         };
 
         //! An implementation of a quadratic hexahedral element
