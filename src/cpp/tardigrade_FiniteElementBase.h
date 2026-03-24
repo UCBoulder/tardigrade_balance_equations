@@ -46,6 +46,9 @@ namespace tardigradeBalanceEquations {
                 //! The type of the surface integration point weight
                 using surface_integration_point_weight_value_type = _surface_integration_point_weight_value_type;
 
+                //! The type of the local point incoming value
+                using local_point_in = typename std::array<local_node_value_type, local_dim>::const_iterator;
+
                 //! The type of the local point return value
                 using local_point_out = typename std::array<local_node_value_type, local_dim>::iterator;
 
@@ -58,32 +61,32 @@ namespace tardigradeBalanceEquations {
         };
 
         //! A base class for a simple finite element formulation useful for testing
-        template <class element_configuration, class node_in, class local_point_in>
+        template <class element_configuration, class node_in>
         class FiniteElementBase {
            public:
             FiniteElementBase(const node_in &_x_begin, const node_in &_x_end, const node_in &_X_begin,
                               const node_in &_X_end, const typename element_configuration::local_node_in &_local_node_xi_begin,
                               const typename element_configuration::local_node_in &_local_node_xi_end);
 
-            virtual void GetShapeFunctions(const local_point_in &xi_begin, const local_point_in &xi_end,
+            virtual void GetShapeFunctions(const typename element_configuration::local_point_in &xi_begin, const typename element_configuration::local_point_in &xi_end,
                                            typename element_configuration::shape_functions_out N_begin, typename element_configuration::shape_functions_out N_end);
 
-            virtual void GetLocalShapeFunctionGradients(const local_point_in &xi_begin, const local_point_in &xi_end,
+            virtual void GetLocalShapeFunctionGradients(const typename element_configuration::local_point_in &xi_begin, const typename element_configuration::local_point_in &xi_end,
                                                         typename element_configuration::grad_shape_functions_out dNdxi_begin,
                                                         typename element_configuration::grad_shape_functions_out dNdxi_end);
 
-            virtual void GetGlobalShapeFunctionGradients(const local_point_in &xi_begin, const local_point_in &xi_end,
+            virtual void GetGlobalShapeFunctionGradients(const typename element_configuration::local_point_in &xi_begin, const typename element_configuration::local_point_in &xi_end,
                                                          const node_in           &node_positions_begin,
                                                          const node_in           &node_positions_end,
                                                          typename element_configuration::grad_shape_functions_out value_begin,
                                                          typename element_configuration::grad_shape_functions_out value_end);
 
             virtual void GetVolumeIntegralJacobianOfTransformation(
-                const local_point_in &xi_begin, const local_point_in &xi_end,
+                const typename element_configuration::local_point_in &xi_begin, const typename element_configuration::local_point_in &xi_end,
                 typename std::iterator_traits<node_in>::value_type &value, const bool configuration = 1);
 
             virtual void GetSurfaceIntegralJacobianOfTransformation(
-                const unsigned int s, const local_point_in &xi_begin, const local_point_in &xi_end,
+                const unsigned int s, const typename element_configuration::local_point_in &xi_begin, const typename element_configuration::local_point_in &xi_end,
                 typename std::iterator_traits<node_in>::value_type &value, const bool configuration = 1);
 
             virtual void GetVolumeIntegrationPointData(const unsigned int i, typename element_configuration::local_point_out xi_begin,
@@ -94,17 +97,17 @@ namespace tardigradeBalanceEquations {
                                                         typename element_configuration::surface_integration_point_weight_value_type &weight);
 
             template <class quantity_in, class quantity_out>
-            void InterpolateQuantity(const local_point_in &xi_begin, const local_point_in &xi_end,
+            void InterpolateQuantity(const typename element_configuration::local_point_in &xi_begin, const typename element_configuration::local_point_in &xi_end,
                                      const quantity_in &quantity_begin, const quantity_in &quantity_end,
                                      quantity_out value_begin, quantity_out value_end);
 
             template <class quantity_in, class quantity_gradient_out>
-            void GetLocalQuantityGradient(const local_point_in &xi_begin, const local_point_in &xi_end,
+            void GetLocalQuantityGradient(const typename element_configuration::local_point_in &xi_begin, const typename element_configuration::local_point_in &xi_end,
                                           const quantity_in &quantity_begin, const quantity_in &quantity_end,
                                           quantity_gradient_out value_begin, quantity_gradient_out value_end);
 
             template <class quantity_in, class quantity_gradient_out>
-            void GetGlobalQuantityGradient(const local_point_in &xi_begin, const local_point_in &xi_end,
+            void GetGlobalQuantityGradient(const typename element_configuration::local_point_in &xi_begin, const typename element_configuration::local_point_in &xi_end,
                                            const quantity_in &quantity_begin, const quantity_in &quantity_end,
                                            quantity_gradient_out value_begin, quantity_gradient_out value_end,
                                            const bool configuration = true);
