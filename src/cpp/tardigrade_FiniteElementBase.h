@@ -18,7 +18,7 @@ namespace tardigradeBalanceEquations {
         /*!
          * A template class which defines the configuration of a finite element
          */
-        template<unsigned int _dim, unsigned int _local_dim, unsigned int _node_count, unsigned int _surface_count, typename _local_node_value_type, typename _volume_integration_point_weight_value_type, typename _surface_integration_point_weight_value_type>
+        template<unsigned int _dim, unsigned int _local_dim, unsigned int _node_count, unsigned int _surface_count, typename _node_value_type, typename _local_node_value_type, typename _volume_integration_point_weight_value_type, typename _surface_integration_point_weight_value_type>
         class FiniteElementConfigurationBase {
 
             public:
@@ -34,8 +34,14 @@ namespace tardigradeBalanceEquations {
                 //! The number of surfaces in the element
                 constexpr static unsigned int surface_count = _surface_count;
 
+                //! The type of the global node coordinate
+                using node_value_type = _node_value_type;
+
                 //! The type of the local node coordinate
                 using local_node_value_type = _local_node_value_type;
+
+                //! The type of the global node coordinate storage iterator
+                using node_in = typename std::array<node_value_type, dim * node_count>::const_iterator;
 
                 //! The type of the local node coordinate storage iterator
                 using local_node_in = typename std::array<local_node_value_type, local_dim * node_count>::const_iterator;
@@ -61,11 +67,11 @@ namespace tardigradeBalanceEquations {
         };
 
         //! A base class for a simple finite element formulation useful for testing
-        template <class element_configuration, class node_in>
+        template <class element_configuration>
         class FiniteElementBase {
            public:
-            FiniteElementBase(const node_in &_x_begin, const node_in &_x_end, const node_in &_X_begin,
-                              const node_in &_X_end, const typename element_configuration::local_node_in &_local_node_xi_begin,
+            FiniteElementBase(const typename element_configuration::node_in &_x_begin, const typename element_configuration::node_in &_x_end, const typename element_configuration::node_in &_X_begin,
+                              const typename element_configuration::node_in &_X_end, const typename element_configuration::local_node_in &_local_node_xi_begin,
                               const typename element_configuration::local_node_in &_local_node_xi_end);
 
             virtual void GetShapeFunctions(const typename element_configuration::local_point_in &xi_begin, const typename element_configuration::local_point_in &xi_end,
@@ -76,18 +82,18 @@ namespace tardigradeBalanceEquations {
                                                         typename element_configuration::grad_shape_functions_out dNdxi_end);
 
             virtual void GetGlobalShapeFunctionGradients(const typename element_configuration::local_point_in &xi_begin, const typename element_configuration::local_point_in &xi_end,
-                                                         const node_in           &node_positions_begin,
-                                                         const node_in           &node_positions_end,
+                                                         const typename element_configuration::node_in           &node_positions_begin,
+                                                         const typename element_configuration::node_in           &node_positions_end,
                                                          typename element_configuration::grad_shape_functions_out value_begin,
                                                          typename element_configuration::grad_shape_functions_out value_end);
 
             virtual void GetVolumeIntegralJacobianOfTransformation(
                 const typename element_configuration::local_point_in &xi_begin, const typename element_configuration::local_point_in &xi_end,
-                typename std::iterator_traits<node_in>::value_type &value, const bool configuration = 1);
+                typename std::iterator_traits<typename element_configuration::node_in>::value_type &value, const bool configuration = 1);
 
             virtual void GetSurfaceIntegralJacobianOfTransformation(
                 const unsigned int s, const typename element_configuration::local_point_in &xi_begin, const typename element_configuration::local_point_in &xi_end,
-                typename std::iterator_traits<node_in>::value_type &value, const bool configuration = 1);
+                typename std::iterator_traits<typename element_configuration::node_in>::value_type &value, const bool configuration = 1);
 
             virtual void GetVolumeIntegrationPointData(const unsigned int i, typename element_configuration::local_point_out xi_begin,
                                                        typename element_configuration::local_point_out xi_end, typename element_configuration::volume_integration_point_weight_value_type &weight);
@@ -113,11 +119,11 @@ namespace tardigradeBalanceEquations {
                                            const bool configuration = true);
 
            protected:
-            const node_in x_begin;  //!< Starting iterator for the current position of the nodal coordinates
-            const node_in x_end;    //!< Stopping iterator for the current position of the nodal coordinates
+            const typename element_configuration::node_in x_begin;  //!< Starting iterator for the current position of the nodal coordinates
+            const typename element_configuration::node_in x_end;    //!< Stopping iterator for the current position of the nodal coordinates
 
-            const node_in X_begin;  //!< Starting iterator for the reference position of the nodal coordinates
-            const node_in X_end;    //!< Stopping iterator for the reference position of the nodal coordinates
+            const typename element_configuration::node_in X_begin;  //!< Starting iterator for the reference position of the nodal coordinates
+            const typename element_configuration::node_in X_end;    //!< Stopping iterator for the reference position of the nodal coordinates
 
             const typename element_configuration::local_node_in local_node_xi_begin;  //!< Starting iterator for the local nodal coordinates
             const typename element_configuration::local_node_in local_node_xi_end;    //!< Stopping iterator for the local nodal coordinates
