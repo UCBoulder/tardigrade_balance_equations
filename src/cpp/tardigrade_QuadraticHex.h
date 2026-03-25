@@ -138,7 +138,7 @@ namespace tardigradeBalanceEquations {
                 const typename element_configuration::local_node_value_type *xi_begin,
                 const typename element_configuration::local_node_value_type *local_normal_begin,
                 typename element_configuration::local_node_value_type       *global_normal_begin,
-                const bool                                                   configuration = 1);
+                const bool                                                   configuration = 1) override;
         };
 
     }  // namespace finiteElement
