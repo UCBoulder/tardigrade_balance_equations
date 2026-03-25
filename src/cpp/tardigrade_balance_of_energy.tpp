@@ -2439,15 +2439,15 @@ namespace tardigradeBalanceEquations {
             dRdRho = dRdRhoDot = dRdE = dRdEDot = 0;
             std::fill(dRdGradE_begin, dRdGradE_end, 0);
             if (!is_per_unit_volume) {
-                dRdRho = internal_energy_dot + internal_energy * trace_velocity_gradient +
-                         std::inner_product(velocity_begin, velocity_end, internal_energy_gradient_begin, 0.);
+                dRdRho    = internal_energy_dot + internal_energy * trace_velocity_gradient +
+                            std::inner_product(velocity_begin, velocity_end, internal_energy_gradient_begin, 0.);
                 dRdRhoDot = internal_energy;
                 std::transform(velocity_begin, velocity_end, dRdGradRho_begin,
                                std::bind(std::multiplies<result_type>(), std::placeholders::_1, internal_energy));
 
-                dRdE = density_dot +
-                       std::inner_product(density_gradient_begin, density_gradient_end, velocity_begin, 0.) +
-                       density * trace_velocity_gradient;
+                dRdE    = density_dot +
+                          std::inner_product(density_gradient_begin, density_gradient_end, velocity_begin, 0.) +
+                          density * trace_velocity_gradient;
                 dRdEDot = density;
                 std::transform(velocity_begin, velocity_end, dRdGradE_begin,
                                std::bind(std::multiplies<result_type>(), std::placeholders::_1, density));
