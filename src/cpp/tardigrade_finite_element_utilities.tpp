@@ -32,7 +32,6 @@ namespace tardigradeBalanceEquations {
         void computeGradientSpatialJacobian(const grad_iterator &grad_a_start, const unsigned int grad_a_size,
                                             floatVector grad_interp, const unsigned int index,
                                             output_iterator dgrad_adui_start) {
-
             TARDIGRADE_ERROR_TOOLS_CHECK((grad_a_size % dim) == 0, "The incoming spatial gradient has a dimension of " +
                                                                        std::to_string(grad_a_size) +
                                                                        " which is not a multiple of " +

@@ -11,7 +11,7 @@
 
 namespace tardigradeBalanceEquations {
 
-    namespace finiteElement{
+    namespace finiteElement {
 
         /*!
          * Assemble the response of an integration point
@@ -45,7 +45,8 @@ namespace tardigradeBalanceEquations {
 
             for (_i = 0; _i < configuration::num_test_functions; ++_i) {
                 for (_j = 0; _j < configuration::num_interpolation_functions; ++_j) {
-                    std::fill(std::begin(_jacobian_ij), std::end(_jacobian_ij), typename configuration::jacobian_type());
+                    std::fill(std::begin(_jacobian_ij), std::end(_jacobian_ij),
+                              typename configuration::jacobian_type());
 
                     computeVariablePointJacobian();
 
@@ -86,6 +87,6 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-    }
+    }  // namespace finiteElement
 
 }  // namespace tardigradeBalanceEquations

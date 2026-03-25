@@ -7,12 +7,12 @@
  ******************************************************************************
  */
 
-#include "tardigrade_constraint_equations.h"
-
 #include <algorithm>
 #include <array>
 #include <functional>
 #include <numeric>
+
+#include "tardigrade_constraint_equations.h"
 
 namespace tardigradeBalanceEquations {
 

@@ -18,15 +18,13 @@ namespace tardigradeBalanceEquations {
          * \param &_X_begin: The starting iterator for the reference node positions
          * \param &_X_end: The stopping iterator for the reference node positions
          */
-        template <typename T, class node_in, class local_point_in, class shape_functions_out,
-                  class grad_shape_functions_out, class local_point_out, typename weight_type>
-        LinearHex<T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, local_point_out, weight_type>::LinearHex(
-            const node_in &_x_begin, const node_in &_x_end, const node_in &_X_begin, const node_in &_X_end)
-            : FiniteElementBase<3, 3, 8, node_in, typename std::array<T, 3 * 8>::const_iterator, local_point_in,
-                                shape_functions_out, grad_shape_functions_out,local_point_out,weight_type>(_x_begin, _x_end, _X_begin, _X_end,
-                                                                               std::cbegin(local_nodes),
-                                                                               std::cend(local_nodes)) {
-        }
+        template <class element_configuration>
+        LinearHex<element_configuration>::LinearHex(const typename element_configuration::node_in &_x_begin,
+                                                    const typename element_configuration::node_in &_x_end,
+                                                    const typename element_configuration::node_in &_X_begin,
+                                                    const typename element_configuration::node_in &_X_end)
+            : FiniteElementBase<LinearHexConfiguration>(_x_begin, _x_end, _X_begin, _X_end, std::cbegin(local_nodes),
+                                                        std::cend(local_nodes)) {}
 
         /*!
          * Get the shape functions of the linear hexahedral element
@@ -36,17 +34,18 @@ namespace tardigradeBalanceEquations {
          * \param N_begin: The starting iterator of the shape functions (must have dimension 8)
          * \param N_end: The stopping iterator of the shape functions (must have dimension 8)
          */
-        template <typename T, class node_in, class local_point_in, class shape_functions_out,
-                  class grad_shape_functions_out, class local_point_out, typename weight_type>
-        void LinearHex<T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, local_point_out, weight_type>::GetShapeFunctions(
-            const local_point_in &xi_begin, const local_point_in &xi_end, shape_functions_out N_begin,
-            shape_functions_out N_end) {
-
+        template <class element_configuration>
+        void LinearHex<element_configuration>::GetShapeFunctions(
+            const typename element_configuration::local_point_in &xi_begin,
+            const typename element_configuration::local_point_in &xi_end,
+            typename element_configuration::shape_functions_out   N_begin,
+            typename element_configuration::shape_functions_out   N_end) {
             TARDIGRADE_ERROR_TOOLS_CHECK((size_type)(N_end - N_begin) == 8,
                                          "The dimension of the shape-function iterator is " +
                                              std::to_string((size_type)(N_end - N_begin)));
 
-            for (std::pair<size_type, shape_functions_out> i(0, N_begin); i.second != N_end; ++i.first, ++i.second) {
+            for (std::pair<size_type, typename element_configuration::shape_functions_out> i(0, N_begin);
+                 i.second != N_end; ++i.first, ++i.second) {
                 *i.second = (1 + (*(this->local_node_xi_begin + 3 * i.first + 0)) * (*(xi_begin + 0))) *
                             (1 + (*(this->local_node_xi_begin + 3 * i.first + 1)) * (*(xi_begin + 1))) *
                             (1 + (*(this->local_node_xi_begin + 3 * i.first + 2)) * (*(xi_begin + 2))) / 8;
@@ -63,14 +62,12 @@ namespace tardigradeBalanceEquations {
          * \param dNdxi_end: The stopping iterator of the local gradient of the shape functions (must have dimension
          * 24)
          */
-        template <typename T, class node_in, class local_point_in, class shape_functions_out,
-                  class grad_shape_functions_out, class local_point_out, typename weight_type>
-        void LinearHex<T, node_in, local_point_in, shape_functions_out,
-                       grad_shape_functions_out, local_point_out, weight_type>::GetLocalShapeFunctionGradients(const local_point_in    &xi_begin,
-                                                                                 const local_point_in    &xi_end,
-                                                                                 grad_shape_functions_out dNdxi_begin,
-                                                                                 grad_shape_functions_out dNdxi_end) {
-
+        template <class element_configuration>
+        void LinearHex<element_configuration>::GetLocalShapeFunctionGradients(
+            const typename element_configuration::local_point_in    &xi_begin,
+            const typename element_configuration::local_point_in    &xi_end,
+            typename element_configuration::grad_shape_functions_out dNdxi_begin,
+            typename element_configuration::grad_shape_functions_out dNdxi_end) {
             TARDIGRADE_ERROR_TOOLS_CHECK((size_type)(dNdxi_end - dNdxi_begin) == 24,
                                          "The dimension of the shape-function iterator is " +
                                              std::to_string((size_type)(dNdxi_end - dNdxi_begin)));
@@ -98,30 +95,31 @@ namespace tardigradeBalanceEquations {
          * \param &value_begin: The starting iterator of the shape function global gradient (row major)
          * \param &value_end: The stopping iterator of the shape function global gradient (row major)
          */
-        template <typename T, class node_in, class local_point_in, class shape_functions_out,
-                  class grad_shape_functions_out, class local_point_out, typename weight_type>
-        void LinearHex<T, node_in, local_point_in, shape_functions_out,
-                       grad_shape_functions_out, local_point_out, weight_type>::GetGlobalShapeFunctionGradients(const local_point_in &xi_begin,
-                                                                                  const local_point_in &xi_end,
-                                                                                  const node_in &node_positions_begin,
-                                                                                  const node_in &node_positions_end,
-                                                                                  grad_shape_functions_out value_begin,
-                                                                                  grad_shape_functions_out value_end) {
-
+        template <class element_configuration>
+        void LinearHex<element_configuration>::GetGlobalShapeFunctionGradients(
+            const typename element_configuration::local_point_in    &xi_begin,
+            const typename element_configuration::local_point_in    &xi_end,
+            const typename element_configuration::node_in           &node_positions_begin,
+            const typename element_configuration::node_in           &node_positions_end,
+            typename element_configuration::grad_shape_functions_out value_begin,
+            typename element_configuration::grad_shape_functions_out value_end) {
             TARDIGRADE_ERROR_TOOLS_CHECK((size_type)(value_end - value_begin) == 24,
                                          "The shape function global gradient must have a size of 24");
 
-            std::array<typename std::iterator_traits<node_in>::value_type, 9> dxdxi;
-            std::array<typename std::iterator_traits<node_in>::value_type, 9> dxidx;
+            std::array<typename std::iterator_traits<typename element_configuration::node_in>::value_type, 9> dxdxi;
+            std::array<typename std::iterator_traits<typename element_configuration::node_in>::value_type, 9> dxidx;
 
             TARDIGRADE_ERROR_TOOLS_CATCH(this->GetLocalQuantityGradient(xi_begin, xi_end, node_positions_begin,
                                                                         node_positions_end, std::begin(dxdxi),
                                                                         std::end(dxdxi)));
 
-            Eigen::Map<const Eigen::Matrix<typename std::iterator_traits<node_in>::value_type, 3, 3, Eigen::RowMajor> >
+            Eigen::Map<
+                const Eigen::Matrix<typename std::iterator_traits<typename element_configuration::node_in>::value_type,
+                                    3, 3, Eigen::RowMajor> >
                 _dxdxi(dxdxi.data());
 
-            Eigen::Map<Eigen::Matrix<typename std::iterator_traits<node_in>::value_type, 3, 3, Eigen::RowMajor> >
+            Eigen::Map<Eigen::Matrix<typename std::iterator_traits<typename element_configuration::node_in>::value_type,
+                                     3, 3, Eigen::RowMajor> >
                 _dxidx(dxidx.data());
 
             _dxidx = (_dxdxi.inverse()).eval();
@@ -149,14 +147,13 @@ namespace tardigradeBalanceEquations {
          * \param configuration: Compute the gradient w.r.t. the current configuration ( true ) or reference
          * configuration ( false )
          */
-        template <typename T, class node_in, class local_point_in, class shape_functions_out,
-                  class grad_shape_functions_out, class local_point_out, typename weight_type>
-        void LinearHex<T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, local_point_out, weight_type>::
-            GetVolumeIntegralJacobianOfTransformation(const local_point_in &xi_begin, const local_point_in &xi_end,
-                                                      typename std::iterator_traits<node_in>::value_type &value,
-                                                      const bool configuration) {
-
-            std::array<typename std::iterator_traits<node_in>::value_type, 9> dxdxi;
+        template <class element_configuration>
+        void LinearHex<element_configuration>::GetVolumeIntegralJacobianOfTransformation(
+            const typename element_configuration::local_point_in                               &xi_begin,
+            const typename element_configuration::local_point_in                               &xi_end,
+            typename std::iterator_traits<typename element_configuration::node_in>::value_type &value,
+            const bool                                                                          configuration) {
+            std::array<typename std::iterator_traits<typename element_configuration::node_in>::value_type, 9> dxdxi;
 
             if (configuration) {
                 this->GetLocalQuantityGradient(xi_begin, xi_end, this->x_begin, this->x_end, std::begin(dxdxi),
@@ -167,7 +164,9 @@ namespace tardigradeBalanceEquations {
                                                std::end(dxdxi));
             }
 
-            Eigen::Map<const Eigen::Matrix<typename std::iterator_traits<node_in>::value_type, 3, 3, Eigen::RowMajor> >
+            Eigen::Map<
+                const Eigen::Matrix<typename std::iterator_traits<typename element_configuration::node_in>::value_type,
+                                    3, 3, Eigen::RowMajor> >
                 _dxdxi(dxdxi.data());
 
             value = _dxdxi.determinant();
@@ -185,15 +184,13 @@ namespace tardigradeBalanceEquations {
          * \param configuration: Compute the gradient w.r.t. the current configuration ( true ) or reference
          * configuration ( false )
          */
-        template <typename T, class node_in, class local_point_in, class shape_functions_out,
-                  class grad_shape_functions_out, class local_point_out, typename weight_type>
-        void LinearHex<T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, local_point_out, weight_type>
-            ::GetSurfaceIntegralJacobianOfTransformation(
-                const unsigned int s,
-                const local_point_in &xi_begin, const local_point_in &xi_end,
-                typename std::iterator_traits<node_in>::value_type &value, const bool configuration) {
-
-            using dxdxi_type = typename std::iterator_traits<node_in>::value_type;
+        template <class element_configuration>
+        void LinearHex<element_configuration>::GetSurfaceIntegralJacobianOfTransformation(
+            const unsigned int s, const typename element_configuration::local_point_in &xi_begin,
+            const typename element_configuration::local_point_in                               &xi_end,
+            typename std::iterator_traits<typename element_configuration::node_in>::value_type &value,
+            const bool                                                                          configuration) {
+            using dxdxi_type = typename std::iterator_traits<typename element_configuration::node_in>::value_type;
 
             std::array<dxdxi_type, 9> dxdxi;
             std::array<dxdxi_type, 9> A, Ainv;
@@ -207,37 +204,41 @@ namespace tardigradeBalanceEquations {
                                                std::end(dxdxi));
             }
 
-            Eigen::Map<const Eigen::Matrix<typename std::iterator_traits<node_in>::value_type, 3, 3, Eigen::RowMajor> >
+            Eigen::Map<
+                const Eigen::Matrix<typename std::iterator_traits<typename element_configuration::node_in>::value_type,
+                                    3, 3, Eigen::RowMajor> >
                 _dxdxi(dxdxi.data());
 
             auto Jvol = _dxdxi.determinant();
 
             std::fill(std::begin(A), std::end(A), dxdxi_type());
-            for ( unsigned int i = 0; i < 3; ++i){
-                for ( unsigned int I = 0; I < 3; ++I ){
-                    for ( unsigned int J = 0; J < 3; ++J ){
-                        A[3*I+J] += dxdxi[dim*i+I] * dxdxi[dim*i+J];
+            for (unsigned int i = 0; i < 3; ++i) {
+                for (unsigned int I = 0; I < 3; ++I) {
+                    for (unsigned int J = 0; J < 3; ++J) {
+                        A[3 * I + J] += dxdxi[dim * i + I] * dxdxi[dim * i + J];
                     }
                 }
             }
 
-            Eigen::Map<const Eigen::Matrix<typename std::iterator_traits<node_in>::value_type, 3, 3, Eigen::RowMajor> >
+            Eigen::Map<
+                const Eigen::Matrix<typename std::iterator_traits<typename element_configuration::node_in>::value_type,
+                                    3, 3, Eigen::RowMajor> >
                 _A(A.data());
-            Eigen::Map<Eigen::Matrix<typename std::iterator_traits<node_in>::value_type, 3, 3, Eigen::RowMajor> >
+            Eigen::Map<Eigen::Matrix<typename std::iterator_traits<typename element_configuration::node_in>::value_type,
+                                     3, 3, Eigen::RowMajor> >
                 _Ainv(Ainv.data());
 
             _Ainv = _A.inverse().eval();
 
             value = dxdxi_type();
 
-            for (unsigned int I = 0; I < 3; ++I){
-                for (unsigned int J = 0; J < 3; ++J){
-                    value += surface_normals[3*s+I] * Ainv[3*I+J] * surface_normals[3*s+J];
+            for (unsigned int I = 0; I < 3; ++I) {
+                for (unsigned int J = 0; J < 3; ++J) {
+                    value += surface_normals[3 * s + I] * Ainv[3 * I + J] * surface_normals[3 * s + J];
                 }
             }
 
             value = std::sqrt(value) * Jvol;
-
         }
 
         /*!
@@ -248,18 +249,19 @@ namespace tardigradeBalanceEquations {
          * \param xi_end: The stopping iterator of the integration point in local coordinates
          * \param &weight: The weight of the integration point
          */
-        template <typename T, class node_in, class local_point_in, class shape_functions_out,
-                  class grad_shape_functions_out, class local_point_out, typename weight_type>
-        void LinearHex<T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, local_point_out, weight_type>
-            ::GetVolumeIntegrationPointData(const unsigned int i, local_point_out xi_begin,
-                                                       local_point_out xi_end, weight_type &weight){
+        template <class element_configuration>
+        void LinearHex<element_configuration>::GetVolumeIntegrationPointData(
+            const unsigned int i, typename element_configuration::local_point_out xi_begin,
+            typename element_configuration::local_point_out                             xi_end,
+            typename element_configuration::volume_integration_point_weight_value_type &weight) {
+            TARDIGRADE_ERROR_TOOLS_CHECK(i < 8, "The integration point id " + std::to_string(i) +
+                                                    " must be less than the number of integration points " +
+                                                    std::to_string(8));
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(i<8, "The integration point id " + std::to_string(i) + " must be less than the number of integration points " + std::to_string(8));
-
-            std::copy(std::begin(volume_integration_points) + 3 * i, std::begin(volume_integration_points) + 3 * (i + 1), xi_begin);
+            std::copy(std::begin(volume_integration_points) + 3 * i,
+                      std::begin(volume_integration_points) + 3 * (i + 1), xi_begin);
 
             weight = volume_integration_weights[i];
-
         }
 
         /*!
@@ -271,18 +273,68 @@ namespace tardigradeBalanceEquations {
          * \param xi_end: The stopping iterator of the local coordinates of the integration point
          * \param &weight: The weight to be applied to the integration point
          */
-        template <typename T, class node_in, class local_point_in, class shape_functions_out,
-                  class grad_shape_functions_out, class local_point_out, typename weight_type>
-        void LinearHex<T, node_in, local_point_in, shape_functions_out, grad_shape_functions_out, local_point_out, weight_type>::
-             GetSurfaceIntegrationPointData(const unsigned int s, const unsigned int i, local_point_out xi_begin,
-                                                    local_point_out xi_end, weight_type &weight){
+        template <class element_configuration>
+        void LinearHex<element_configuration>::GetSurfaceIntegrationPointData(
+            const unsigned int s, const unsigned int i, typename element_configuration::local_point_out xi_begin,
+            typename element_configuration::local_point_out                              xi_end,
+            typename element_configuration::surface_integration_point_weight_value_type &weight) {
+            std::copy(std::begin(surface_integration_points) + 4 * 3 * s + 3 * i,
+                      std::begin(surface_integration_points) + 4 * 3 * s + 3 * (i + 1), xi_begin);
 
-            std::copy(std::begin(surface_integration_points) + 4 * 3 * s + 3 * i, std::begin(surface_integration_points) + 4 * 3 * s + 3 * (i+1), xi_begin);
-
-            weight = surface_integration_weights[4*s+i];
-
+            weight = surface_integration_weights[4 * s + i];
         }
 
-    }
+        /*!
+         * Compute the global normal of a local normal
+         * All of the vectors must be continuous
+         *
+         * \param &xi_begin: The pointer to the start of the local coordinates of the normal
+         * \param &local_normal_begin: The pointer to the start of the local normal vector
+         * \param &global_normal_begin: The pointer to the start of the global normal vector
+         * \param configuration: Whether to compute the normal in the reference (0) or current (1) configuration
+         */
+        template <class element_configuration>
+        void LinearHex<element_configuration>::GetGlobalNormal(
+            const typename element_configuration::local_node_value_type *xi_begin,
+            const typename element_configuration::local_node_value_type *local_normal_begin,
+            typename element_configuration::local_node_value_type *global_normal_begin, const bool configuration) {
+            using dxdxi_type = typename std::iterator_traits<typename element_configuration::node_in>::value_type;
 
-}
+            std::array<dxdxi_type, 9> dxdxi, dxidx;
+
+            if (configuration) {
+                this->GetLocalQuantityGradient(xi_begin, xi_begin + element_configuration::local_dim, this->x_begin,
+                                               this->x_end, std::begin(dxdxi), std::end(dxdxi));
+
+            } else {
+                this->GetLocalQuantityGradient(xi_begin, xi_begin + element_configuration::local_dim, this->X_begin,
+                                               this->X_end, std::begin(dxdxi), std::end(dxdxi));
+            }
+
+            Eigen::Map<const Eigen::Matrix<dxdxi_type, 3, 3, Eigen::RowMajor> > _dxdxi(dxdxi.data());
+
+            Eigen::Map<Eigen::Matrix<dxdxi_type, 3, 3, Eigen::RowMajor> > _dxidx(dxidx.data());
+
+            auto Jvol = _dxdxi.determinant();
+            _dxidx    = _dxdxi.inverse().eval();
+
+            std::fill(global_normal_begin, global_normal_begin + element_configuration::dim, dxdxi_type());
+
+            for (unsigned int i = 0; i < element_configuration::dim; ++i) {
+                for (unsigned int I = 0; I < element_configuration::local_dim; ++I) {
+                    *(global_normal_begin + i) +=
+                        Jvol * dxidx[element_configuration::dim * I + i] * (*(local_normal_begin + I));
+                }
+            }
+
+            auto norm =
+                std::sqrt(std::inner_product(global_normal_begin, global_normal_begin + element_configuration::dim,
+                                             global_normal_begin, dxdxi_type()));
+
+            std::transform(global_normal_begin, global_normal_begin + element_configuration::dim, global_normal_begin,
+                           std::bind(std::divides<>(), std::placeholders::_1, norm));
+        }
+
+    }  // namespace finiteElement
+
+}  // namespace tardigradeBalanceEquations

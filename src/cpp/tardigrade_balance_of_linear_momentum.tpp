@@ -7,11 +7,11 @@
  ******************************************************************************
  */
 
-#include "tardigrade_balance_of_linear_momentum.h"
-
 #include <algorithm>
 #include <functional>
 #include <numeric>
+
+#include "tardigrade_balance_of_linear_momentum.h"
 
 namespace tardigradeBalanceEquations {
 
