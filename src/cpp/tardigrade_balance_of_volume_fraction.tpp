@@ -7,11 +7,11 @@
  ******************************************************************************
  */
 
-#include "tardigrade_balance_of_volume_fraction.h"
-
 #include <algorithm>
 #include <functional>
 #include <numeric>
+
+#include "tardigrade_balance_of_volume_fraction.h"
 
 namespace tardigradeBalanceEquations {
 

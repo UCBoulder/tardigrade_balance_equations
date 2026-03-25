@@ -59,11 +59,9 @@ void evaluate_at_nodes(const xi_in &xi_begin, const xi_in &xi_end, const v_tp1_i
                    std::plus<typename std::iterator_traits<umesh_tp1_in>::value_type>());
 
     // Instantiate the element
-    tardigradeBalanceEquations::finiteElement::LinearHex<
-        floatType, typename std::array<floatType, 24>::const_iterator,
-        typename std::array<floatType, 3>::const_iterator, typename std::array<floatType, 8>::iterator,
-        typename std::array<floatType, 24>::iterator, typename std::array<floatType, 3>::iterator, floatType>
-        e(std::cbegin(x_tp1), std::cend(x_tp1), X_begin, X_end);
+    using element_configuration = typename tardigradeBalanceEquations::finiteElement::LinearHexConfiguration;
+    tardigradeBalanceEquations::finiteElement::LinearHex<element_configuration> e(std::cbegin(x_tp1), std::cend(x_tp1),
+                                                                                  X_begin, X_end);
 
     // Interpolate the quantities to the local point
     std::array<typename std::iterator_traits<v_tp1_in>::value_type, dim> v_tp1_p;
@@ -121,11 +119,9 @@ void evaluate_at_nodes(const xi_in &xi_begin, const xi_in &xi_end, const v_tp1_i
                    std::plus<typename std::iterator_traits<umesh_tp1_in>::value_type>());
 
     // Instantiate the element
-    tardigradeBalanceEquations::finiteElement::LinearHex<
-        floatType, typename std::array<floatType, 24>::const_iterator,
-        typename std::array<floatType, 3>::const_iterator, typename std::array<floatType, 8>::iterator,
-        typename std::array<floatType, 24>::iterator, typename std::array<floatType, 3>::iterator, floatType>
-        e(std::cbegin(x_tp1), std::cend(x_tp1), X_begin, X_end);
+    using element_configuration = typename tardigradeBalanceEquations::finiteElement::LinearHexConfiguration;
+    tardigradeBalanceEquations::finiteElement::LinearHex<element_configuration> e(std::cbegin(x_tp1), std::cend(x_tp1),
+                                                                                  X_begin, X_end);
 
     // Interpolate the quantities to the local point
     std::array<typename std::iterator_traits<v_tp1_in>::value_type, dim> v_tp1_p;
@@ -222,11 +218,9 @@ void evaluate_at_nodes(const xi_in &xi_begin, const xi_in &xi_end, const v_tp1_i
                    std::plus<typename std::iterator_traits<umesh_tp1_in>::value_type>());
 
     // Instantiate the element
-    tardigradeBalanceEquations::finiteElement::LinearHex<
-        floatType, typename std::array<floatType, 24>::const_iterator,
-        typename std::array<floatType, 3>::const_iterator, typename std::array<floatType, 8>::iterator,
-        typename std::array<floatType, 24>::iterator, typename std::array<floatType, 3>::iterator, floatType>
-        e(std::cbegin(x_tp1), std::cend(x_tp1), X_begin, X_end);
+    using element_configuration = typename tardigradeBalanceEquations::finiteElement::LinearHexConfiguration;
+    tardigradeBalanceEquations::finiteElement::LinearHex<element_configuration> e(std::cbegin(x_tp1), std::cend(x_tp1),
+                                                                                  X_begin, X_end);
 
     // Interpolate the quantities to the local point
     std::array<typename std::iterator_traits<v_tp1_in>::value_type, dim> v_tp1_p;
@@ -278,11 +272,9 @@ void evaluate_at_nodes(const xi_in &xi_begin, const xi_in &xi_end, const v_tp1_i
                    std::plus<typename std::iterator_traits<umesh_tp1_in>::value_type>());
 
     // Instantiate the element
-    tardigradeBalanceEquations::finiteElement::LinearHex<
-        floatType, typename std::array<floatType, 24>::const_iterator,
-        typename std::array<floatType, 3>::const_iterator, typename std::array<floatType, 8>::iterator,
-        typename std::array<floatType, 24>::iterator, typename std::array<floatType, 3>::iterator, floatType>
-        e(std::cbegin(x_tp1), std::cend(x_tp1), X_begin, X_end);
+    using element_configuration = typename tardigradeBalanceEquations::finiteElement::LinearHexConfiguration;
+    tardigradeBalanceEquations::finiteElement::LinearHex<element_configuration> e(std::cbegin(x_tp1), std::cend(x_tp1),
+                                                                                  X_begin, X_end);
 
     // Interpolate the quantities to the local point
     std::array<typename std::iterator_traits<v_tp1_in>::value_type, dim> v_tp1_p;

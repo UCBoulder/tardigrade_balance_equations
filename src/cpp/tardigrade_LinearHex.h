@@ -9,85 +9,134 @@
 #ifndef TARDIGRADE_LINEARHEX_H
 #define TARDIGRADE_LINEARHEX_H
 
+#include <numeric>
+
 #include "tardigrade_FiniteElementBase.h"
 
 namespace tardigradeBalanceEquations {
 
     namespace finiteElement {
 
+        /*!
+         * The configuration of the linear hex element
+         */
+        class LinearHexConfiguration
+            : public FiniteElementConfigurationBase<3, 3, 8, 6, double, double, double, double> {
+           public:
+            //! The number of volume integration points
+            constexpr static unsigned int num_volume_integration_points = 8;
+
+            //! The number of integration points on each surface
+            constexpr static unsigned int num_surface_integration_points = 4;
+        };
+
         //! An implementation of a linear hexahedral element
-        template <typename T, class node_in, class local_point_in, class shape_functions_out,
-                  class grad_shape_functions_out, class local_point_out, typename weight_type>
-        class LinearHex
-            : public FiniteElementBase<3, 3, 8, node_in, typename std::array<T, 3 * 8>::const_iterator, local_point_in,
-                                       shape_functions_out, grad_shape_functions_out, local_point_out, weight_type> {
+        template <class element_configuration>
+        class LinearHex : public FiniteElementBase<element_configuration> {
            public:
             //! The local nodes for an isoparametric linear hex element
-            constexpr static std::array<T, 3 * 8> local_nodes = {-1, -1, -1, 1, -1, -1, 1, 1, -1, -1, 1, -1,
-                                                                 -1, -1, 1,  1, -1, 1,  1, 1, 1,  -1, 1, 1};
+            constexpr static std::array<typename element_configuration::local_node_value_type,
+                                        element_configuration::local_dim * element_configuration::node_count>
+                local_nodes = {-1, -1, -1, 1, -1, -1, 1, 1, -1, -1, 1, -1, -1, -1, 1, 1, -1, 1, 1, 1, 1, -1, 1, 1};
 
             //! The volume integration points for a fully integrated isoparametric linear hex element
-            constexpr static std::array<T, 3 * 8> volume_integration_points = {
-                -0.57735027, -0.57735027, -0.57735027, 0.57735027,  -0.57735027, -0.57735027, 0.57735027, 0.57735027,
-                -0.57735027, -0.57735027, 0.57735027,  -0.57735027, -0.57735027, -0.57735027, 0.57735027, 0.57735027,
-                -0.57735027, 0.57735027,  0.57735027,  0.57735027,  0.57735027,  -0.57735027, 0.57735027, 0.57735027};
+            constexpr static std::array<typename element_configuration::local_node_value_type,
+                                        element_configuration::local_dim *
+                                            element_configuration::num_volume_integration_points>
+                volume_integration_points = {-0.57735027, -0.57735027, -0.57735027, 0.57735027,  -0.57735027,
+                                             -0.57735027, 0.57735027,  0.57735027,  -0.57735027, -0.57735027,
+                                             0.57735027,  -0.57735027, -0.57735027, -0.57735027, 0.57735027,
+                                             0.57735027,  -0.57735027, 0.57735027,  0.57735027,  0.57735027,
+                                             0.57735027,  -0.57735027, 0.57735027,  0.57735027};
 
             //! The volume integration weights for a fully integrated isoparametric linear hex element
-            constexpr static std::array<T, 8> volume_integration_weights = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
+            constexpr static std::array<typename element_configuration::volume_integration_point_weight_value_type,
+                                        element_configuration::num_volume_integration_points>
+                volume_integration_weights = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
 
             //! The surface integration points for a fully integrated isoparametric linear hex element
-            constexpr static std::array<T, 6 * 4 * 3> surface_integration_points = {
-                -1,          -0.57735027, -0.57735027, -1,         0.57735027,  -0.57735027, -1,          0.57735027,
-                0.57735027,  -1,          -0.57735027, 0.57735027, 1,           -0.57735027, -0.57735027, 1,
-                0.57735027,  -0.57735027, 1,           0.57735027, 0.57735027,  1,           -0.57735027, 0.57735027,
-                -0.57735027, -1,          -0.57735027, 0.57735027, -1,          -0.57735027, 0.57735027,  -1,
-                0.57735027,  -0.57735027, -1,          0.57735027, -0.57735027, 1,           -0.57735027, 0.57735027,
-                1,           -0.57735027, 0.57735027,  1,          0.57735027,  -0.57735027, 1,           0.57735027,
-                -0.57735027, -0.57735027, -1,          0.57735027, -0.57735027, -1,          0.57735027,  0.57735027,
-                -1,          -0.57735027, 0.57735027,  -1,         -0.57735027, -0.57735027, 1,           0.57735027,
-                -0.57735027, 1,           0.57735027,  0.57735027, 1,           -0.57735027, 0.57735027,  1};
+            constexpr static std::array<typename element_configuration::local_node_value_type,
+                                        element_configuration::surface_count *
+                                            element_configuration::num_surface_integration_points *
+                                            element_configuration::local_dim>
+                surface_integration_points = {
+                    -1,          -0.57735027, -0.57735027, -1,          0.57735027,  -0.57735027,
+                    -1,          0.57735027,  0.57735027,  -1,          -0.57735027, 0.57735027,
+                    1,           -0.57735027, -0.57735027, 1,           0.57735027,  -0.57735027,
+                    1,           0.57735027,  0.57735027,  1,           -0.57735027, 0.57735027,
+                    -0.57735027, -1,          -0.57735027, 0.57735027,  -1,          -0.57735027,
+                    0.57735027,  -1,          0.57735027,  -0.57735027, -1,          0.57735027,
+                    -0.57735027, 1,           -0.57735027, 0.57735027,  1,           -0.57735027,
+                    0.57735027,  1,           0.57735027,  -0.57735027, 1,           0.57735027,
+                    -0.57735027, -0.57735027, -1,          0.57735027,  -0.57735027, -1,
+                    0.57735027,  0.57735027,  -1,          -0.57735027, 0.57735027,  -1,
+                    -0.57735027, -0.57735027, 1,           0.57735027,  -0.57735027, 1,
+                    0.57735027,  0.57735027,  1,           -0.57735027, 0.57735027,  1};
 
             //! The surface integration weights for a fully integrated isoparametric linear hex element
-            constexpr static std::array<T, 4 * 6> surface_integration_weights = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                                                                                 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+            constexpr static std::array<typename element_configuration::surface_integration_point_weight_value_type,
+                                        element_configuration::surface_count *
+                                            element_configuration::num_surface_integration_points>
+                surface_integration_weights = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 
             //! The surface normals
-            constexpr static std::array<T, 3 * 6> surface_normals = {-1, 0, 0, 1, 0, 0,  0, -1, 0,
-                                                                     0,  1, 0, 0, 0, -1, 0, 0,  1};
+            constexpr static std::array<typename element_configuration::local_node_value_type,
+                                        element_configuration::surface_count * element_configuration::local_dim>
+                surface_normals = {-1, 0, 0, 1, 0, 0, 0, -1, 0, 0, 1, 0, 0, 0, -1, 0, 0, 1};
 
-            LinearHex(const node_in &_x_begin, const node_in &_x_end, const node_in &_X_begin, const node_in &_X_end);
+            LinearHex(const typename element_configuration::node_in &_x_begin,
+                      const typename element_configuration::node_in &_x_end,
+                      const typename element_configuration::node_in &_X_begin,
+                      const typename element_configuration::node_in &_X_end);
 
-            using FiniteElementBase<3, 3, 8, node_in, typename std::array<T, 3 * 8>::const_iterator, local_point_in,
-                                    shape_functions_out, grad_shape_functions_out, local_point_out,
-                                    weight_type>::FiniteElementBase;
+            using FiniteElementBase<element_configuration>::FiniteElementBase;
 
-            virtual void GetShapeFunctions(const local_point_in &xi_begin, const local_point_in &xi_end,
-                                           shape_functions_out N_begin, shape_functions_out N_end) override;
+            virtual void GetShapeFunctions(const typename element_configuration::local_point_in &xi_begin,
+                                           const typename element_configuration::local_point_in &xi_end,
+                                           typename element_configuration::shape_functions_out   N_begin,
+                                           typename element_configuration::shape_functions_out   N_end) override;
 
-            virtual void GetLocalShapeFunctionGradients(const local_point_in &xi_begin, const local_point_in &xi_end,
-                                                        grad_shape_functions_out dNdxi_begin,
-                                                        grad_shape_functions_out dNdxi_end) override;
+            virtual void GetLocalShapeFunctionGradients(
+                const typename element_configuration::local_point_in    &xi_begin,
+                const typename element_configuration::local_point_in    &xi_end,
+                typename element_configuration::grad_shape_functions_out dNdxi_begin,
+                typename element_configuration::grad_shape_functions_out dNdxi_end) override;
 
-            virtual void GetGlobalShapeFunctionGradients(const local_point_in &xi_begin, const local_point_in &xi_end,
-                                                         const node_in           &node_positions_begin,
-                                                         const node_in           &node_positions_end,
-                                                         grad_shape_functions_out value_begin,
-                                                         grad_shape_functions_out value_end) override;
+            virtual void GetGlobalShapeFunctionGradients(
+                const typename element_configuration::local_point_in    &xi_begin,
+                const typename element_configuration::local_point_in    &xi_end,
+                const typename element_configuration::node_in           &node_positions_begin,
+                const typename element_configuration::node_in           &node_positions_end,
+                typename element_configuration::grad_shape_functions_out value_begin,
+                typename element_configuration::grad_shape_functions_out value_end) override;
 
             virtual void GetVolumeIntegralJacobianOfTransformation(
-                const local_point_in &xi_begin, const local_point_in &xi_end,
-                typename std::iterator_traits<node_in>::value_type &value, const bool configuration = 1) override;
+                const typename element_configuration::local_point_in                               &xi_begin,
+                const typename element_configuration::local_point_in                               &xi_end,
+                typename std::iterator_traits<typename element_configuration::node_in>::value_type &value,
+                const bool configuration = 1) override;
 
             virtual void GetSurfaceIntegralJacobianOfTransformation(
-                const unsigned int s, const local_point_in &xi_begin, const local_point_in &xi_end,
-                typename std::iterator_traits<node_in>::value_type &value, const bool configuration = 1) override;
+                const unsigned int s, const typename element_configuration::local_point_in &xi_begin,
+                const typename element_configuration::local_point_in                               &xi_end,
+                typename std::iterator_traits<typename element_configuration::node_in>::value_type &value,
+                const bool configuration = 1) override;
 
-            virtual void GetVolumeIntegrationPointData(const unsigned int i, local_point_out xi_begin,
-                                                       local_point_out xi_end, weight_type &weight) override;
+            virtual void GetVolumeIntegrationPointData(
+                const unsigned int i, typename element_configuration::local_point_out xi_begin,
+                typename element_configuration::local_point_out                             xi_end,
+                typename element_configuration::volume_integration_point_weight_value_type &weight) override;
 
-            virtual void GetSurfaceIntegrationPointData(const unsigned int s, const unsigned int i,
-                                                        local_point_out xi_begin, local_point_out xi_end,
-                                                        weight_type &weight) override;
+            virtual void GetSurfaceIntegrationPointData(
+                const unsigned int s, const unsigned int i, typename element_configuration::local_point_out xi_begin,
+                typename element_configuration::local_point_out                              xi_end,
+                typename element_configuration::surface_integration_point_weight_value_type &weight) override;
+
+            virtual void GetGlobalNormal(
+                const typename element_configuration::local_node_value_type *xi_begin,
+                const typename element_configuration::local_node_value_type *local_normal_begin,
+                typename element_configuration::local_node_value_type       *global_normal_begin,
+                const bool                                                   configuration = 1) override;
         };
 
     }  // namespace finiteElement

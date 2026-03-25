@@ -6,11 +6,11 @@
  ******************************************************************************
  */
 
-#include "tardigrade_balance_of_mass.h"
-
 #include <algorithm>
 #include <functional>
 #include <numeric>
+
+#include "tardigrade_balance_of_mass.h"
 
 namespace tardigradeBalanceEquations {
 
