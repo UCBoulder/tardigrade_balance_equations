@@ -612,23 +612,19 @@ BOOST_AUTO_TEST_CASE(test_LinearHex10, *boost::unit_test::tolerance(DEFAULT_TEST
                                                                                   std::cbegin(X), std::cend(X));
 
     std::array<floatType, 18> reference_answers = {1., 0, 0, -1., 0, 0, 0, -1., 0., 0, 1., 0., 0., 0, 1, 0., 0, -1.};
-    std::array<floatType, 18> current_answers = {-1, 0, 0, 1./std::sqrt(2.), 0, 1./std::sqrt(2.), 0, -1., 0., 0, 1., 0., 0., 0, -1, 0., 0, 1.};
+    std::array<floatType, 18> current_answers   = {
+        -1, 0, 0, 1. / std::sqrt(2.), 0, 1. / std::sqrt(2.), 0, -1., 0., 0, 1., 0., 0., 0, -1, 0., 0, 1.};
 
     std::array<floatType, 18> reference_results;
     std::array<floatType, 18> current_results;
 
     for (unsigned int s = 0; s < 6; ++s) {
-        e.GetGlobalNormal(std::begin(locations)+3*s,
-                          std::begin(e.surface_normals)+3*s,
-                          std::begin(reference_results)+3*s,
-                          0);
-        e.GetGlobalNormal(std::begin(locations)+3*s,
-                          std::begin(e.surface_normals)+3*s,
-                          std::begin(current_results)+3*s,
-                          1);
+        e.GetGlobalNormal(std::begin(locations) + 3 * s, std::begin(e.surface_normals) + 3 * s,
+                          std::begin(reference_results) + 3 * s, 0);
+        e.GetGlobalNormal(std::begin(locations) + 3 * s, std::begin(e.surface_normals) + 3 * s,
+                          std::begin(current_results) + 3 * s, 1);
     }
 
     BOOST_TEST(reference_results == reference_answers, CHECK_PER_ELEMENT);
     BOOST_TEST(current_results == current_answers, CHECK_PER_ELEMENT);
-
 }

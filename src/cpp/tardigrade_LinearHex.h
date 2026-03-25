@@ -9,8 +9,9 @@
 #ifndef TARDIGRADE_LINEARHEX_H
 #define TARDIGRADE_LINEARHEX_H
 
+#include <numeric>
+
 #include "tardigrade_FiniteElementBase.h"
-#include<numeric>
 
 namespace tardigradeBalanceEquations {
 
@@ -134,9 +135,8 @@ namespace tardigradeBalanceEquations {
             virtual void GetGlobalNormal(
                 const typename element_configuration::local_node_value_type *xi_begin,
                 const typename element_configuration::local_node_value_type *local_normal_begin,
-                typename element_configuration::local_node_value_type *global_normal_begin,
-                const bool configuration = 1);
-
+                typename element_configuration::local_node_value_type       *global_normal_begin,
+                const bool                                                   configuration = 1);
         };
 
     }  // namespace finiteElement

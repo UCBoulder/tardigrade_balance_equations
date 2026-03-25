@@ -314,8 +314,7 @@ namespace tardigradeBalanceEquations {
         void FiniteElementBase<element_configuration>::GetGlobalNormal(
             const typename element_configuration::local_node_value_type *xi_begin,
             const typename element_configuration::local_node_value_type *local_normal_begin,
-            typename element_configuration::local_node_value_type *global_normal_begin,
-            const bool configuration){
+            typename element_configuration::local_node_value_type *global_normal_begin, const bool configuration) {
             throw std::logic_error("Not implemented");
         }
 
