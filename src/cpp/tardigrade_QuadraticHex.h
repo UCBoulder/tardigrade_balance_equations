@@ -10,6 +10,7 @@
 #define TARDIGRADE_QUADRATICHEX_H
 
 #include "tardigrade_FiniteElementBase.h"
+#include<numeric>
 
 namespace tardigradeBalanceEquations {
 
@@ -131,6 +132,13 @@ namespace tardigradeBalanceEquations {
                 const unsigned int s, const unsigned int i, typename element_configuration::local_point_out xi_begin,
                 typename element_configuration::local_point_out                              xi_end,
                 typename element_configuration::surface_integration_point_weight_value_type &weight) override;
+
+            virtual void GetGlobalNormal(
+                const typename element_configuration::local_node_value_type *xi_begin,
+                const typename element_configuration::local_node_value_type *local_normal_begin,
+                typename element_configuration::local_node_value_type *global_normal_begin,
+                const bool configuration = 1);
+
         };
 
     }  // namespace finiteElement

@@ -601,3 +601,34 @@ BOOST_AUTO_TEST_CASE(test_LinearHex9, *boost::unit_test::tolerance(DEFAULT_TEST_
     }
     BOOST_TEST(results == answers, CHECK_PER_ELEMENT);
 }
+
+BOOST_AUTO_TEST_CASE(test_LinearHex10, *boost::unit_test::tolerance(DEFAULT_TEST_TOLERANCE)) {
+    std::array<floatType, 24> X = {0, 0, 0, -1, 0, 0, -1, 1, 0, 0, 1, 0, 0, 0, -1, -1, 0, -1, -1, 1, -1, 0, 1, -1};
+    std::array<floatType, 24> x = {0, 0, 0, 2, 0, 0, 2, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1};
+    std::array<floatType, 24> locations = {-1, 0, 0, 1, 0, 0, 0, -1, 0, 0, 1, 0, 0, 0, -1, 0, 0, 1};
+
+    using element_configuration = typename tardigradeBalanceEquations::finiteElement::LinearHexConfiguration;
+    tardigradeBalanceEquations::finiteElement::LinearHex<element_configuration> e(std::cbegin(x), std::cend(x),
+                                                                                  std::cbegin(X), std::cend(X));
+
+    std::array<floatType, 18> reference_answers = {1., 0, 0, -1., 0, 0, 0, -1., 0., 0, 1., 0., 0., 0, 1, 0., 0, -1.};
+    std::array<floatType, 18> current_answers = {-1, 0, 0, 1./std::sqrt(2.), 0, 1./std::sqrt(2.), 0, -1., 0., 0, 1., 0., 0., 0, -1, 0., 0, 1.};
+
+    std::array<floatType, 18> reference_results;
+    std::array<floatType, 18> current_results;
+
+    for (unsigned int s = 0; s < 6; ++s) {
+        e.GetGlobalNormal(std::begin(locations)+3*s,
+                          std::begin(e.surface_normals)+3*s,
+                          std::begin(reference_results)+3*s,
+                          0);
+        e.GetGlobalNormal(std::begin(locations)+3*s,
+                          std::begin(e.surface_normals)+3*s,
+                          std::begin(current_results)+3*s,
+                          1);
+    }
+
+    BOOST_TEST(reference_results == reference_answers, CHECK_PER_ELEMENT);
+    BOOST_TEST(current_results == current_answers, CHECK_PER_ELEMENT);
+
+}

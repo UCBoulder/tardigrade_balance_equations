@@ -139,6 +139,12 @@ namespace tardigradeBalanceEquations {
                                            quantity_gradient_out value_begin, quantity_gradient_out value_end,
                                            const bool configuration = true);
 
+            virtual void GetGlobalNormal(
+                const typename element_configuration::local_node_value_type *xi_begin,
+                const typename element_configuration::local_node_value_type *local_normal_begin,
+                typename element_configuration::local_node_value_type *global_normal_begin,
+                const bool configuration = 1);
+
            protected:
             const typename element_configuration::node_in
                 x_begin;  //!< Starting iterator for the current position of the nodal coordinates

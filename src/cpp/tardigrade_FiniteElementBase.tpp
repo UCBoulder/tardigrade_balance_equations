@@ -301,6 +301,24 @@ namespace tardigradeBalanceEquations {
             }
         }
 
+        /*!
+         * Compute the global normal of a local normal
+         * All of the vectors must be continuous
+         *
+         * \param &xi_begin: The pointer to the start of the local coordinates of the normal
+         * \param &local_normal_begin: The pointer to the start of the local normal vector
+         * \param &global_normal_begin: The pointer to the start of the global normal vector
+         * \param configuration: Whether to compute the normal in the reference (0) or current (1) configuration
+         */
+        template <class element_configuration>
+        void FiniteElementBase<element_configuration>::GetGlobalNormal(
+            const typename element_configuration::local_node_value_type *xi_begin,
+            const typename element_configuration::local_node_value_type *local_normal_begin,
+            typename element_configuration::local_node_value_type *global_normal_begin,
+            const bool configuration){
+            throw std::logic_error("Not implemented");
+        }
+
     }  // namespace finiteElement
 
 }  // namespace tardigradeBalanceEquations

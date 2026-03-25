@@ -382,6 +382,67 @@ namespace tardigradeBalanceEquations {
 
             weight = surface_integration_weights[4 * s + i];
         }
+
+        /*!
+         * Compute the global normal of a local normal
+         * All of the vectors must be continuous
+         *
+         * \param &xi_begin: The pointer to the start of the local coordinates of the normal
+         * \param &local_normal_begin: The pointer to the start of the local normal vector
+         * \param &global_normal_begin: The pointer to the start of the global normal vector
+         * \param configuration: Whether to compute the normal in the reference (0) or current (1) configuration
+         */
+        template <class element_configuration>
+        void QuadraticHex<element_configuration>::GetGlobalNormal(
+            const typename element_configuration::local_node_value_type *xi_begin,
+            const typename element_configuration::local_node_value_type *local_normal_begin,
+            typename element_configuration::local_node_value_type *global_normal_begin,
+            const bool configuration){
+
+            using dxdxi_type = typename std::iterator_traits<typename element_configuration::node_in>::value_type;
+
+            std::array<dxdxi_type, 9> dxdxi, dxidx;
+
+            if (configuration) {
+                this->GetLocalQuantityGradient(xi_begin, xi_begin + element_configuration::local_dim, this->x_begin, this->x_end, std::begin(dxdxi),
+                                               std::end(dxdxi));
+
+            } else {
+                this->GetLocalQuantityGradient(xi_begin, xi_begin + element_configuration::local_dim, this->X_begin, this->X_end, std::begin(dxdxi),
+                                               std::end(dxdxi));
+            }
+
+            Eigen::Map<
+                const Eigen::Matrix<dxdxi_type,
+                                    3, 3, Eigen::RowMajor> >
+                _dxdxi(dxdxi.data());
+
+            Eigen::Map<
+                Eigen::Matrix<dxdxi_type,
+                                    3, 3, Eigen::RowMajor> >
+                _dxidx(dxidx.data());
+
+            auto Jvol = _dxdxi.determinant();
+            _dxidx = _dxdxi.inverse().eval();
+
+            std::fill(global_normal_begin, global_normal_begin + element_configuration::dim, dxdxi_type());
+
+            for ( unsigned int i = 0; i < element_configuration::dim; ++i ){
+
+                for ( unsigned int I = 0; I < element_configuration::local_dim; ++I ){
+
+                    *(global_normal_begin + i) += Jvol * dxidx[element_configuration::dim * I + i] * (*(local_normal_begin + I));
+
+                }
+
+            }
+
+            auto norm = std::sqrt(std::inner_product(global_normal_begin, global_normal_begin + element_configuration::dim, global_normal_begin, dxdxi_type()));
+
+            std::transform(global_normal_begin, global_normal_begin + element_configuration::dim, global_normal_begin, std::bind(std::divides<>(), std::placeholders::_1, norm));
+
+        }
+
     }  // namespace finiteElement
 
 }  // namespace tardigradeBalanceEquations
