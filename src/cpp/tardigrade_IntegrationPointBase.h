@@ -67,9 +67,11 @@ namespace tardigradeBalanceEquations {
         /*!
          * The base class for integration points
          */
-        template <class configuration>
+        template <class _configuration>
         class IntegrationPointBase {
            public:
+            using configuration = _configuration;
+
             /*!
              * Default constructor
              */
