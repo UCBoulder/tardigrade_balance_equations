@@ -6,6 +6,30 @@ Changelog
 #########
 
 ******************
+0.2.6 (03-26-2026)
+******************
+
+Internal Changes
+================
+- Exposed the IntegrationPointBase configuration to derived classes (:pull:`58`). By `Nathan Miller`_.
+
+Release
+=======
+- Released version (:pull:`59`). By `Nathan Miller`_.
+
+******************
+0.2.5 (03-25-2026)
+******************
+
+New Features
+============
+- Added the calculation of the global surface normal (:pull:`56`). By `Nathan Miller`_.
+
+Release
+=======
+- Released version (:pull:`57`). By `Nathan Miller`_.
+
+******************
 0.2.4 (03-17-2026)
 ******************
 
