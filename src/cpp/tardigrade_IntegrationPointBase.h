@@ -125,10 +125,16 @@ namespace tardigradeBalanceEquations {
                   _Jxw(Jxw) {};
 
             //! Get the net response
-            const auto getResponse() { return &_response; }
+            const auto getResponse() {
+                assembleIntegrationPointResponse();
+                return &_response;
+            }
 
             //! Get the net Jacobian
-            const auto getJacobian() { return &_jacobian; }
+            const auto getJacobian() {
+                assembleIntegrationPointJacobian();
+                return &_jacobian;
+            }
 
            protected:
             /*!
