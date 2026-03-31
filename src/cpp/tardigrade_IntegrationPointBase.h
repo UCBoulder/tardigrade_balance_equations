@@ -124,6 +124,7 @@ namespace tardigradeBalanceEquations {
                   _previous_grad_dof(previous_grad_dof),
                   _Jxw(Jxw) {};
 
+           public:
             //! Get the net response
             const auto getResponse() {
                 assembleIntegrationPointResponse();
