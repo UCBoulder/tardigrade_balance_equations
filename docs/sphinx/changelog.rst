@@ -6,6 +6,14 @@ Changelog
 #########
 
 ******************
+0.2.7 (unreleased)
+******************
+
+Internal Changes
+================
+- Have the integration point evaluate the residual and Jacobian when the values are requested (:pull:`60`). By `Nathan Miller`_.
+
+******************
 0.2.6 (03-26-2026)
 ******************
 
