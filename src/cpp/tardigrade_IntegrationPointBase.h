@@ -70,7 +70,7 @@ namespace tardigradeBalanceEquations {
         template <class _configuration>
         class IntegrationPointBase {
            public:
-            //!The configuration of the integration point i.e., the point definitions
+            //! The configuration of the integration point i.e., the point definitions
             using configuration = _configuration;
 
             /*!
@@ -103,11 +103,11 @@ namespace tardigradeBalanceEquations {
             IntegrationPointBase(
                 const std::array<typename configuration::test_type, configuration::num_test_functions> &test,
                 const std::array<typename configuration::test_type,
-                                 configuration::num_test_functions * configuration::dimension>               &grad_test,
+                                 configuration::num_test_functions * configuration::dimension>         &grad_test,
                 const std::array<typename configuration::test_type, configuration::num_interpolation_functions>
                                                                                                   &interpolation,
-                const std::array<typename configuration::test_type,
-                                 configuration::num_interpolation_functions * configuration::dimension> &grad_interpolation,
+                const std::array<typename configuration::test_type, configuration::num_interpolation_functions *
+                                                                        configuration::dimension> &grad_interpolation,
                 const std::array<typename configuration::test_type, configuration::num_dof>       &dof,
                 const std::array<typename configuration::test_type, configuration::num_dof * configuration::dimension>
                                                                                             &grad_dof,
@@ -181,7 +181,8 @@ namespace tardigradeBalanceEquations {
             const std::array<typename configuration::test_type, configuration::num_test_functions> _test;
 
             //! The gradient of the test functions
-            const std::array<typename configuration::test_type, configuration::num_test_functions * configuration::dimension>
+            const std::array<typename configuration::test_type,
+                             configuration::num_test_functions * configuration::dimension>
                 _grad_test;
 
             //! The interpolation functions
@@ -197,7 +198,8 @@ namespace tardigradeBalanceEquations {
             const std::array<typename configuration::dof_type, configuration::num_dof> _dof;
 
             //! The DOF gradient vector
-            const std::array<typename configuration::dof_type, configuration::num_dof * configuration::dimension> _grad_dof;
+            const std::array<typename configuration::dof_type, configuration::num_dof * configuration::dimension>
+                _grad_dof;
 
             //! The previous DOF vector
             const std::array<typename configuration::dof_type, configuration::num_dof> _previous_dof;
