@@ -24,7 +24,7 @@ namespace tardigradeBalanceEquations {
         /*!
          * The configuration of the integration point
          */
-        template <int _dim, int _num_response_terms, int _num_dof, int _num_test_functions,
+        template <int _dimension, int _num_response_terms, int _num_dof, int _num_test_functions,
                   int _num_interpolation_functions, typename _test_type = double, typename _interpolation_type = double,
                   typename _response_type = double, typename _jacobian_type = double, typename _dof_type = double,
                   typename _Jxw_type = double>
@@ -49,7 +49,7 @@ namespace tardigradeBalanceEquations {
             using Jxw_type = _Jxw_type;
 
             //! The spatial dimension
-            static constexpr unsigned int dim = _dim;
+            static constexpr unsigned int dimension = _dimension;
 
             //! The number of response terms
             static constexpr unsigned int num_response_terms = _num_response_terms;
@@ -70,6 +70,7 @@ namespace tardigradeBalanceEquations {
         template <class _configuration>
         class IntegrationPointBase {
            public:
+            //! The configuration of the integration point i.e., the point definitions
             using configuration = _configuration;
 
             /*!
@@ -102,16 +103,16 @@ namespace tardigradeBalanceEquations {
             IntegrationPointBase(
                 const std::array<typename configuration::test_type, configuration::num_test_functions> &test,
                 const std::array<typename configuration::test_type,
-                                 configuration::num_test_functions * configuration::dim>               &grad_test,
+                                 configuration::num_test_functions * configuration::dimension>         &grad_test,
                 const std::array<typename configuration::test_type, configuration::num_interpolation_functions>
                                                                                                   &interpolation,
-                const std::array<typename configuration::test_type,
-                                 configuration::num_interpolation_functions * configuration::dim> &grad_interpolation,
+                const std::array<typename configuration::test_type, configuration::num_interpolation_functions *
+                                                                        configuration::dimension> &grad_interpolation,
                 const std::array<typename configuration::test_type, configuration::num_dof>       &dof,
-                const std::array<typename configuration::test_type, configuration::num_dof * configuration::dim>
+                const std::array<typename configuration::test_type, configuration::num_dof * configuration::dimension>
                                                                                             &grad_dof,
                 const std::array<typename configuration::test_type, configuration::num_dof> &previous_dof,
-                const std::array<typename configuration::test_type, configuration::num_dof * configuration::dim>
+                const std::array<typename configuration::test_type, configuration::num_dof * configuration::dimension>
                                                        &previous_grad_dof,
                 const typename configuration::Jxw_type &Jxw)
                 : _test(test),
@@ -180,7 +181,8 @@ namespace tardigradeBalanceEquations {
             const std::array<typename configuration::test_type, configuration::num_test_functions> _test;
 
             //! The gradient of the test functions
-            const std::array<typename configuration::test_type, configuration::num_test_functions * configuration::dim>
+            const std::array<typename configuration::test_type,
+                             configuration::num_test_functions * configuration::dimension>
                 _grad_test;
 
             //! The interpolation functions
@@ -189,20 +191,21 @@ namespace tardigradeBalanceEquations {
 
             //! The gradient of the interpolation functions
             const std::array<typename configuration::interpolation_type,
-                             configuration::num_interpolation_functions * configuration::dim>
+                             configuration::num_interpolation_functions * configuration::dimension>
                 _grad_interpolation;
 
             //! The DOF vector
             const std::array<typename configuration::dof_type, configuration::num_dof> _dof;
 
             //! The DOF gradient vector
-            const std::array<typename configuration::dof_type, configuration::num_dof * configuration::dim> _grad_dof;
+            const std::array<typename configuration::dof_type, configuration::num_dof * configuration::dimension>
+                _grad_dof;
 
             //! The previous DOF vector
             const std::array<typename configuration::dof_type, configuration::num_dof> _previous_dof;
 
             //! The previous DOF gradient vector
-            const std::array<typename configuration::dof_type, configuration::num_dof * configuration::dim>
+            const std::array<typename configuration::dof_type, configuration::num_dof * configuration::dimension>
                 _previous_grad_dof;
 
             //! The product of the volumetric Jacobian and the integration point weight
