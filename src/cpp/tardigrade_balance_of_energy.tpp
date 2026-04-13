@@ -17,7 +17,7 @@ namespace tardigradeBalanceEquations {
 
     namespace balanceOfEnergy {
 
-        template <int dim, bool is_per_unit_volume, typename density_type, typename density_dot_type,
+        template <class configuration, bool is_per_unit_volume, typename density_type, typename density_dot_type,
                   class density_gradient_iter, typename internal_energy_type, typename internal_energy_dot_type,
                   class internal_energy_gradient_iter, class velocity_iter, class velocity_gradient_iter,
                   class cauchy_stress_iter, typename volume_fraction_type, typename internal_heat_generation_type,
@@ -42,7 +42,7 @@ namespace tardigradeBalanceEquations {
              * Compute the full balance of energy in a variational context
              *
              * Template parameters:
-             * - dim: The spatial dimension
+             * - configuration: The configuration of the balance of energy
              * - is_per_unit_volume: Whether the internal energy is per unit mass (false) or per unit volume (true)
              *
              * \param &density: The apparent density (dm / dv) of phase \f$ \alpha \f$ \f$\left(\rho^{\alpha}\right)\f$
@@ -89,7 +89,7 @@ namespace tardigradeBalanceEquations {
              * \param &result: The result of the non-divergence part of the balance of energy
              */
 
-            computeBalanceOfEnergyNonDivergence<dim, is_per_unit_volume>(
+            computeBalanceOfEnergyNonDivergence<configuration, is_per_unit_volume>(
                 density, density_dot, density_gradient_begin, density_gradient_end, internal_energy,
                 internal_energy_dot, internal_energy_gradient_begin, internal_energy_gradient_end, velocity_begin,
                 velocity_end, velocity_gradient_begin, velocity_gradient_end, cauchy_stress_begin, cauchy_stress_end,
@@ -100,13 +100,13 @@ namespace tardigradeBalanceEquations {
 
             result_type result_divergence;
 
-            computeBalanceOfEnergyDivergence<dim>(test_function_gradient_begin, test_function_gradient_end,
+            computeBalanceOfEnergyDivergence<configuration>(test_function_gradient_begin, test_function_gradient_end,
                                                   heat_flux_begin, heat_flux_end, result_divergence);
 
             result += result_divergence;
         }
 
-        template <int dim, bool is_per_unit_volume, typename density_type, typename density_dot_type,
+        template <class configuration, bool is_per_unit_volume, typename density_type, typename density_dot_type,
                   class density_gradient_iter, typename internal_energy_type, typename internal_energy_dot_type,
                   class internal_energy_gradient_iter, class velocity_iter, class velocity_gradient_iter,
                   class cauchy_stress_iter, typename volume_fraction_type, typename internal_heat_generation_type,
@@ -143,7 +143,7 @@ namespace tardigradeBalanceEquations {
              * Compute the balance of energy.
              *
              * Template parameters:
-             * - dim: The spatial dimension
+             * - configuration: The configuration of the balance equation
              * - is_per_unit_volume: Whether the internal energy is per unit mass (false) or per unit volume (true)
              *
              * \param &density: The apparent density (dm / dv) of phase \f$ \alpha \f$ \f$\left(\rho^{\alpha}\right)\f$
@@ -234,16 +234,16 @@ namespace tardigradeBalanceEquations {
             using dRdGradTestFunction_type = result_type;
 
             dRdRhoDot_type                   dRdRhoDot;
-            std::array<dRdGradRho_type, dim> dRdGradRho;
+            std::array<dRdGradRho_type, configuration::dimension> dRdGradRho;
 
             dRdEDot_type                   dRdEDot;
-            std::array<dRdGradE_type, dim> dRdGradE;
+            std::array<dRdGradE_type, configuration::dimension> dRdGradE;
 
-            std::array<dRdGradV_type, dim * dim> dRdGradV;
+            std::array<dRdGradV_type, configuration::dimension * configuration::dimension> dRdGradV;
 
-            std::array<dRdGradTestFunction_type, dim> dRdGradTestFunction;
+            std::array<dRdGradTestFunction_type, configuration::dimension> dRdGradTestFunction;
 
-            computeBalanceOfEnergyNonDivergence<dim, is_per_unit_volume>(
+            computeBalanceOfEnergyNonDivergence<configuration, is_per_unit_volume>(
                 density, density_dot, density_gradient_begin, density_gradient_end, internal_energy,
                 internal_energy_dot, internal_energy_gradient_begin, internal_energy_gradient_end, velocity_begin,
                 velocity_end, velocity_gradient_begin, velocity_gradient_end, cauchy_stress_begin, cauchy_stress_end,
@@ -256,7 +256,7 @@ namespace tardigradeBalanceEquations {
 
             result_type result_divergence;
 
-            computeBalanceOfEnergyDivergence<dim>(test_function_gradient_begin, test_function_gradient_end,
+            computeBalanceOfEnergyDivergence<configuration>(test_function_gradient_begin, test_function_gradient_end,
                                                   heat_flux_begin, heat_flux_end, result_divergence,
                                                   std::begin(dRdGradTestFunction), std::end(dRdGradTestFunction),
                                                   dRdq_begin, dRdq_end);
@@ -282,9 +282,9 @@ namespace tardigradeBalanceEquations {
                            std::bind(std::multiplies<dRdU_type>(), std::placeholders::_1,
                                      test_function * dUDotdU * interpolation_function));
 
-            for (unsigned int i = 0; i < dim; ++i) {
-                for (unsigned int j = 0; j < dim; ++j) {
-                    *(dRdU_begin + i) += test_function * dRdGradV[dim * i + j] * dUDotdU *
+            for (unsigned int i = 0; i < configuration::dimension; ++i) {
+                for (unsigned int j = 0; j < configuration::dimension; ++j) {
+                    *(dRdU_begin + i) += test_function * dRdGradV[configuration::dimension * i + j] * dUDotdU *
                                          (*(interpolation_function_gradient_begin + j));
                 }
             }
@@ -305,10 +305,10 @@ namespace tardigradeBalanceEquations {
 
             // Jacobian w.r.t. the mesh deformation
             std::fill(dRdUMesh_begin, dRdUMesh_end, result_type());
-            for (unsigned int a = 0; a < dim; ++a) {
+            for (unsigned int a = 0; a < configuration::dimension; ++a) {
                 *(dRdUMesh_begin + a) += result * (*(interpolation_function_gradient_begin + a));
 
-                for (unsigned int i = 0; i < dim; ++i) {
+                for (unsigned int i = 0; i < configuration::dimension; ++i) {
                     *(dRdUMesh_begin + a) -= test_function *
                                              (dRdGradRho[i] * (*(density_gradient_begin + a)) +
                                               dRdGradE[i] * (*(internal_energy_gradient_begin + a))) *
@@ -317,16 +317,16 @@ namespace tardigradeBalanceEquations {
                     *(dRdUMesh_begin + a) -= dRdGradTestFunction[i] * (*(test_function_gradient_begin + a)) *
                                              (*(interpolation_function_gradient_begin + i));
 
-                    for (unsigned int j = 0; j < dim; ++j) {
+                    for (unsigned int j = 0; j < configuration::dimension; ++j) {
                         *(dRdUMesh_begin + a) -=
-                            test_function * (dRdGradV[dim * i + j] * (*(velocity_gradient_begin + dim * i + a)) *
+                            test_function * (dRdGradV[configuration::dimension * i + j] * (*(velocity_gradient_begin + configuration::dimension * i + a)) *
                                              (*(interpolation_function_gradient_begin + j)));
                     }
                 }
             }
         }
 
-        template <int dim, bool is_per_unit_volume, class density_iter, class density_dot_iter,
+        template <class configuration, bool is_per_unit_volume, class density_iter, class density_dot_iter,
                   class density_gradient_iter, class internal_energy_iter, class internal_energy_dot_iter,
                   class internal_energy_gradient_iter, class velocity_iter, class velocity_gradient_iter,
                   class cauchy_stress_iter, class volume_fraction_iter, class internal_heat_generation_iter,
@@ -422,7 +422,7 @@ namespace tardigradeBalanceEquations {
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(density_dot_end - density_dot_begin),
                                          "The density and density_dot must be the same size")
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * dim == (unsigned int)(density_gradient_end - density_gradient_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * configuration::dimension == (unsigned int)(density_gradient_end - density_gradient_begin),
                                          "The density and density gradient terms are of inconsistent sizes");
 
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(internal_energy_end - internal_energy_begin),
@@ -431,18 +431,18 @@ namespace tardigradeBalanceEquations {
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(internal_energy_dot_end - internal_energy_dot_begin),
                                          "The internal energy dot and density must be the same size");
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * dim == (unsigned int)(internal_energy_gradient_end -
+            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * configuration::dimension == (unsigned int)(internal_energy_gradient_end -
                                                                          internal_energy_gradient_begin),
                                          "The density and internal energy gradient terms are of inconsistent sizes");
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * dim == (unsigned int)(velocity_end - velocity_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * configuration::dimension == (unsigned int)(velocity_end - velocity_begin),
                                          "The density and velocity terms are of inconsistent sizes");
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * dim * dim ==
+            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * configuration::dimension * configuration::dimension ==
                                              (unsigned int)(velocity_gradient_end - velocity_gradient_begin),
                                          "The density and velocity gradient terms are of inconsistent sizes");
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * dim * dim == (unsigned int)(cauchy_stress_end - cauchy_stress_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * configuration::dimension * configuration::dimension == (unsigned int)(cauchy_stress_end - cauchy_stress_begin),
                                          "The density and Cauchy stress terms are of inconsistent sizes");
 
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(volume_fraction_end - volume_fraction_begin),
@@ -452,11 +452,11 @@ namespace tardigradeBalanceEquations {
                                                                    internal_heat_generation_begin),
                                          "The internal heat generation and density must be the same size");
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(dim * nphases ==
+            TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension * nphases ==
                                              (unsigned int)(net_interphase_force_end - net_interphase_force_begin),
                                          "The net interphase force and density must be the same size");
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(dim * nphases == (unsigned int)(heat_flux_end - heat_flux_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension * nphases == (unsigned int)(heat_flux_end - heat_flux_begin),
                                          "The heat flux and density must be the same size");
 
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(result_end - result_begin),
@@ -464,22 +464,22 @@ namespace tardigradeBalanceEquations {
 
             for (auto rho = std::pair<unsigned int, density_iter>(0, density_begin); rho.second != density_end;
                  ++rho.first, ++rho.second) {
-                computeBalanceOfEnergy<dim, is_per_unit_volume>(
-                    *rho.second, *(density_dot_begin + rho.first), density_gradient_begin + dim * rho.first,
-                    density_gradient_begin + dim * (rho.first + 1), *(internal_energy_begin + rho.first),
-                    *(internal_energy_dot_begin + rho.first), internal_energy_gradient_begin + dim * rho.first,
-                    internal_energy_gradient_begin + dim * (rho.first + 1), velocity_begin + dim * rho.first,
-                    velocity_begin + dim * (rho.first + 1), velocity_gradient_begin + dim * dim * rho.first,
-                    velocity_gradient_begin + dim * dim * (rho.first + 1), cauchy_stress_begin + dim * dim * rho.first,
-                    cauchy_stress_begin + dim * dim * (rho.first + 1), *(volume_fraction_begin + rho.first),
-                    *(internal_heat_generation_begin + rho.first), net_interphase_force_begin + dim * rho.first,
-                    net_interphase_force_begin + dim * (rho.first + 1), heat_flux_begin + dim * rho.first,
-                    heat_flux_begin + dim * (rho.first + 1), test_function, test_function_gradient_begin,
+                computeBalanceOfEnergy<configuration, is_per_unit_volume>(
+                    *rho.second, *(density_dot_begin + rho.first), density_gradient_begin + configuration::dimension * rho.first,
+                    density_gradient_begin + configuration::dimension * (rho.first + 1), *(internal_energy_begin + rho.first),
+                    *(internal_energy_dot_begin + rho.first), internal_energy_gradient_begin + configuration::dimension * rho.first,
+                    internal_energy_gradient_begin + configuration::dimension * (rho.first + 1), velocity_begin + configuration::dimension * rho.first,
+                    velocity_begin + configuration::dimension * (rho.first + 1), velocity_gradient_begin + configuration::dimension * configuration::dimension * rho.first,
+                    velocity_gradient_begin + configuration::dimension * configuration::dimension * (rho.first + 1), cauchy_stress_begin + configuration::dimension * configuration::dimension * rho.first,
+                    cauchy_stress_begin + configuration::dimension * configuration::dimension * (rho.first + 1), *(volume_fraction_begin + rho.first),
+                    *(internal_heat_generation_begin + rho.first), net_interphase_force_begin + configuration::dimension * rho.first,
+                    net_interphase_force_begin + configuration::dimension * (rho.first + 1), heat_flux_begin + configuration::dimension * rho.first,
+                    heat_flux_begin + configuration::dimension * (rho.first + 1), test_function, test_function_gradient_begin,
                     test_function_gradient_end, *(result_begin + rho.first));
             }
         }
 
-        template <int dim, bool is_per_unit_volume, class density_iter, class density_dot_iter,
+        template <class configuration, bool is_per_unit_volume, class density_iter, class density_dot_iter,
                   class density_gradient_iter, class internal_energy_iter, class internal_energy_dot_iter,
                   class internal_energy_gradient_iter, class velocity_iter, class velocity_gradient_iter,
                   class cauchy_stress_iter, class volume_fraction_iter, class internal_heat_generation_iter,
@@ -626,7 +626,7 @@ namespace tardigradeBalanceEquations {
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(density_dot_end - density_dot_begin),
                                          "The density and density_dot must be the same size")
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * dim == (unsigned int)(density_gradient_end - density_gradient_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * configuration::dimension == (unsigned int)(density_gradient_end - density_gradient_begin),
                                          "The density and density gradient terms are of inconsistent sizes");
 
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(internal_energy_end - internal_energy_begin),
@@ -635,18 +635,18 @@ namespace tardigradeBalanceEquations {
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(internal_energy_dot_end - internal_energy_dot_begin),
                                          "The internal energy dot and density must be the same size");
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * dim == (unsigned int)(internal_energy_gradient_end -
+            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * configuration::dimension == (unsigned int)(internal_energy_gradient_end -
                                                                          internal_energy_gradient_begin),
                                          "The density and internal energy gradient terms are of inconsistent sizes");
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * dim == (unsigned int)(velocity_end - velocity_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * configuration::dimension == (unsigned int)(velocity_end - velocity_begin),
                                          "The density and velocity terms are of inconsistent sizes");
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * dim * dim ==
+            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * configuration::dimension * configuration::dimension ==
                                              (unsigned int)(velocity_gradient_end - velocity_gradient_begin),
                                          "The density and velocity gradient terms are of inconsistent sizes");
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * dim * dim == (unsigned int)(cauchy_stress_end - cauchy_stress_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * configuration::dimension * configuration::dimension == (unsigned int)(cauchy_stress_end - cauchy_stress_begin),
                                          "The density and Cauchy stress terms are of inconsistent sizes");
 
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(volume_fraction_end - volume_fraction_begin),
@@ -656,11 +656,11 @@ namespace tardigradeBalanceEquations {
                                                                    internal_heat_generation_begin),
                                          "The internal heat generation and density must be the same size");
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(dim * nphases ==
+            TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension * nphases ==
                                              (unsigned int)(net_interphase_force_end - net_interphase_force_begin),
                                          "The net interphase force and density must be the same size");
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(dim * nphases == (unsigned int)(heat_flux_end - heat_flux_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension * nphases == (unsigned int)(heat_flux_end - heat_flux_begin),
                                          "The heat flux and density must be the same size");
 
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(result_end - result_begin),
@@ -672,10 +672,10 @@ namespace tardigradeBalanceEquations {
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(dRdRho_end - dRdRho_begin),
                                          "The result and dRdE must be the same size");
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(dim * nphases == (unsigned int)(dRdU_end - dRdU_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension * nphases == (unsigned int)(dRdU_end - dRdU_begin),
                                          "The result and dRdU are of inconsistent sizes");
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(dim * dim * nphases == (unsigned int)(dRdCauchy_end - dRdCauchy_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension * configuration::dimension * nphases == (unsigned int)(dRdCauchy_end - dRdCauchy_begin),
                                          "The result and dRdCauchy are of inconsistent sizes");
 
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(dRdVolumeFraction_end - dRdVolumeFraction_begin),
@@ -695,29 +695,29 @@ namespace tardigradeBalanceEquations {
 
             for (auto rho = std::pair<unsigned int, density_iter>(0, density_begin); rho.second != density_end;
                  ++rho.first, ++rho.second) {
-                computeBalanceOfEnergy<dim, is_per_unit_volume>(
-                    *rho.second, *(density_dot_begin + rho.first), density_gradient_begin + dim * rho.first,
-                    density_gradient_begin + dim * (rho.first + 1), *(internal_energy_begin + rho.first),
-                    *(internal_energy_dot_begin + rho.first), internal_energy_gradient_begin + dim * rho.first,
-                    internal_energy_gradient_begin + dim * (rho.first + 1), velocity_begin + dim * rho.first,
-                    velocity_begin + dim * (rho.first + 1), velocity_gradient_begin + dim * dim * rho.first,
-                    velocity_gradient_begin + dim * dim * (rho.first + 1), cauchy_stress_begin + dim * dim * rho.first,
-                    cauchy_stress_begin + dim * dim * (rho.first + 1), *(volume_fraction_begin + rho.first),
-                    *(internal_heat_generation_begin + rho.first), net_interphase_force_begin + dim * rho.first,
-                    net_interphase_force_begin + dim * (rho.first + 1), heat_flux_begin + dim * rho.first,
-                    heat_flux_begin + dim * (rho.first + 1), test_function, test_function_gradient_begin,
+                computeBalanceOfEnergy<configuration, is_per_unit_volume>(
+                    *rho.second, *(density_dot_begin + rho.first), density_gradient_begin + configuration::dimension * rho.first,
+                    density_gradient_begin + configuration::dimension * (rho.first + 1), *(internal_energy_begin + rho.first),
+                    *(internal_energy_dot_begin + rho.first), internal_energy_gradient_begin + configuration::dimension * rho.first,
+                    internal_energy_gradient_begin + configuration::dimension * (rho.first + 1), velocity_begin + configuration::dimension * rho.first,
+                    velocity_begin + configuration::dimension * (rho.first + 1), velocity_gradient_begin + configuration::dimension * configuration::dimension * rho.first,
+                    velocity_gradient_begin + configuration::dimension * configuration::dimension * (rho.first + 1), cauchy_stress_begin + configuration::dimension * configuration::dimension * rho.first,
+                    cauchy_stress_begin + configuration::dimension * configuration::dimension * (rho.first + 1), *(volume_fraction_begin + rho.first),
+                    *(internal_heat_generation_begin + rho.first), net_interphase_force_begin + configuration::dimension * rho.first,
+                    net_interphase_force_begin + configuration::dimension * (rho.first + 1), heat_flux_begin + configuration::dimension * rho.first,
+                    heat_flux_begin + configuration::dimension * (rho.first + 1), test_function, test_function_gradient_begin,
                     test_function_gradient_end, interpolation_function, interpolation_function_gradient_begin,
                     interpolation_function_gradient_end, dRhoDotdRho, dEDotdE, dUDotdU, *(result_begin + rho.first),
-                    *(dRdRho_begin + rho.first), *(dRdE_begin + rho.first), dRdU_begin + dim * rho.first,
-                    dRdU_begin + dim * (rho.first + 1), dRdCauchy_begin + dim * dim * rho.first,
-                    dRdCauchy_begin + dim * dim * (rho.first + 1), *(dRdVolumeFraction_begin + rho.first),
-                    *(dRdr_begin + rho.first), dRdpi_begin + dim * rho.first, dRdpi_begin + dim * (rho.first + 1),
-                    dRdq_begin + dim * rho.first, dRdq_begin + dim * (rho.first + 1), dRdUMesh_begin + dim * rho.first,
-                    dRdUMesh_begin + dim * (rho.first + 1));
+                    *(dRdRho_begin + rho.first), *(dRdE_begin + rho.first), dRdU_begin + configuration::dimension * rho.first,
+                    dRdU_begin + configuration::dimension * (rho.first + 1), dRdCauchy_begin + configuration::dimension * configuration::dimension * rho.first,
+                    dRdCauchy_begin + configuration::dimension * configuration::dimension * (rho.first + 1), *(dRdVolumeFraction_begin + rho.first),
+                    *(dRdr_begin + rho.first), dRdpi_begin + configuration::dimension * rho.first, dRdpi_begin + configuration::dimension * (rho.first + 1),
+                    dRdq_begin + configuration::dimension * rho.first, dRdq_begin + configuration::dimension * (rho.first + 1), dRdUMesh_begin + configuration::dimension * rho.first,
+                    dRdUMesh_begin + configuration::dimension * (rho.first + 1));
             }
         }
 
-        template <int dim, bool is_per_unit_volume, int material_response_dim, int cauchy_stress_index,
+        template <class configuration, bool is_per_unit_volume, int material_response_dim, int cauchy_stress_index,
                   int internal_heat_generation_index, int heat_flux_index, int interphasic_force_index,
                   int interphasic_heat_transfer_index, typename density_type, typename density_dot_type,
                   class density_gradient_iter, typename internal_energy_type, typename internal_energy_dot_type,
@@ -772,7 +772,7 @@ namespace tardigradeBalanceEquations {
              * \param &result: The result of the non-divergence part of the balance of energy
              */
 
-            computeBalanceOfEnergy<dim, is_per_unit_volume>(
+            computeBalanceOfEnergy<configuration, is_per_unit_volume>(
                 density, density_dot, density_gradient_begin, density_gradient_end, internal_energy,
                 internal_energy_dot, internal_energy_gradient_begin, internal_energy_gradient_end, velocity_begin,
                 velocity_end, velocity_gradient_begin, velocity_gradient_end,
@@ -788,7 +788,7 @@ namespace tardigradeBalanceEquations {
             result -= test_function * (*(material_response_begin + interphasic_heat_transfer_index));
         }
 
-        template <int dim, bool is_per_unit_volume, int material_response_dim, int cauchy_stress_index,
+        template <class configuration, bool is_per_unit_volume, int material_response_dim, int cauchy_stress_index,
                   int internal_heat_generation_index, int heat_flux_index, int interphasic_force_index,
                   int interphasic_heat_transfer_index, int material_response_num_dof, typename density_type,
                   typename density_dot_type, class density_gradient_iter, typename internal_energy_type,
@@ -919,7 +919,7 @@ namespace tardigradeBalanceEquations {
             std::fill(dRdVolumeFraction_begin, dRdVolumeFraction_end, 0);
             std::fill(dRdUMesh_begin, dRdUMesh_end, 0);
 
-            computeBalanceOfEnergy<dim, is_per_unit_volume>(
+            computeBalanceOfEnergy<configuration, is_per_unit_volume>(
                 density, density_dot, density_gradient_begin, density_gradient_end, internal_energy,
                 internal_energy_dot, internal_energy_gradient_begin, internal_energy_gradient_end, velocity_begin,
                 velocity_end, velocity_gradient_begin, velocity_gradient_end,
@@ -932,8 +932,8 @@ namespace tardigradeBalanceEquations {
                 material_response_begin + heat_flux_index + material_response_dim, test_function,
                 test_function_gradient_begin, test_function_gradient_end, interpolation_function,
                 interpolation_function_gradient_begin, interpolation_function_gradient_end, dRhoDotdRho, dEDotdE,
-                dUDotdU, result, *(dRdRho_begin + phase), *(dRdE_begin + phase), dRdU_begin + dim * phase,
-                dRdU_begin + dim * (phase + 1), std::begin(dRdCauchy_phase), std::end(dRdCauchy_phase),
+                dUDotdU, result, *(dRdRho_begin + phase), *(dRdE_begin + phase), dRdU_begin + configuration::dimension * phase,
+                dRdU_begin + configuration::dimension * (phase + 1), std::begin(dRdCauchy_phase), std::end(dRdCauchy_phase),
                 *(dRdVolumeFraction_begin + phase), dRdr_phase, std::begin(dRdpi_phase), std::end(dRdpi_phase),
                 std::begin(dRdq_phase), std::end(dRdq_phase), dRdUMesh_begin, dRdUMesh_end);
 
@@ -947,7 +947,7 @@ namespace tardigradeBalanceEquations {
             *(dRdVolumeFraction_begin + phase) *= interpolation_function;
 
             // CAUCHY STRESS CONTRIBUTIONS
-            for (unsigned int j = 0; j < dim * dim; ++j) {
+            for (unsigned int j = 0; j < configuration::dimension * configuration::dimension; ++j) {
                 // density
                 for (auto p = std::pair<unsigned int, dRdRho_iter>(0, dRdRho_begin); p.second != dRdRho_end;
                      ++p.first, ++p.second) {
@@ -1277,7 +1277,7 @@ namespace tardigradeBalanceEquations {
             }
 
             // INTERPHASIC FORCE CONTRIBUTIONS
-            for (unsigned int j = 0; j < dim; ++j) {
+            for (unsigned int j = 0; j < configuration::dimension; ++j) {
                 // density
                 for (auto p = std::pair<unsigned int, dRdRho_iter>(0, dRdRho_begin); p.second != dRdRho_end;
                      ++p.first, ++p.second) {
@@ -1443,7 +1443,7 @@ namespace tardigradeBalanceEquations {
             }
 
             // HEAT FLUX CONTRIBUTIONS
-            for (unsigned int j = 0; j < dim; ++j) {
+            for (unsigned int j = 0; j < configuration::dimension; ++j) {
                 // density
                 for (auto p = std::pair<unsigned int, dRdRho_iter>(0, dRdRho_begin); p.second != dRdRho_end;
                      ++p.first, ++p.second) {
@@ -1772,14 +1772,14 @@ namespace tardigradeBalanceEquations {
                 }
             }
 
-            for (unsigned int a = 0; a < dim; ++a) {
+            for (unsigned int a = 0; a < configuration::dimension; ++a) {
                 *(dRdUMesh_begin + a) -= test_function *
                                          (*(material_response_begin + interphasic_heat_transfer_index)) *
                                          (*(interpolation_function_gradient_begin + a));
             }
         }
 
-        template <int dim, bool is_per_unit_volume, int material_response_dim, int cauchy_stress_index,
+        template <class configuration, bool is_per_unit_volume, int material_response_dim, int cauchy_stress_index,
                   int internal_heat_generation_index, int heat_flux_index, int interphasic_force_index,
                   int interphasic_heat_transfer_index, class density_iter, class density_dot_iter,
                   class density_gradient_iter, class internal_energy_iter, class internal_energy_dot_iter,
@@ -1862,7 +1862,7 @@ namespace tardigradeBalanceEquations {
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(density_dot_end - density_dot_begin),
                                          "The density and density dot vectors must be the same size")
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * dim == (unsigned int)(density_gradient_end - density_gradient_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * configuration::dimension == (unsigned int)(density_gradient_end - density_gradient_begin),
                                          "The density and density gradient vectors must be of consistent sizes")
 
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(internal_energy_end - internal_energy_begin),
@@ -1871,14 +1871,14 @@ namespace tardigradeBalanceEquations {
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(internal_energy_dot_end - internal_energy_dot_begin),
                                          "The density and internal energy dot vectors must be the same size")
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * dim == (unsigned int)(internal_energy_gradient_end -
+            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * configuration::dimension == (unsigned int)(internal_energy_gradient_end -
                                                                          internal_energy_gradient_begin),
                                          "The density and internal energy gradient vectors must be a consistent size")
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * dim == (unsigned int)(velocity_end - velocity_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * configuration::dimension == (unsigned int)(velocity_end - velocity_begin),
                                          "The density and velocity vectors must be a consistent size")
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * dim * dim ==
+            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * configuration::dimension * configuration::dimension ==
                                              (unsigned int)(velocity_gradient_end - velocity_gradient_begin),
                                          "The density and velocity gradient vectors must be a consistent size")
 
@@ -1889,24 +1889,24 @@ namespace tardigradeBalanceEquations {
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(volume_fraction_end - volume_fraction_begin),
                                          "The density and volume fraction vectors must be the same size")
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(dim ==
+            TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension ==
                                              (unsigned int)(test_function_gradient_end - test_function_gradient_begin),
-                                         "The test function gradient must be of size dim")
+                                         "The test function gradient must be of size configuration::dimension")
 
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(result_end - result_begin),
                                          "The density and result vectors must be the same size")
 
             for (auto v = std::pair<unsigned int, density_iter>(0, density_begin); v.second != density_end;
                  ++v.first, ++v.second) {
-                computeBalanceOfEnergy<dim, is_per_unit_volume, material_response_dim, cauchy_stress_index,
+                computeBalanceOfEnergy<configuration, is_per_unit_volume, material_response_dim, cauchy_stress_index,
                                        internal_heat_generation_index, heat_flux_index, interphasic_force_index,
                                        interphasic_heat_transfer_index>(
-                    *(density_begin + v.first), *(density_dot_begin + v.first), density_gradient_begin + dim * v.first,
-                    density_gradient_begin + dim * (v.first + 1), *(internal_energy_begin + v.first),
-                    *(internal_energy_dot_begin + v.first), internal_energy_gradient_begin + dim * v.first,
-                    internal_energy_gradient_begin + dim * (v.first + 1), velocity_begin + dim * v.first,
-                    velocity_begin + dim * (v.first + 1), velocity_gradient_begin + dim * dim * v.first,
-                    velocity_gradient_begin + dim * dim * (v.first + 1),
+                    *(density_begin + v.first), *(density_dot_begin + v.first), density_gradient_begin + configuration::dimension * v.first,
+                    density_gradient_begin + configuration::dimension * (v.first + 1), *(internal_energy_begin + v.first),
+                    *(internal_energy_dot_begin + v.first), internal_energy_gradient_begin + configuration::dimension * v.first,
+                    internal_energy_gradient_begin + configuration::dimension * (v.first + 1), velocity_begin + configuration::dimension * v.first,
+                    velocity_begin + configuration::dimension * (v.first + 1), velocity_gradient_begin + configuration::dimension * configuration::dimension * v.first,
+                    velocity_gradient_begin + configuration::dimension * configuration::dimension * (v.first + 1),
                     material_response_begin + material_response_size * v.first,
                     material_response_begin + material_response_size * (v.first + 1),
                     *(volume_fraction_begin + v.first), test_function, test_function_gradient_begin,
@@ -1914,7 +1914,7 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <int dim, bool is_per_unit_volume, int material_response_dim, int cauchy_stress_index,
+        template <class configuration, bool is_per_unit_volume, int material_response_dim, int cauchy_stress_index,
                   int internal_heat_generation_index, int heat_flux_index, int interphasic_force_index,
                   int interphasic_heat_transfer_index, int material_response_num_dof, class density_iter,
                   class density_dot_iter, class density_gradient_iter, class internal_energy_iter,
@@ -2064,7 +2064,7 @@ namespace tardigradeBalanceEquations {
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(density_dot_end - density_dot_begin),
                                          "The density and density dot vectors must be the same size")
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * dim == (unsigned int)(density_gradient_end - density_gradient_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * configuration::dimension == (unsigned int)(density_gradient_end - density_gradient_begin),
                                          "The density and density gradient vectors must be of consistent sizes")
 
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(internal_energy_end - internal_energy_begin),
@@ -2073,14 +2073,14 @@ namespace tardigradeBalanceEquations {
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(internal_energy_dot_end - internal_energy_dot_begin),
                                          "The density and internal energy dot vectors must be the same size")
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * dim == (unsigned int)(internal_energy_gradient_end -
+            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * configuration::dimension == (unsigned int)(internal_energy_gradient_end -
                                                                          internal_energy_gradient_begin),
                                          "The density and internal energy gradient vectors must be a consistent size")
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * dim == (unsigned int)(velocity_end - velocity_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * configuration::dimension == (unsigned int)(velocity_end - velocity_begin),
                                          "The density and velocity vectors must be a consistent size")
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * dim * dim ==
+            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * configuration::dimension * configuration::dimension ==
                                              (unsigned int)(velocity_gradient_end - velocity_gradient_begin),
                                          "The density and velocity gradient vectors must be a consistent size")
 
@@ -2108,13 +2108,13 @@ namespace tardigradeBalanceEquations {
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(volume_fraction_end - volume_fraction_begin),
                                          "The density and volume fraction vectors must be the same size")
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(dim ==
+            TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension ==
                                              (unsigned int)(test_function_gradient_end - test_function_gradient_begin),
-                                         "The test function gradient must be of size dim")
+                                         "The test function gradient must be of size configuration::dimension")
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(dim == (unsigned int)(interpolation_function_gradient_end -
+            TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension == (unsigned int)(interpolation_function_gradient_end -
                                                                interpolation_function_gradient_begin),
-                                         "The interpolation function gradient must be of size dim")
+                                         "The interpolation function gradient must be of size configuration::dimension")
 
             TARDIGRADE_ERROR_TOOLS_CHECK(
                 (nphases * num_phase_dof + num_additional_dof) * material_response_dim ==
@@ -2127,10 +2127,10 @@ namespace tardigradeBalanceEquations {
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases * nphases == (unsigned int)(dRdRho_end - dRdRho_begin),
                                          "The density and dRdRho must be of consistent sizes")
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * dim * nphases == (unsigned int)(dRdU_end - dRdU_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * configuration::dimension * nphases == (unsigned int)(dRdU_end - dRdU_begin),
                                          "The density and dRdU must be of consistent sizes")
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * dim * nphases == (unsigned int)(dRdU_end - dRdU_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * configuration::dimension * nphases == (unsigned int)(dRdU_end - dRdU_begin),
                                          "The density and dRdW must be of consistent sizes")
 
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases * nphases == (unsigned int)(dRdTheta_end - dRdTheta_begin),
@@ -2146,13 +2146,13 @@ namespace tardigradeBalanceEquations {
                                              (unsigned int)(dRdVolumeFraction_end - dRdVolumeFraction_begin),
                                          "The density and dRdVolumeFraction must be of consistent sizes")
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * dim == (unsigned int)(dRdUMesh_end - dRdUMesh_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * configuration::dimension == (unsigned int)(dRdUMesh_end - dRdUMesh_begin),
                                          "The density and dRdUMesh must be of consistent sizes")
 
             for (auto v = std::pair<unsigned int, density_iter>(0, density_begin); v.second != density_end;
                  ++v.first, ++v.second) {
                 computeBalanceOfEnergy<
-                    dim, is_per_unit_volume, material_response_dim, cauchy_stress_index, internal_heat_generation_index,
+                    configuration, is_per_unit_volume, material_response_dim, cauchy_stress_index, internal_heat_generation_index,
                     heat_flux_index, interphasic_force_index, interphasic_heat_transfer_index,
                     material_response_num_dof, density_type, density_dot_type, density_gradient_iter,
                     internal_energy_type, internal_energy_dot_type, internal_energy_gradient_iter, velocity_iter,
@@ -2163,12 +2163,12 @@ namespace tardigradeBalanceEquations {
                     dRdE_iter, dRdVolumeFraction_iter, dRdZ_iter, dRdUMesh_iter, density_index, displacement_index,
                     velocity_index, temperature_index, internal_energy_index, volume_fraction_index,
                     additional_dof_index>(
-                    *(density_begin + v.first), *(density_dot_begin + v.first), density_gradient_begin + dim * v.first,
-                    density_gradient_begin + dim * (v.first + 1), *(internal_energy_begin + v.first),
-                    *(internal_energy_dot_begin + v.first), internal_energy_gradient_begin + dim * v.first,
-                    internal_energy_gradient_begin + dim * (v.first + 1), velocity_begin + dim * v.first,
-                    velocity_begin + dim * (v.first + 1), velocity_gradient_begin + dim * dim * v.first,
-                    velocity_gradient_begin + dim * dim * (v.first + 1),
+                    *(density_begin + v.first), *(density_dot_begin + v.first), density_gradient_begin + configuration::dimension * v.first,
+                    density_gradient_begin + configuration::dimension * (v.first + 1), *(internal_energy_begin + v.first),
+                    *(internal_energy_dot_begin + v.first), internal_energy_gradient_begin + configuration::dimension * v.first,
+                    internal_energy_gradient_begin + configuration::dimension * (v.first + 1), velocity_begin + configuration::dimension * v.first,
+                    velocity_begin + configuration::dimension * (v.first + 1), velocity_gradient_begin + configuration::dimension * configuration::dimension * v.first,
+                    velocity_gradient_begin + configuration::dimension * configuration::dimension * (v.first + 1),
                     material_response_begin + material_response_size * v.first,
                     material_response_begin + material_response_size * (v.first + 1),
                     material_response_jacobian_begin + material_response_size *
@@ -2182,17 +2182,17 @@ namespace tardigradeBalanceEquations {
                     interpolation_function_gradient_end, full_material_response_dof_gradient_begin,
                     full_material_response_dof_gradient_end, dRhoDotdRho, dEDotdE, dUDotdU, v.first,
                     *(result_begin + v.first), dRdRho_begin + nphases * v.first, dRdRho_begin + nphases * (v.first + 1),
-                    dRdU_begin + nphases * dim * v.first, dRdU_begin + nphases * dim * (v.first + 1),
-                    dRdW_begin + nphases * dim * v.first, dRdW_begin + nphases * dim * (v.first + 1),
+                    dRdU_begin + nphases * configuration::dimension * v.first, dRdU_begin + nphases * configuration::dimension * (v.first + 1),
+                    dRdW_begin + nphases * configuration::dimension * v.first, dRdW_begin + nphases * configuration::dimension * (v.first + 1),
                     dRdTheta_begin + nphases * v.first, dRdTheta_begin + nphases * (v.first + 1),
                     dRdE_begin + nphases * v.first, dRdE_begin + nphases * (v.first + 1),
                     dRdVolumeFraction_begin + nphases * v.first, dRdVolumeFraction_begin + nphases * (v.first + 1),
                     dRdZ_begin + num_additional_dof * v.first, dRdZ_begin + num_additional_dof * (v.first + 1),
-                    dRdUMesh_begin + dim * v.first, dRdUMesh_begin + dim * (v.first + 1));
+                    dRdUMesh_begin + configuration::dimension * v.first, dRdUMesh_begin + configuration::dimension * (v.first + 1));
             }
         }
 
-        template <int dim, bool is_per_unit_volume, typename density_type, typename density_dot_type,
+        template <class configuration, bool is_per_unit_volume, typename density_type, typename density_dot_type,
                   class density_gradient_iter, typename internal_energy_type, typename internal_energy_dot_type,
                   class internal_energy_gradient_iter, class velocity_iter, class velocity_gradient_iter,
                   class cauchy_stress_iter, typename volume_fraction_type, typename internal_heat_generation_type,
@@ -2265,14 +2265,14 @@ namespace tardigradeBalanceEquations {
             // Compute the mass change rate
             density_dot_type mass_change_rate;
 
-            tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMass<dim>(
+            tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMass<configuration>(
                 density, density_dot, density_gradient_begin, density_gradient_end, velocity_begin, velocity_end,
                 velocity_gradient_begin, velocity_gradient_end, mass_change_rate);
 
             // Compute the trace of the velocity gradient
             velocity_gradient_type trace_velocity_gradient = 0.;
-            for (unsigned int i = 0; i < dim; i++) {
-                trace_velocity_gradient += *(velocity_gradient_begin + dim * i + i);
+            for (unsigned int i = 0; i < configuration::dimension; i++) {
+                trace_velocity_gradient += *(velocity_gradient_begin + configuration::dimension * i + i);
             }
 
             if (is_per_unit_volume) {
@@ -2290,15 +2290,15 @@ namespace tardigradeBalanceEquations {
                       std::inner_product(net_interphase_force_begin, net_interphase_force_end, velocity_begin, 0.) -
                       density * internal_heat_generation;
 
-            for (unsigned int i = 0; i < dim; i++) {
-                for (unsigned int j = 0; j < dim; j++) {
-                    result -= volume_fraction * (*(cauchy_stress_begin + dim * j + i)) *
-                              (*(velocity_gradient_begin + dim * i + j));
+            for (unsigned int i = 0; i < configuration::dimension; i++) {
+                for (unsigned int j = 0; j < configuration::dimension; j++) {
+                    result -= volume_fraction * (*(cauchy_stress_begin + configuration::dimension * j + i)) *
+                              (*(velocity_gradient_begin + configuration::dimension * i + j));
                 }
             }
         }
 
-        template <int dim, bool is_per_unit_volume, typename density_type, typename density_dot_type,
+        template <class configuration, bool is_per_unit_volume, typename density_type, typename density_dot_type,
                   class density_gradient_iter, typename internal_energy_type, typename internal_energy_dot_type,
                   class internal_energy_gradient_iter, class velocity_iter, class velocity_gradient_iter,
                   class cauchy_stress_iter, typename volume_fraction_type, typename internal_heat_generation_type,
@@ -2403,11 +2403,11 @@ namespace tardigradeBalanceEquations {
 
             density_dot_type dCdRho, dCdRhoDot;
 
-            std::array<density_dot_type, dim> dCdGradRho, dCdV;
+            std::array<density_dot_type, configuration::dimension> dCdGradRho, dCdV;
 
-            std::array<density_dot_type, dim * dim> dCdGradV;
+            std::array<density_dot_type, configuration::dimension * configuration::dimension> dCdGradV;
 
-            tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMass<dim>(
+            tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMass<configuration>(
                 density, density_dot, density_gradient_begin, density_gradient_end, velocity_begin, velocity_end,
                 velocity_gradient_begin, velocity_gradient_end, mass_change_rate, dCdRho, dCdRhoDot,
                 std::begin(dCdGradRho), std::end(dCdGradRho), std::begin(dCdV), std::end(dCdV), std::begin(dCdGradV),
@@ -2415,8 +2415,8 @@ namespace tardigradeBalanceEquations {
 
             // Compute the trace of the velocity gradient
             velocity_gradient_type trace_velocity_gradient = 0.;
-            for (unsigned int i = 0; i < dim; i++) {
-                trace_velocity_gradient += *(velocity_gradient_begin + dim * i + i);
+            for (unsigned int i = 0; i < configuration::dimension; i++) {
+                trace_velocity_gradient += *(velocity_gradient_begin + configuration::dimension * i + i);
             }
 
             velocity_gradient_type v_dot_v = std::inner_product(velocity_begin, velocity_end, velocity_begin, 0.);
@@ -2476,35 +2476,35 @@ namespace tardigradeBalanceEquations {
 
             std::copy(velocity_begin, velocity_end, dRdpi_begin);
 
-            for (unsigned int i = 0; i < dim; i++) {
+            for (unsigned int i = 0; i < configuration::dimension; i++) {
                 *(dRdGradRho_begin + i) -= 0.5 * dCdGradRho[i] * v_dot_v;
 
                 if (!is_per_unit_volume) {
                     *(dRdV_begin + i) += internal_energy * (*(density_gradient_begin + i)) +
                                          density * (*(internal_energy_gradient_begin + i));
-                    *(dRdGradV_begin + dim * i + i) += density * internal_energy;
+                    *(dRdGradV_begin + configuration::dimension * i + i) += density * internal_energy;
                 } else {
                     *(dRdV_begin + i) += (*(internal_energy_gradient_begin + i));
-                    *(dRdGradV_begin + dim * i + i) += internal_energy;
+                    *(dRdGradV_begin + configuration::dimension * i + i) += internal_energy;
                 }
                 *(dRdV_begin + i) += -0.5 * dCdV[i] * v_dot_v - mass_change_rate * (*(velocity_begin + i)) +
                                      *(net_interphase_force_begin + i);
 
-                for (unsigned int j = 0; j < dim; j++) {
+                for (unsigned int j = 0; j < configuration::dimension; j++) {
                     dRdVolumeFraction -=
-                        (*(cauchy_stress_begin + dim * j + i)) * (*(velocity_gradient_begin + dim * i + j));
+                        (*(cauchy_stress_begin + configuration::dimension * j + i)) * (*(velocity_gradient_begin + configuration::dimension * i + j));
 
-                    *(dRdGradV_begin + dim * i + j) -= 0.5 * dCdGradV[dim * i + j] * v_dot_v +
-                                                       volume_fraction * (*(cauchy_stress_begin + dim * j + i));
+                    *(dRdGradV_begin + configuration::dimension * i + j) -= 0.5 * dCdGradV[configuration::dimension * i + j] * v_dot_v +
+                                                       volume_fraction * (*(cauchy_stress_begin + configuration::dimension * j + i));
 
-                    *(dRdCauchy_begin + dim * i + j) -= volume_fraction * (*(velocity_gradient_begin + dim * j + i));
+                    *(dRdCauchy_begin + configuration::dimension * i + j) -= volume_fraction * (*(velocity_gradient_begin + configuration::dimension * j + i));
                 }
             }
 
             result += volume_fraction * dRdVolumeFraction;
         }
 
-        template <int dim, bool is_per_unit_volume, class density_iter, class density_dot_iter,
+        template <class configuration, bool is_per_unit_volume, class density_iter, class density_dot_iter,
                   class density_gradient_iter, class internal_energy_iter, class internal_energy_dot_iter,
                   class internal_energy_gradient_iter, class velocity_iter, class velocity_gradient_iter,
                   class cauchy_stress_iter, class volume_fraction_iter, class internal_heat_generation_iter,
@@ -2602,20 +2602,20 @@ namespace tardigradeBalanceEquations {
             for (auto rho = density_begin; rho != density_end; rho++) {
                 unsigned int phase = (unsigned int)(rho - density_begin);
 
-                computeBalanceOfEnergyNonDivergence<dim, is_per_unit_volume>(
-                    *(density_begin + phase), *(density_dot_begin + phase), density_gradient_begin + dim * phase,
-                    density_gradient_begin + dim * (phase + 1), *(internal_energy_begin + phase),
-                    *(internal_energy_dot_begin + phase), internal_energy_gradient_begin + dim * phase,
-                    internal_energy_gradient_begin + dim * (phase + 1), velocity_begin + dim * phase,
-                    velocity_begin + dim * (phase + 1), velocity_gradient_begin + dim * dim * phase,
-                    velocity_gradient_begin + dim * dim * (phase + 1), cauchy_stress_begin + dim * dim * phase,
-                    cauchy_stress_begin + dim * dim * (phase + 1), *(volume_fraction_begin + phase),
-                    *(internal_heat_generation_begin + phase), net_interphase_force_begin + dim * phase,
-                    net_interphase_force_begin + dim * (phase + 1), *(result_begin + phase));
+                computeBalanceOfEnergyNonDivergence<configuration, is_per_unit_volume>(
+                    *(density_begin + phase), *(density_dot_begin + phase), density_gradient_begin + configuration::dimension * phase,
+                    density_gradient_begin + configuration::dimension * (phase + 1), *(internal_energy_begin + phase),
+                    *(internal_energy_dot_begin + phase), internal_energy_gradient_begin + configuration::dimension * phase,
+                    internal_energy_gradient_begin + configuration::dimension * (phase + 1), velocity_begin + configuration::dimension * phase,
+                    velocity_begin + configuration::dimension * (phase + 1), velocity_gradient_begin + configuration::dimension * configuration::dimension * phase,
+                    velocity_gradient_begin + configuration::dimension * configuration::dimension * (phase + 1), cauchy_stress_begin + configuration::dimension * configuration::dimension * phase,
+                    cauchy_stress_begin + configuration::dimension * configuration::dimension * (phase + 1), *(volume_fraction_begin + phase),
+                    *(internal_heat_generation_begin + phase), net_interphase_force_begin + configuration::dimension * phase,
+                    net_interphase_force_begin + configuration::dimension * (phase + 1), *(result_begin + phase));
             }
         }
 
-        template <int dim, bool is_per_unit_volume, class density_iter, class density_dot_iter,
+        template <class configuration, bool is_per_unit_volume, class density_iter, class density_dot_iter,
                   class density_gradient_iter, class internal_energy_iter, class internal_energy_dot_iter,
                   class internal_energy_gradient_iter, class velocity_iter, class velocity_gradient_iter,
                   class cauchy_stress_iter, class volume_fraction_iter, class internal_heat_generation_iter,
@@ -2755,27 +2755,27 @@ namespace tardigradeBalanceEquations {
             for (auto rho = density_begin; rho != density_end; rho++) {
                 unsigned int phase = (unsigned int)(rho - density_begin);
 
-                computeBalanceOfEnergyNonDivergence<dim, is_per_unit_volume>(
-                    *(density_begin + phase), *(density_dot_begin + phase), density_gradient_begin + dim * phase,
-                    density_gradient_begin + dim * (phase + 1), *(internal_energy_begin + phase),
-                    *(internal_energy_dot_begin + phase), internal_energy_gradient_begin + dim * phase,
-                    internal_energy_gradient_begin + dim * (phase + 1), velocity_begin + dim * phase,
-                    velocity_begin + dim * (phase + 1), velocity_gradient_begin + dim * dim * phase,
-                    velocity_gradient_begin + dim * dim * (phase + 1), cauchy_stress_begin + dim * dim * phase,
-                    cauchy_stress_begin + dim * dim * (phase + 1), *(volume_fraction_begin + phase),
-                    *(internal_heat_generation_begin + phase), net_interphase_force_begin + dim * phase,
-                    net_interphase_force_begin + dim * (phase + 1), *(result_begin + phase), *(dRdRho_begin + phase),
-                    *(dRdRhoDot_begin + phase), dRdGradRho_begin + dim * phase, dRdGradRho_begin + dim * (phase + 1),
-                    *(dRdE_begin + phase), *(dRdEDot_begin + phase), dRdGradE_begin + dim * phase,
-                    dRdGradE_begin + dim * (phase + 1), dRdV_begin + dim * phase, dRdV_begin + dim * (phase + 1),
-                    dRdGradV_begin + dim * dim * phase, dRdGradV_begin + dim * dim * (phase + 1),
-                    dRdCauchy_begin + dim * dim * phase, dRdCauchy_begin + dim * dim * (phase + 1),
-                    *(dRdVolumeFraction_begin + phase), *(dRdr_begin + phase), dRdpi_begin + dim * phase,
-                    dRdpi_begin + dim * (phase + 1));
+                computeBalanceOfEnergyNonDivergence<configuration, is_per_unit_volume>(
+                    *(density_begin + phase), *(density_dot_begin + phase), density_gradient_begin + configuration::dimension * phase,
+                    density_gradient_begin + configuration::dimension * (phase + 1), *(internal_energy_begin + phase),
+                    *(internal_energy_dot_begin + phase), internal_energy_gradient_begin + configuration::dimension * phase,
+                    internal_energy_gradient_begin + configuration::dimension * (phase + 1), velocity_begin + configuration::dimension * phase,
+                    velocity_begin + configuration::dimension * (phase + 1), velocity_gradient_begin + configuration::dimension * configuration::dimension * phase,
+                    velocity_gradient_begin + configuration::dimension * configuration::dimension * (phase + 1), cauchy_stress_begin + configuration::dimension * configuration::dimension * phase,
+                    cauchy_stress_begin + configuration::dimension * configuration::dimension * (phase + 1), *(volume_fraction_begin + phase),
+                    *(internal_heat_generation_begin + phase), net_interphase_force_begin + configuration::dimension * phase,
+                    net_interphase_force_begin + configuration::dimension * (phase + 1), *(result_begin + phase), *(dRdRho_begin + phase),
+                    *(dRdRhoDot_begin + phase), dRdGradRho_begin + configuration::dimension * phase, dRdGradRho_begin + configuration::dimension * (phase + 1),
+                    *(dRdE_begin + phase), *(dRdEDot_begin + phase), dRdGradE_begin + configuration::dimension * phase,
+                    dRdGradE_begin + configuration::dimension * (phase + 1), dRdV_begin + configuration::dimension * phase, dRdV_begin + configuration::dimension * (phase + 1),
+                    dRdGradV_begin + configuration::dimension * configuration::dimension * phase, dRdGradV_begin + configuration::dimension * configuration::dimension * (phase + 1),
+                    dRdCauchy_begin + configuration::dimension * configuration::dimension * phase, dRdCauchy_begin + configuration::dimension * configuration::dimension * (phase + 1),
+                    *(dRdVolumeFraction_begin + phase), *(dRdr_begin + phase), dRdpi_begin + configuration::dimension * phase,
+                    dRdpi_begin + configuration::dimension * (phase + 1));
             }
         }
 
-        template <int dim, class test_function_gradient_iter, class heat_flux_iter, typename result_type>
+        template <class configuration, class test_function_gradient_iter, class heat_flux_iter, typename result_type>
         void computeBalanceOfEnergyDivergence(const test_function_gradient_iter &test_function_gradient_begin,
                                               const test_function_gradient_iter &test_function_gradient_end,
                                               const heat_flux_iter              &heat_flux_begin,
@@ -2799,7 +2799,7 @@ namespace tardigradeBalanceEquations {
             result = -std::inner_product(test_function_gradient_begin, test_function_gradient_end, heat_flux_begin, 0.);
         }
 
-        template <int dim, class test_function_gradient_iter, class heat_flux_iter, typename result_type,
+        template <class configuration, class test_function_gradient_iter, class heat_flux_iter, typename result_type,
                   class dRdGradTestFunction_iter, class dRdq_iter>
         void computeBalanceOfEnergyDivergence(const test_function_gradient_iter &test_function_gradient_begin,
                                               const test_function_gradient_iter &test_function_gradient_end,
@@ -2841,7 +2841,7 @@ namespace tardigradeBalanceEquations {
                            std::bind(std::multiplies<test_function_gradient_type>(), std::placeholders::_1, -1.));
         }
 
-        template <int dim, class test_function_gradient_iter, class heat_flux_iter, class result_iter>
+        template <class configuration, class test_function_gradient_iter, class heat_flux_iter, class result_iter>
         void computeBalanceOfEnergyDivergence(const test_function_gradient_iter &test_function_gradient_begin,
                                               const test_function_gradient_iter &test_function_gradient_end,
                                               const heat_flux_iter              &heat_flux_begin,
@@ -2867,13 +2867,13 @@ namespace tardigradeBalanceEquations {
             for (auto r = result_begin; r != result_end; r++) {
                 const unsigned int phase = (unsigned int)(r - result_begin);
 
-                computeBalanceOfEnergyDivergence<dim>(test_function_gradient_begin, test_function_gradient_end,
-                                                      heat_flux_begin + dim * phase,
-                                                      heat_flux_begin + dim * (phase + 1), *r);
+                computeBalanceOfEnergyDivergence<configuration>(test_function_gradient_begin, test_function_gradient_end,
+                                                      heat_flux_begin + configuration::dimension * phase,
+                                                      heat_flux_begin + configuration::dimension * (phase + 1), *r);
             }
         }
 
-        template <int dim, class test_function_gradient_iter, class heat_flux_iter, class result_iter,
+        template <class configuration, class test_function_gradient_iter, class heat_flux_iter, class result_iter,
                   class dRdGradTestFunction_iter, class dRdq_iter>
         void computeBalanceOfEnergyDivergence(const test_function_gradient_iter &test_function_gradient_begin,
                                               const test_function_gradient_iter &test_function_gradient_end,
@@ -2909,12 +2909,12 @@ namespace tardigradeBalanceEquations {
             for (auto r = result_begin; r != result_end; r++) {
                 const unsigned int phase = (unsigned int)(r - result_begin);
 
-                computeBalanceOfEnergyDivergence<dim>(test_function_gradient_begin, test_function_gradient_end,
-                                                      heat_flux_begin + dim * phase,
-                                                      heat_flux_begin + dim * (phase + 1), *r,
-                                                      dRdGradTestFunction_begin + dim * phase,
-                                                      dRdGradTestFunction_begin + dim * (phase + 1),
-                                                      dRdq_begin + dim * phase, dRdq_begin + dim * (phase + 1));
+                computeBalanceOfEnergyDivergence<configuration>(test_function_gradient_begin, test_function_gradient_end,
+                                                      heat_flux_begin + configuration::dimension * phase,
+                                                      heat_flux_begin + configuration::dimension * (phase + 1), *r,
+                                                      dRdGradTestFunction_begin + configuration::dimension * phase,
+                                                      dRdGradTestFunction_begin + configuration::dimension * (phase + 1),
+                                                      dRdq_begin + configuration::dimension * phase, dRdq_begin + configuration::dimension * (phase + 1));
             }
         }
 
