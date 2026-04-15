@@ -2258,113 +2258,113 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfEnergyDivergence, *boost::unit_test::t
     }
 }
 
-//BOOST_AUTO_TEST_CASE(test_multiphase_computeBalanceOfEnergyDivergence,
-//                     *boost::unit_test::tolerance(DEFAULT_TEST_TOLERANCE)) {
-//    constexpr unsigned int dim = 3;
-//
-//    constexpr unsigned int nphases = 5;
-//
-//    floatVector grad_psi = {0.69646919, 0.28613933, 0.22685145};
-//
-//    std::array<floatType, configuration::dimension * nphases> q = {0.55131477, 0.71946897, 0.42310646, 0.9807642,  0.68482974,
-//                                              0.4809319,  0.39211752, 0.34317802, 0.72904971, 0.43857224,
-//                                              0.0596779,  0.39804426, 0.73799541, 0.18249173, 0.17545176};
-//
-//    std::array<floatType, nphases> answer = {-0.68582444, -0.98812887, -0.53668048, -0.41282517, -0.60601061};
-//
-//    std::array<floatType, nphases> result;
-//
-//    tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyDivergence<configuration>(
-//        std::begin(grad_psi), std::end(grad_psi), std::begin(q), std::end(q), std::begin(result), std::end(result));
-//
-//    BOOST_TEST(result == answer, CHECK_PER_ELEMENT);
-//
-//    std::fill(std::begin(result), std::end(result), 0.);
-//
-//    std::array<floatType, configuration::dimension * nphases> dRdGradPsi, dRdq;
-//
-//    tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyDivergence<configuration>(
-//        std::begin(grad_psi), std::end(grad_psi), std::begin(q), std::end(q), std::begin(result), std::end(result),
-//        std::begin(dRdGradPsi), std::end(dRdGradPsi), std::begin(dRdq), std::end(dRdq));
-//
-//    BOOST_TEST(result == answer, CHECK_PER_ELEMENT);
-//
-//    floatType eps = 1e-6;
-//
-//    for (unsigned int i = 0; i < configuration::dimension; i++) {
-//        floatType delta = eps * std::fabs(grad_psi[i]) + eps;
-//
-//        floatVector xp = grad_psi;
-//        floatVector xm = grad_psi;
-//
-//        xp[i] += delta;
-//        xm[i] -= delta;
-//
-//        std::array<floatType, nphases> vp, vm;
-//
-//        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyDivergence<configuration>(std::begin(xp), std::end(xp),
-//                                                                                           std::begin(q), std::end(q),
-//                                                                                           std::begin(vp),
-//                                                                                           std::end(vp));
-//
-//        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyDivergence<configuration>(std::begin(xm), std::end(xm),
-//                                                                                           std::begin(q), std::end(q),
-//                                                                                           std::begin(vm),
-//                                                                                           std::end(vm));
-//
-//        for (unsigned int j = 0; j < nphases; j++) {
-//            floatType grad = (vp[j] - vm[j]) / (2 * delta);
-//
-//            BOOST_TEST(grad == dRdGradPsi[configuration::dimension * j + i]);
-//        }
-//    }
-//
-//    for (unsigned int i = 0; i < configuration::dimension * nphases; i++) {
-//        floatType delta = eps * std::fabs(q[i]) + eps;
-//
-//        std::array<floatType, configuration::dimension * nphases> xp = q;
-//        std::array<floatType, configuration::dimension * nphases> xm = q;
-//
-//        xp[i] += delta;
-//        xm[i] -= delta;
-//
-//        std::array<floatType, nphases> vp, vm;
-//
-//        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyDivergence<configuration>(
-//            std::begin(grad_psi), std::end(grad_psi), std::begin(xp), std::end(xp), std::begin(vp), std::end(vp));
-//
-//        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyDivergence<configuration>(
-//            std::begin(grad_psi), std::end(grad_psi), std::begin(xm), std::end(xm), std::begin(vm), std::end(vm));
-//
-//        for (unsigned int j = 0; j < nphases; j++) {
-//            floatType grad = (vp[j] - vm[j]) / (2 * delta);
-//
-//            if ((i / configuration::dimension) == j) {
-//                unsigned int row = (i - configuration::dimension * j);
-//
-//                BOOST_TEST(grad == dRdq[configuration::dimension * j + row]);
-//
-//            } else {
-//                BOOST_TEST(grad == 0);
-//            }
-//        }
-//    }
-//}
-//
-//template <typename dt_type, class v_t_in, class v_tp1_in, class vDot_t_in, typename alpha_type, class vDot_tp1_out,
-//          typename dVDotdV_type>
-//void compute_current_rate_of_change(const dt_type &dt, const v_t_in &v_t_begin, const v_t_in &v_t_end,
-//                                    const v_tp1_in &v_tp1_begin, const v_tp1_in &v_tp1_end,
-//                                    const vDot_t_in &vDot_t_begin, const vDot_t_in &vDot_t_end, const alpha_type &alpha,
-//                                    vDot_tp1_out vDot_tp1_begin, vDot_tp1_out vDot_tp1_end, dVDotdV_type &dVDotdV) {
-//    dVDotdV = 1. / (alpha * dt);
-//
-//    for (unsigned int i = 0; i < (unsigned int)(v_t_end - v_t_begin); ++i) {
-//        *(vDot_tp1_begin + i) =
-//            ((*(v_tp1_begin + i)) - (*(v_t_begin + i))) / (alpha * dt) - ((1 - alpha) / alpha) * (*(vDot_t_begin + i));
-//    }
-//}
-//
+BOOST_AUTO_TEST_CASE(test_multiphase_computeBalanceOfEnergyDivergence,
+                     *boost::unit_test::tolerance(DEFAULT_TEST_TOLERANCE)) {
+    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<> { };
+
+    constexpr unsigned int nphases = 5;
+
+    floatVector grad_psi = {0.69646919, 0.28613933, 0.22685145};
+
+    std::array<floatType, configuration::dimension * nphases> q = {0.55131477, 0.71946897, 0.42310646, 0.9807642,  0.68482974,
+                                              0.4809319,  0.39211752, 0.34317802, 0.72904971, 0.43857224,
+                                              0.0596779,  0.39804426, 0.73799541, 0.18249173, 0.17545176};
+
+    std::array<floatType, nphases> answer = {-0.68582444, -0.98812887, -0.53668048, -0.41282517, -0.60601061};
+
+    std::array<floatType, nphases> result;
+
+    tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyDivergence<configuration>(
+        std::begin(grad_psi), std::end(grad_psi), std::begin(q), std::end(q), std::begin(result), std::end(result));
+
+    BOOST_TEST(result == answer, CHECK_PER_ELEMENT);
+
+    std::fill(std::begin(result), std::end(result), 0.);
+
+    std::array<floatType, configuration::dimension * nphases> dRdGradPsi, dRdq;
+
+    tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyDivergence<configuration>(
+        std::begin(grad_psi), std::end(grad_psi), std::begin(q), std::end(q), std::begin(result), std::end(result),
+        std::begin(dRdGradPsi), std::end(dRdGradPsi), std::begin(dRdq), std::end(dRdq));
+
+    BOOST_TEST(result == answer, CHECK_PER_ELEMENT);
+
+    floatType eps = 1e-6;
+
+    for (unsigned int i = 0; i < configuration::dimension; i++) {
+        floatType delta = eps * std::fabs(grad_psi[i]) + eps;
+
+        floatVector xp = grad_psi;
+        floatVector xm = grad_psi;
+
+        xp[i] += delta;
+        xm[i] -= delta;
+
+        std::array<floatType, nphases> vp, vm;
+
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyDivergence<configuration>(std::begin(xp), std::end(xp),
+                                                                                           std::begin(q), std::end(q),
+                                                                                           std::begin(vp),
+                                                                                           std::end(vp));
+
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyDivergence<configuration>(std::begin(xm), std::end(xm),
+                                                                                           std::begin(q), std::end(q),
+                                                                                           std::begin(vm),
+                                                                                           std::end(vm));
+
+        for (unsigned int j = 0; j < nphases; j++) {
+            floatType grad = (vp[j] - vm[j]) / (2 * delta);
+
+            BOOST_TEST(grad == dRdGradPsi[configuration::dimension * j + i]);
+        }
+    }
+
+    for (unsigned int i = 0; i < configuration::dimension * nphases; i++) {
+        floatType delta = eps * std::fabs(q[i]) + eps;
+
+        std::array<floatType, configuration::dimension * nphases> xp = q;
+        std::array<floatType, configuration::dimension * nphases> xm = q;
+
+        xp[i] += delta;
+        xm[i] -= delta;
+
+        std::array<floatType, nphases> vp, vm;
+
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyDivergence<configuration>(
+            std::begin(grad_psi), std::end(grad_psi), std::begin(xp), std::end(xp), std::begin(vp), std::end(vp));
+
+        tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergyDivergence<configuration>(
+            std::begin(grad_psi), std::end(grad_psi), std::begin(xm), std::end(xm), std::begin(vm), std::end(vm));
+
+        for (unsigned int j = 0; j < nphases; j++) {
+            floatType grad = (vp[j] - vm[j]) / (2 * delta);
+
+            if ((i / configuration::dimension) == j) {
+                unsigned int row = (i - configuration::dimension * j);
+
+                BOOST_TEST(grad == dRdq[configuration::dimension * j + row]);
+
+            } else {
+                BOOST_TEST(grad == 0);
+            }
+        }
+    }
+}
+
+template <typename dt_type, class v_t_in, class v_tp1_in, class vDot_t_in, typename alpha_type, class vDot_tp1_out,
+          typename dVDotdV_type>
+void compute_current_rate_of_change(const dt_type &dt, const v_t_in &v_t_begin, const v_t_in &v_t_end,
+                                    const v_tp1_in &v_tp1_begin, const v_tp1_in &v_tp1_end,
+                                    const vDot_t_in &vDot_t_begin, const vDot_t_in &vDot_t_end, const alpha_type &alpha,
+                                    vDot_tp1_out vDot_tp1_begin, vDot_tp1_out vDot_tp1_end, dVDotdV_type &dVDotdV) {
+    dVDotdV = 1. / (alpha * dt);
+
+    for (unsigned int i = 0; i < (unsigned int)(v_t_end - v_t_begin); ++i) {
+        *(vDot_tp1_begin + i) =
+            ((*(v_tp1_begin + i)) - (*(v_t_begin + i))) / (alpha * dt) - ((1 - alpha) / alpha) * (*(vDot_t_begin + i));
+    }
+}
+
 //template <int dim, bool is_per_unit_volume, int node_count, int nphases, class xi_in, typename dt_type,
 //          class density_t_in, class density_tp1_in, class e_t_in, class e_tp1_in, class u_t_in, class u_tp1_in,
 //          class umesh_t_in, class umesh_tp1_in, class density_dot_t_in, class e_dot_t_in, class u_dot_t_in, class X_in,
