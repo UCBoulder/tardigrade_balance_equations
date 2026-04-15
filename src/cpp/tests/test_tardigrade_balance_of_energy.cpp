@@ -3349,545 +3349,549 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfEnergy_fea, *boost::unit_test::toleran
         }
     }
 }
-//
-//BOOST_AUTO_TEST_CASE(test_computeBalanceOfEnergy_fea2, *boost::unit_test::tolerance(1e-5)) {
-//    /*!
-//     * Test computing the balance of mass in a finite element context
-//     */
-//
-//    constexpr unsigned int nphases = 1;
-//
-//    constexpr bool is_per_unit_volume = true;
-//
-//    std::array<floatType, 8> density_t = {0.61289453, 0.12062867, 0.8263408,  0.60306013,
-//                                          0.54506801, 0.34276383, 0.30412079, 0.41702221};
-//
-//    std::array<floatType, 8> density_tp1 = {0.08319499, 0.76368284, 0.24366637, 0.19422296,
-//                                            0.57245696, 0.09571252, 0.88532683, 0.62724897};
-//
-//    std::array<floatType, 8> e_t = {0.72341636, 0.01612921, 0.59443188, 0.55678519,
-//                                    0.15895964, 0.15307052, 0.69552953, 0.31876643};
-//
-//    std::array<floatType, 8> e_tp1 = {0.39818568, 0.70495883, 0.99535848, 0.35591487,
-//                                      0.76254781, 0.59317692, 0.6917018,  0.15112745};
-//
-//    std::array<floatType, 24> u_t = {-0.20224741, -0.5182882,  -0.31308797, 0.02625631,  0.3332491,  -0.78818303,
-//                                     -0.7382101,  -0.35603879, 0.32312867,  0.69301245,  0.10651469, 0.70890498,
-//                                     -0.23032438, -0.36642421, -0.29147065, -0.65783634, 0.65822527, -0.32265831,
-//                                     0.10474015,  0.15710294,  0.04306612,  -0.99462387, 0.97669084, 0.81068315};
-//
-//    std::array<floatType, 24> u_tp1 = {0.50705198,  0.4837243,   -0.90284193, 0.41739479,  0.6784867,   -0.66812423,
-//                                       0.56199588,  -0.42692677, -0.38706049, 0.33052293,  -0.77721566, 0.3297449,
-//                                       0.77571359,  0.39262254,  -0.11934425, -0.12357123, 0.53019219,  0.131284,
-//                                       -0.83019167, 0.16534218,  0.62968741,  -0.32586723, 0.85515316,  0.501434};
-//
-//    std::array<floatType, 24> umesh_t = {0.53182759, 0.63440096, 0.84943179, 0.51044152, 0.65634786, 0.86791477,
-//                                         0.48312667, 0.6486585,  0.86600796, 0.50451273, 0.6267116,  0.84752498,
-//                                         0.53695906, 0.68247738, 0.83864355, 0.515573,   0.70442428, 0.85712652,
-//                                         0.48825814, 0.69673492, 0.85521971, 0.50964421, 0.67478802, 0.83673674};
-//
-//    std::array<floatType, 24> umesh_tp1 = {0.72445532, 0.61102351, 0.72244338, 0.70877313, 0.5669913,  0.69069256,
-//                                           0.7316781,  0.55679573, 0.65823773, 0.7473603,  0.60082794, 0.68998856,
-//                                           0.71831255, 0.63482305, 0.72559852, 0.70263035, 0.59079084, 0.69384769,
-//                                           0.72553532, 0.58059527, 0.66139287, 0.74121752, 0.62462748, 0.6931437};
-//
-//    std::array<floatType, 8> density_dot_t = {0.68130077, 0.87545684, 0.51042234, 0.66931378,
-//                                              0.58593655, 0.6249035,  0.67468905, 0.84234244};
-//
-//    std::array<floatType, 8> e_dot_t = {0.6919703, 0.55438325, 0.38895057, 0.92513249,
-//                                        0.84167,   0.35739757, 0.04359146, 0.30476807};
-//
-//    std::array<floatType, 24> u_dot_t = {-0.58472828, -0.41502117, 0.04002031,  0.80382275,  0.96726177,  -0.48491587,
-//                                         0.12871809,  0.61393737,  -0.21125989, 0.46214607,  -0.67786197, 0.20139714,
-//                                         0.73172892,  0.96704322,  -0.84126842, -0.14330545, -0.59091428, -0.09872702,
-//                                         0.09552715,  -0.81334658, -0.40627845, 0.85516848,  0.13800746,  -0.085176};
-//
-//    std::array<floatType, 24> X = {0., 0., 0., 1., 0., 0., 1., 1., 0., 0., 1., 0.,
-//                                   0., 0., 1., 1., 0., 1., 1., 1., 1., 0., 1., 1.};
-//
-//    std::array<floatType, 9> cauchy_stress = {0.14812765, 0.50328798, -0.84170208, 0.71877815, 0.64300823,
-//                                              0.81974332, -0.7427376, -0.83643983, -0.72316885};
-//
-//    std::array<floatType, 3> heat_flux = {-0.20124258, -0.15138628, 0.12443676};
-//
-//    std::array<floatType, 1> volume_fractions = {0.12224355};
-//
-//    std::array<floatType, 1> internal_heat_generation = {-0.597201};
-//
-//    std::array<floatType, 3> net_interphase_force = {0.6232887, -0.06402485, 0.61587642};
-//
-//    std::array<floatType, 8> answer = {0.00690475, 0.0008039,  0.00101159, 0.01152725,
-//                                       0.00460744, 0.01033358, 0.01302225, 0.04720157};
-//
-//    std::array<floatType, 8> result;
-//
-//    std::array<floatType, 3> local_point = {-0.98514724, 0.10318545, 0.8638643};
-//
-//    floatType dt = 1.3929383711957233;
-//
-//    floatType alpha = 0.56;
-//
-//    floatType beta = 0.67;
-//
-//    evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
-//        std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
-//        std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1),
-//        std::cend(e_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1), std::cbegin(umesh_t),
-//        std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1), std::cbegin(density_dot_t),
-//        std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t), std::cbegin(u_dot_t), std::cend(u_dot_t),
-//        std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress), std::cend(cauchy_stress), std::cbegin(heat_flux),
-//        std::cend(heat_flux), std::cbegin(volume_fractions), std::cend(volume_fractions),
-//        std::cbegin(internal_heat_generation), std::cend(internal_heat_generation), std::cbegin(net_interphase_force),
-//        std::cend(net_interphase_force), alpha, beta, std::begin(result), std::end(result));
-//
-//    BOOST_TEST(result == answer, CHECK_PER_ELEMENT);
-//
-//    std::fill(std::begin(result), std::end(result), 0);
-//
-//    std::array<floatType, 8 * 1 * 8 * 1> dRdRho;
-//    std::array<floatType, 8 * 1 * 8 * 1> dRdE;
-//    std::array<floatType, 8 * 1 * 8 * 3> dRdU;
-//    std::array<floatType, 8 * 1 * 9>     dRdCauchy;
-//    std::array<floatType, 8 * 1 * 3>     dRdq;
-//    std::array<floatType, 8 * 1 * 1>     dRdVolumeFraction;
-//    std::array<floatType, 8 * 1 * 1>     dRdr;
-//    std::array<floatType, 8 * 1 * 3>     dRdpi;
-//    std::array<floatType, 8 * 1 * 8 * 3> dRdUMesh;
-//
-//    evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
-//        std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
-//        std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1),
-//        std::cend(e_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1), std::cbegin(umesh_t),
-//        std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1), std::cbegin(density_dot_t),
-//        std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t), std::cbegin(u_dot_t), std::cend(u_dot_t),
-//        std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress), std::cend(cauchy_stress), std::cbegin(heat_flux),
-//        std::cend(heat_flux), std::cbegin(volume_fractions), std::cend(volume_fractions),
-//        std::cbegin(internal_heat_generation), std::cend(internal_heat_generation), std::cbegin(net_interphase_force),
-//        std::cend(net_interphase_force), alpha, beta, std::begin(result), std::end(result), std::begin(dRdRho),
-//        std::end(dRdRho), std::begin(dRdE), std::end(dRdE), std::begin(dRdU), std::end(dRdU), std::begin(dRdCauchy),
-//        std::end(dRdCauchy), std::begin(dRdq), std::end(dRdq), std::begin(dRdVolumeFraction),
-//        std::end(dRdVolumeFraction), std::begin(dRdr), std::end(dRdr), std::begin(dRdpi), std::end(dRdpi),
-//        std::begin(dRdUMesh), std::end(dRdUMesh));
-//
-//    BOOST_TEST(result == answer, CHECK_PER_ELEMENT);
-//
-//    floatType eps = 1e-6;
-//
-//    // Check the derivatives w.r.t. the density
-//    {
-//        constexpr unsigned int vardim = 1 * nphases * 8;
-//        constexpr unsigned int outdim = 1 * nphases * 8;
-//
-//        for (unsigned int i = 0; i < vardim; ++i) {
-//            floatType delta = eps * std::fabs(density_tp1[i]) + eps;
-//
-//            std::array<floatType, vardim> xp = density_tp1;
-//            std::array<floatType, vardim> xm = density_tp1;
-//
-//            xp[i] += delta;
-//            xm[i] -= delta;
-//
-//            std::array<floatType, outdim> vp, vm;
-//
-//            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
-//                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
-//                std::cbegin(xp), std::cend(xp), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1), std::cend(e_tp1),
-//                std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1), std::cbegin(umesh_t),
-//                std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1), std::cbegin(density_dot_t),
-//                std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t), std::cbegin(u_dot_t),
-//                std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress), std::cend(cauchy_stress),
-//                std::cbegin(heat_flux), std::cend(heat_flux), std::cbegin(volume_fractions),
-//                std::cend(volume_fractions), std::cbegin(internal_heat_generation), std::cend(internal_heat_generation),
-//                std::cbegin(net_interphase_force), std::cend(net_interphase_force), alpha, beta, std::begin(vp),
-//                std::end(vp));
-//
-//            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
-//                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
-//                std::cbegin(xm), std::cend(xm), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1), std::cend(e_tp1),
-//                std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1), std::cbegin(umesh_t),
-//                std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1), std::cbegin(density_dot_t),
-//                std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t), std::cbegin(u_dot_t),
-//                std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress), std::cend(cauchy_stress),
-//                std::cbegin(heat_flux), std::cend(heat_flux), std::cbegin(volume_fractions),
-//                std::cend(volume_fractions), std::cbegin(internal_heat_generation), std::cend(internal_heat_generation),
-//                std::cbegin(net_interphase_force), std::cend(net_interphase_force), alpha, beta, std::begin(vm),
-//                std::end(vm));
-//
-//            for (unsigned int j = 0; j < outdim; ++j) {
-//                BOOST_TEST(dRdRho[vardim * j + i] == (vp[j] - vm[j]) / (2 * delta));
-//            }
-//        }
-//    }
-//
-//    // Check the derivatives w.r.t. the internal energy
-//    {
-//        constexpr unsigned int vardim = 1 * nphases * 8;
-//        constexpr unsigned int outdim = 1 * nphases * 8;
-//
-//        for (unsigned int i = 0; i < vardim; ++i) {
-//            floatType delta = eps * std::fabs(e_tp1[i]) + eps;
-//
-//            std::array<floatType, vardim> xp = e_tp1;
-//            std::array<floatType, vardim> xm = e_tp1;
-//
-//            xp[i] += delta;
-//            xm[i] -= delta;
-//
-//            std::array<floatType, outdim> vp, vm;
-//
-//            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
-//                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
-//                std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(xp),
-//                std::cend(xp), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
-//                std::cbegin(umesh_t), std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1),
-//                std::cbegin(density_dot_t), std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t),
-//                std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress),
-//                std::cend(cauchy_stress), std::cbegin(heat_flux), std::cend(heat_flux), std::cbegin(volume_fractions),
-//                std::cend(volume_fractions), std::cbegin(internal_heat_generation), std::cend(internal_heat_generation),
-//                std::cbegin(net_interphase_force), std::cend(net_interphase_force), alpha, beta, std::begin(vp),
-//                std::end(vp));
-//
-//            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
-//                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
-//                std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(xm),
-//                std::cend(xm), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
-//                std::cbegin(umesh_t), std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1),
-//                std::cbegin(density_dot_t), std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t),
-//                std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress),
-//                std::cend(cauchy_stress), std::cbegin(heat_flux), std::cend(heat_flux), std::cbegin(volume_fractions),
-//                std::cend(volume_fractions), std::cbegin(internal_heat_generation), std::cend(internal_heat_generation),
-//                std::cbegin(net_interphase_force), std::cend(net_interphase_force), alpha, beta, std::begin(vm),
-//                std::end(vm));
-//
-//            for (unsigned int j = 0; j < outdim; ++j) {
-//                BOOST_TEST(dRdE[vardim * j + i] == (vp[j] - vm[j]) / (2 * delta));
-//            }
-//        }
-//    }
-//
-//    // Check the derivatives w.r.t. the displacement
-//    {
-//        constexpr unsigned int vardim = 3 * nphases * 8;
-//        constexpr unsigned int outdim = 1 * nphases * 8;
-//
-//        for (unsigned int i = 0; i < vardim; ++i) {
-//            floatType delta = eps * std::fabs(u_tp1[i]) + eps;
-//
-//            std::array<floatType, vardim> xp = u_tp1;
-//            std::array<floatType, vardim> xm = u_tp1;
-//
-//            xp[i] += delta;
-//            xm[i] -= delta;
-//
-//            std::array<floatType, outdim> vp, vm;
-//
-//            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
-//                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
-//                std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1),
-//                std::cend(e_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(xp), std::cend(xp),
-//                std::cbegin(umesh_t), std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1),
-//                std::cbegin(density_dot_t), std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t),
-//                std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress),
-//                std::cend(cauchy_stress), std::cbegin(heat_flux), std::cend(heat_flux), std::cbegin(volume_fractions),
-//                std::cend(volume_fractions), std::cbegin(internal_heat_generation), std::cend(internal_heat_generation),
-//                std::cbegin(net_interphase_force), std::cend(net_interphase_force), alpha, beta, std::begin(vp),
-//                std::end(vp));
-//
-//            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
-//                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
-//                std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1),
-//                std::cend(e_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(xm), std::cend(xm),
-//                std::cbegin(umesh_t), std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1),
-//                std::cbegin(density_dot_t), std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t),
-//                std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress),
-//                std::cend(cauchy_stress), std::cbegin(heat_flux), std::cend(heat_flux), std::cbegin(volume_fractions),
-//                std::cend(volume_fractions), std::cbegin(internal_heat_generation), std::cend(internal_heat_generation),
-//                std::cbegin(net_interphase_force), std::cend(net_interphase_force), alpha, beta, std::begin(vm),
-//                std::end(vm));
-//
-//            for (unsigned int j = 0; j < outdim; ++j) {
-//                BOOST_TEST(dRdU[vardim * j + i] == (vp[j] - vm[j]) / (2 * delta));
-//            }
-//        }
-//    }
-//
-//    // Check the derivatives w.r.t. the Cauchy stress
-//    {
-//        constexpr unsigned int vardim = 9 * nphases;
-//        constexpr unsigned int outdim = 1 * nphases * 8;
-//
-//        for (unsigned int i = 0; i < vardim; ++i) {
-//            floatType delta = eps * std::fabs(cauchy_stress[i]) + eps;
-//
-//            std::array<floatType, vardim> xp = cauchy_stress;
-//            std::array<floatType, vardim> xm = cauchy_stress;
-//
-//            xp[i] += delta;
-//            xm[i] -= delta;
-//
-//            std::array<floatType, outdim> vp, vm;
-//
-//            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
-//                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
-//                std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1),
-//                std::cend(e_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
-//                std::cbegin(umesh_t), std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1),
-//                std::cbegin(density_dot_t), std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t),
-//                std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(xp), std::cend(xp),
-//                std::cbegin(heat_flux), std::cend(heat_flux), std::cbegin(volume_fractions),
-//                std::cend(volume_fractions), std::cbegin(internal_heat_generation), std::cend(internal_heat_generation),
-//                std::cbegin(net_interphase_force), std::cend(net_interphase_force), alpha, beta, std::begin(vp),
-//                std::end(vp));
-//
-//            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
-//                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
-//                std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1),
-//                std::cend(e_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
-//                std::cbegin(umesh_t), std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1),
-//                std::cbegin(density_dot_t), std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t),
-//                std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(xm), std::cend(xm),
-//                std::cbegin(heat_flux), std::cend(heat_flux), std::cbegin(volume_fractions),
-//                std::cend(volume_fractions), std::cbegin(internal_heat_generation), std::cend(internal_heat_generation),
-//                std::cbegin(net_interphase_force), std::cend(net_interphase_force), alpha, beta, std::begin(vm),
-//                std::end(vm));
-//
-//            for (unsigned int j = 0; j < outdim; ++j) {
-//                BOOST_TEST(dRdCauchy[vardim * j + i] == (vp[j] - vm[j]) / (2 * delta));
-//            }
-//        }
-//    }
-//
-//    // Check the derivatives w.r.t. the volume fractions
-//    {
-//        constexpr unsigned int vardim = 1 * nphases;
-//        constexpr unsigned int outdim = 1 * nphases * 8;
-//
-//        for (unsigned int i = 0; i < vardim; ++i) {
-//            floatType delta = eps * std::fabs(volume_fractions[i]) + eps;
-//
-//            std::array<floatType, vardim> xp = volume_fractions;
-//            std::array<floatType, vardim> xm = volume_fractions;
-//
-//            xp[i] += delta;
-//            xm[i] -= delta;
-//
-//            std::array<floatType, outdim> vp, vm;
-//
-//            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
-//                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
-//                std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1),
-//                std::cend(e_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
-//                std::cbegin(umesh_t), std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1),
-//                std::cbegin(density_dot_t), std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t),
-//                std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress),
-//                std::cend(cauchy_stress), std::cbegin(heat_flux), std::cend(heat_flux), std::cbegin(xp), std::cend(xp),
-//                std::cbegin(internal_heat_generation), std::cend(internal_heat_generation),
-//                std::cbegin(net_interphase_force), std::cend(net_interphase_force), alpha, beta, std::begin(vp),
-//                std::end(vp));
-//
-//            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
-//                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
-//                std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1),
-//                std::cend(e_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
-//                std::cbegin(umesh_t), std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1),
-//                std::cbegin(density_dot_t), std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t),
-//                std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress),
-//                std::cend(cauchy_stress), std::cbegin(heat_flux), std::cend(heat_flux), std::cbegin(xm), std::cend(xm),
-//                std::cbegin(internal_heat_generation), std::cend(internal_heat_generation),
-//                std::cbegin(net_interphase_force), std::cend(net_interphase_force), alpha, beta, std::begin(vm),
-//                std::end(vm));
-//
-//            for (unsigned int j = 0; j < outdim; ++j) {
-//                BOOST_TEST(dRdVolumeFraction[vardim * j + i] == (vp[j] - vm[j]) / (2 * delta));
-//            }
-//        }
-//    }
-//
-//    // Check the derivatives w.r.t. the internal heat generation
-//    {
-//        constexpr unsigned int vardim = 1 * nphases;
-//        constexpr unsigned int outdim = 1 * nphases * 8;
-//
-//        for (unsigned int i = 0; i < vardim; ++i) {
-//            floatType delta = eps * std::fabs(internal_heat_generation[i]) + eps;
-//
-//            std::array<floatType, vardim> xp = internal_heat_generation;
-//            std::array<floatType, vardim> xm = internal_heat_generation;
-//
-//            xp[i] += delta;
-//            xm[i] -= delta;
-//
-//            std::array<floatType, outdim> vp, vm;
-//
-//            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
-//                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
-//                std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1),
-//                std::cend(e_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
-//                std::cbegin(umesh_t), std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1),
-//                std::cbegin(density_dot_t), std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t),
-//                std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress),
-//                std::cend(cauchy_stress), std::cbegin(heat_flux), std::cend(heat_flux), std::cbegin(volume_fractions),
-//                std::cend(volume_fractions), std::cbegin(xp), std::cend(xp), std::cbegin(net_interphase_force),
-//                std::cend(net_interphase_force), alpha, beta, std::begin(vp), std::end(vp));
-//
-//            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
-//                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
-//                std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1),
-//                std::cend(e_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
-//                std::cbegin(umesh_t), std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1),
-//                std::cbegin(density_dot_t), std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t),
-//                std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress),
-//                std::cend(cauchy_stress), std::cbegin(heat_flux), std::cend(heat_flux), std::cbegin(volume_fractions),
-//                std::cend(volume_fractions), std::cbegin(xm), std::cend(xm), std::cbegin(net_interphase_force),
-//                std::cend(net_interphase_force), alpha, beta, std::begin(vm), std::end(vm));
-//
-//            for (unsigned int j = 0; j < outdim; ++j) {
-//                BOOST_TEST(dRdr[vardim * j + i] == (vp[j] - vm[j]) / (2 * delta));
-//            }
-//        }
-//    }
-//
-//    // Check the derivatives w.r.t. the heat flux
-//    {
-//        constexpr unsigned int vardim = 3 * nphases;
-//        constexpr unsigned int outdim = 1 * nphases * 8;
-//
-//        for (unsigned int i = 0; i < vardim; ++i) {
-//            floatType delta = eps * std::fabs(heat_flux[i]) + eps;
-//
-//            std::array<floatType, vardim> xp = heat_flux;
-//            std::array<floatType, vardim> xm = heat_flux;
-//
-//            xp[i] += delta;
-//            xm[i] -= delta;
-//
-//            std::array<floatType, outdim> vp, vm;
-//
-//            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
-//                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
-//                std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1),
-//                std::cend(e_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
-//                std::cbegin(umesh_t), std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1),
-//                std::cbegin(density_dot_t), std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t),
-//                std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress),
-//                std::cend(cauchy_stress), std::cbegin(xp), std::cend(xp), std::cbegin(volume_fractions),
-//                std::cend(volume_fractions), std::cbegin(internal_heat_generation), std::cend(internal_heat_generation),
-//                std::cbegin(net_interphase_force), std::cend(net_interphase_force), alpha, beta, std::begin(vp),
-//                std::end(vp));
-//
-//            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
-//                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
-//                std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1),
-//                std::cend(e_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
-//                std::cbegin(umesh_t), std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1),
-//                std::cbegin(density_dot_t), std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t),
-//                std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress),
-//                std::cend(cauchy_stress), std::cbegin(xm), std::cend(xm), std::cbegin(volume_fractions),
-//                std::cend(volume_fractions), std::cbegin(internal_heat_generation), std::cend(internal_heat_generation),
-//                std::cbegin(net_interphase_force), std::cend(net_interphase_force), alpha, beta, std::begin(vm),
-//                std::end(vm));
-//
-//            for (unsigned int j = 0; j < outdim; ++j) {
-//                BOOST_TEST(dRdq[vardim * j + i] == (vp[j] - vm[j]) / (2 * delta));
-//            }
-//        }
-//    }
-//
-//    // Check the derivatives w.r.t. the net interphase force
-//    {
-//        constexpr unsigned int vardim = 3 * nphases;
-//        constexpr unsigned int outdim = 1 * nphases * 8;
-//
-//        for (unsigned int i = 0; i < vardim; ++i) {
-//            floatType delta = eps * std::fabs(net_interphase_force[i]) + eps;
-//
-//            std::array<floatType, vardim> xp = net_interphase_force;
-//            std::array<floatType, vardim> xm = net_interphase_force;
-//
-//            xp[i] += delta;
-//            xm[i] -= delta;
-//
-//            std::array<floatType, outdim> vp, vm;
-//
-//            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
-//                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
-//                std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1),
-//                std::cend(e_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
-//                std::cbegin(umesh_t), std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1),
-//                std::cbegin(density_dot_t), std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t),
-//                std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress),
-//                std::cend(cauchy_stress), std::cbegin(heat_flux), std::cend(heat_flux), std::cbegin(volume_fractions),
-//                std::cend(volume_fractions), std::cbegin(internal_heat_generation), std::cend(internal_heat_generation),
-//                std::cbegin(xp), std::cend(xp), alpha, beta, std::begin(vp), std::end(vp));
-//
-//            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
-//                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
-//                std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1),
-//                std::cend(e_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
-//                std::cbegin(umesh_t), std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1),
-//                std::cbegin(density_dot_t), std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t),
-//                std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress),
-//                std::cend(cauchy_stress), std::cbegin(heat_flux), std::cend(heat_flux), std::cbegin(volume_fractions),
-//                std::cend(volume_fractions), std::cbegin(internal_heat_generation), std::cend(internal_heat_generation),
-//                std::cbegin(xm), std::cend(xm), alpha, beta, std::begin(vm), std::end(vm));
-//
-//            for (unsigned int j = 0; j < outdim; ++j) {
-//                BOOST_TEST(dRdpi[vardim * j + i] == (vp[j] - vm[j]) / (2 * delta));
-//            }
-//        }
-//    }
-//
-//    // Check the derivatives w.r.t. the mesh displacement
-//    {
-//        constexpr unsigned int vardim = 3 * 8;
-//        constexpr unsigned int outdim = 1 * nphases * 8;
-//
-//        for (unsigned int i = 0; i < vardim; ++i) {
-//            floatType delta = eps * std::fabs(umesh_tp1[i]) + eps;
-//
-//            std::array<floatType, vardim> xp = umesh_tp1;
-//            std::array<floatType, vardim> xm = umesh_tp1;
-//
-//            xp[i] += delta;
-//            xm[i] -= delta;
-//
-//            std::array<floatType, outdim> vp, vm;
-//
-//            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
-//                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
-//                std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1),
-//                std::cend(e_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
-//                std::cbegin(umesh_t), std::cend(umesh_t), std::cbegin(xp), std::cend(xp), std::cbegin(density_dot_t),
-//                std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t), std::cbegin(u_dot_t),
-//                std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress), std::cend(cauchy_stress),
-//                std::cbegin(heat_flux), std::cend(heat_flux), std::cbegin(volume_fractions),
-//                std::cend(volume_fractions), std::cbegin(internal_heat_generation), std::cend(internal_heat_generation),
-//                std::cbegin(net_interphase_force), std::cend(net_interphase_force), alpha, beta, std::begin(vp),
-//                std::end(vp));
-//
-//            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
-//                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
-//                std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1),
-//                std::cend(e_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
-//                std::cbegin(umesh_t), std::cend(umesh_t), std::cbegin(xm), std::cend(xm), std::cbegin(density_dot_t),
-//                std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t), std::cbegin(u_dot_t),
-//                std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress), std::cend(cauchy_stress),
-//                std::cbegin(heat_flux), std::cend(heat_flux), std::cbegin(volume_fractions),
-//                std::cend(volume_fractions), std::cbegin(internal_heat_generation), std::cend(internal_heat_generation),
-//                std::cbegin(net_interphase_force), std::cend(net_interphase_force), alpha, beta, std::begin(vm),
-//                std::end(vm));
-//
-//            for (unsigned int j = 0; j < outdim; ++j) {
-//                BOOST_TEST(dRdUMesh[vardim * j + i] == (vp[j] - vm[j]) / (2 * delta));
-//            }
-//        }
-//    }
-//}
-//
+
+BOOST_AUTO_TEST_CASE(test_computeBalanceOfEnergy_fea2, *boost::unit_test::tolerance(1e-5)) {
+    /*!
+     * Test computing the balance of mass in a finite element context
+     */
+
+    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<> { };
+
+    constexpr unsigned int nphases = 1;
+
+    constexpr bool is_per_unit_volume = true;
+
+    std::array<floatType, 8> density_t = {0.61289453, 0.12062867, 0.8263408,  0.60306013,
+                                          0.54506801, 0.34276383, 0.30412079, 0.41702221};
+
+    std::array<floatType, 8> density_tp1 = {0.08319499, 0.76368284, 0.24366637, 0.19422296,
+                                            0.57245696, 0.09571252, 0.88532683, 0.62724897};
+
+    std::array<floatType, 8> e_t = {0.72341636, 0.01612921, 0.59443188, 0.55678519,
+                                    0.15895964, 0.15307052, 0.69552953, 0.31876643};
+
+    std::array<floatType, 8> e_tp1 = {0.39818568, 0.70495883, 0.99535848, 0.35591487,
+                                      0.76254781, 0.59317692, 0.6917018,  0.15112745};
+
+    std::array<floatType, 24> u_t = {-0.20224741, -0.5182882,  -0.31308797, 0.02625631,  0.3332491,  -0.78818303,
+                                     -0.7382101,  -0.35603879, 0.32312867,  0.69301245,  0.10651469, 0.70890498,
+                                     -0.23032438, -0.36642421, -0.29147065, -0.65783634, 0.65822527, -0.32265831,
+                                     0.10474015,  0.15710294,  0.04306612,  -0.99462387, 0.97669084, 0.81068315};
+
+    std::array<floatType, 24> u_tp1 = {0.50705198,  0.4837243,   -0.90284193, 0.41739479,  0.6784867,   -0.66812423,
+                                       0.56199588,  -0.42692677, -0.38706049, 0.33052293,  -0.77721566, 0.3297449,
+                                       0.77571359,  0.39262254,  -0.11934425, -0.12357123, 0.53019219,  0.131284,
+                                       -0.83019167, 0.16534218,  0.62968741,  -0.32586723, 0.85515316,  0.501434};
+
+    std::array<floatType, 24> umesh_t = {0.53182759, 0.63440096, 0.84943179, 0.51044152, 0.65634786, 0.86791477,
+                                         0.48312667, 0.6486585,  0.86600796, 0.50451273, 0.6267116,  0.84752498,
+                                         0.53695906, 0.68247738, 0.83864355, 0.515573,   0.70442428, 0.85712652,
+                                         0.48825814, 0.69673492, 0.85521971, 0.50964421, 0.67478802, 0.83673674};
+
+    std::array<floatType, 24> umesh_tp1 = {0.72445532, 0.61102351, 0.72244338, 0.70877313, 0.5669913,  0.69069256,
+                                           0.7316781,  0.55679573, 0.65823773, 0.7473603,  0.60082794, 0.68998856,
+                                           0.71831255, 0.63482305, 0.72559852, 0.70263035, 0.59079084, 0.69384769,
+                                           0.72553532, 0.58059527, 0.66139287, 0.74121752, 0.62462748, 0.6931437};
+
+    std::array<floatType, 8> density_dot_t = {0.68130077, 0.87545684, 0.51042234, 0.66931378,
+                                              0.58593655, 0.6249035,  0.67468905, 0.84234244};
+
+    std::array<floatType, 8> e_dot_t = {0.6919703, 0.55438325, 0.38895057, 0.92513249,
+                                        0.84167,   0.35739757, 0.04359146, 0.30476807};
+
+    std::array<floatType, 24> u_dot_t = {-0.58472828, -0.41502117, 0.04002031,  0.80382275,  0.96726177,  -0.48491587,
+                                         0.12871809,  0.61393737,  -0.21125989, 0.46214607,  -0.67786197, 0.20139714,
+                                         0.73172892,  0.96704322,  -0.84126842, -0.14330545, -0.59091428, -0.09872702,
+                                         0.09552715,  -0.81334658, -0.40627845, 0.85516848,  0.13800746,  -0.085176};
+
+    std::array<floatType, 24> X = {0., 0., 0., 1., 0., 0., 1., 1., 0., 0., 1., 0.,
+                                   0., 0., 1., 1., 0., 1., 1., 1., 1., 0., 1., 1.};
+
+    std::array<floatType, 9> cauchy_stress = {0.14812765, 0.50328798, -0.84170208, 0.71877815, 0.64300823,
+                                              0.81974332, -0.7427376, -0.83643983, -0.72316885};
+
+    std::array<floatType, 3> heat_flux = {-0.20124258, -0.15138628, 0.12443676};
+
+    std::array<floatType, 1> volume_fractions = {0.12224355};
+
+    std::array<floatType, 1> internal_heat_generation = {-0.597201};
+
+    std::array<floatType, 3> net_interphase_force = {0.6232887, -0.06402485, 0.61587642};
+
+    std::array<floatType, 8> answer = {0.00690475, 0.0008039,  0.00101159, 0.01152725,
+                                       0.00460744, 0.01033358, 0.01302225, 0.04720157};
+
+    std::array<floatType, 8> result;
+
+    std::array<floatType, 3> local_point = {-0.98514724, 0.10318545, 0.8638643};
+
+    floatType dt = 1.3929383711957233;
+
+    floatType alpha = 0.56;
+
+    floatType beta = 0.67;
+
+    evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
+        std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
+        std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1),
+        std::cend(e_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1), std::cbegin(umesh_t),
+        std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1), std::cbegin(density_dot_t),
+        std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t), std::cbegin(u_dot_t), std::cend(u_dot_t),
+        std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress), std::cend(cauchy_stress), std::cbegin(heat_flux),
+        std::cend(heat_flux), std::cbegin(volume_fractions), std::cend(volume_fractions),
+        std::cbegin(internal_heat_generation), std::cend(internal_heat_generation), std::cbegin(net_interphase_force),
+        std::cend(net_interphase_force), alpha, beta, std::begin(result), std::end(result));
+
+    BOOST_TEST(result == answer, CHECK_PER_ELEMENT);
+
+    std::fill(std::begin(result), std::end(result), 0);
+
+    std::array<floatType, 8 * 1 * 8 * 1> dRdRho;
+    std::array<floatType, 8 * 1 * 8 * 1> dRdE;
+    std::array<floatType, 8 * 1 * 8 * 3> dRdU;
+    std::array<floatType, 8 * 1 * 9>     dRdCauchy;
+    std::array<floatType, 8 * 1 * 3>     dRdq;
+    std::array<floatType, 8 * 1 * 1>     dRdVolumeFraction;
+    std::array<floatType, 8 * 1 * 1>     dRdr;
+    std::array<floatType, 8 * 1 * 3>     dRdpi;
+    std::array<floatType, 8 * 1 * 8 * 3> dRdUMesh;
+
+    evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
+        std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
+        std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1),
+        std::cend(e_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1), std::cbegin(umesh_t),
+        std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1), std::cbegin(density_dot_t),
+        std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t), std::cbegin(u_dot_t), std::cend(u_dot_t),
+        std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress), std::cend(cauchy_stress), std::cbegin(heat_flux),
+        std::cend(heat_flux), std::cbegin(volume_fractions), std::cend(volume_fractions),
+        std::cbegin(internal_heat_generation), std::cend(internal_heat_generation), std::cbegin(net_interphase_force),
+        std::cend(net_interphase_force), alpha, beta, std::begin(result), std::end(result), std::begin(dRdRho),
+        std::end(dRdRho), std::begin(dRdE), std::end(dRdE), std::begin(dRdU), std::end(dRdU), std::begin(dRdCauchy),
+        std::end(dRdCauchy), std::begin(dRdq), std::end(dRdq), std::begin(dRdVolumeFraction),
+        std::end(dRdVolumeFraction), std::begin(dRdr), std::end(dRdr), std::begin(dRdpi), std::end(dRdpi),
+        std::begin(dRdUMesh), std::end(dRdUMesh));
+
+    BOOST_TEST(result == answer, CHECK_PER_ELEMENT);
+
+    floatType eps = 1e-6;
+
+    // Check the derivatives w.r.t. the density
+    {
+        constexpr unsigned int vardim = 1 * nphases * 8;
+        constexpr unsigned int outdim = 1 * nphases * 8;
+
+        for (unsigned int i = 0; i < vardim; ++i) {
+            floatType delta = eps * std::fabs(density_tp1[i]) + eps;
+
+            std::array<floatType, vardim> xp = density_tp1;
+            std::array<floatType, vardim> xm = density_tp1;
+
+            xp[i] += delta;
+            xm[i] -= delta;
+
+            std::array<floatType, outdim> vp, vm;
+
+            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
+                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
+                std::cbegin(xp), std::cend(xp), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1), std::cend(e_tp1),
+                std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1), std::cbegin(umesh_t),
+                std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1), std::cbegin(density_dot_t),
+                std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t), std::cbegin(u_dot_t),
+                std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress), std::cend(cauchy_stress),
+                std::cbegin(heat_flux), std::cend(heat_flux), std::cbegin(volume_fractions),
+                std::cend(volume_fractions), std::cbegin(internal_heat_generation), std::cend(internal_heat_generation),
+                std::cbegin(net_interphase_force), std::cend(net_interphase_force), alpha, beta, std::begin(vp),
+                std::end(vp));
+
+            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
+                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
+                std::cbegin(xm), std::cend(xm), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1), std::cend(e_tp1),
+                std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1), std::cbegin(umesh_t),
+                std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1), std::cbegin(density_dot_t),
+                std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t), std::cbegin(u_dot_t),
+                std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress), std::cend(cauchy_stress),
+                std::cbegin(heat_flux), std::cend(heat_flux), std::cbegin(volume_fractions),
+                std::cend(volume_fractions), std::cbegin(internal_heat_generation), std::cend(internal_heat_generation),
+                std::cbegin(net_interphase_force), std::cend(net_interphase_force), alpha, beta, std::begin(vm),
+                std::end(vm));
+
+            for (unsigned int j = 0; j < outdim; ++j) {
+                BOOST_TEST(dRdRho[vardim * j + i] == (vp[j] - vm[j]) / (2 * delta));
+            }
+        }
+    }
+
+    // Check the derivatives w.r.t. the internal energy
+    {
+        constexpr unsigned int vardim = 1 * nphases * 8;
+        constexpr unsigned int outdim = 1 * nphases * 8;
+
+        for (unsigned int i = 0; i < vardim; ++i) {
+            floatType delta = eps * std::fabs(e_tp1[i]) + eps;
+
+            std::array<floatType, vardim> xp = e_tp1;
+            std::array<floatType, vardim> xm = e_tp1;
+
+            xp[i] += delta;
+            xm[i] -= delta;
+
+            std::array<floatType, outdim> vp, vm;
+
+            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
+                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
+                std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(xp),
+                std::cend(xp), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
+                std::cbegin(umesh_t), std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1),
+                std::cbegin(density_dot_t), std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t),
+                std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress),
+                std::cend(cauchy_stress), std::cbegin(heat_flux), std::cend(heat_flux), std::cbegin(volume_fractions),
+                std::cend(volume_fractions), std::cbegin(internal_heat_generation), std::cend(internal_heat_generation),
+                std::cbegin(net_interphase_force), std::cend(net_interphase_force), alpha, beta, std::begin(vp),
+                std::end(vp));
+
+            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
+                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
+                std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(xm),
+                std::cend(xm), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
+                std::cbegin(umesh_t), std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1),
+                std::cbegin(density_dot_t), std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t),
+                std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress),
+                std::cend(cauchy_stress), std::cbegin(heat_flux), std::cend(heat_flux), std::cbegin(volume_fractions),
+                std::cend(volume_fractions), std::cbegin(internal_heat_generation), std::cend(internal_heat_generation),
+                std::cbegin(net_interphase_force), std::cend(net_interphase_force), alpha, beta, std::begin(vm),
+                std::end(vm));
+
+            for (unsigned int j = 0; j < outdim; ++j) {
+                BOOST_TEST(dRdE[vardim * j + i] == (vp[j] - vm[j]) / (2 * delta));
+            }
+        }
+    }
+
+    // Check the derivatives w.r.t. the displacement
+    {
+        constexpr unsigned int vardim = 3 * nphases * 8;
+        constexpr unsigned int outdim = 1 * nphases * 8;
+
+        for (unsigned int i = 0; i < vardim; ++i) {
+            floatType delta = eps * std::fabs(u_tp1[i]) + eps;
+
+            std::array<floatType, vardim> xp = u_tp1;
+            std::array<floatType, vardim> xm = u_tp1;
+
+            xp[i] += delta;
+            xm[i] -= delta;
+
+            std::array<floatType, outdim> vp, vm;
+
+            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
+                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
+                std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1),
+                std::cend(e_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(xp), std::cend(xp),
+                std::cbegin(umesh_t), std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1),
+                std::cbegin(density_dot_t), std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t),
+                std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress),
+                std::cend(cauchy_stress), std::cbegin(heat_flux), std::cend(heat_flux), std::cbegin(volume_fractions),
+                std::cend(volume_fractions), std::cbegin(internal_heat_generation), std::cend(internal_heat_generation),
+                std::cbegin(net_interphase_force), std::cend(net_interphase_force), alpha, beta, std::begin(vp),
+                std::end(vp));
+
+            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
+                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
+                std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1),
+                std::cend(e_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(xm), std::cend(xm),
+                std::cbegin(umesh_t), std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1),
+                std::cbegin(density_dot_t), std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t),
+                std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress),
+                std::cend(cauchy_stress), std::cbegin(heat_flux), std::cend(heat_flux), std::cbegin(volume_fractions),
+                std::cend(volume_fractions), std::cbegin(internal_heat_generation), std::cend(internal_heat_generation),
+                std::cbegin(net_interphase_force), std::cend(net_interphase_force), alpha, beta, std::begin(vm),
+                std::end(vm));
+
+            for (unsigned int j = 0; j < outdim; ++j) {
+                BOOST_TEST(dRdU[vardim * j + i] == (vp[j] - vm[j]) / (2 * delta));
+            }
+        }
+    }
+
+    // Check the derivatives w.r.t. the Cauchy stress
+    {
+        constexpr unsigned int vardim = 9 * nphases;
+        constexpr unsigned int outdim = 1 * nphases * 8;
+
+        for (unsigned int i = 0; i < vardim; ++i) {
+            floatType delta = eps * std::fabs(cauchy_stress[i]) + eps;
+
+            std::array<floatType, vardim> xp = cauchy_stress;
+            std::array<floatType, vardim> xm = cauchy_stress;
+
+            xp[i] += delta;
+            xm[i] -= delta;
+
+            std::array<floatType, outdim> vp, vm;
+
+            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
+                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
+                std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1),
+                std::cend(e_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
+                std::cbegin(umesh_t), std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1),
+                std::cbegin(density_dot_t), std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t),
+                std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(xp), std::cend(xp),
+                std::cbegin(heat_flux), std::cend(heat_flux), std::cbegin(volume_fractions),
+                std::cend(volume_fractions), std::cbegin(internal_heat_generation), std::cend(internal_heat_generation),
+                std::cbegin(net_interphase_force), std::cend(net_interphase_force), alpha, beta, std::begin(vp),
+                std::end(vp));
+
+            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
+                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
+                std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1),
+                std::cend(e_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
+                std::cbegin(umesh_t), std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1),
+                std::cbegin(density_dot_t), std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t),
+                std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(xm), std::cend(xm),
+                std::cbegin(heat_flux), std::cend(heat_flux), std::cbegin(volume_fractions),
+                std::cend(volume_fractions), std::cbegin(internal_heat_generation), std::cend(internal_heat_generation),
+                std::cbegin(net_interphase_force), std::cend(net_interphase_force), alpha, beta, std::begin(vm),
+                std::end(vm));
+
+            for (unsigned int j = 0; j < outdim; ++j) {
+                BOOST_TEST(dRdCauchy[vardim * j + i] == (vp[j] - vm[j]) / (2 * delta));
+            }
+        }
+    }
+
+    // Check the derivatives w.r.t. the volume fractions
+    {
+        constexpr unsigned int vardim = 1 * nphases;
+        constexpr unsigned int outdim = 1 * nphases * 8;
+
+        for (unsigned int i = 0; i < vardim; ++i) {
+            floatType delta = eps * std::fabs(volume_fractions[i]) + eps;
+
+            std::array<floatType, vardim> xp = volume_fractions;
+            std::array<floatType, vardim> xm = volume_fractions;
+
+            xp[i] += delta;
+            xm[i] -= delta;
+
+            std::array<floatType, outdim> vp, vm;
+
+            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
+                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
+                std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1),
+                std::cend(e_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
+                std::cbegin(umesh_t), std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1),
+                std::cbegin(density_dot_t), std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t),
+                std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress),
+                std::cend(cauchy_stress), std::cbegin(heat_flux), std::cend(heat_flux), std::cbegin(xp), std::cend(xp),
+                std::cbegin(internal_heat_generation), std::cend(internal_heat_generation),
+                std::cbegin(net_interphase_force), std::cend(net_interphase_force), alpha, beta, std::begin(vp),
+                std::end(vp));
+
+            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
+                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
+                std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1),
+                std::cend(e_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
+                std::cbegin(umesh_t), std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1),
+                std::cbegin(density_dot_t), std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t),
+                std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress),
+                std::cend(cauchy_stress), std::cbegin(heat_flux), std::cend(heat_flux), std::cbegin(xm), std::cend(xm),
+                std::cbegin(internal_heat_generation), std::cend(internal_heat_generation),
+                std::cbegin(net_interphase_force), std::cend(net_interphase_force), alpha, beta, std::begin(vm),
+                std::end(vm));
+
+            for (unsigned int j = 0; j < outdim; ++j) {
+                BOOST_TEST(dRdVolumeFraction[vardim * j + i] == (vp[j] - vm[j]) / (2 * delta));
+            }
+        }
+    }
+
+    // Check the derivatives w.r.t. the internal heat generation
+    {
+        constexpr unsigned int vardim = 1 * nphases;
+        constexpr unsigned int outdim = 1 * nphases * 8;
+
+        for (unsigned int i = 0; i < vardim; ++i) {
+            floatType delta = eps * std::fabs(internal_heat_generation[i]) + eps;
+
+            std::array<floatType, vardim> xp = internal_heat_generation;
+            std::array<floatType, vardim> xm = internal_heat_generation;
+
+            xp[i] += delta;
+            xm[i] -= delta;
+
+            std::array<floatType, outdim> vp, vm;
+
+            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
+                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
+                std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1),
+                std::cend(e_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
+                std::cbegin(umesh_t), std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1),
+                std::cbegin(density_dot_t), std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t),
+                std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress),
+                std::cend(cauchy_stress), std::cbegin(heat_flux), std::cend(heat_flux), std::cbegin(volume_fractions),
+                std::cend(volume_fractions), std::cbegin(xp), std::cend(xp), std::cbegin(net_interphase_force),
+                std::cend(net_interphase_force), alpha, beta, std::begin(vp), std::end(vp));
+
+            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
+                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
+                std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1),
+                std::cend(e_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
+                std::cbegin(umesh_t), std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1),
+                std::cbegin(density_dot_t), std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t),
+                std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress),
+                std::cend(cauchy_stress), std::cbegin(heat_flux), std::cend(heat_flux), std::cbegin(volume_fractions),
+                std::cend(volume_fractions), std::cbegin(xm), std::cend(xm), std::cbegin(net_interphase_force),
+                std::cend(net_interphase_force), alpha, beta, std::begin(vm), std::end(vm));
+
+            for (unsigned int j = 0; j < outdim; ++j) {
+                BOOST_TEST(dRdr[vardim * j + i] == (vp[j] - vm[j]) / (2 * delta));
+            }
+        }
+    }
+
+    // Check the derivatives w.r.t. the heat flux
+    {
+        constexpr unsigned int vardim = 3 * nphases;
+        constexpr unsigned int outdim = 1 * nphases * 8;
+
+        for (unsigned int i = 0; i < vardim; ++i) {
+            floatType delta = eps * std::fabs(heat_flux[i]) + eps;
+
+            std::array<floatType, vardim> xp = heat_flux;
+            std::array<floatType, vardim> xm = heat_flux;
+
+            xp[i] += delta;
+            xm[i] -= delta;
+
+            std::array<floatType, outdim> vp, vm;
+
+            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
+                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
+                std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1),
+                std::cend(e_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
+                std::cbegin(umesh_t), std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1),
+                std::cbegin(density_dot_t), std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t),
+                std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress),
+                std::cend(cauchy_stress), std::cbegin(xp), std::cend(xp), std::cbegin(volume_fractions),
+                std::cend(volume_fractions), std::cbegin(internal_heat_generation), std::cend(internal_heat_generation),
+                std::cbegin(net_interphase_force), std::cend(net_interphase_force), alpha, beta, std::begin(vp),
+                std::end(vp));
+
+            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
+                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
+                std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1),
+                std::cend(e_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
+                std::cbegin(umesh_t), std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1),
+                std::cbegin(density_dot_t), std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t),
+                std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress),
+                std::cend(cauchy_stress), std::cbegin(xm), std::cend(xm), std::cbegin(volume_fractions),
+                std::cend(volume_fractions), std::cbegin(internal_heat_generation), std::cend(internal_heat_generation),
+                std::cbegin(net_interphase_force), std::cend(net_interphase_force), alpha, beta, std::begin(vm),
+                std::end(vm));
+
+            for (unsigned int j = 0; j < outdim; ++j) {
+                BOOST_TEST(dRdq[vardim * j + i] == (vp[j] - vm[j]) / (2 * delta));
+            }
+        }
+    }
+
+    // Check the derivatives w.r.t. the net interphase force
+    {
+        constexpr unsigned int vardim = 3 * nphases;
+        constexpr unsigned int outdim = 1 * nphases * 8;
+
+        for (unsigned int i = 0; i < vardim; ++i) {
+            floatType delta = eps * std::fabs(net_interphase_force[i]) + eps;
+
+            std::array<floatType, vardim> xp = net_interphase_force;
+            std::array<floatType, vardim> xm = net_interphase_force;
+
+            xp[i] += delta;
+            xm[i] -= delta;
+
+            std::array<floatType, outdim> vp, vm;
+
+            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
+                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
+                std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1),
+                std::cend(e_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
+                std::cbegin(umesh_t), std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1),
+                std::cbegin(density_dot_t), std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t),
+                std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress),
+                std::cend(cauchy_stress), std::cbegin(heat_flux), std::cend(heat_flux), std::cbegin(volume_fractions),
+                std::cend(volume_fractions), std::cbegin(internal_heat_generation), std::cend(internal_heat_generation),
+                std::cbegin(xp), std::cend(xp), alpha, beta, std::begin(vp), std::end(vp));
+
+            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
+                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
+                std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1),
+                std::cend(e_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
+                std::cbegin(umesh_t), std::cend(umesh_t), std::cbegin(umesh_tp1), std::cend(umesh_tp1),
+                std::cbegin(density_dot_t), std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t),
+                std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress),
+                std::cend(cauchy_stress), std::cbegin(heat_flux), std::cend(heat_flux), std::cbegin(volume_fractions),
+                std::cend(volume_fractions), std::cbegin(internal_heat_generation), std::cend(internal_heat_generation),
+                std::cbegin(xm), std::cend(xm), alpha, beta, std::begin(vm), std::end(vm));
+
+            for (unsigned int j = 0; j < outdim; ++j) {
+                BOOST_TEST(dRdpi[vardim * j + i] == (vp[j] - vm[j]) / (2 * delta));
+            }
+        }
+    }
+
+    // Check the derivatives w.r.t. the mesh displacement
+    {
+        constexpr unsigned int vardim = 3 * 8;
+        constexpr unsigned int outdim = 1 * nphases * 8;
+
+        for (unsigned int i = 0; i < vardim; ++i) {
+            floatType delta = eps * std::fabs(umesh_tp1[i]) + eps;
+
+            std::array<floatType, vardim> xp = umesh_tp1;
+            std::array<floatType, vardim> xm = umesh_tp1;
+
+            xp[i] += delta;
+            xm[i] -= delta;
+
+            std::array<floatType, outdim> vp, vm;
+
+            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
+                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
+                std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1),
+                std::cend(e_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
+                std::cbegin(umesh_t), std::cend(umesh_t), std::cbegin(xp), std::cend(xp), std::cbegin(density_dot_t),
+                std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t), std::cbegin(u_dot_t),
+                std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress), std::cend(cauchy_stress),
+                std::cbegin(heat_flux), std::cend(heat_flux), std::cbegin(volume_fractions),
+                std::cend(volume_fractions), std::cbegin(internal_heat_generation), std::cend(internal_heat_generation),
+                std::cbegin(net_interphase_force), std::cend(net_interphase_force), alpha, beta, std::begin(vp),
+                std::end(vp));
+
+            evaluate_at_nodes<configuration, is_per_unit_volume, 8, 1>(
+                std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
+                std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(e_t), std::cend(e_t), std::cbegin(e_tp1),
+                std::cend(e_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
+                std::cbegin(umesh_t), std::cend(umesh_t), std::cbegin(xm), std::cend(xm), std::cbegin(density_dot_t),
+                std::cend(density_dot_t), std::cbegin(e_dot_t), std::cend(e_dot_t), std::cbegin(u_dot_t),
+                std::cend(u_dot_t), std::cbegin(X), std::cend(X), std::cbegin(cauchy_stress), std::cend(cauchy_stress),
+                std::cbegin(heat_flux), std::cend(heat_flux), std::cbegin(volume_fractions),
+                std::cend(volume_fractions), std::cbegin(internal_heat_generation), std::cend(internal_heat_generation),
+                std::cbegin(net_interphase_force), std::cend(net_interphase_force), alpha, beta, std::begin(vm),
+                std::end(vm));
+
+            for (unsigned int j = 0; j < outdim; ++j) {
+                BOOST_TEST(dRdUMesh[vardim * j + i] == (vp[j] - vm[j]) / (2 * delta));
+            }
+        }
+    }
+}
+
 //BOOST_AUTO_TEST_CASE(test_computeBalanceOfEnergy_multiphase_fea, *boost::unit_test::tolerance(1e-5)) {
 //    /*!
 //     * Test computing the balance of mass in a finite element context
 //     */
+//
+//    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<> { };
 //
 //    constexpr unsigned int nphases = 4;
 //
@@ -4480,6 +4484,8 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfEnergy_fea, *boost::unit_test::toleran
 //    /*!
 //     * Test computing the balance of mass in a finite element context
 //     */
+//
+//    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<> { };
 //
 //    constexpr unsigned int nphases = 4;
 //
@@ -6145,6 +6151,8 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfEnergy_fea, *boost::unit_test::toleran
 //     * Test computing the balance of energy in a finite element context
 //     */
 //
+//    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<> { };
+//
 //    constexpr unsigned int nphases = 4;
 //
 //    constexpr unsigned int active_phase = 2;
@@ -6793,6 +6801,8 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfEnergy_fea, *boost::unit_test::toleran
 //    /*!
 //     * Test computing the balance of energy in a finite element context
 //     */
+//
+//    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<> { };
 //
 //    constexpr unsigned int nphases = 4;
 //
