@@ -28,11 +28,14 @@ namespace tardigradeBalanceEquations {
     /*!
      * A class which defines the configuration of the the balance equations
      */
-    template <unsigned int _dimension = 3, class _material = MaterialResponseConfigurationBase<_dimension>>
+    template <unsigned int _dimension = 3, bool _energy_is_per_unit_volume=true, class _material = MaterialResponseConfigurationBase<_dimension>>
     class BalanceEquationConfigurationBase {
        public:
         //! The spatial dimension of the balance equations
         static constexpr unsigned int dimension = _dimension;
+
+        //! Whether the energy is per unit volume or not
+        static constexpr bool energy_is_per_unit_volume = _energy_is_per_unit_volume;
 
         //! The configuration of the material response
         using material = _material;

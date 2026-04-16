@@ -17,7 +17,7 @@ namespace tardigradeBalanceEquations {
 
     namespace balanceOfEnergy {
 
-        template <class configuration, bool is_per_unit_volume, typename density_type, typename density_dot_type,
+        template <class configuration, typename density_type, typename density_dot_type,
                   class density_gradient_iter, typename internal_energy_type, typename internal_energy_dot_type,
                   class internal_energy_gradient_iter, class velocity_iter, class velocity_gradient_iter,
                   class cauchy_stress_iter, typename volume_fraction_type, typename internal_heat_generation_type,
@@ -43,7 +43,7 @@ namespace tardigradeBalanceEquations {
              *
              * Template parameters:
              * - configuration: The configuration of the balance of energy
-             * - is_per_unit_volume: Whether the internal energy is per unit mass (false) or per unit volume (true)
+             * - energy_is_per_unit_volume: Whether the internal energy is per unit mass (false) or per unit volume (true)
              *
              * \param &density: The apparent density (dm / dv) of phase \f$ \alpha \f$ \f$\left(\rho^{\alpha}\right)\f$
              * \param &density_dot: The partial temporal derivative of the apparent density (dm / dv) of phase \f$
@@ -89,7 +89,7 @@ namespace tardigradeBalanceEquations {
              * \param &result: The result of the non-divergence part of the balance of energy
              */
 
-            computeBalanceOfEnergyNonDivergence<configuration, is_per_unit_volume>(
+            computeBalanceOfEnergyNonDivergence<configuration>(
                 density, density_dot, density_gradient_begin, density_gradient_end, internal_energy,
                 internal_energy_dot, internal_energy_gradient_begin, internal_energy_gradient_end, velocity_begin,
                 velocity_end, velocity_gradient_begin, velocity_gradient_end, cauchy_stress_begin, cauchy_stress_end,
@@ -106,7 +106,7 @@ namespace tardigradeBalanceEquations {
             result += result_divergence;
         }
 
-        template <class configuration, bool is_per_unit_volume, typename density_type, typename density_dot_type,
+        template <class configuration, typename density_type, typename density_dot_type,
                   class density_gradient_iter, typename internal_energy_type, typename internal_energy_dot_type,
                   class internal_energy_gradient_iter, class velocity_iter, class velocity_gradient_iter,
                   class cauchy_stress_iter, typename volume_fraction_type, typename internal_heat_generation_type,
@@ -144,7 +144,7 @@ namespace tardigradeBalanceEquations {
              *
              * Template parameters:
              * - configuration: The configuration of the balance equation
-             * - is_per_unit_volume: Whether the internal energy is per unit mass (false) or per unit volume (true)
+             * - energy_is_per_unit_volume: Whether the internal energy is per unit mass (false) or per unit volume (true)
              *
              * \param &density: The apparent density (dm / dv) of phase \f$ \alpha \f$ \f$\left(\rho^{\alpha}\right)\f$
              * \param &density_dot: The partial temporal derivative of the apparent density (dm / dv) of phase \f$
@@ -243,7 +243,7 @@ namespace tardigradeBalanceEquations {
 
             std::array<dRdGradTestFunction_type, configuration::dimension> dRdGradTestFunction;
 
-            computeBalanceOfEnergyNonDivergence<configuration, is_per_unit_volume>(
+            computeBalanceOfEnergyNonDivergence<configuration>(
                 density, density_dot, density_gradient_begin, density_gradient_end, internal_energy,
                 internal_energy_dot, internal_energy_gradient_begin, internal_energy_gradient_end, velocity_begin,
                 velocity_end, velocity_gradient_begin, velocity_gradient_end, cauchy_stress_begin, cauchy_stress_end,
@@ -327,7 +327,7 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <class configuration, bool is_per_unit_volume, class density_iter, class density_dot_iter,
+        template <class configuration, class density_iter, class density_dot_iter,
                   class density_gradient_iter, class internal_energy_iter, class internal_energy_dot_iter,
                   class internal_energy_gradient_iter, class velocity_iter, class velocity_gradient_iter,
                   class cauchy_stress_iter, class volume_fraction_iter, class internal_heat_generation_iter,
@@ -470,7 +470,7 @@ namespace tardigradeBalanceEquations {
 
             for (auto rho = std::pair<unsigned int, density_iter>(0, density_begin); rho.second != density_end;
                  ++rho.first, ++rho.second) {
-                computeBalanceOfEnergy<configuration, is_per_unit_volume>(
+                computeBalanceOfEnergy<configuration>(
                     *rho.second, *(density_dot_begin + rho.first),
                     density_gradient_begin + configuration::dimension * rho.first,
                     density_gradient_begin + configuration::dimension * (rho.first + 1),
@@ -492,7 +492,7 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <class configuration, bool is_per_unit_volume, class density_iter, class density_dot_iter,
+        template <class configuration, class density_iter, class density_dot_iter,
                   class density_gradient_iter, class internal_energy_iter, class internal_energy_dot_iter,
                   class internal_energy_gradient_iter, class velocity_iter, class velocity_gradient_iter,
                   class cauchy_stress_iter, class volume_fraction_iter, class internal_heat_generation_iter,
@@ -714,7 +714,7 @@ namespace tardigradeBalanceEquations {
 
             for (auto rho = std::pair<unsigned int, density_iter>(0, density_begin); rho.second != density_end;
                  ++rho.first, ++rho.second) {
-                computeBalanceOfEnergy<configuration, is_per_unit_volume>(
+                computeBalanceOfEnergy<configuration>(
                     *rho.second, *(density_dot_begin + rho.first),
                     density_gradient_begin + configuration::dimension * rho.first,
                     density_gradient_begin + configuration::dimension * (rho.first + 1),
@@ -749,7 +749,7 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <class configuration, bool is_per_unit_volume, int cauchy_stress_index,
+        template <class configuration, int cauchy_stress_index,
                   int internal_heat_generation_index, int heat_flux_index, int interphasic_force_index,
                   int interphasic_heat_transfer_index, typename density_type, typename density_dot_type,
                   class density_gradient_iter, typename internal_energy_type, typename internal_energy_dot_type,
@@ -804,7 +804,7 @@ namespace tardigradeBalanceEquations {
              * \param &result: The result of the non-divergence part of the balance of energy
              */
 
-            computeBalanceOfEnergy<configuration, is_per_unit_volume>(
+            computeBalanceOfEnergy<configuration>(
                 density, density_dot, density_gradient_begin, density_gradient_end, internal_energy,
                 internal_energy_dot, internal_energy_gradient_begin, internal_energy_gradient_end, velocity_begin,
                 velocity_end, velocity_gradient_begin, velocity_gradient_end,
@@ -820,7 +820,7 @@ namespace tardigradeBalanceEquations {
             result -= test_function * (*(material_response_begin + interphasic_heat_transfer_index));
         }
 
-        template <class configuration, bool is_per_unit_volume, int cauchy_stress_index,
+        template <class configuration, int cauchy_stress_index,
                   int internal_heat_generation_index, int heat_flux_index, int interphasic_force_index,
                   int interphasic_heat_transfer_index, int material_response_num_dof, typename density_type,
                   typename density_dot_type, class density_gradient_iter, typename internal_energy_type,
@@ -951,7 +951,7 @@ namespace tardigradeBalanceEquations {
             std::fill(dRdVolumeFraction_begin, dRdVolumeFraction_end, 0);
             std::fill(dRdUMesh_begin, dRdUMesh_end, 0);
 
-            computeBalanceOfEnergy<configuration, is_per_unit_volume>(
+            computeBalanceOfEnergy<configuration>(
                 density, density_dot, density_gradient_begin, density_gradient_end, internal_energy,
                 internal_energy_dot, internal_energy_gradient_begin, internal_energy_gradient_end, velocity_begin,
                 velocity_end, velocity_gradient_begin, velocity_gradient_end,
@@ -1812,7 +1812,7 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <class configuration, bool is_per_unit_volume, int cauchy_stress_index,
+        template <class configuration, int cauchy_stress_index,
                   int internal_heat_generation_index, int heat_flux_index, int interphasic_force_index,
                   int interphasic_heat_transfer_index, class density_iter, class density_dot_iter,
                   class density_gradient_iter, class internal_energy_iter, class internal_energy_dot_iter,
@@ -1934,7 +1934,7 @@ namespace tardigradeBalanceEquations {
 
             for (auto v = std::pair<unsigned int, density_iter>(0, density_begin); v.second != density_end;
                  ++v.first, ++v.second) {
-                computeBalanceOfEnergy<configuration, is_per_unit_volume, cauchy_stress_index,
+                computeBalanceOfEnergy<configuration, cauchy_stress_index,
                                        internal_heat_generation_index, heat_flux_index, interphasic_force_index,
                                        interphasic_heat_transfer_index>(
                     *(density_begin + v.first), *(density_dot_begin + v.first),
@@ -1954,7 +1954,7 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <class configuration, bool is_per_unit_volume, int cauchy_stress_index,
+        template <class configuration, int cauchy_stress_index,
                   int internal_heat_generation_index, int heat_flux_index, int interphasic_force_index,
                   int interphasic_heat_transfer_index, int material_response_num_dof, class density_iter,
                   class density_dot_iter, class density_gradient_iter, class internal_energy_iter,
@@ -2199,7 +2199,7 @@ namespace tardigradeBalanceEquations {
             for (auto v = std::pair<unsigned int, density_iter>(0, density_begin); v.second != density_end;
                  ++v.first, ++v.second) {
                 computeBalanceOfEnergy<
-                    configuration, is_per_unit_volume, cauchy_stress_index,
+                    configuration, cauchy_stress_index,
                     internal_heat_generation_index, heat_flux_index, interphasic_force_index,
                     interphasic_heat_transfer_index, material_response_num_dof, density_type, density_dot_type,
                     density_gradient_iter, internal_energy_type, internal_energy_dot_type,
@@ -2246,7 +2246,7 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <class configuration, bool is_per_unit_volume, typename density_type, typename density_dot_type,
+        template <class configuration, typename density_type, typename density_dot_type,
                   class density_gradient_iter, typename internal_energy_type, typename internal_energy_dot_type,
                   class internal_energy_gradient_iter, class velocity_iter, class velocity_gradient_iter,
                   class cauchy_stress_iter, typename volume_fraction_type, typename internal_heat_generation_type,
@@ -2271,7 +2271,7 @@ namespace tardigradeBalanceEquations {
              * \pi_i^{\alpha \beta} v_i^{\alpha} - \phi^{\alpha}\bar{\sigma}_{ji}^{\alpha}v_{i,j}^{\alpha} -
              * \rho^{\alpha} r^{\alpha} \f$
              *
-             * NOTE: If is_per_unit_volume is true then the internal energy is assumed to be per unit volume rather than
+             * NOTE: If energy_is_per_unit_volume is true then the internal energy is assumed to be per unit volume rather than
              * per unit mass meaning that the balance equation is
              *
              * \f$ \frac{\partial}{\partial t}\left( e^{\alpha} \right) + \left( v_i^{\alpha} e^{\alpha} \right)_{,i} -
@@ -2329,7 +2329,7 @@ namespace tardigradeBalanceEquations {
                 trace_velocity_gradient += *(velocity_gradient_begin + configuration::dimension * i + i);
             }
 
-            if (is_per_unit_volume) {
+            if (configuration::energy_is_per_unit_volume) {
                 result = internal_energy_dot + internal_energy * trace_velocity_gradient +
                          std::inner_product(velocity_begin, velocity_end, internal_energy_gradient_begin, 0.);
             } else {
@@ -2352,7 +2352,7 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <class configuration, bool is_per_unit_volume, typename density_type, typename density_dot_type,
+        template <class configuration, typename density_type, typename density_dot_type,
                   class density_gradient_iter, typename internal_energy_type, typename internal_energy_dot_type,
                   class internal_energy_gradient_iter, class velocity_iter, class velocity_gradient_iter,
                   class cauchy_stress_iter, typename volume_fraction_type, typename internal_heat_generation_type,
@@ -2385,7 +2385,7 @@ namespace tardigradeBalanceEquations {
              * \pi_i^{\alpha \beta} v_i^{\alpha} - \phi^{\alpha}\bar{\sigma}_{ji}^{\alpha}v_{i,j}^{\alpha} -
              * \rho^{\alpha} r^{\alpha} \f$
              *
-             * NOTE: If is_per_unit_volume is true then the internal energy is assumed to be per unit volume rather than
+             * NOTE: If energy_is_per_unit_volume is true then the internal energy is assumed to be per unit volume rather than
              * per unit mass meaning that the balance equation is
              *
              * \f$ \frac{\partial}{\partial t}\left( e^{\alpha} \right) + \left( v_i^{\alpha} e^{\alpha} \right)_{,i} -
@@ -2475,7 +2475,7 @@ namespace tardigradeBalanceEquations {
 
             velocity_gradient_type v_dot_v = std::inner_product(velocity_begin, velocity_end, velocity_begin, 0.);
 
-            if (is_per_unit_volume) {
+            if (configuration::energy_is_per_unit_volume) {
                 result = internal_energy_dot + internal_energy * trace_velocity_gradient +
                          std::inner_product(velocity_begin, velocity_end, internal_energy_gradient_begin, 0.);
             } else {
@@ -2492,7 +2492,7 @@ namespace tardigradeBalanceEquations {
 
             dRdRho = dRdRhoDot = dRdE = dRdEDot = 0;
             std::fill(dRdGradE_begin, dRdGradE_end, 0);
-            if (!is_per_unit_volume) {
+            if (!configuration::energy_is_per_unit_volume) {
                 dRdRho    = internal_energy_dot + internal_energy * trace_velocity_gradient +
                             std::inner_product(velocity_begin, velocity_end, internal_energy_gradient_begin, 0.);
                 dRdRhoDot = internal_energy;
@@ -2533,7 +2533,7 @@ namespace tardigradeBalanceEquations {
             for (unsigned int i = 0; i < configuration::dimension; i++) {
                 *(dRdGradRho_begin + i) -= 0.5 * dCdGradRho[i] * v_dot_v;
 
-                if (!is_per_unit_volume) {
+                if (!configuration::energy_is_per_unit_volume) {
                     *(dRdV_begin + i) += internal_energy * (*(density_gradient_begin + i)) +
                                          density * (*(internal_energy_gradient_begin + i));
                     *(dRdGradV_begin + configuration::dimension * i + i) += density * internal_energy;
@@ -2560,7 +2560,7 @@ namespace tardigradeBalanceEquations {
             result += volume_fraction * dRdVolumeFraction;
         }
 
-        template <class configuration, bool is_per_unit_volume, class density_iter, class density_dot_iter,
+        template <class configuration, class density_iter, class density_dot_iter,
                   class density_gradient_iter, class internal_energy_iter, class internal_energy_dot_iter,
                   class internal_energy_gradient_iter, class velocity_iter, class velocity_gradient_iter,
                   class cauchy_stress_iter, class volume_fraction_iter, class internal_heat_generation_iter,
@@ -2591,7 +2591,7 @@ namespace tardigradeBalanceEquations {
              * \pi_i^{\alpha \beta} v_i^{\alpha} - \phi^{\alpha}\bar{\sigma}_{ji}^{\alpha}v_{i,j}^{\alpha} -
              * \rho^{\alpha} r^{\alpha} \f$
              *
-             * NOTE: If is_per_unit_volume is true then the internal energy is assumed to be per unit volume rather than
+             * NOTE: If energy_is_per_unit_volume is true then the internal energy is assumed to be per unit volume rather than
              * per unit mass meaning that the balance equation is
              *
              * \f$ \frac{\partial}{\partial t}\left( e^{\alpha} \right) + \left( v_i^{\alpha} e^{\alpha} \right)_{,i} -
@@ -2658,7 +2658,7 @@ namespace tardigradeBalanceEquations {
             for (auto rho = density_begin; rho != density_end; rho++) {
                 unsigned int phase = (unsigned int)(rho - density_begin);
 
-                computeBalanceOfEnergyNonDivergence<configuration, is_per_unit_volume>(
+                computeBalanceOfEnergyNonDivergence<configuration>(
                     *(density_begin + phase), *(density_dot_begin + phase),
                     density_gradient_begin + configuration::dimension * phase,
                     density_gradient_begin + configuration::dimension * (phase + 1), *(internal_energy_begin + phase),
@@ -2677,7 +2677,7 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <class configuration, bool is_per_unit_volume, class density_iter, class density_dot_iter,
+        template <class configuration, class density_iter, class density_dot_iter,
                   class density_gradient_iter, class internal_energy_iter, class internal_energy_dot_iter,
                   class internal_energy_gradient_iter, class velocity_iter, class velocity_gradient_iter,
                   class cauchy_stress_iter, class volume_fraction_iter, class internal_heat_generation_iter,
@@ -2718,7 +2718,7 @@ namespace tardigradeBalanceEquations {
              * \pi_i^{\alpha \beta} v_i^{\alpha} - \phi^{\alpha}\bar{\sigma}_{ji}^{\alpha}v_{i,j}^{\alpha} -
              * \rho^{\alpha} r^{\alpha} \f$
              *
-             * NOTE: If is_per_unit_volume is true then the internal energy is assumed to be per unit volume rather than
+             * NOTE: If energy_is_per_unit_volume is true then the internal energy is assumed to be per unit volume rather than
              * per unit mass meaning that the balance equation is
              *
              * \f$ \frac{\partial}{\partial t}\left( e^{\alpha} \right) + \left( v_i^{\alpha} e^{\alpha} \right)_{,i} -
@@ -2817,7 +2817,7 @@ namespace tardigradeBalanceEquations {
             for (auto rho = density_begin; rho != density_end; rho++) {
                 unsigned int phase = (unsigned int)(rho - density_begin);
 
-                computeBalanceOfEnergyNonDivergence<configuration, is_per_unit_volume>(
+                computeBalanceOfEnergyNonDivergence<configuration>(
                     *(density_begin + phase), *(density_dot_begin + phase),
                     density_gradient_begin + configuration::dimension * phase,
                     density_gradient_begin + configuration::dimension * (phase + 1), *(internal_energy_begin + phase),
