@@ -142,7 +142,7 @@ namespace tardigradeBalanceEquations {
             dRdr_iter dRdr_begin, dRdr_iter dRdr_end, dRdpi_iter dRdpi_begin, dRdpi_iter dRdpi_end,
             dRdq_iter dRdq_begin, dRdq_iter dRdq_end, dRdUMesh_iter dRdUMesh_begin, dRdUMesh_iter dRdUMesh_end);
 
-        template <class configuration, bool is_per_unit_volume, int material_response_dim, int cauchy_stress_index,
+        template <class configuration, bool is_per_unit_volume, int cauchy_stress_index,
                   int internal_heat_generation_index, int heat_flux_index, int interphasic_force_index,
                   int interphasic_heat_transfer_index, typename density_type, typename density_dot_type,
                   class density_gradient_iter, typename internal_energy_type, typename internal_energy_dot_type,
@@ -161,7 +161,7 @@ namespace tardigradeBalanceEquations {
             const test_function_type &test_function, const test_function_gradient_iter &test_function_gradient_begin,
             const test_function_gradient_iter &test_function_gradient_end, result_type &result);
 
-        template <class configuration, bool is_per_unit_volume, int material_response_dim, int cauchy_stress_index,
+        template <class configuration, bool is_per_unit_volume, int cauchy_stress_index,
                   int internal_heat_generation_index, int heat_flux_index, int interphasic_force_index,
                   int interphasic_heat_transfer_index, class density_iter, class density_dot_iter,
                   class density_gradient_iter, class internal_energy_iter, class internal_energy_dot_iter,
@@ -185,7 +185,7 @@ namespace tardigradeBalanceEquations {
             const test_function_gradient_iter &test_function_gradient_end, result_iter result_begin,
             result_iter result_end);
 
-        template <class configuration, bool is_per_unit_volume, int material_response_dim, int cauchy_stress_index,
+        template <class configuration, bool is_per_unit_volume, int cauchy_stress_index,
                   int internal_heat_generation_index, int heat_flux_index, int interphasic_force_index,
                   int interphasic_heat_transfer_index, int material_response_num_dof, typename density_type,
                   typename density_dot_type, class density_gradient_iter, typename internal_energy_type,
@@ -225,7 +225,7 @@ namespace tardigradeBalanceEquations {
             dRdVolumeFraction_iter dRdVolumeFraction_begin, dRdVolumeFraction_iter dRdVolumeFraction_end,
             dRdZ_iter dRdZ_begin, dRdZ_iter dRdZ_end, dRdUMesh_iter dRdUMesh_begin, dRdUMesh_iter dRdUMesh_end);
 
-        template <class configuration, bool is_per_unit_volume, int material_response_dim, int cauchy_stress_index,
+        template <class configuration, bool is_per_unit_volume, int cauchy_stress_index,
                   int internal_heat_generation_index, int heat_flux_index, int interphasic_force_index,
                   int interphasic_heat_transfer_index, int material_response_num_dof, class density_iter,
                   class density_dot_iter, class density_gradient_iter, class internal_energy_iter,
