@@ -49,7 +49,7 @@ typedef std::array<floatType, 9> secondOrderTensor;  //!< Define the second orde
 
 BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentumNonDivergence,
                      *boost::unit_test::tolerance(DEFAULT_TEST_TOLERANCE)) {
-    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + 0> {};
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1, 0> {};
     class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
 
     constexpr unsigned int sot_dim = 9;
@@ -300,7 +300,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentumNonDivergence,
 
 BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentumDivergence,
                      *boost::unit_test::tolerance(DEFAULT_TEST_TOLERANCE)) {
-    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + 0> {};
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1, 0> {};
     class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
 
     constexpr unsigned int sot_dim = 9;
@@ -422,7 +422,7 @@ BOOST_AUTO_TEST_CASE(test_multiphase_computeBalanceOfLinearMomentumNonDivergence
                      *boost::unit_test::tolerance(DEFAULT_TEST_TOLERANCE)) {
     constexpr unsigned int nphases = 5;
 
-    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + 0> {};
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1, 0> {};
     class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
 
     constexpr unsigned int sot_dim = configuration::dimension * configuration::dimension;
@@ -761,7 +761,7 @@ BOOST_AUTO_TEST_CASE(test_multiphase_computeBalanceOfLinearMomentumDivergence,
                      *boost::unit_test::tolerance(DEFAULT_TEST_TOLERANCE)) {
     constexpr unsigned int nphases = 5;
 
-    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + 0> {};
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1, 0> {};
     class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
 
     constexpr unsigned int sot_dim = 9;
@@ -1400,7 +1400,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_fea, *boost::unit_test:
      * Test computing the balance of linear momentum in a finite element context
      */
 
-    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + 0> {};
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1, 0> {};
     class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
 
     std::array<floatType, 8> density_t = {0.61289453, 0.12062867, 0.8263408,  0.60306013,
@@ -1754,7 +1754,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
      * Test computing the balance of linear momentum in a finite element context
      */
 
-    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + 0> {};
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1, 0> {};
     class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
 
     constexpr unsigned int nphases = 4;
@@ -2606,7 +2606,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
      }
  }
 
- template <class configuration, int node_count, int nphases, int num_additional_dof, class xi_in, typename dt_type,
+ template <class configuration, int node_count, int nphases, class xi_in, typename dt_type,
            class density_t_in, class density_tp1_in, class u_t_in, class u_tp1_in, class w_t_in, class w_tp1_in,
            class theta_t_in, class theta_tp1_in, class e_t_in, class e_tp1_in, class z_t_in, class z_tp1_in,
            class vf_t_in, class vf_tp1_in, class umesh_t_in, class umesh_tp1_in, class density_dot_t_in, class v_t_in,
@@ -2669,7 +2669,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
      std::array<typename std::iterator_traits<u_tp1_in>::value_type, configuration::dimension * nphases> v_tp1_p,
      w_tp1_p, a_tp1_p;
 
-     std::array<typename std::iterator_traits<z_tp1_in>::value_type, num_additional_dof> z_tp1_p;
+     std::array<typename std::iterator_traits<z_tp1_in>::value_type, configuration::material::num_additional_dof> z_tp1_p;
 
      // Interpolate quantities to the local point
 
@@ -2705,7 +2705,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
      std::array<typename std::iterator_traits<u_tp1_in>::value_type, configuration::dimension *
      configuration::dimension * nphases> grad_velocity_tp1, grad_w_tp1;
 
-     std::array<typename std::iterator_traits<u_tp1_in>::value_type, configuration::dimension * num_additional_dof>
+     std::array<typename std::iterator_traits<u_tp1_in>::value_type, configuration::dimension * configuration::material::num_additional_dof>
      grad_z_tp1;
 
      e.GetGlobalQuantityGradient(xi_begin, xi_end, density_tp1_begin, density_tp1_end, std::begin(grad_density_tp1),
@@ -2740,9 +2740,9 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
          configuration::dimension>::const_iterator, floatType, 3, 3>(
              std::cbegin(dxdxi), std::cend(dxdxi), 3, 3);
 
-     std::vector<floatType> dof_vector(nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3) + num_additional_dof
+     std::vector<floatType> dof_vector(nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3) + configuration::material::num_additional_dof
      +
-                                           3 * num_additional_dof,
+                                           3 * configuration::material::num_additional_dof,
                                        0);
 
      std::copy(std::begin(density_tp1_p), std::end(density_tp1_p), std::begin(dof_vector) + nphases * 0);
@@ -2760,26 +2760,26 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
      std::copy(std::begin(z_tp1_p), std::end(z_tp1_p), std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1));
 
      std::copy(std::begin(grad_density_tp1), std::end(grad_density_tp1),
-               std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1) + num_additional_dof);
+               std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1) + configuration::material::num_additional_dof);
 
      std::copy(std::begin(grad_w_tp1), std::end(grad_w_tp1),
-               std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3) + num_additional_dof);
+               std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3) + configuration::material::num_additional_dof);
 
      std::copy(std::begin(grad_velocity_tp1), std::end(grad_velocity_tp1),
-               std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9) + num_additional_dof);
+               std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9) + configuration::material::num_additional_dof);
 
      std::copy(std::begin(grad_theta_tp1), std::end(grad_theta_tp1),
-               std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9) + num_additional_dof);
+               std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9) + configuration::material::num_additional_dof);
 
      std::copy(std::begin(grad_e_tp1), std::end(grad_e_tp1),
-               std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3) + num_additional_dof);
+               std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3) + configuration::material::num_additional_dof);
 
      std::copy(std::begin(grad_vf_tp1), std::end(grad_vf_tp1),
-               std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3) + num_additional_dof);
+               std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3) + configuration::material::num_additional_dof);
 
      std::copy(std::begin(grad_z_tp1), std::end(grad_z_tp1),
                std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3) +
-               num_additional_dof);
+               configuration::material::num_additional_dof);
 
      std::vector<floatType> previous_dof_vector(dof_vector.size());
 
@@ -2803,7 +2803,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
      std::fill(std::begin(material_response), std::end(material_response), 0);
 
      for (unsigned int j = low_bound; j < high_bound; ++j) {
-         hydraLinearTest linearTest(nphases, j, 10, num_additional_dof, 0, 0.1, dof_vector, previous_dof_vector);
+         hydraLinearTest linearTest(nphases, j, 10, configuration::material::num_additional_dof, 0, 0.1, dof_vector, previous_dof_vector);
 
          linearTest.evaluate();
 
@@ -2853,7 +2853,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
      }
  }
 
- template <class configuration, int node_count, int nphases, int num_additional_dof, class xi_in, typename dt_type,
+ template <class configuration, int node_count, int nphases, class xi_in, typename dt_type,
            class density_t_in, class density_tp1_in, class u_t_in, class u_tp1_in, class w_t_in, class w_tp1_in,
            class theta_t_in, class theta_tp1_in, class e_t_in, class e_tp1_in, class z_t_in, class z_tp1_in,
            class vf_t_in, class vf_tp1_in, class umesh_t_in, class umesh_tp1_in, class density_dot_t_in, class v_t_in,
@@ -2921,7 +2921,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
      std::array<typename std::iterator_traits<u_tp1_in>::value_type, configuration::dimension * nphases> v_tp1_p,
      w_tp1_p, a_tp1_p;
 
-     std::array<typename std::iterator_traits<z_tp1_in>::value_type, num_additional_dof> z_tp1_p;
+     std::array<typename std::iterator_traits<z_tp1_in>::value_type, configuration::material::num_additional_dof> z_tp1_p;
 
      // Interpolate quantities to the local point
 
@@ -2957,7 +2957,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
      std::array<typename std::iterator_traits<u_tp1_in>::value_type, configuration::dimension *
      configuration::dimension * nphases> grad_velocity_tp1, grad_w_tp1;
 
-     std::array<typename std::iterator_traits<u_tp1_in>::value_type, configuration::dimension * num_additional_dof>
+     std::array<typename std::iterator_traits<u_tp1_in>::value_type, configuration::dimension * configuration::material::num_additional_dof>
      grad_z_tp1;
 
      e.GetGlobalQuantityGradient(xi_begin, xi_end, density_tp1_begin, density_tp1_end, std::begin(grad_density_tp1),
@@ -2995,11 +2995,11 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
      constexpr unsigned int num_phase_dof = 10;
 
      constexpr unsigned int dof_vector_size =
-         (nphases * (1 + 3 + 3 + 1 + 1 + +1 + 3 + 9 + 9 + 3 + 3 + 3) + num_additional_dof + 3 * num_additional_dof);
+         (nphases * (1 + 3 + 3 + 1 + 1 + +1 + 3 + 9 + 9 + 3 + 3 + 3) + configuration::material::num_additional_dof + 3 * configuration::material::num_additional_dof);
 
-     std::vector<floatType> dof_vector(nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3) + num_additional_dof
+     std::vector<floatType> dof_vector(nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3) + configuration::material::num_additional_dof
      +
-                                           3 * num_additional_dof,
+                                           3 * configuration::material::num_additional_dof,
                                        0);
 
      std::copy(std::begin(density_tp1_p), std::end(density_tp1_p), std::begin(dof_vector) + nphases * 0);
@@ -3017,26 +3017,26 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
      std::copy(std::begin(z_tp1_p), std::end(z_tp1_p), std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1));
 
      std::copy(std::begin(grad_density_tp1), std::end(grad_density_tp1),
-               std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1) + num_additional_dof);
+               std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1) + configuration::material::num_additional_dof);
 
      std::copy(std::begin(grad_w_tp1), std::end(grad_w_tp1),
-               std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3) + num_additional_dof);
+               std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3) + configuration::material::num_additional_dof);
 
      std::copy(std::begin(grad_velocity_tp1), std::end(grad_velocity_tp1),
-               std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9) + num_additional_dof);
+               std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9) + configuration::material::num_additional_dof);
 
      std::copy(std::begin(grad_theta_tp1), std::end(grad_theta_tp1),
-               std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9) + num_additional_dof);
+               std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9) + configuration::material::num_additional_dof);
 
      std::copy(std::begin(grad_e_tp1), std::end(grad_e_tp1),
-               std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3) + num_additional_dof);
+               std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3) + configuration::material::num_additional_dof);
 
      std::copy(std::begin(grad_vf_tp1), std::end(grad_vf_tp1),
-               std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3) + num_additional_dof);
+               std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3) + configuration::material::num_additional_dof);
 
      std::copy(std::begin(grad_z_tp1), std::end(grad_z_tp1),
                std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3) +
-               num_additional_dof);
+               configuration::material::num_additional_dof);
 
      std::vector<floatType> previous_dof_vector(dof_vector.size());
 
@@ -3063,7 +3063,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
      std::fill(std::begin(material_response_jacobian), std::end(material_response_jacobian), 0);
 
      for (unsigned int j = low_bound; j < high_bound; ++j) {
-         hydraLinearTest linearTest(nphases, j, 10, num_additional_dof, 0, 0.1, dof_vector, previous_dof_vector);
+         hydraLinearTest linearTest(nphases, j, 10, configuration::material::num_additional_dof, 0, 0.1, dof_vector, previous_dof_vector);
 
          linearTest.evaluate();
 
@@ -3086,7 +3086,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
 
      std::array<floatType, nphases * 3 * nphases * 3> dRdW_n;
 
-     std::array<floatType, nphases * 3 * num_additional_dof> dRdZ_n;
+     std::array<floatType, nphases * 3 * configuration::material::num_additional_dof> dRdZ_n;
 
      std::array<floatType, nphases * 3 * 3> dRdUMesh_n;
 
@@ -3179,7 +3179,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
                      std::cbegin(material_response_jacobian) + material_response_size * dof_vector_size * (j + 1),
                      vf_tp1_p[j], Ns[i], std::cbegin(dNdx) + 3 * i, std::cbegin(dNdx) + 3 * (i + 1), Ns[k],
                      std::cbegin(dNdx) + 3 * k, std::cbegin(dNdx) + 3 * (k + 1),
-                     std::cbegin(dof_vector) + (nphases * num_phase_dof + num_additional_dof), std::cend(dof_vector),
+                     std::cbegin(dof_vector) + (nphases * num_phase_dof + configuration::material::num_additional_dof), std::cend(dof_vector),
                      dDensityDotdDensity, dUDotdU, dUDDotdU, j, std::begin(value_n) + configuration::dimension *
                      nphases * i + configuration::dimension * j, std::begin(value_n) + configuration::dimension *
                      nphases * i + configuration::dimension * (j + 1), std::begin(dRdRho_n) + configuration::dimension
@@ -3192,8 +3192,8 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
                      configuration::dimension * nphases * 1 * j, std::begin(dRdE_n) + configuration::dimension *
                      nphases * 1 * (j + 1), std::begin(dRdVolumeFraction_n) + configuration::dimension * nphases * 1 *
                      j, std::begin(dRdVolumeFraction_n) + configuration::dimension * nphases * 1 * (j + 1),
-                     std::begin(dRdZ_n) + configuration::dimension * num_additional_dof * j,
-                     std::begin(dRdZ_n) + configuration::dimension * num_additional_dof * (j + 1),
+                     std::begin(dRdZ_n) + configuration::dimension * configuration::material::num_additional_dof * j,
+                     std::begin(dRdZ_n) + configuration::dimension * configuration::material::num_additional_dof * (j + 1),
                      std::begin(dRdUMesh_n) + configuration::dimension * configuration::dimension * j,
                      std::begin(dRdUMesh_n) + configuration::dimension * configuration::dimension * (j + 1));
 
@@ -3216,7 +3216,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
                      std::cend(material_response_jacobian), std::cbegin(vf_tp1_p), std::cend(vf_tp1_p), Ns[i],
                      std::cbegin(dNdx) + 3 * i, std::cbegin(dNdx) + 3 * (i + 1), Ns[k], std::cbegin(dNdx) + 3 * k,
                      std::cbegin(dNdx) + 3 * (k + 1),
-                     std::cbegin(dof_vector) + (nphases * num_phase_dof + num_additional_dof), std::cend(dof_vector),
+                     std::cbegin(dof_vector) + (nphases * num_phase_dof + configuration::material::num_additional_dof), std::cend(dof_vector),
                      dDensityDotdDensity, dUDotdU, dUDDotdU,
                      //                    std::begin( value_n ),             std::end( value_n ),
                      std::begin(value_n) + configuration::dimension * nphases * i, std::begin(value_n) +
@@ -3272,10 +3272,10 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
                        nphases * 1 * k + l) += dRdE_n[nphases * 1 * j + l] * J;
                  }
 
-                 for (unsigned int l = 0; l < num_additional_dof; ++l) {
-                     *(dRdZ_begin + configuration::dimension * nphases * node_count * num_additional_dof * 1 * i +
-                       node_count * num_additional_dof * 1 * j + num_additional_dof * 1 * k + l) +=
-                         dRdZ_n[num_additional_dof * 1 * j + l] * J;
+                 for (unsigned int l = 0; l < configuration::material::num_additional_dof; ++l) {
+                     *(dRdZ_begin + configuration::dimension * nphases * node_count * configuration::material::num_additional_dof * 1 * i +
+                       node_count * configuration::material::num_additional_dof * 1 * j + configuration::material::num_additional_dof * 1 * k + l) +=
+                         dRdZ_n[configuration::material::num_additional_dof * 1 * j + l] * J;
                  }
 
                  for (unsigned int l = 0; l < nphases; ++l) {
@@ -3302,7 +3302,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
 
     constexpr unsigned int num_additional_dof = 5;
 
-    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + num_additional_dof> {};
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1, num_additional_dof> {};
     class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
 
     constexpr unsigned int nphases = 4;
@@ -3401,14 +3401,14 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
          -0.60168369, 0.93315875,  -0.87261828, -0.02970122, -0.55853858, -0.41205174, 0.65705464,  -0.26546887,
          -0.83330346, -0.60738199, 0.72074682,  0.9540577,   -0.46403568, 0.35081798,  -0.83760201, 0.44693118};
 
-     std::array<floatType, 8 * num_additional_dof> z_t = {
+     std::array<floatType, 8 * configuration::material::num_additional_dof> z_t = {
          -0.16712678, 0.83631984,  -0.37692766, 0.88293399,  0.00649485,  -0.30221415, 0.29403919,  -0.50050759,
          -0.54047281, -0.60730711, 0.91979913,  -0.01417254, 0.50322993,  -0.05201624, 0.17508032,  0.16827796,
          0.95977262,  0.33686625,  -0.52046106, -0.96960468, -0.56263572, -0.08896072, -0.21315933, 0.62465248,
          0.57111351,  -0.82180806, 0.90402145,  0.05491335,  0.19280793,  -0.18988646, 0.29900191,  0.74265261,
          0.34787193,  0.94019709,  0.4022445,   0.64344147,  -0.90992083, 0.34539703,  0.30950529,  -0.7965079};
 
-     std::array<floatType, 8 * num_additional_dof> z_tp1 = {
+     std::array<floatType, 8 * configuration::material::num_additional_dof> z_tp1 = {
          0.68477499,  0.22834481,  -0.80334382, 0.18893424,  -0.0431683,  -0.53341286, -0.96048782, -0.26886544,
          0.23970215,  -0.34144173, -0.38549069, 0.50224248,  0.5172493,   0.43753167,  -0.79763609, 0.03233191,
          0.11559732,  0.48960905,  0.80635544,  -0.26192227, -0.14267306, 0.46553498,  0.32527284,  0.1157398,
@@ -3498,7 +3498,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
 
      std::array<floatType, 8 * nphases * 3> result;
 
-     evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+     evaluate_at_nodes<configuration, 8, nphases>(
          std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
          std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
          std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -3527,7 +3527,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
 
      std::array<floatType, 8 * 3 * nphases * 8 * nphases * 1> dRdE;
 
-     std::array<floatType, 8 * 3 * nphases * 8 * nphases * num_additional_dof> dRdZ;
+     std::array<floatType, 8 * 3 * nphases * 8 * nphases * configuration::material::num_additional_dof> dRdZ;
 
      std::array<floatType, 8 * 3 * nphases * 8 * nphases * 1> dRdVF;
 
@@ -3535,7 +3535,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
 
      std::fill(std::begin(result), std::end(result), 0);
 
-     evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+     evaluate_at_nodes<configuration, 8, nphases>(
          std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
          std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
          std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -3574,7 +3574,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
 
              std::array<floatType, outdim> vp, vm;
 
-             evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+             evaluate_at_nodes<configuration, 8, nphases>(
                  std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                  std::cbegin(xp), std::cend(xp), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                  std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -3586,7 +3586,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
                  std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(u_ddot_t), std::cend(u_ddot_t), std::cbegin(X),
                  std::cend(X), alpha, beta, std::begin(vp), std::end(vp), active_phase);
 
-             evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+             evaluate_at_nodes<configuration, 8, nphases>(
                  std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                  std::cbegin(xm), std::cend(xm), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                  std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -3625,7 +3625,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
 
              std::array<floatType, outdim> vp, vm;
 
-             evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+             evaluate_at_nodes<configuration, 8, nphases>(
                  std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                  std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(xp),
                  std::cend(xp), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -3637,7 +3637,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
                  std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(u_ddot_t), std::cend(u_ddot_t), std::cbegin(X),
                  std::cend(X), alpha, beta, std::begin(vp), std::end(vp), active_phase);
 
-             evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+             evaluate_at_nodes<configuration, 8, nphases>(
                  std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                  std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(xm),
                  std::cend(xm), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -3676,7 +3676,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
 
              std::array<floatType, outdim> vp, vm;
 
-             evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+             evaluate_at_nodes<configuration, 8, nphases>(
                  std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                  std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t),
                  std::cbegin(u_tp1), std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(xp),
@@ -3688,7 +3688,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
                  std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(u_ddot_t), std::cend(u_ddot_t), std::cbegin(X),
                  std::cend(X), alpha, beta, std::begin(vp), std::end(vp), active_phase);
 
-             evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+             evaluate_at_nodes<configuration, 8, nphases>(
                  std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                  std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t),
                  std::cbegin(u_tp1), std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(xm),
@@ -3727,7 +3727,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
 
              std::array<floatType, outdim> vp, vm;
 
-             evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+             evaluate_at_nodes<configuration, 8, nphases>(
                  std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                  std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t),
                  std::cbegin(u_tp1), std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1),
@@ -3739,7 +3739,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
                  std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(u_ddot_t), std::cend(u_ddot_t), std::cbegin(X),
                  std::cend(X), alpha, beta, std::begin(vp), std::end(vp), active_phase);
 
-             evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+             evaluate_at_nodes<configuration, 8, nphases>(
                  std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                  std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t),
                  std::cbegin(u_tp1), std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1),
@@ -3778,7 +3778,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
 
              std::array<floatType, outdim> vp, vm;
 
-             evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+             evaluate_at_nodes<configuration, 8, nphases>(
                  std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                  std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t),
                  std::cbegin(u_tp1), std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1),
@@ -3790,7 +3790,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
                  std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(u_ddot_t), std::cend(u_ddot_t), std::cbegin(X),
                  std::cend(X), alpha, beta, std::begin(vp), std::end(vp), active_phase);
 
-             evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+             evaluate_at_nodes<configuration, 8, nphases>(
                  std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                  std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t),
                  std::cbegin(u_tp1), std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1),
@@ -3815,7 +3815,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
 
      // Check the derivatives w.r.t. the additional dof
      {
-         constexpr unsigned int vardim = num_additional_dof * 8;
+         constexpr unsigned int vardim = configuration::material::num_additional_dof * 8;
          constexpr unsigned int outdim = 3 * nphases * 8;
 
          for (unsigned int i = 0; i < vardim; ++i) {
@@ -3829,7 +3829,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
 
              std::array<floatType, outdim> vp, vm;
 
-             evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+             evaluate_at_nodes<configuration, 8, nphases>(
                  std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                  std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t),
                  std::cbegin(u_tp1), std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1),
@@ -3841,7 +3841,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
                  std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(u_ddot_t), std::cend(u_ddot_t), std::cbegin(X),
                  std::cend(X), alpha, beta, std::begin(vp), std::end(vp), active_phase);
 
-             evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+             evaluate_at_nodes<configuration, 8, nphases>(
                  std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                  std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t),
                  std::cbegin(u_tp1), std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1),
@@ -3880,7 +3880,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
 
              std::array<floatType, outdim> vp, vm;
 
-             evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+             evaluate_at_nodes<configuration, 8, nphases>(
                  std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                  std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t),
                  std::cbegin(u_tp1), std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1),
@@ -3892,7 +3892,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
                  std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(u_ddot_t), std::cend(u_ddot_t), std::cbegin(X),
                  std::cend(X), alpha, beta, std::begin(vp), std::end(vp), active_phase);
 
-             evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+             evaluate_at_nodes<configuration, 8, nphases>(
                  std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                  std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t),
                  std::cbegin(u_tp1), std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1),
@@ -3931,7 +3931,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
 
              std::array<floatType, outdim> vp, vm;
 
-             evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+             evaluate_at_nodes<configuration, 8, nphases>(
                  std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                  std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t),
                  std::cbegin(u_tp1), std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1),
@@ -3943,7 +3943,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
                  std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(u_ddot_t), std::cend(u_ddot_t), std::cbegin(X),
                  std::cend(X), alpha, beta, std::begin(vp), std::end(vp), active_phase);
 
-             evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+             evaluate_at_nodes<configuration, 8, nphases>(
                  std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                  std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t),
                  std::cbegin(u_tp1), std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1),
@@ -3974,7 +3974,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
 
     constexpr unsigned int num_additional_dof = 5;
 
-    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + num_additional_dof> {};
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1, num_additional_dof> {};
     class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
      constexpr unsigned int nphases = 4;
 
@@ -4070,14 +4070,14 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
          -0.60168369, 0.93315875,  -0.87261828, -0.02970122, -0.55853858, -0.41205174, 0.65705464,  -0.26546887,
          -0.83330346, -0.60738199, 0.72074682,  0.9540577,   -0.46403568, 0.35081798,  -0.83760201, 0.44693118};
 
-     std::array<floatType, 8 * num_additional_dof> z_t = {
+     std::array<floatType, 8 * configuration::material::num_additional_dof> z_t = {
          -0.16712678, 0.83631984,  -0.37692766, 0.88293399,  0.00649485,  -0.30221415, 0.29403919,  -0.50050759,
          -0.54047281, -0.60730711, 0.91979913,  -0.01417254, 0.50322993,  -0.05201624, 0.17508032,  0.16827796,
          0.95977262,  0.33686625,  -0.52046106, -0.96960468, -0.56263572, -0.08896072, -0.21315933, 0.62465248,
          0.57111351,  -0.82180806, 0.90402145,  0.05491335,  0.19280793,  -0.18988646, 0.29900191,  0.74265261,
          0.34787193,  0.94019709,  0.4022445,   0.64344147,  -0.90992083, 0.34539703,  0.30950529,  -0.7965079};
 
-     std::array<floatType, 8 * num_additional_dof> z_tp1 = {
+     std::array<floatType, 8 * configuration::material::num_additional_dof> z_tp1 = {
          0.68477499,  0.22834481,  -0.80334382, 0.18893424,  -0.0431683,  -0.53341286, -0.96048782, -0.26886544,
          0.23970215,  -0.34144173, -0.38549069, 0.50224248,  0.5172493,   0.43753167,  -0.79763609, 0.03233191,
          0.11559732,  0.48960905,  0.80635544,  -0.26192227, -0.14267306, 0.46553498,  0.32527284,  0.1157398,
@@ -4167,7 +4167,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
 
      std::array<floatType, 8 * nphases * 3> result;
 
-     evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+     evaluate_at_nodes<configuration, 8, nphases>(
          std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
          std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
          std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -4191,7 +4191,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
 
      std::array<floatType, 8 * 3 * nphases * 8 * nphases * 1> dRdE;
 
-     std::array<floatType, 8 * 3 * nphases * 8 * nphases * num_additional_dof> dRdZ;
+     std::array<floatType, 8 * 3 * nphases * 8 * nphases * configuration::material::num_additional_dof> dRdZ;
 
      std::array<floatType, 8 * 3 * nphases * 8 * nphases * 1> dRdVF;
 
@@ -4199,7 +4199,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
 
      std::fill(std::begin(result), std::end(result), 0);
 
-     evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+     evaluate_at_nodes<configuration, 8, nphases>(
          std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
          std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
          std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -4233,7 +4233,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
 
              std::array<floatType, outdim> vp, vm;
 
-             evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+             evaluate_at_nodes<configuration, 8, nphases>(
                  std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                  std::cbegin(xp), std::cend(xp), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                  std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -4245,7 +4245,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
                  std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(u_ddot_t), std::cend(u_ddot_t), std::cbegin(X),
                  std::cend(X), alpha, beta, std::begin(vp), std::end(vp));
 
-             evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+             evaluate_at_nodes<configuration, 8, nphases>(
                  std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                  std::cbegin(xm), std::cend(xm), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                  std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -4279,7 +4279,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
 
              std::array<floatType, outdim> vp, vm;
 
-             evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+             evaluate_at_nodes<configuration, 8, nphases>(
                  std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                  std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(xp),
                  std::cend(xp), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -4291,7 +4291,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
                  std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(u_ddot_t), std::cend(u_ddot_t), std::cbegin(X),
                  std::cend(X), alpha, beta, std::begin(vp), std::end(vp));
 
-             evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+             evaluate_at_nodes<configuration, 8, nphases>(
                  std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                  std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(xm),
                  std::cend(xm), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -4325,7 +4325,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
 
              std::array<floatType, outdim> vp, vm;
 
-             evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+             evaluate_at_nodes<configuration, 8, nphases>(
                  std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                  std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t),
                  std::cbegin(u_tp1), std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(xp),
@@ -4337,7 +4337,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
                  std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(u_ddot_t), std::cend(u_ddot_t), std::cbegin(X),
                  std::cend(X), alpha, beta, std::begin(vp), std::end(vp));
 
-             evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+             evaluate_at_nodes<configuration, 8, nphases>(
                  std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                  std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t),
                  std::cbegin(u_tp1), std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(xm),
@@ -4371,7 +4371,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
 
              std::array<floatType, outdim> vp, vm;
 
-             evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+             evaluate_at_nodes<configuration, 8, nphases>(
                  std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                  std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t),
                  std::cbegin(u_tp1), std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1),
@@ -4383,7 +4383,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
                  std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(u_ddot_t), std::cend(u_ddot_t), std::cbegin(X),
                  std::cend(X), alpha, beta, std::begin(vp), std::end(vp));
 
-             evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+             evaluate_at_nodes<configuration, 8, nphases>(
                  std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                  std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t),
                  std::cbegin(u_tp1), std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1),
@@ -4417,7 +4417,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
 
              std::array<floatType, outdim> vp, vm;
 
-             evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+             evaluate_at_nodes<configuration, 8, nphases>(
                  std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                  std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t),
                  std::cbegin(u_tp1), std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1),
@@ -4429,7 +4429,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
                  std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(u_ddot_t), std::cend(u_ddot_t), std::cbegin(X),
                  std::cend(X), alpha, beta, std::begin(vp), std::end(vp));
 
-             evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+             evaluate_at_nodes<configuration, 8, nphases>(
                  std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                  std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t),
                  std::cbegin(u_tp1), std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1),
@@ -4449,7 +4449,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
 
      // Check the derivatives w.r.t. the additional dof
      {
-         constexpr unsigned int vardim = num_additional_dof * 8;
+         constexpr unsigned int vardim = configuration::material::num_additional_dof * 8;
          constexpr unsigned int outdim = 3 * nphases * 8;
 
          for (unsigned int i = 0; i < vardim; ++i) {
@@ -4463,7 +4463,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
 
              std::array<floatType, outdim> vp, vm;
 
-             evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+             evaluate_at_nodes<configuration, 8, nphases>(
                  std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                  std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t),
                  std::cbegin(u_tp1), std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1),
@@ -4475,7 +4475,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
                  std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(u_ddot_t), std::cend(u_ddot_t), std::cbegin(X),
                  std::cend(X), alpha, beta, std::begin(vp), std::end(vp));
 
-             evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+             evaluate_at_nodes<configuration, 8, nphases>(
                  std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                  std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t),
                  std::cbegin(u_tp1), std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1),
@@ -4509,7 +4509,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
 
              std::array<floatType, outdim> vp, vm;
 
-             evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+             evaluate_at_nodes<configuration, 8, nphases>(
                  std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                  std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t),
                  std::cbegin(u_tp1), std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1),
@@ -4521,7 +4521,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
                  std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(u_ddot_t), std::cend(u_ddot_t), std::cbegin(X),
                  std::cend(X), alpha, beta, std::begin(vp), std::end(vp));
 
-             evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+             evaluate_at_nodes<configuration, 8, nphases>(
                  std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                  std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t),
                  std::cbegin(u_tp1), std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1),
@@ -4555,7 +4555,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
 
              std::array<floatType, outdim> vp, vm;
 
-             evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+             evaluate_at_nodes<configuration, 8, nphases>(
                  std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                  std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t),
                  std::cbegin(u_tp1), std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1),
@@ -4567,7 +4567,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
                  std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(u_ddot_t), std::cend(u_ddot_t), std::cbegin(X),
                  std::cend(X), alpha, beta, std::begin(vp), std::end(vp));
 
-             evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
+             evaluate_at_nodes<configuration, 8, nphases>(
                  std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                  std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t),
                  std::cbegin(u_tp1), std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1),

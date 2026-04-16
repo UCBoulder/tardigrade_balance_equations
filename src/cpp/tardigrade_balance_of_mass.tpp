@@ -34,7 +34,7 @@ namespace tardigradeBalanceEquations {
              */
 
 
-            class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + 0> {};
+            class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1, 0> {};
             class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
 
             computeBalanceOfMass<configuration>(
@@ -70,7 +70,7 @@ namespace tardigradeBalanceEquations {
              * v_{i,j} \f$
              */
 
-            class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + 0> {};
+            class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1, 0> {};
             class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
 
             computeBalanceOfMass<configuration>(
