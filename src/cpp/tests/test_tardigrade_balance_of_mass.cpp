@@ -1983,8 +1983,6 @@ void evaluate_at_nodes(
 
     constexpr unsigned int num_phase_dof = 10;
 
-    constexpr unsigned int num_dof = (1 + 3 + 3 + 1 + 1 + 1) + num_additional_dof;
-
     constexpr unsigned int dof_vector_size =
         (nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3) + num_additional_dof + 3 * num_additional_dof);
 
@@ -2131,7 +2129,7 @@ void evaluate_at_nodes(
                 unsigned int j = active_phase;
 
                 // Single phase evaluation
-                tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMass<configuration, 10, num_dof>(
+                tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMass<configuration, 10>(
                     density_tp1_p[j], density_dot_tp1_p[j], std::cbegin(grad_density_tp1) + 3 * j,
                     std::cbegin(grad_density_tp1) + 3 * (j + 1), std::cbegin(v_tp1_p) + 3 * j,
                     std::cbegin(v_tp1_p) + 3 * (j + 1), std::cbegin(grad_velocity_tp1) + 9 * j,
@@ -2157,7 +2155,7 @@ void evaluate_at_nodes(
 
             } else {
                 // Multiphase evaluation
-                tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMass<configuration, 10, num_dof>(
+                tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMass<configuration, 10>(
                     std::cbegin(density_tp1_p), std::cend(density_tp1_p), std::cbegin(density_dot_tp1_p),
                     std::cend(density_dot_tp1_p), std::cbegin(grad_density_tp1), std::cend(grad_density_tp1),
                     std::cbegin(v_tp1_p), std::cend(v_tp1_p), std::cbegin(grad_velocity_tp1),
@@ -4120,8 +4118,6 @@ void evaluate_at_nodes_diffusion(
 
     constexpr unsigned int num_phase_dof = 10;
 
-    constexpr unsigned int num_dof = (1 + 3 + 3 + 1 + 1 + 1) + num_additional_dof;
-
     constexpr unsigned int dof_vector_size =
         (nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3) + num_additional_dof + 3 * num_additional_dof);
 
@@ -4263,7 +4259,7 @@ void evaluate_at_nodes_diffusion(
                 unsigned int j = active_phase;
 
                 // Single phase evaluation
-                tardigradeBalanceEquations::balanceOfMass::computeDiffusionTerm<configuration, 10, num_dof>(
+                tardigradeBalanceEquations::balanceOfMass::computeDiffusionTerm<configuration, 10>(
                     std::cbegin(material_response) + material_response_size * j,
                     std::cbegin(material_response) + material_response_size * (j + 1),
                     std::cbegin(material_response_jacobian) + material_response_size * dof_vector_size * j,
@@ -4287,7 +4283,7 @@ void evaluate_at_nodes_diffusion(
 
             } else {
                 // Multiphase evaluation
-                tardigradeBalanceEquations::balanceOfMass::computeDiffusionTerm<configuration, 10, num_dof>(
+                tardigradeBalanceEquations::balanceOfMass::computeDiffusionTerm<configuration, 10>(
                     std::cbegin(material_response), std::cend(material_response),
                     std::cbegin(material_response_jacobian), std::cend(material_response_jacobian),
                     std::cbegin(dNdxs) + configuration::dimension * i,
