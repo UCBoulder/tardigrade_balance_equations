@@ -1200,7 +1200,7 @@ namespace tardigradeBalanceEquations {
                            std::bind(std::multiplies<result_type>(), std::placeholders::_1, test_function));
         }
 
-        template <int dim, class displacement_dot_iter, class velocity_iter, typename test_function_type,
+        template <class configuration, class displacement_dot_iter, class velocity_iter, typename test_function_type,
                   typename interpolation_function_type, class interpolation_function_gradient_iter,
                   typename dDDotdD_type, class result_iter, class dRdD_iter, class dRdV_iter, class dRdUMesh_iter>
         void computeDisplacementConstraint(
@@ -1260,7 +1260,7 @@ namespace tardigradeBalanceEquations {
             TARDIGRADE_ERROR_TOOLS_CHECK(length == (unsigned int)(dRdV_end - dRdV_begin),
                                          "The dRdV and density dot vectors must be the same size")
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(length * dim == (unsigned int)(dRdUMesh_end - dRdUMesh_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(length * configuration::dimension == (unsigned int)(dRdUMesh_end - dRdUMesh_begin),
                                          "The dRdUMesh vector must be the length of the density dot vector time the "
                                          "length of the interpolation function gradient vector")
 
@@ -1276,14 +1276,14 @@ namespace tardigradeBalanceEquations {
                 *v.second               = test_function * dDDotdD * interpolation_function;
                 *(dRdV_begin + v.first) = -test_function * interpolation_function;
 
-                for (unsigned int a = 0; a < dim; ++a) {
-                    *(dRdUMesh_begin + dim * v.first + a) =
+                for (unsigned int a = 0; a < configuration::dimension; ++a) {
+                    *(dRdUMesh_begin + configuration::dimension * v.first + a) =
                         (*(result_begin + v.first)) * (*(interpolation_function_gradient_begin + a));
                 }
             }
         }
 
-        template <int dim, int cauchy_stress_index, int internal_energy_index, int mass_change_index,
+        template <class configuration, int cauchy_stress_index, int internal_energy_index, int mass_change_index,
                   int body_force_index, int interphasic_force_index, int heat_flux_index,
                   int internal_heat_generation_index, int interphasic_heat_transfer_index,
                   int trace_mass_change_velocity_gradient_index, class density_iter, class volume_fraction_iter,
@@ -1371,7 +1371,7 @@ namespace tardigradeBalanceEquations {
                 }
 
                 // interphasic force
-                for (unsigned int i = 0; i < dim; ++i) {
+                for (unsigned int i = 0; i < configuration::dimension; ++i) {
                     *(mixture_response_begin + interphasic_force_index + i) +=
                         *(material_response_begin + phase * material_response_size + interphasic_force_index + i);
 
@@ -1383,7 +1383,7 @@ namespace tardigradeBalanceEquations {
                 }
 
                 // heat flux
-                for (unsigned int i = 0; i < dim; ++i) {
+                for (unsigned int i = 0; i < configuration::dimension; ++i) {
                     *(mixture_response_begin + heat_flux_index + i) +=
                         *(material_response_begin + phase * material_response_size + heat_flux_index + i);
 
@@ -1412,7 +1412,7 @@ namespace tardigradeBalanceEquations {
                 //
 
                 // Cauchy stress
-                for (unsigned int i = 0; i < dim * dim; ++i) {
+                for (unsigned int i = 0; i < configuration::dimension * configuration::dimension; ++i) {
                     *(mixture_response_begin + cauchy_stress_index + i) +=
                         (*(volume_fraction_begin + phase)) *
                         (*(material_response_begin + phase * material_response_size + cauchy_stress_index + i));
@@ -1456,7 +1456,7 @@ namespace tardigradeBalanceEquations {
                 //
 
                 // body force
-                for (unsigned int i = 0; i < dim; ++i) {
+                for (unsigned int i = 0; i < configuration::dimension; ++i) {
                     *(mixture_response_begin + body_force_index + i) +=
                         (*(density_begin + phase)) *
                         (*(material_response_begin + phase * material_response_size + body_force_index + i)) /
