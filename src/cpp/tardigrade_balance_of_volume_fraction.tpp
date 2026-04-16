@@ -17,7 +17,7 @@ namespace tardigradeBalanceEquations {
 
     namespace balanceOfVolumeFraction {
 
-        template <int dim, typename density_type, class velocity_iter, typename volume_fraction_type,
+        template <class configuration, typename density_type, class velocity_iter, typename volume_fraction_type,
                   typename volume_fraction_dot_type, class volume_fraction_gradient_iter,
                   typename mass_change_rate_type, typename rest_density_type,
                   typename trace_mass_change_velocity_gradient_type, typename test_function_type, typename result_type>
@@ -53,18 +53,18 @@ namespace tardigradeBalanceEquations {
              * tolerance, the true density is assumed to be the rest density.
              */
 
-            TARDIGRADE_ERROR_TOOLS_CHECK((unsigned int)(velocity_end - velocity_begin) == dim,
+            TARDIGRADE_ERROR_TOOLS_CHECK((unsigned int)(velocity_end - velocity_begin) == configuration::dimension,
                                          "The velocity must be the same size as the spatial dimension");
 
             TARDIGRADE_ERROR_TOOLS_CHECK((unsigned int)(volume_fraction_gradient_end -
-                                                        volume_fraction_gradient_begin) == dim,
+                                                        volume_fraction_gradient_begin) == configuration::dimension,
                                          "The volume fraction gradient must be the same size as the spatial dimension");
 
             using true_density_type = decltype(std::declval<density_type &>() / std::declval<volume_fraction_type &>());
 
             result = volume_fraction_dot + volume_fraction * trace_mass_change_velocity_gradient;
 
-            for (unsigned int i = 0; i < dim; ++i) {
+            for (unsigned int i = 0; i < configuration::dimension; ++i) {
                 result += (*(volume_fraction_gradient_begin + i)) * (*(velocity_begin + i));
             }
 
@@ -80,7 +80,7 @@ namespace tardigradeBalanceEquations {
             result *= test_function;
         }
 
-        template <int dim, int mass_change_rate_index, int trace_mass_change_velocity_gradient_index,
+        template <class configuration, int mass_change_rate_index, int trace_mass_change_velocity_gradient_index,
                   typename density_type, class velocity_iter, typename volume_fraction_type,
                   typename volume_fraction_dot_type, class volume_fraction_gradient_iter, class material_response_iter,
                   typename rest_density_type, typename test_function_type, typename result_type>
@@ -118,7 +118,7 @@ namespace tardigradeBalanceEquations {
              * tolerance, the true density is assumed to be the rest density.
              */
 
-            computeBalanceOfVolumeFraction<dim>(density, velocity_begin, velocity_end, volume_fraction,
+            computeBalanceOfVolumeFraction<configuration::dimension>(density, velocity_begin, velocity_end, volume_fraction,
                                                 volume_fraction_dot, volume_fraction_gradient_begin,
                                                 volume_fraction_gradient_end,
                                                 *(material_response_begin + mass_change_rate_index), rest_density,
@@ -126,7 +126,7 @@ namespace tardigradeBalanceEquations {
                                                 test_function, result, volume_fraction_tolerance);
         }
 
-        template <int dim, typename density_type, class velocity_iter, typename volume_fraction_type,
+        template <class configuration, typename density_type, class velocity_iter, typename volume_fraction_type,
                   typename volume_fraction_dot_type, class volume_fraction_gradient_iter,
                   typename mass_change_rate_type, typename rest_density_type,
                   typename trace_mass_change_velocity_gradient_type, typename test_function_type,
@@ -193,18 +193,18 @@ namespace tardigradeBalanceEquations {
              * tolerance, the true density is assumed to be the rest density.
              */
 
-            TARDIGRADE_ERROR_TOOLS_CHECK((unsigned int)(velocity_end - velocity_begin) == dim,
+            TARDIGRADE_ERROR_TOOLS_CHECK((unsigned int)(velocity_end - velocity_begin) == configuration::dimension,
                                          "The velocity must be the same size as the spatial dimension");
 
             TARDIGRADE_ERROR_TOOLS_CHECK((unsigned int)(volume_fraction_gradient_end -
-                                                        volume_fraction_gradient_begin) == dim,
+                                                        volume_fraction_gradient_begin) == configuration::dimension,
                                          "The volume fraction gradient must be the same size as the spatial dimension");
 
-            TARDIGRADE_ERROR_TOOLS_CHECK((unsigned int)(dRdU_end - dRdU_begin) == dim,
+            TARDIGRADE_ERROR_TOOLS_CHECK((unsigned int)(dRdU_end - dRdU_begin) == configuration::dimension,
                                          "The derivative of the residual w.r.t. the phase displacement dof must be the "
                                          "same size as the spatial dimension");
 
-            TARDIGRADE_ERROR_TOOLS_CHECK((unsigned int)(dRdUMesh_end - dRdUMesh_begin) == dim,
+            TARDIGRADE_ERROR_TOOLS_CHECK((unsigned int)(dRdUMesh_end - dRdUMesh_begin) == configuration::dimension,
                                          "The derivative of the residual w.r.t. the mesh displacement must be the same "
                                          "size as the spatial dimension");
 
@@ -219,7 +219,7 @@ namespace tardigradeBalanceEquations {
 
             std::fill(dRdUMesh_begin, dRdUMesh_end, 0);
 
-            for (unsigned int i = 0; i < dim; ++i) {
+            for (unsigned int i = 0; i < configuration::dimension; ++i) {
                 result += (*(volume_fraction_gradient_begin + i)) * (*(velocity_begin + i));
 
                 *(dRdU_begin + i) +=
@@ -227,7 +227,7 @@ namespace tardigradeBalanceEquations {
 
                 dRdVolumeFraction += (*(interpolation_function_gradient_begin + i)) * (*(velocity_begin + i));
 
-                for (unsigned int a = 0; a < dim; ++a) {
+                for (unsigned int a = 0; a < configuration::dimension; ++a) {
                     *(dRdUMesh_begin + a) -= test_function * (*(volume_fraction_gradient_begin + a)) *
                                              (*(interpolation_function_gradient_begin + i)) * (*(velocity_begin + i));
                 }
@@ -257,7 +257,7 @@ namespace tardigradeBalanceEquations {
 
             dRdVolumeFraction *= test_function;
 
-            for (unsigned int a = 0; a < dim; ++a) {
+            for (unsigned int a = 0; a < configuration::dimension; ++a) {
                 *(dRdUMesh_begin + a) += result * (*(interpolation_function_gradient_begin + a));
             }
 
@@ -266,7 +266,7 @@ namespace tardigradeBalanceEquations {
             dRdTraceVA = test_function * volume_fraction;
         }
 
-        template <int dim, int material_response_dim, int mass_change_rate_index,
+        template <class configuration, int material_response_dim, int mass_change_rate_index,
                   int trace_mass_change_velocity_gradient_index, int material_response_num_dof, typename density_type,
                   class velocity_iter, typename volume_fraction_type, typename volume_fraction_dot_type,
                   class volume_fraction_gradient_iter, class material_response_iter,
@@ -368,10 +368,10 @@ namespace tardigradeBalanceEquations {
             constexpr unsigned int num_phase_dof      = 4 + 2 * material_response_dim;
             const unsigned int     num_additional_dof = material_response_num_dof - num_phase_dof;
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(dim * nphases == (unsigned int)(dRdU_end - dRdU_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension * nphases == (unsigned int)(dRdU_end - dRdU_begin),
                                          "The dRdU must be a consistent size with the number of phases")
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(dim * nphases == (unsigned int)(dRdW_end - dRdW_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension * nphases == (unsigned int)(dRdW_end - dRdW_begin),
                                          "The dRdW must be a consistent size with the number of phases")
 
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(dRdTheta_end - dRdTheta_begin),
@@ -383,7 +383,7 @@ namespace tardigradeBalanceEquations {
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(dRdVolumeFraction_end - dRdVolumeFraction_begin),
                                          "The dRdVolumeFraction must be the same size as the number of phases")
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(dim == (unsigned int)(dRdUMesh_end - dRdUMesh_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension == (unsigned int)(dRdUMesh_end - dRdUMesh_begin),
                                          "The dRdUMesh must be the same size as the dimension")
 
             result_type dRdC_phase, dRdTraceVA_phase;
@@ -397,14 +397,14 @@ namespace tardigradeBalanceEquations {
             std::fill(dRdVolumeFraction_begin, dRdVolumeFraction_end, 0);
             std::fill(dRdUMesh_begin, dRdUMesh_end, 0);
 
-            computeBalanceOfVolumeFraction<dim>(
+            computeBalanceOfVolumeFraction<configuration::dimension>(
                 density, velocity_begin, velocity_end, volume_fraction, volume_fraction_dot,
                 volume_fraction_gradient_begin, volume_fraction_gradient_end,
                 *(material_response_begin + mass_change_rate_index), rest_density,
                 *(material_response_begin + trace_mass_change_velocity_gradient_index), test_function,
                 interpolation_function, interpolation_function_gradient_begin, interpolation_function_gradient_end,
-                dUDotdU, dVolumeFractionDotdVolumeFraction, result, *(dRdRho_begin + phase), dRdU_begin + dim * phase,
-                dRdU_begin + dim * (phase + 1), *(dRdVolumeFraction_begin + phase), dRdC_phase, dRdTraceVA_phase,
+                dUDotdU, dVolumeFractionDotdVolumeFraction, result, *(dRdRho_begin + phase), dRdU_begin + configuration::dimension * phase,
+                dRdU_begin + configuration::dimension * (phase + 1), *(dRdVolumeFraction_begin + phase), dRdC_phase, dRdTraceVA_phase,
                 dRdUMesh_begin, dRdUMesh_end, volume_fraction_tolerance);
 
             // MASS CHANGE RATE
@@ -736,7 +736,7 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <int dim, class density_iter, class velocity_iter, class volume_fraction_iter,
+        template <class configuration, class density_iter, class velocity_iter, class volume_fraction_iter,
                   class volume_fraction_dot_iter, class volume_fraction_gradient_iter, class mass_change_rate_iter,
                   class rest_density_iter, class trace_mass_change_velocity_gradient_iter, typename test_function_type,
                   class result_iter>
@@ -795,7 +795,7 @@ namespace tardigradeBalanceEquations {
 
             TARDIGRADE_ERROR_TOOLS_EVAL(unsigned int nphases = (unsigned int)(density_end - density_begin);)
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(dim * nphases == (unsigned int)(velocity_end - velocity_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension * nphases == (unsigned int)(velocity_end - velocity_begin),
                                          "The velocity size is inconsistent with the number of phases");
 
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(volume_fraction_end - volume_fraction_begin),
@@ -805,7 +805,7 @@ namespace tardigradeBalanceEquations {
                 nphases == (unsigned int)(volume_fraction_dot_end - volume_fraction_dot_begin),
                 "The partial derivative of the volume fraction w.r.t. time size is not equal to the number of phases");
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(dim * nphases == (unsigned int)(volume_fraction_gradient_end -
+            TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension * nphases == (unsigned int)(volume_fraction_gradient_end -
                                                                          volume_fraction_gradient_begin),
                                          "The volume fraction gradient size is inconsistent with the number of phases");
 
@@ -819,17 +819,17 @@ namespace tardigradeBalanceEquations {
 
             for (auto rho = std::pair<unsigned int, density_iter>(0, density_begin); rho.second != density_end;
                  ++rho.first, ++rho.second) {
-                computeBalanceOfVolumeFraction<dim>(
-                    *rho.second, velocity_begin + dim * rho.first, velocity_begin + dim * (rho.first + 1),
+                computeBalanceOfVolumeFraction<configuration>(
+                    *rho.second, velocity_begin + configuration::dimension * rho.first, velocity_begin + configuration::dimension * (rho.first + 1),
                     *(volume_fraction_begin + rho.first), *(volume_fraction_dot_begin + rho.first),
-                    volume_fraction_gradient_begin + dim * rho.first,
-                    volume_fraction_gradient_begin + dim * (rho.first + 1), *(mass_change_rate_begin + rho.first),
+                    volume_fraction_gradient_begin + configuration::dimension * rho.first,
+                    volume_fraction_gradient_begin + configuration::dimension * (rho.first + 1), *(mass_change_rate_begin + rho.first),
                     *(rest_density_begin + rho.first), *(trace_mass_change_velocity_gradient_begin + rho.first),
                     test_function, *(result_begin + rho.first), volume_fraction_tolerance);
             }
         }
 
-        template <int dim, int mass_change_rate_index, int trace_mass_change_velocity_gradient_index,
+        template <class configuration, int mass_change_rate_index, int trace_mass_change_velocity_gradient_index,
                   class density_iter, class velocity_iter, class volume_fraction_iter, class volume_fraction_dot_iter,
                   class volume_fraction_gradient_iter, class material_response_iter, class rest_density_iter,
                   typename test_function_type, class result_iter>
@@ -886,7 +886,7 @@ namespace tardigradeBalanceEquations {
             const unsigned int material_response_size =
                 (unsigned int)(material_response_end - material_response_begin) / nphases;
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(dim * nphases == (unsigned int)(velocity_end - velocity_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension * nphases == (unsigned int)(velocity_end - velocity_begin),
                                          "The velocity size is inconsistent with the number of phases");
 
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(volume_fraction_end - volume_fraction_begin),
@@ -896,7 +896,7 @@ namespace tardigradeBalanceEquations {
                 nphases == (unsigned int)(volume_fraction_dot_end - volume_fraction_dot_begin),
                 "The partial derivative of the volume fraction w.r.t. time size is not equal to the number of phases");
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(dim * nphases == (unsigned int)(volume_fraction_gradient_end -
+            TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension * nphases == (unsigned int)(volume_fraction_gradient_end -
                                                                          volume_fraction_gradient_begin),
                                          "The volume fraction gradient size is inconsistent with the number of phases");
 
@@ -914,11 +914,11 @@ namespace tardigradeBalanceEquations {
 
             for (auto rho = std::pair<unsigned int, density_iter>(0, density_begin); rho.second != density_end;
                  ++rho.first, ++rho.second) {
-                computeBalanceOfVolumeFraction<dim, mass_change_rate_index, trace_mass_change_velocity_gradient_index>(
-                    *rho.second, velocity_begin + dim * rho.first, velocity_begin + dim * (rho.first + 1),
+                computeBalanceOfVolumeFraction<configuration::dimension, mass_change_rate_index, trace_mass_change_velocity_gradient_index>(
+                    *rho.second, velocity_begin + configuration::dimension * rho.first, velocity_begin + configuration::dimension * (rho.first + 1),
                     *(volume_fraction_begin + rho.first), *(volume_fraction_dot_begin + rho.first),
-                    volume_fraction_gradient_begin + dim * rho.first,
-                    volume_fraction_gradient_begin + dim * (rho.first + 1),
+                    volume_fraction_gradient_begin + configuration::dimension * rho.first,
+                    volume_fraction_gradient_begin + configuration::dimension * (rho.first + 1),
                     material_response_begin + material_response_size * rho.first,
                     material_response_begin + material_response_size * (rho.first + 1),
                     *(rest_density_begin + rho.first), test_function, *(result_begin + rho.first),
@@ -926,7 +926,7 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <int dim, class density_iter, class velocity_iter, class volume_fraction_iter,
+        template <class configuration, class density_iter, class velocity_iter, class volume_fraction_iter,
                   class volume_fraction_dot_iter, class volume_fraction_gradient_iter, class mass_change_rate_iter,
                   class rest_density_iter, class trace_mass_change_velocity_gradient_iter, typename test_function_type,
                   typename interpolation_function_type, class interpolation_function_gradient_iter,
@@ -1025,7 +1025,7 @@ namespace tardigradeBalanceEquations {
 
             TARDIGRADE_ERROR_TOOLS_EVAL(unsigned int nphases = (unsigned int)(density_end - density_begin);)
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(dim * nphases == (unsigned int)(velocity_end - velocity_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension * nphases == (unsigned int)(velocity_end - velocity_begin),
                                          "The velocity size is inconsistent with the number of phases");
 
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(volume_fraction_end - volume_fraction_begin),
@@ -1035,7 +1035,7 @@ namespace tardigradeBalanceEquations {
                 nphases == (unsigned int)(volume_fraction_dot_end - volume_fraction_dot_begin),
                 "The partial derivative of the volume fraction w.r.t. time size is not equal to the number of phases");
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(dim * nphases == (unsigned int)(volume_fraction_gradient_end -
+            TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension * nphases == (unsigned int)(volume_fraction_gradient_end -
                                                                          volume_fraction_gradient_begin),
                                          "The volume fraction gradient size is inconsistent with the number of phases");
 
@@ -1050,7 +1050,7 @@ namespace tardigradeBalanceEquations {
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(dRdRho_end - dRdRho_begin),
                                          "The dRdRho size is inconsistent with the number of phases");
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(dim * nphases == (unsigned int)(dRdU_end - dRdU_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension * nphases == (unsigned int)(dRdU_end - dRdU_begin),
                                          "The dRdU size is inconsistent with the number of phases");
 
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(dRdVolumeFraction_end - dRdVolumeFraction_begin),
@@ -1062,27 +1062,27 @@ namespace tardigradeBalanceEquations {
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(dRdTraceVA_end - dRdTraceVA_begin),
                                          "The dRdTraceVA size is inconsistent with the number of phases");
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(dim * nphases == (unsigned int)(dRdUMesh_end - dRdUMesh_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension * nphases == (unsigned int)(dRdUMesh_end - dRdUMesh_begin),
                                          "The dRdUMesh size is inconsistent with the number of phases");
 
             for (auto rho = std::pair<unsigned int, density_iter>(0, density_begin); rho.second != density_end;
                  ++rho.first, ++rho.second) {
-                computeBalanceOfVolumeFraction<dim>(
-                    *rho.second, velocity_begin + dim * rho.first, velocity_begin + dim * (rho.first + 1),
+                computeBalanceOfVolumeFraction<configuration>(
+                    *rho.second, velocity_begin + configuration::dimension * rho.first, velocity_begin + configuration::dimension * (rho.first + 1),
                     *(volume_fraction_begin + rho.first), *(volume_fraction_dot_begin + rho.first),
-                    volume_fraction_gradient_begin + dim * rho.first,
-                    volume_fraction_gradient_begin + dim * (rho.first + 1), *(mass_change_rate_begin + rho.first),
+                    volume_fraction_gradient_begin + configuration::dimension * rho.first,
+                    volume_fraction_gradient_begin + configuration::dimension * (rho.first + 1), *(mass_change_rate_begin + rho.first),
                     *(rest_density_begin + rho.first), *(trace_mass_change_velocity_gradient_begin + rho.first),
                     test_function, interpolation_function, interpolation_function_gradient_begin,
                     interpolation_function_gradient_end, dUDotdU, dVolumeFractionDotdVolumeFraction,
-                    *(result_begin + rho.first), *(dRdRho_begin + rho.first), dRdU_begin + dim * rho.first,
-                    dRdU_begin + dim * (rho.first + 1), *(dRdVolumeFraction_begin + rho.first),
-                    *(dRdC_begin + rho.first), *(dRdTraceVA_begin + rho.first), dRdUMesh_begin + dim * rho.first,
-                    dRdUMesh_begin + dim * (rho.first + 1), volume_fraction_tolerance);
+                    *(result_begin + rho.first), *(dRdRho_begin + rho.first), dRdU_begin + configuration::dimension * rho.first,
+                    dRdU_begin + configuration::dimension * (rho.first + 1), *(dRdVolumeFraction_begin + rho.first),
+                    *(dRdC_begin + rho.first), *(dRdTraceVA_begin + rho.first), dRdUMesh_begin + configuration::dimension * rho.first,
+                    dRdUMesh_begin + configuration::dimension * (rho.first + 1), volume_fraction_tolerance);
             }
         }
 
-        template <int dim, int material_response_dim, int mass_change_rate_index,
+        template <class configuration, int material_response_dim, int mass_change_rate_index,
                   int trace_mass_change_velocity_gradient_index, int material_response_num_dof, class density_iter,
                   class velocity_iter, class volume_fraction_iter, class volume_fraction_dot_iter,
                   class volume_fraction_gradient_iter, class material_response_iter,
@@ -1208,7 +1208,7 @@ namespace tardigradeBalanceEquations {
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(density_end - density_begin),
                                          "The density must have the same size as the result vector")
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(dim * nphases == (unsigned int)(velocity_end - velocity_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension * nphases == (unsigned int)(velocity_end - velocity_begin),
                                          "The velocity must be consistent with the size of the result vector")
 
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(volume_fraction_end - volume_fraction_begin),
@@ -1218,7 +1218,7 @@ namespace tardigradeBalanceEquations {
                                          "The volume fraction dot must have the same size as the result vector")
 
             TARDIGRADE_ERROR_TOOLS_CHECK(
-                dim * nphases == (unsigned int)(volume_fraction_gradient_end - volume_fraction_gradient_begin),
+                configuration::dimension * nphases == (unsigned int)(volume_fraction_gradient_end - volume_fraction_gradient_begin),
                 "The patial gradient of the volume fraction must be consistent with the size of the result vector")
 
             TARDIGRADE_ERROR_TOOLS_CHECK(
@@ -1242,10 +1242,10 @@ namespace tardigradeBalanceEquations {
                                          "The full material response dof spatial gradient vector must be the material "
                                          "response dimension times the number of DOF in the material response in size")
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * dim * nphases == (dRdU_end - dRdU_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * configuration::dimension * nphases == (dRdU_end - dRdU_begin),
                                          "The dRdU must be a consistent size with the number of phases")
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * dim * nphases == (dRdW_end - dRdW_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * configuration::dimension * nphases == (dRdW_end - dRdW_begin),
                                          "The dRdW must be a consistent size with the number of phases")
 
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases * nphases == (dRdTheta_end - dRdTheta_begin),
@@ -1257,13 +1257,13 @@ namespace tardigradeBalanceEquations {
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases * nphases == (dRdVolumeFraction_end - dRdVolumeFraction_begin),
                                          "The dRdVolumeFraction must be the same size as the number of phases")
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * dim == (dRdUMesh_end - dRdUMesh_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * configuration::dimension == (dRdUMesh_end - dRdUMesh_begin),
                                          "The dRdUMesh must be the same size as the dimension")
 
             for (auto v = std::pair<unsigned int, result_iter>(0, result_begin); v.second != result_end;
                  ++v.first, ++v.second) {
                 computeBalanceOfVolumeFraction<
-                    dim, material_response_dim, mass_change_rate_index, trace_mass_change_velocity_gradient_index,
+                    configuration::dimension, material_response_dim, mass_change_rate_index, trace_mass_change_velocity_gradient_index,
                     material_response_num_dof, density_type, velocity_iter, volume_fraction_type,
                     volume_fraction_dot_type, volume_fraction_gradient_iter, material_response_iter,
                     material_response_jacobian_iter, rest_density_type, test_function_type, interpolation_function_type,
@@ -1272,10 +1272,10 @@ namespace tardigradeBalanceEquations {
                     dRdTheta_iter, dRdE_iter, dRdVolumeFraction_iter, dRdZ_iter, dRdUMesh_iter, density_index,
                     displacement_index, velocity_index, temperature_index, internal_energy_index, volume_fraction_index,
                     additional_dof_index>(
-                    *(density_begin + v.first), velocity_begin + dim * v.first, velocity_begin + dim * (v.first + 1),
+                    *(density_begin + v.first), velocity_begin + configuration::dimension * v.first, velocity_begin + configuration::dimension * (v.first + 1),
                     *(volume_fraction_begin + v.first), *(volume_fraction_dot_begin + v.first),
-                    volume_fraction_gradient_begin + dim * v.first,
-                    volume_fraction_gradient_begin + dim * (v.first + 1),
+                    volume_fraction_gradient_begin + configuration::dimension * v.first,
+                    volume_fraction_gradient_begin + configuration::dimension * (v.first + 1),
                     material_response_begin + material_response_size * v.first,
                     material_response_begin + material_response_size * (v.first + 1),
                     material_response_jacobian_begin + material_response_size *
@@ -1288,14 +1288,14 @@ namespace tardigradeBalanceEquations {
                     interpolation_function_gradient_begin, interpolation_function_gradient_end,
                     full_material_response_dof_gradient_begin, full_material_response_dof_gradient_end, dUDotdU,
                     dVolumeFractionDotdVolumeFraction, v.first, *v.second, dRdRho_begin + nphases * v.first,
-                    dRdRho_begin + nphases * (v.first + 1), dRdU_begin + nphases * dim * v.first,
-                    dRdU_begin + nphases * dim * (v.first + 1), dRdW_begin + nphases * dim * v.first,
-                    dRdW_begin + nphases * dim * (v.first + 1), dRdTheta_begin + nphases * v.first,
+                    dRdRho_begin + nphases * (v.first + 1), dRdU_begin + nphases * configuration::dimension * v.first,
+                    dRdU_begin + nphases * configuration::dimension * (v.first + 1), dRdW_begin + nphases * configuration::dimension * v.first,
+                    dRdW_begin + nphases * configuration::dimension * (v.first + 1), dRdTheta_begin + nphases * v.first,
                     dRdTheta_begin + nphases * (v.first + 1), dRdE_begin + nphases * v.first,
                     dRdE_begin + nphases * (v.first + 1), dRdVolumeFraction_begin + nphases * v.first,
                     dRdVolumeFraction_begin + nphases * (v.first + 1), dRdZ_begin + num_additional_dof * v.first,
-                    dRdZ_begin + num_additional_dof * (v.first + 1), dRdUMesh_begin + dim * v.first,
-                    dRdUMesh_begin + dim * (v.first + 1), volume_fraction_tolerance);
+                    dRdZ_begin + num_additional_dof * (v.first + 1), dRdUMesh_begin + configuration::dimension * v.first,
+                    dRdUMesh_begin + configuration::dimension * (v.first + 1), volume_fraction_tolerance);
             }
         }
 

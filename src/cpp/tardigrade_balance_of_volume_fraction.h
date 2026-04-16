@@ -19,7 +19,7 @@ namespace tardigradeBalanceEquations {
 
     namespace balanceOfVolumeFraction {
 
-        template <int dim, typename density_type, class velocity_iter, typename volume_fraction_type,
+        template <class configuration, typename density_type, class velocity_iter, typename volume_fraction_type,
                   typename volume_fraction_dot_type, class volume_fraction_gradient_iter,
                   typename mass_change_rate_type, typename rest_density_type,
                   typename trace_mass_change_velocity_gradient_type, typename test_function_type, typename result_type>
@@ -33,7 +33,7 @@ namespace tardigradeBalanceEquations {
             const test_function_type &test_function, result_type &result,
             const double volume_fraction_tolerance = 1e-8);
 
-        template <int dim, int mass_change_rate_index, int trace_mass_change_velocity_gradient_index,
+        template <class configuration, int mass_change_rate_index, int trace_mass_change_velocity_gradient_index,
                   typename density_type, class velocity_iter, typename volume_fraction_type,
                   typename volume_fraction_dot_type, class volume_fraction_gradient_iter, class material_response_iter,
                   typename rest_density_type, typename test_function_type, typename result_type>
@@ -46,7 +46,7 @@ namespace tardigradeBalanceEquations {
             const rest_density_type &rest_density, const test_function_type &test_function, result_type &result,
             const double volume_fraction_tolerance = 1e-8);
 
-        template <int dim, class density_iter, class velocity_iter, class volume_fraction_iter,
+        template <class configuration, class density_iter, class velocity_iter, class volume_fraction_iter,
                   class volume_fraction_dot_iter, class volume_fraction_gradient_iter, class mass_change_rate_iter,
                   class rest_density_iter, class trace_mass_change_velocity_gradient_iter, typename test_function_type,
                   class result_iter>
@@ -64,7 +64,7 @@ namespace tardigradeBalanceEquations {
             const test_function_type &test_function, result_iter result_begin, result_iter result_end,
             const double volume_fraction_tolerance = 1e-8);
 
-        template <int dim, int mass_change_rate_index, int trace_mass_change_velocity_gradient_index,
+        template <class configuration, int mass_change_rate_index, int trace_mass_change_velocity_gradient_index,
                   class density_iter, class velocity_iter, class volume_fraction_iter, class volume_fraction_dot_iter,
                   class volume_fraction_gradient_iter, class material_response_iter, class rest_density_iter,
                   typename test_function_type, class result_iter>
@@ -80,7 +80,7 @@ namespace tardigradeBalanceEquations {
             const test_function_type &test_function, result_iter result_begin, result_iter result_end,
             const double volume_fraction_tolerance = 1e-8);
 
-        template <int dim, typename density_type, class velocity_iter, typename volume_fraction_type,
+        template <class configuration, typename density_type, class velocity_iter, typename volume_fraction_type,
                   typename volume_fraction_dot_type, class volume_fraction_gradient_iter,
                   typename mass_change_rate_type, typename rest_density_type,
                   typename trace_mass_change_velocity_gradient_type, typename test_function_type,
@@ -103,7 +103,7 @@ namespace tardigradeBalanceEquations {
             dRdC_type &dRdC, dRdTraceVA_type &dRdTraceVA, dRdUMesh_iter dRdUMesh_begin, dRdUMesh_iter dRdUMesh_end,
             const double volume_fraction_tolerance = 1e-8);
 
-        template <int dim, int material_response_dim, int mass_change_rate_index,
+        template <class configuration, int material_response_dim, int mass_change_rate_index,
                   int trace_mass_change_velocity_gradient_index, int material_response_num_dof, typename density_type,
                   class velocity_iter, typename volume_fraction_type, typename volume_fraction_dot_type,
                   class volume_fraction_gradient_iter, class material_response_iter,
@@ -137,7 +137,7 @@ namespace tardigradeBalanceEquations {
             dRdZ_iter dRdZ_begin, dRdZ_iter dRdZ_end, dRdUMesh_iter dRdUMesh_begin, dRdUMesh_iter dRdUMesh_end,
             const double volume_fraction_tolerance = 1e-8);
 
-        template <int dim, class density_iter, class velocity_iter, class volume_fraction_iter,
+        template <class configuration, class density_iter, class velocity_iter, class volume_fraction_iter,
                   class volume_fraction_dot_iter, class volume_fraction_gradient_iter, class mass_change_rate_iter,
                   class rest_density_iter, class trace_mass_change_velocity_gradient_iter, typename test_function_type,
                   typename interpolation_function_type, class interpolation_function_gradient_iter,
@@ -165,7 +165,7 @@ namespace tardigradeBalanceEquations {
             dRdTraceVA_iter dRdTraceVA_begin, dRdTraceVA_iter dRdTraceVA_end, dRdUMesh_iter dRdUMesh_begin,
             dRdUMesh_iter dRdUMesh_end, const double volume_fraction_tolerance = 1e-8);
 
-        template <int dim, int material_response_dim, int mass_change_rate_index,
+        template <class configuration, int material_response_dim, int mass_change_rate_index,
                   int trace_mass_change_velocity_gradient_index, int material_response_num_dof, class density_iter,
                   class velocity_iter, class volume_fraction_iter, class volume_fraction_dot_iter,
                   class volume_fraction_gradient_iter, class material_response_iter,
