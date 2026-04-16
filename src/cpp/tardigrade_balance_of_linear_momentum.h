@@ -75,8 +75,8 @@ namespace tardigradeBalanceEquations {
             dRdVolumeFraction_iter dRdVolumeFraction_begin, dRdVolumeFraction_iter dRdVolumeFraction_end,
             dRdUMesh_iter dRdUMesh_begin, dRdUMesh_iter dRdUMesh_end);
 
-        template <class configuration, class density_iter, class density_dot_iter, class density_gradient_iter, class velocity_iter,
-                  class velocity_dot_iter, class velocity_gradient_iter, class body_force_iter,
+        template <class configuration, class density_iter, class density_dot_iter, class density_gradient_iter,
+                  class velocity_iter, class velocity_dot_iter, class velocity_gradient_iter, class body_force_iter,
                   class cauchy_stress_iter, class volume_fraction_iter, typename testFunction_type,
                   class testFunctionGradient_iter, class result_iter>
         inline void computeBalanceOfLinearMomentum(
@@ -109,8 +109,9 @@ namespace tardigradeBalanceEquations {
             dRdV_iter dRdV_begin, dRdV_iter dRdV_end, dRdVDot_iter dRdVDot_begin, dRdVDot_iter dRdVDot_end,
             dRdGradV_iter dRdGradV_begin, dRdGradV_iter dRdGradV_end, dRdB_iter dRdB_begin, dRdB_iter dRdB_end);
 
-        template <class configuration, class density_iter, class density_dot_iter, class density_gradient_iter, class velocity_iter,
-                  class velocity_dot_iter, class velocity_gradient_iter, class body_force_iter, class result_iter>
+        template <class configuration, class density_iter, class density_dot_iter, class density_gradient_iter,
+                  class velocity_iter, class velocity_dot_iter, class velocity_gradient_iter, class body_force_iter,
+                  class result_iter>
         inline void computeBalanceOfLinearMomentumNonDivergence(
             const density_iter &density_begin, const density_iter &density_end,
             const density_dot_iter &density_dot_begin, const density_dot_iter &density_dot_end,
@@ -121,10 +122,10 @@ namespace tardigradeBalanceEquations {
             const body_force_iter &body_force_begin, const body_force_iter &body_force_end, result_iter result_begin,
             result_iter result_end);
 
-        template <class configuration, class density_iter, class density_dot_iter, class density_gradient_iter, class velocity_iter,
-                  class velocity_dot_iter, class velocity_gradient_iter, class body_force_iter, class result_iter,
-                  class dRdRho_iter, class dRdRhoDot_iter, class dRdGradRho_iter, class dRdV_iter, class dRdVDot_iter,
-                  class dRdGradV_iter, class dRdB_iter>
+        template <class configuration, class density_iter, class density_dot_iter, class density_gradient_iter,
+                  class velocity_iter, class velocity_dot_iter, class velocity_gradient_iter, class body_force_iter,
+                  class result_iter, class dRdRho_iter, class dRdRhoDot_iter, class dRdGradRho_iter, class dRdV_iter,
+                  class dRdVDot_iter, class dRdGradV_iter, class dRdB_iter>
         inline void computeBalanceOfLinearMomentumNonDivergence(
             const density_iter &density_begin, const density_iter &density_end,
             const density_dot_iter &density_dot_begin, const density_dot_iter &density_dot_end,
@@ -138,8 +139,8 @@ namespace tardigradeBalanceEquations {
             dRdV_iter dRdV_begin, dRdV_iter dRdV_end, dRdVDot_iter dRdVDot_begin, dRdVDot_iter dRdVDot_end,
             dRdGradV_iter dRdGradV_begin, dRdGradV_iter dRdGradV_end, dRdB_iter dRdB_begin, dRdB_iter dRdB_end);
 
-        template <class configuration, class testFunctionGradient_iter, class cauchyStress_iter, typename volumeFraction_type,
-                  class result_iter>
+        template <class configuration, class testFunctionGradient_iter, class cauchyStress_iter,
+                  typename volumeFraction_type, class result_iter>
         inline void computeBalanceOfLinearMomentumDivergence(const testFunctionGradient_iter &grad_test_function_begin,
                                                              const testFunctionGradient_iter &grad_test_function_end,
                                                              const cauchyStress_iter         &cauchy_stress_begin,
@@ -147,8 +148,9 @@ namespace tardigradeBalanceEquations {
                                                              const volumeFraction_type       &volume_fraction,
                                                              result_iter result_begin, result_iter result_end);
 
-        template <class configuration, class testFunctionGradient_iter, class cauchyStress_iter, typename volumeFraction_type,
-                  class result_iter, class dRdGradPsi_iter, class dRdCauchy_iter, class dRdVolumeFraction_iter>
+        template <class configuration, class testFunctionGradient_iter, class cauchyStress_iter,
+                  typename volumeFraction_type, class result_iter, class dRdGradPsi_iter, class dRdCauchy_iter,
+                  class dRdVolumeFraction_iter>
         inline void computeBalanceOfLinearMomentumDivergence(
             const testFunctionGradient_iter &grad_test_function_begin,
             const testFunctionGradient_iter &grad_test_function_end, const cauchyStress_iter &cauchy_stress_begin,
@@ -157,8 +159,8 @@ namespace tardigradeBalanceEquations {
             dRdGradPsi_iter dRdGradPsi_end, dRdCauchy_iter dRdCauchy_begin, dRdCauchy_iter dRdCauchy_end,
             dRdVolumeFraction_iter dRdVolumeFraction_begin, dRdVolumeFraction_iter dRdVolumeFraction_end);
 
-        template <class configuration, class testFunctionGradient_iter, class cauchyStress_iter, class volumeFraction_iter,
-                  class result_iter>
+        template <class configuration, class testFunctionGradient_iter, class cauchyStress_iter,
+                  class volumeFraction_iter, class result_iter>
         inline void computeBalanceOfLinearMomentumDivergence(const testFunctionGradient_iter &grad_test_function_begin,
                                                              const testFunctionGradient_iter &grad_test_function_end,
                                                              const cauchyStress_iter         &cauchy_stress_begin,
@@ -167,8 +169,9 @@ namespace tardigradeBalanceEquations {
                                                              const volumeFraction_iter       &volume_fraction_end,
                                                              result_iter result_begin, result_iter result_end);
 
-        template <class configuration, class testFunctionGradient_iter, class cauchyStress_iter, class volumeFraction_iter,
-                  class result_iter, class dRdGradPsi_iter, class dRdCauchy_iter, class dRdVolumeFraction_iter>
+        template <class configuration, class testFunctionGradient_iter, class cauchyStress_iter,
+                  class volumeFraction_iter, class result_iter, class dRdGradPsi_iter, class dRdCauchy_iter,
+                  class dRdVolumeFraction_iter>
         inline void computeBalanceOfLinearMomentumDivergence(
             const testFunctionGradient_iter &grad_test_function_begin,
             const testFunctionGradient_iter &grad_test_function_end, const cauchyStress_iter &cauchy_stress_begin,

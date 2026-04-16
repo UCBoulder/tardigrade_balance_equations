@@ -11,20 +11,17 @@
 
 namespace tardigradeBalanceEquations {
 
-    template<unsigned int _dimension = 3, unsigned int _material_response_dimension = _dimension>
-    class BalanceEquationConfigurationBase{
+    template <unsigned int _dimension = 3, unsigned int _material_response_dimension = _dimension>
+    class BalanceEquationConfigurationBase {
+       public:
+        //! The spatial dimension of the balance equations
+        static constexpr unsigned int dimension = _dimension;
 
-        public:
-
-            //! The spatial dimension of the balance equations
-            static constexpr unsigned int dimension = _dimension;
-
-            //! The spatial dimension of the material
-            static constexpr unsigned int material_response_dimension = _material_response_dimension;
-
+        //! The spatial dimension of the material
+        static constexpr unsigned int material_response_dimension = _material_response_dimension;
     };
 
-}
+}  // namespace tardigradeBalanceEquations
 
 #include "tardigrade_balance_equations.tpp"
 

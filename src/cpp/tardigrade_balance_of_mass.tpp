@@ -33,9 +33,9 @@ namespace tardigradeBalanceEquations {
              * \param &result: The net mass change per unit volume \f$ c \f$
              */
 
-            computeBalanceOfMass<tardigradeBalanceEquations::BalanceEquationConfigurationBase<>>(density, density_dot, std::begin(density_gradient),
-                                             std::end(density_gradient), std::begin(velocity), std::end(velocity),
-                                             std::begin(velocity_gradient), std::end(velocity_gradient), result);
+            computeBalanceOfMass<tardigradeBalanceEquations::BalanceEquationConfigurationBase<>>(
+                density, density_dot, std::begin(density_gradient), std::end(density_gradient), std::begin(velocity),
+                std::end(velocity), std::begin(velocity_gradient), std::end(velocity_gradient), result);
         }
 
         void computeBalanceOfMass(const floatType &density, const floatType &density_dot,
@@ -66,11 +66,11 @@ namespace tardigradeBalanceEquations {
              * v_{i,j} \f$
              */
 
-            computeBalanceOfMass<tardigradeBalanceEquations::BalanceEquationConfigurationBase<>>(density, density_dot, std::begin(density_gradient),
-                                             std::end(density_gradient), std::begin(velocity), std::end(velocity),
-                                             std::begin(velocity_gradient), std::end(velocity_gradient), result, dRdRho,
-                                             dRdRhoDot, std::begin(dRdGradRho), std::end(dRdGradRho), std::begin(dRdV),
-                                             std::end(dRdV), std::begin(dRdGradV), std::end(dRdGradV));
+            computeBalanceOfMass<tardigradeBalanceEquations::BalanceEquationConfigurationBase<>>(
+                density, density_dot, std::begin(density_gradient), std::end(density_gradient), std::begin(velocity),
+                std::end(velocity), std::begin(velocity_gradient), std::end(velocity_gradient), result, dRdRho,
+                dRdRhoDot, std::begin(dRdGradRho), std::end(dRdGradRho), std::begin(dRdV), std::end(dRdV),
+                std::begin(dRdGradV), std::end(dRdGradV));
         }
 
         template <class configuration, typename density_type, typename densityDot_type, typename result_type,
@@ -106,11 +106,12 @@ namespace tardigradeBalanceEquations {
                                              (unsigned int)(velocity_end - velocity_begin),
                                          "The density gradient and the velocity must have the same size");
 
-            TARDIGRADE_ERROR_TOOLS_CHECK((unsigned int)(velocity_gradient_end - velocity_gradient_begin) == configuration::dimension * configuration::dimension,
-                                         "The velocity gradient has a size of " +
-                                             std::to_string((unsigned int)(velocity_gradient_end -
-                                                                           velocity_gradient_begin)) +
-                                             " and must have a size of " + std::to_string(configuration::dimension * configuration::dimension));
+            TARDIGRADE_ERROR_TOOLS_CHECK(
+                (unsigned int)(velocity_gradient_end - velocity_gradient_begin) ==
+                    configuration::dimension * configuration::dimension,
+                "The velocity gradient has a size of " +
+                    std::to_string((unsigned int)(velocity_gradient_end - velocity_gradient_begin)) +
+                    " and must have a size of " + std::to_string(configuration::dimension * configuration::dimension));
 
             result = std::inner_product(density_gradient_begin, density_gradient_end, velocity_begin, density_dot);
 
@@ -152,15 +153,15 @@ namespace tardigradeBalanceEquations {
              */
 
             computeBalanceOfMass<configuration>(density, density_dot, density_gradient_begin, density_gradient_end,
-                                      velocity_begin, velocity_end, velocity_gradient_begin, velocity_gradient_end,
-                                      result);
+                                                velocity_begin, velocity_end, velocity_gradient_begin,
+                                                velocity_gradient_end, result);
 
             result *= test_function;
         }
 
-        template <class configuration, typename density_type, typename densityDot_type, typename result_type, typename dRdRho_type,
-                  typename dRdRhoDot_type, class densityGradient_iter, class velocity_iter, class velocityGradient_iter,
-                  class dRdGradRho_iter, class dRdV_iter, class dRdGradV_iter>
+        template <class configuration, typename density_type, typename densityDot_type, typename result_type,
+                  typename dRdRho_type, typename dRdRhoDot_type, class densityGradient_iter, class velocity_iter,
+                  class velocityGradient_iter, class dRdGradRho_iter, class dRdV_iter, class dRdGradV_iter>
         void computeBalanceOfMass(const density_type &density, const densityDot_type &density_dot,
                                   const densityGradient_iter &density_gradient_begin,
                                   const densityGradient_iter &density_gradient_end, const velocity_iter &velocity_begin,
@@ -207,8 +208,8 @@ namespace tardigradeBalanceEquations {
              */
 
             computeBalanceOfMass<configuration>(density, density_dot, density_gradient_begin, density_gradient_end,
-                                      velocity_begin, velocity_end, velocity_gradient_begin, velocity_gradient_end,
-                                      result);
+                                                velocity_begin, velocity_end, velocity_gradient_begin,
+                                                velocity_gradient_end, result);
 
             dRdRho = 0;
 
@@ -293,14 +294,17 @@ namespace tardigradeBalanceEquations {
 
             density_type dRdRhoDot;
 
-            std::array<density_type, configuration::dimension>                                               dRdGradRho{};
-            std::array<typename std::iterator_traits<dRdU_iter>::value_type, configuration::dimension>       dRdV;
-            std::array<typename std::iterator_traits<dRdU_iter>::value_type, configuration::dimension * configuration::dimension> dRdGradV;
+            std::array<density_type, configuration::dimension>                                         dRdGradRho{};
+            std::array<typename std::iterator_traits<dRdU_iter>::value_type, configuration::dimension> dRdV;
+            std::array<typename std::iterator_traits<dRdU_iter>::value_type,
+                       configuration::dimension * configuration::dimension>
+                dRdGradV;
 
             computeBalanceOfMass<configuration>(density, density_dot, density_gradient_begin, density_gradient_end,
-                                      velocity_begin, velocity_end, velocity_gradient_begin, velocity_gradient_end,
-                                      result, dRdRho, dRdRhoDot, std::begin(dRdGradRho), std::end(dRdGradRho),
-                                      std::begin(dRdV), std::end(dRdV), std::begin(dRdGradV), std::end(dRdGradV));
+                                                velocity_begin, velocity_end, velocity_gradient_begin,
+                                                velocity_gradient_end, result, dRdRho, dRdRhoDot,
+                                                std::begin(dRdGradRho), std::end(dRdGradRho), std::begin(dRdV),
+                                                std::end(dRdV), std::begin(dRdGradV), std::end(dRdGradV));
 
             // Set the mass change rate
             result *= test_function;
@@ -337,8 +341,8 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <class configuration, class density_iter, class densityDot_iter, class densityGradient_iter, class velocity_iter,
-                  class velocityGradient_iter, class result_iter>
+        template <class configuration, class density_iter, class densityDot_iter, class densityGradient_iter,
+                  class velocity_iter, class velocityGradient_iter, class result_iter>
         void computeBalanceOfMass(const density_iter &density_begin, const density_iter &density_end,
                                   const densityDot_iter &density_dot_begin, const densityDot_iter &density_dot_end,
                                   const densityGradient_iter &density_gradient_begin,
@@ -384,7 +388,8 @@ namespace tardigradeBalanceEquations {
                                              (unsigned int)(velocity_end - velocity_begin),
                                          "The density and velocity arrays are of inconsistent length");
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension * configuration::dimension * (unsigned int)(density_end - density_begin) ==
+            TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension * configuration::dimension *
+                                                 (unsigned int)(density_end - density_begin) ==
                                              (unsigned int)(velocity_gradient_end - velocity_gradient_begin),
                                          "The density and velocity gradient arrays are of inconsistent length");
 
@@ -397,12 +402,15 @@ namespace tardigradeBalanceEquations {
             for (auto rho = density_begin; rho != density_end; ++rho) {
                 phase = (unsigned int)(rho - density_begin);
 
-                computeBalanceOfMass<configuration>(*(density_begin + phase), *(density_dot_begin + phase),
-                                          density_gradient_begin + configuration::dimension * phase,
-                                          density_gradient_begin + configuration::dimension * (phase + 1), velocity_begin + configuration::dimension * phase,
-                                          velocity_begin + configuration::dimension * (phase + 1),
-                                          velocity_gradient_begin + configuration::dimension * configuration::dimension * phase,
-                                          velocity_gradient_begin + configuration::dimension * configuration::dimension * (phase + 1), *(result_begin + phase));
+                computeBalanceOfMass<configuration>(
+                    *(density_begin + phase), *(density_dot_begin + phase),
+                    density_gradient_begin + configuration::dimension * phase,
+                    density_gradient_begin + configuration::dimension * (phase + 1),
+                    velocity_begin + configuration::dimension * phase,
+                    velocity_begin + configuration::dimension * (phase + 1),
+                    velocity_gradient_begin + configuration::dimension * configuration::dimension * phase,
+                    velocity_gradient_begin + configuration::dimension * configuration::dimension * (phase + 1),
+                    *(result_begin + phase));
             }
         }
 
@@ -446,17 +454,18 @@ namespace tardigradeBalanceEquations {
              */
 
             computeBalanceOfMass<configuration>(density_begin, density_end, density_dot_begin, density_dot_end,
-                                      density_gradient_begin, density_gradient_end, velocity_begin, velocity_end,
-                                      velocity_gradient_begin, velocity_gradient_end, result_begin, result_end);
+                                                density_gradient_begin, density_gradient_end, velocity_begin,
+                                                velocity_end, velocity_gradient_begin, velocity_gradient_end,
+                                                result_begin, result_end);
 
             std::transform(result_begin, result_end, result_begin,
                            std::bind(std::multiplies<typename std::iterator_traits<result_iter>::value_type>(),
                                      std::placeholders::_1, test_function));
         }
 
-        template <class configuration, class density_iter, class densityDot_iter, class densityGradient_iter, class velocity_iter,
-                  class velocityGradient_iter, class result_iter, class dRdRho_iter, class dRdRhoDot_iter,
-                  class dRdGradRho_iter, class dRdV_iter, class dRdGradV_iter>
+        template <class configuration, class density_iter, class densityDot_iter, class densityGradient_iter,
+                  class velocity_iter, class velocityGradient_iter, class result_iter, class dRdRho_iter,
+                  class dRdRhoDot_iter, class dRdGradRho_iter, class dRdV_iter, class dRdGradV_iter>
         void computeBalanceOfMass(const density_iter &density_begin, const density_iter &density_end,
                                   const densityDot_iter &density_dot_begin, const densityDot_iter &density_dot_end,
                                   const densityGradient_iter &density_gradient_begin,
@@ -526,7 +535,8 @@ namespace tardigradeBalanceEquations {
                                              (unsigned int)(velocity_end - velocity_begin),
                                          "The density and velocity arrays are of inconsistent length");
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension * configuration::dimension * (unsigned int)(density_end - density_begin) ==
+            TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension * configuration::dimension *
+                                                 (unsigned int)(density_end - density_begin) ==
                                              (unsigned int)(velocity_gradient_end - velocity_gradient_begin),
                                          "The density and velocity gradient arrays are of inconsistent length");
 
@@ -550,7 +560,8 @@ namespace tardigradeBalanceEquations {
                                              (unsigned int)(dRdV_end - dRdV_begin),
                                          "The density and dRdV arrays must have consistent lengths");
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension * configuration::dimension * (unsigned int)(density_end - density_begin) ==
+            TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension * configuration::dimension *
+                                                 (unsigned int)(density_end - density_begin) ==
                                              (unsigned int)(dRdGradV_end - dRdGradV_begin),
                                          "The density and dRdGradV arrays must have consistent lengths");
 
@@ -559,16 +570,20 @@ namespace tardigradeBalanceEquations {
             for (auto rho = density_begin; rho != density_end; ++rho) {
                 phase = (unsigned int)(rho - density_begin);
 
-                computeBalanceOfMass<configuration>(*(density_begin + phase), *(density_dot_begin + phase),
-                                          density_gradient_begin + configuration::dimension * phase,
-                                          density_gradient_begin + configuration::dimension * (phase + 1), velocity_begin + configuration::dimension * phase,
-                                          velocity_begin + configuration::dimension * (phase + 1),
-                                          velocity_gradient_begin + configuration::dimension * configuration::dimension * phase,
-                                          velocity_gradient_begin + configuration::dimension * configuration::dimension * (phase + 1), *(result_begin + phase),
-                                          *(dRdRho_begin + phase), *(dRdRhoDot_begin + phase),
-                                          dRdGradRho_begin + configuration::dimension * phase, dRdGradRho_begin + configuration::dimension * (phase + 1),
-                                          dRdV_begin + configuration::dimension * phase, dRdV_begin + configuration::dimension * (phase + 1),
-                                          dRdGradV_begin + configuration::dimension * configuration::dimension * phase, dRdGradV_begin + configuration::dimension * configuration::dimension * (phase + 1));
+                computeBalanceOfMass<configuration>(
+                    *(density_begin + phase), *(density_dot_begin + phase),
+                    density_gradient_begin + configuration::dimension * phase,
+                    density_gradient_begin + configuration::dimension * (phase + 1),
+                    velocity_begin + configuration::dimension * phase,
+                    velocity_begin + configuration::dimension * (phase + 1),
+                    velocity_gradient_begin + configuration::dimension * configuration::dimension * phase,
+                    velocity_gradient_begin + configuration::dimension * configuration::dimension * (phase + 1),
+                    *(result_begin + phase), *(dRdRho_begin + phase), *(dRdRhoDot_begin + phase),
+                    dRdGradRho_begin + configuration::dimension * phase,
+                    dRdGradRho_begin + configuration::dimension * (phase + 1),
+                    dRdV_begin + configuration::dimension * phase, dRdV_begin + configuration::dimension * (phase + 1),
+                    dRdGradV_begin + configuration::dimension * configuration::dimension * phase,
+                    dRdGradV_begin + configuration::dimension * configuration::dimension * (phase + 1));
             }
         }
 
@@ -660,7 +675,8 @@ namespace tardigradeBalanceEquations {
                                              (unsigned int)(velocity_end - velocity_begin),
                                          "The density and velocity arrays are of inconsistent length");
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension * configuration::dimension * (unsigned int)(density_end - density_begin) ==
+            TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension * configuration::dimension *
+                                                 (unsigned int)(density_end - density_begin) ==
                                              (unsigned int)(velocity_gradient_end - velocity_gradient_begin),
                                          "The density and velocity gradient arrays are of inconsistent length");
 
@@ -694,22 +710,25 @@ namespace tardigradeBalanceEquations {
             for (auto rho = density_begin; rho != density_end; ++rho) {
                 phase = (unsigned int)(rho - density_begin);
 
-                computeBalanceOfMass<configuration>(*(density_begin + phase), *(density_dot_begin + phase),
-                                          density_gradient_begin + configuration::dimension * phase,
-                                          density_gradient_begin + configuration::dimension * (phase + 1), velocity_begin + configuration::dimension * phase,
-                                          velocity_begin + configuration::dimension * (phase + 1),
-                                          velocity_gradient_begin + configuration::dimension * configuration::dimension * phase,
-                                          velocity_gradient_begin + configuration::dimension * configuration::dimension * (phase + 1), test_function,
-                                          interpolation_function, interpolation_function_gradient_begin,
-                                          interpolation_function_gradient_end, *(dDensityDotdDensity_begin + phase),
-                                          *(dUDotdU_begin + phase), *(result_begin + phase), *(dRdRho_begin + phase),
-                                          dRdU_begin + configuration::dimension * phase, dRdU_begin + configuration::dimension * (phase + 1),
-                                          dRdUMesh_begin + configuration::dimension * phase, dRdUMesh_begin + configuration::dimension * (phase + 1));
+                computeBalanceOfMass<configuration>(
+                    *(density_begin + phase), *(density_dot_begin + phase),
+                    density_gradient_begin + configuration::dimension * phase,
+                    density_gradient_begin + configuration::dimension * (phase + 1),
+                    velocity_begin + configuration::dimension * phase,
+                    velocity_begin + configuration::dimension * (phase + 1),
+                    velocity_gradient_begin + configuration::dimension * configuration::dimension * phase,
+                    velocity_gradient_begin + configuration::dimension * configuration::dimension * (phase + 1),
+                    test_function, interpolation_function, interpolation_function_gradient_begin,
+                    interpolation_function_gradient_end, *(dDensityDotdDensity_begin + phase), *(dUDotdU_begin + phase),
+                    *(result_begin + phase), *(dRdRho_begin + phase), dRdU_begin + configuration::dimension * phase,
+                    dRdU_begin + configuration::dimension * (phase + 1),
+                    dRdUMesh_begin + configuration::dimension * phase,
+                    dRdUMesh_begin + configuration::dimension * (phase + 1));
             }
         }
 
-        template <class configuration, int mass_change_index, typename density_type, typename densityDot_type, typename result_type,
-                  typename testFunction_type, class densityGradient_iter, class velocity_iter,
+        template <class configuration, int mass_change_index, typename density_type, typename densityDot_type,
+                  typename result_type, typename testFunction_type, class densityGradient_iter, class velocity_iter,
                   class velocityGradient_iter, class material_response_iter>
         void computeBalanceOfMass(const density_type &density, const densityDot_type &density_dot,
                                   const densityGradient_iter &density_gradient_begin,
@@ -745,15 +764,15 @@ namespace tardigradeBalanceEquations {
 
             // Compute the non-mass change parts of the balance of mass
             computeBalanceOfMass<configuration>(density, density_dot, density_gradient_begin, density_gradient_end,
-                                      velocity_begin, velocity_end, velocity_gradient_begin, velocity_gradient_end,
-                                      test_function, result);
+                                                velocity_begin, velocity_end, velocity_gradient_begin,
+                                                velocity_gradient_end, test_function, result);
 
             // Add in the contributions from the change in mass
             result -= test_function * (*(material_response_begin + mass_change_index));
         }
 
-        template <class configuration, int mass_change_index, class density_iter, class densityDot_iter, class result_iter,
-                  typename testFunction_type, class densityGradient_iter, class velocity_iter,
+        template <class configuration, int mass_change_index, class density_iter, class densityDot_iter,
+                  class result_iter, typename testFunction_type, class densityGradient_iter, class velocity_iter,
                   class velocityGradient_iter, class material_response_iter>
         void computeBalanceOfMass(
             const density_iter &density_begin, const density_iter &density_end,
@@ -805,7 +824,8 @@ namespace tardigradeBalanceEquations {
                                              (unsigned int)(density_gradient_end - density_gradient_begin),
                                          "The density and density gradient arrays must have consistent lengths")
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension * num_phases == (unsigned int)(velocity_end - velocity_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension * num_phases ==
+                                             (unsigned int)(velocity_end - velocity_begin),
                                          "The density and velocity arrays must have consistent lengths")
 
             TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension * configuration::dimension * num_phases ==
@@ -822,9 +842,12 @@ namespace tardigradeBalanceEquations {
             for (auto v = std::pair<unsigned int, density_iter>(0, density_begin); v.second != density_end;
                  ++v.first, ++v.second) {
                 computeBalanceOfMass<configuration, mass_change_index>(
-                    *v.second, *(density_dot_begin + v.first), density_gradient_begin + configuration::dimension * v.first,
-                    density_gradient_begin + configuration::dimension * (v.first + 1), velocity_begin + configuration::dimension * v.first,
-                    velocity_begin + configuration::dimension * (v.first + 1), velocity_gradient_begin + configuration::dimension * configuration::dimension * v.first,
+                    *v.second, *(density_dot_begin + v.first),
+                    density_gradient_begin + configuration::dimension * v.first,
+                    density_gradient_begin + configuration::dimension * (v.first + 1),
+                    velocity_begin + configuration::dimension * v.first,
+                    velocity_begin + configuration::dimension * (v.first + 1),
+                    velocity_gradient_begin + configuration::dimension * configuration::dimension * v.first,
                     velocity_gradient_begin + configuration::dimension * configuration::dimension * (v.first + 1),
                     material_response_begin + material_response_size * v.first,
                     material_response_begin + material_response_size * (v.first + 1), test_function,
@@ -977,11 +1000,12 @@ namespace tardigradeBalanceEquations {
 
             // Compute the non-mass change parts of the balance of mass
             computeBalanceOfMass<configuration>(density, density_dot, density_gradient_begin, density_gradient_end,
-                                      velocity_begin, velocity_end, velocity_gradient_begin, velocity_gradient_end,
-                                      test_function, interpolation_function, interpolation_function_gradient_begin,
-                                      interpolation_function_gradient_end, dDensityDotdDensity, dUDotdU, result,
-                                      phase_dRdRho, std::begin(phase_dRdU), std::end(phase_dRdU), dRdUMesh_begin,
-                                      dRdUMesh_end);
+                                                velocity_begin, velocity_end, velocity_gradient_begin,
+                                                velocity_gradient_end, test_function, interpolation_function,
+                                                interpolation_function_gradient_begin,
+                                                interpolation_function_gradient_end, dDensityDotdDensity, dUDotdU,
+                                                result, phase_dRdRho, std::begin(phase_dRdU), std::end(phase_dRdU),
+                                                dRdUMesh_begin, dRdUMesh_end);
 
             // Add in the contributions from the change in mass
             result -= test_function * (*(material_response_begin + mass_change_index));
@@ -1346,10 +1370,12 @@ namespace tardigradeBalanceEquations {
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(density_dot_end - density_dot_begin),
                                          "The length of density dot and density must be the same")
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * configuration::dimension == (unsigned int)(density_gradient_end - density_gradient_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * configuration::dimension ==
+                                             (unsigned int)(density_gradient_end - density_gradient_begin),
                                          "The length of the density gradient and the density must be consistent")
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * configuration::dimension == (unsigned int)(velocity_end - velocity_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * configuration::dimension ==
+                                             (unsigned int)(velocity_end - velocity_begin),
                                          "The length of the velocity and the density must be consistent")
 
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases * configuration::dimension * configuration::dimension ==
@@ -1377,9 +1403,10 @@ namespace tardigradeBalanceEquations {
                     "\n  actual jacobian size       : " +
                     std::to_string((unsigned int)(material_response_jacobian_end - material_response_jacobian_begin)))
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension == (unsigned int)(interpolation_function_gradient_end -
-                                                               interpolation_function_gradient_begin),
-                                         "The interpolation function gradient must have a size of configuration::dimension")
+            TARDIGRADE_ERROR_TOOLS_CHECK(
+                configuration::dimension ==
+                    (unsigned int)(interpolation_function_gradient_end - interpolation_function_gradient_begin),
+                "The interpolation function gradient must have a size of configuration::dimension")
 
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(result_end - result_begin),
                                          "The result vector must be the same size as the density vector")
@@ -1407,7 +1434,8 @@ namespace tardigradeBalanceEquations {
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases * num_additional_dof == (unsigned int)(dRdZ_end - dRdZ_begin),
                                          "dRdZ must have a consistent size with the density vector")
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * configuration::dimension == (unsigned int)(dRdUMesh_end - dRdUMesh_begin),
+            TARDIGRADE_ERROR_TOOLS_CHECK(nphases * configuration::dimension ==
+                                             (unsigned int)(dRdUMesh_end - dRdUMesh_begin),
                                          "dRdUMesh must have a consistent size with the density vector")
 
             for (auto v = std::pair<unsigned int, density_iter>(0, density_begin); v.second != density_end;
@@ -1420,9 +1448,12 @@ namespace tardigradeBalanceEquations {
                     dRdU_iter, dRdW_iter, dRdTheta_iter, dRdE_iter, dRdVF_iter, dRdZ_iter, dRdUMesh_iter,
                     dDensityDotdDensity_type, dUDotdU_type, density_index, displacement_index, velocity_index,
                     temperature_index, internal_energy_index, volume_fraction_index, additional_dof_index>(
-                    *(density_begin + v.first), *(density_dot_begin + v.first), density_gradient_begin + configuration::dimension * v.first,
-                    density_gradient_begin + configuration::dimension * (v.first + 1), velocity_begin + configuration::dimension * v.first,
-                    velocity_begin + configuration::dimension * (v.first + 1), velocity_gradient_begin + configuration::dimension * configuration::dimension * v.first,
+                    *(density_begin + v.first), *(density_dot_begin + v.first),
+                    density_gradient_begin + configuration::dimension * v.first,
+                    density_gradient_begin + configuration::dimension * (v.first + 1),
+                    velocity_begin + configuration::dimension * v.first,
+                    velocity_begin + configuration::dimension * (v.first + 1),
+                    velocity_gradient_begin + configuration::dimension * configuration::dimension * v.first,
                     velocity_gradient_begin + configuration::dimension * configuration::dimension * (v.first + 1),
                     material_response_begin + material_response_size * v.first,
                     material_response_begin + material_response_size * (v.first + 1),
@@ -1436,13 +1467,16 @@ namespace tardigradeBalanceEquations {
                     interpolation_function_gradient_end, full_material_response_dof_gradient_begin,
                     full_material_response_dof_gradient_end, dDensityDotdDensity, dUDotdU, v.first,
                     *(result_begin + v.first), dRdRho_begin + nphases * 1 * v.first,
-                    dRdRho_begin + nphases * 1 * (v.first + 1), dRdU_begin + nphases * configuration::dimension * v.first,
-                    dRdU_begin + nphases * configuration::dimension * (v.first + 1), dRdW_begin + nphases * configuration::dimension * v.first,
-                    dRdW_begin + nphases * configuration::dimension * (v.first + 1), dRdTheta_begin + nphases * 1 * v.first,
-                    dRdTheta_begin + nphases * 1 * (v.first + 1), dRdE_begin + nphases * 1 * v.first,
-                    dRdE_begin + nphases * 1 * (v.first + 1), dRdVF_begin + nphases * 1 * v.first,
-                    dRdVF_begin + nphases * 1 * (v.first + 1), dRdZ_begin + num_additional_dof * v.first,
-                    dRdZ_begin + num_additional_dof * (v.first + 1), dRdUMesh_begin + 1 * configuration::dimension * v.first,
+                    dRdRho_begin + nphases * 1 * (v.first + 1),
+                    dRdU_begin + nphases * configuration::dimension * v.first,
+                    dRdU_begin + nphases * configuration::dimension * (v.first + 1),
+                    dRdW_begin + nphases * configuration::dimension * v.first,
+                    dRdW_begin + nphases * configuration::dimension * (v.first + 1),
+                    dRdTheta_begin + nphases * 1 * v.first, dRdTheta_begin + nphases * 1 * (v.first + 1),
+                    dRdE_begin + nphases * 1 * v.first, dRdE_begin + nphases * 1 * (v.first + 1),
+                    dRdVF_begin + nphases * 1 * v.first, dRdVF_begin + nphases * 1 * (v.first + 1),
+                    dRdZ_begin + num_additional_dof * v.first, dRdZ_begin + num_additional_dof * (v.first + 1),
+                    dRdUMesh_begin + 1 * configuration::dimension * v.first,
                     dRdUMesh_begin + 1 * configuration::dimension * (v.first + 1));
             }
         }
@@ -1586,13 +1620,15 @@ namespace tardigradeBalanceEquations {
                                                                            interpolation_function_gradient_begin)) +
                                              ")")
 
-            TARDIGRADE_ERROR_TOOLS_CHECK((unsigned int)(dRdU_end - dRdU_begin) == nphases * configuration::material_response_dimension,
+            TARDIGRADE_ERROR_TOOLS_CHECK((unsigned int)(dRdU_end - dRdU_begin) ==
+                                             nphases * configuration::material_response_dimension,
                                          "dRdU is an inconsistent size (" + std::to_string(dRdU_end - dRdU_begin) +
                                              ") with the number of phases (" + std::to_string(nphases) +
                                              ") and the material response dimension (" +
                                              std::to_string(configuration::material_response_dimension) + ")")
 
-            TARDIGRADE_ERROR_TOOLS_CHECK((unsigned int)(dRdW_end - dRdW_begin) == nphases * configuration::material_response_dimension,
+            TARDIGRADE_ERROR_TOOLS_CHECK((unsigned int)(dRdW_end - dRdW_begin) ==
+                                             nphases * configuration::material_response_dimension,
                                          "dRdW is an inconsistent size (" + std::to_string(dRdW_end - dRdW_begin) +
                                              ") with the number of phases (" + std::to_string(nphases) +
                                              ") and the material response dimension (" +
@@ -1643,19 +1679,20 @@ namespace tardigradeBalanceEquations {
                      ++p.first, ++p.second) {
                     *p.second -= (*(test_function_gradient_begin + j)) *
                                  (*(material_response_jacobian_begin +
-                                    (nphases * num_phase_dof + num_additional_dof) * (1 + configuration::material_response_dimension) *
-                                        (diffusion_index + j) +
+                                    (nphases * num_phase_dof + num_additional_dof) *
+                                        (1 + configuration::material_response_dimension) * (diffusion_index + j) +
                                     nphases * density_index + p.first)) *
                                  interpolation_function;
 
                     for (unsigned int a = 0; a < configuration::material_response_dimension; ++a) {
-                        *p.second -= (*(test_function_gradient_begin + j)) *
-                                     (*(material_response_jacobian_begin +
-                                        (nphases * num_phase_dof + num_additional_dof) * (1 + configuration::material_response_dimension) *
-                                            (diffusion_index + j) +
-                                        (nphases * num_phase_dof + num_additional_dof) +
-                                        configuration::material_response_dimension * (nphases * density_index + p.first) + a)) *
-                                     (*(interpolation_function_gradient_begin + a));
+                        *p.second -=
+                            (*(test_function_gradient_begin + j)) *
+                            (*(material_response_jacobian_begin +
+                               (nphases * num_phase_dof + num_additional_dof) *
+                                   (1 + configuration::material_response_dimension) * (diffusion_index + j) +
+                               (nphases * num_phase_dof + num_additional_dof) +
+                               configuration::material_response_dimension * (nphases * density_index + p.first) + a)) *
+                            (*(interpolation_function_gradient_begin + a));
                     }
                 }
 
@@ -1664,19 +1701,20 @@ namespace tardigradeBalanceEquations {
                      ++p.first, ++p.second) {
                     *p.second -= (*(test_function_gradient_begin + j)) *
                                  (*(material_response_jacobian_begin +
-                                    (nphases * num_phase_dof + num_additional_dof) * (1 + configuration::material_response_dimension) *
-                                        (diffusion_index + j) +
+                                    (nphases * num_phase_dof + num_additional_dof) *
+                                        (1 + configuration::material_response_dimension) * (diffusion_index + j) +
                                     nphases * velocity_index + p.first)) *
                                  interpolation_function * dUDotdU;
 
                     for (unsigned int a = 0; a < configuration::material_response_dimension; ++a) {
-                        *p.second -= (*(test_function_gradient_begin + j)) *
-                                     (*(material_response_jacobian_begin +
-                                        (nphases * num_phase_dof + num_additional_dof) * (1 + configuration::material_response_dimension) *
-                                            (diffusion_index + j) +
-                                        (nphases * num_phase_dof + num_additional_dof) +
-                                        configuration::material_response_dimension * (nphases * velocity_index + p.first) + a)) *
-                                     (*(interpolation_function_gradient_begin + a)) * dUDotdU;
+                        *p.second -=
+                            (*(test_function_gradient_begin + j)) *
+                            (*(material_response_jacobian_begin +
+                               (nphases * num_phase_dof + num_additional_dof) *
+                                   (1 + configuration::material_response_dimension) * (diffusion_index + j) +
+                               (nphases * num_phase_dof + num_additional_dof) +
+                               configuration::material_response_dimension * (nphases * velocity_index + p.first) + a)) *
+                            (*(interpolation_function_gradient_begin + a)) * dUDotdU;
                     }
                 }
 
@@ -1685,19 +1723,21 @@ namespace tardigradeBalanceEquations {
                      ++p.first, ++p.second) {
                     *p.second -= (*(test_function_gradient_begin + j)) *
                                  (*(material_response_jacobian_begin +
-                                    (nphases * num_phase_dof + num_additional_dof) * (1 + configuration::material_response_dimension) *
-                                        (diffusion_index + j) +
+                                    (nphases * num_phase_dof + num_additional_dof) *
+                                        (1 + configuration::material_response_dimension) * (diffusion_index + j) +
                                     nphases * displacement_index + p.first)) *
                                  interpolation_function;
 
                     for (unsigned int a = 0; a < configuration::material_response_dimension; ++a) {
-                        *p.second -= (*(test_function_gradient_begin + j)) *
-                                     (*(material_response_jacobian_begin +
-                                        (nphases * num_phase_dof + num_additional_dof) * (1 + configuration::material_response_dimension) *
-                                            (diffusion_index + j) +
-                                        (nphases * num_phase_dof + num_additional_dof) +
-                                        configuration::material_response_dimension * (nphases * displacement_index + p.first) + a)) *
-                                     (*(interpolation_function_gradient_begin + a));
+                        *p.second -=
+                            (*(test_function_gradient_begin + j)) *
+                            (*(material_response_jacobian_begin +
+                               (nphases * num_phase_dof + num_additional_dof) *
+                                   (1 + configuration::material_response_dimension) * (diffusion_index + j) +
+                               (nphases * num_phase_dof + num_additional_dof) +
+                               configuration::material_response_dimension * (nphases * displacement_index + p.first) +
+                               a)) *
+                            (*(interpolation_function_gradient_begin + a));
                     }
                 }
 
@@ -1706,19 +1746,21 @@ namespace tardigradeBalanceEquations {
                      ++p.first, ++p.second) {
                     *p.second -= (*(test_function_gradient_begin + j)) *
                                  (*(material_response_jacobian_begin +
-                                    (nphases * num_phase_dof + num_additional_dof) * (1 + configuration::material_response_dimension) *
-                                        (diffusion_index + j) +
+                                    (nphases * num_phase_dof + num_additional_dof) *
+                                        (1 + configuration::material_response_dimension) * (diffusion_index + j) +
                                     nphases * temperature_index + p.first)) *
                                  interpolation_function;
 
                     for (unsigned int a = 0; a < configuration::material_response_dimension; ++a) {
-                        *p.second -= (*(test_function_gradient_begin + j)) *
-                                     (*(material_response_jacobian_begin +
-                                        (nphases * num_phase_dof + num_additional_dof) * (1 + configuration::material_response_dimension) *
-                                            (diffusion_index + j) +
-                                        (nphases * num_phase_dof + num_additional_dof) +
-                                        configuration::material_response_dimension * (nphases * temperature_index + p.first) + a)) *
-                                     (*(interpolation_function_gradient_begin + a));
+                        *p.second -=
+                            (*(test_function_gradient_begin + j)) *
+                            (*(material_response_jacobian_begin +
+                               (nphases * num_phase_dof + num_additional_dof) *
+                                   (1 + configuration::material_response_dimension) * (diffusion_index + j) +
+                               (nphases * num_phase_dof + num_additional_dof) +
+                               configuration::material_response_dimension * (nphases * temperature_index + p.first) +
+                               a)) *
+                            (*(interpolation_function_gradient_begin + a));
                     }
                 }
 
@@ -1727,18 +1769,20 @@ namespace tardigradeBalanceEquations {
                      ++p.first, ++p.second) {
                     *p.second -= (*(test_function_gradient_begin + j)) *
                                  (*(material_response_jacobian_begin +
-                                    (nphases * num_phase_dof + num_additional_dof) * (1 + configuration::material_response_dimension) *
-                                        (diffusion_index + j) +
+                                    (nphases * num_phase_dof + num_additional_dof) *
+                                        (1 + configuration::material_response_dimension) * (diffusion_index + j) +
                                     nphases * internal_energy_index + p.first)) *
                                  interpolation_function;
 
                     for (unsigned int a = 0; a < configuration::material_response_dimension; ++a) {
                         *p.second -= (*(test_function_gradient_begin + j)) *
                                      (*(material_response_jacobian_begin +
-                                        (nphases * num_phase_dof + num_additional_dof) * (1 + configuration::material_response_dimension) *
-                                            (diffusion_index + j) +
+                                        (nphases * num_phase_dof + num_additional_dof) *
+                                            (1 + configuration::material_response_dimension) * (diffusion_index + j) +
                                         (nphases * num_phase_dof + num_additional_dof) +
-                                        configuration::material_response_dimension * (nphases * internal_energy_index + p.first) + a)) *
+                                        configuration::material_response_dimension *
+                                            (nphases * internal_energy_index + p.first) +
+                                        a)) *
                                      (*(interpolation_function_gradient_begin + a));
                     }
                 }
@@ -1748,18 +1792,20 @@ namespace tardigradeBalanceEquations {
                      ++p.first, ++p.second) {
                     *p.second -= (*(test_function_gradient_begin + j)) *
                                  (*(material_response_jacobian_begin +
-                                    (nphases * num_phase_dof + num_additional_dof) * (1 + configuration::material_response_dimension) *
-                                        (diffusion_index + j) +
+                                    (nphases * num_phase_dof + num_additional_dof) *
+                                        (1 + configuration::material_response_dimension) * (diffusion_index + j) +
                                     nphases * volume_fraction_index + p.first)) *
                                  interpolation_function;
 
                     for (unsigned int a = 0; a < configuration::material_response_dimension; ++a) {
                         *p.second -= (*(test_function_gradient_begin + j)) *
                                      (*(material_response_jacobian_begin +
-                                        (nphases * num_phase_dof + num_additional_dof) * (1 + configuration::material_response_dimension) *
-                                            (diffusion_index + j) +
+                                        (nphases * num_phase_dof + num_additional_dof) *
+                                            (1 + configuration::material_response_dimension) * (diffusion_index + j) +
                                         (nphases * num_phase_dof + num_additional_dof) +
-                                        configuration::material_response_dimension * (nphases * volume_fraction_index + p.first) + a)) *
+                                        configuration::material_response_dimension *
+                                            (nphases * volume_fraction_index + p.first) +
+                                        a)) *
                                      (*(interpolation_function_gradient_begin + a));
                     }
                 }
@@ -1769,19 +1815,21 @@ namespace tardigradeBalanceEquations {
                      ++p.first, ++p.second) {
                     *p.second -= (*(test_function_gradient_begin + j)) *
                                  (*(material_response_jacobian_begin +
-                                    (nphases * num_phase_dof + num_additional_dof) * (1 + configuration::material_response_dimension) *
-                                        (diffusion_index + j) +
+                                    (nphases * num_phase_dof + num_additional_dof) *
+                                        (1 + configuration::material_response_dimension) * (diffusion_index + j) +
                                     nphases * additional_dof_index + p.first)) *
                                  interpolation_function;
 
                     for (unsigned int a = 0; a < configuration::material_response_dimension; ++a) {
-                        *p.second -= (*(test_function_gradient_begin + j)) *
-                                     (*(material_response_jacobian_begin +
-                                        (nphases * num_phase_dof + num_additional_dof) * (1 + configuration::material_response_dimension) *
-                                            (diffusion_index + j) +
-                                        (nphases * num_phase_dof + num_additional_dof) +
-                                        configuration::material_response_dimension * (nphases * additional_dof_index + p.first) + a)) *
-                                     (*(interpolation_function_gradient_begin + a));
+                        *p.second -=
+                            (*(test_function_gradient_begin + j)) *
+                            (*(material_response_jacobian_begin +
+                               (nphases * num_phase_dof + num_additional_dof) *
+                                   (1 + configuration::material_response_dimension) * (diffusion_index + j) +
+                               (nphases * num_phase_dof + num_additional_dof) +
+                               configuration::material_response_dimension * (nphases * additional_dof_index + p.first) +
+                               a)) *
+                            (*(interpolation_function_gradient_begin + a));
                     }
                 }
 
@@ -1792,10 +1840,12 @@ namespace tardigradeBalanceEquations {
                             *(dRdUMesh_begin + a) +=
                                 (*(test_function_gradient_begin + j)) *
                                 (*(material_response_jacobian_begin +
-                                   (nphases * num_phase_dof + num_additional_dof) * (1 + configuration::material_response_dimension) *
-                                       (diffusion_index + j) +
-                                   (nphases * num_phase_dof + num_additional_dof) + configuration::material_response_dimension * I + k)) *
-                                (*(full_material_response_dof_gradient_begin + configuration::material_response_dimension * I + a)) *
+                                   (nphases * num_phase_dof + num_additional_dof) *
+                                       (1 + configuration::material_response_dimension) * (diffusion_index + j) +
+                                   (nphases * num_phase_dof + num_additional_dof) +
+                                   configuration::material_response_dimension * I + k)) *
+                                (*(full_material_response_dof_gradient_begin +
+                                   configuration::material_response_dimension * I + a)) *
                                 (*(interpolation_function_gradient_begin + k));
                         }
                     }
@@ -1968,9 +2018,10 @@ namespace tardigradeBalanceEquations {
                     "\n  actual jacobian size       : " +
                     std::to_string((unsigned int)(material_response_jacobian_end - material_response_jacobian_begin)))
 
-            TARDIGRADE_ERROR_TOOLS_CHECK(configuration::material_response_dimension == (unsigned int)(interpolation_function_gradient_end -
-                                                                                 interpolation_function_gradient_begin),
-                                         "The interpolation function gradient must have a size of configuration::dimension")
+            TARDIGRADE_ERROR_TOOLS_CHECK(
+                configuration::material_response_dimension ==
+                    (unsigned int)(interpolation_function_gradient_end - interpolation_function_gradient_begin),
+                "The interpolation function gradient must have a size of configuration::dimension")
 
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(result_end - result_begin),
                                          "The result vector must be the same size as the density vector")
@@ -2016,14 +2067,15 @@ namespace tardigradeBalanceEquations {
                     material_response_jacobian_begin + material_response_size *
                                                            (nphases * num_phase_dof + num_additional_dof) *
                                                            (1 + configuration::material_response_dimension) * v.first,
-                    material_response_jacobian_begin + material_response_size *
-                                                           (nphases * num_phase_dof + num_additional_dof) *
-                                                           (1 + configuration::material_response_dimension) * (v.first + 1),
+                    material_response_jacobian_begin +
+                        material_response_size * (nphases * num_phase_dof + num_additional_dof) *
+                            (1 + configuration::material_response_dimension) * (v.first + 1),
                     test_function_gradient_begin, test_function_gradient_end, interpolation_function,
                     interpolation_function_gradient_begin, interpolation_function_gradient_end,
                     full_material_response_dof_gradient_begin, full_material_response_dof_gradient_end, dUDotdU,
                     *(result_begin + v.first), dRdRho_begin + nphases * 1 * v.first,
-                    dRdRho_begin + nphases * 1 * (v.first + 1), dRdU_begin + nphases * configuration::material_response_dimension * v.first,
+                    dRdRho_begin + nphases * 1 * (v.first + 1),
+                    dRdU_begin + nphases * configuration::material_response_dimension * v.first,
                     dRdU_begin + nphases * configuration::material_response_dimension * (v.first + 1),
                     dRdW_begin + nphases * configuration::material_response_dimension * v.first,
                     dRdW_begin + nphases * configuration::material_response_dimension * (v.first + 1),
