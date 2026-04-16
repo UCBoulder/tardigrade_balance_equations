@@ -49,7 +49,8 @@ typedef std::array<floatType, 9> secondOrderTensor;  //!< Define the second orde
 
 BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentumNonDivergence,
                      *boost::unit_test::tolerance(DEFAULT_TEST_TOLERANCE)) {
-    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<> {};
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + 0> {};
+    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
 
     constexpr unsigned int sot_dim = 9;
 
@@ -299,7 +300,8 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentumNonDivergence,
 
 BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentumDivergence,
                      *boost::unit_test::tolerance(DEFAULT_TEST_TOLERANCE)) {
-    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<> {};
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + 0> {};
+    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
 
     constexpr unsigned int sot_dim = 9;
 
@@ -420,7 +422,8 @@ BOOST_AUTO_TEST_CASE(test_multiphase_computeBalanceOfLinearMomentumNonDivergence
                      *boost::unit_test::tolerance(DEFAULT_TEST_TOLERANCE)) {
     constexpr unsigned int nphases = 5;
 
-    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<> {};
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + 0> {};
+    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
 
     constexpr unsigned int sot_dim = configuration::dimension * configuration::dimension;
 
@@ -758,7 +761,8 @@ BOOST_AUTO_TEST_CASE(test_multiphase_computeBalanceOfLinearMomentumDivergence,
                      *boost::unit_test::tolerance(DEFAULT_TEST_TOLERANCE)) {
     constexpr unsigned int nphases = 5;
 
-    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<> {};
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + 0> {};
+    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
 
     constexpr unsigned int sot_dim = 9;
 
@@ -1396,7 +1400,8 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_fea, *boost::unit_test:
      * Test computing the balance of linear momentum in a finite element context
      */
 
-    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<> {};
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + 0> {};
+    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
 
     std::array<floatType, 8> density_t = {0.61289453, 0.12062867, 0.8263408,  0.60306013,
                                           0.54506801, 0.34276383, 0.30412079, 0.41702221};
@@ -1749,7 +1754,8 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
      * Test computing the balance of linear momentum in a finite element context
      */
 
-    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<> {};
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + 0> {};
+    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
 
     constexpr unsigned int nphases = 4;
 
@@ -3297,12 +3303,15 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
       * Test computing the balance of linear momentum in a finite element context
       */
 
-     class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<> { };
-     constexpr unsigned int nphases = 4;
+
+    constexpr unsigned int num_additional_dof = 5;
+
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + num_additional_dof> {};
+    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
+
+    constexpr unsigned int nphases = 4;
 
      constexpr unsigned int active_phase = 2;
-
-     constexpr unsigned int num_additional_dof = 5;
 
      std::array<floatType, 8 * nphases> density_t = {
          0.3213189,  0.845533,   0.18690375, 0.41729106, 0.98903451, 0.23659981, 0.91683233, 0.91839747,
@@ -3967,10 +3976,11 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
       * Test computing the balance of linear momentum in a finite element context
       */
 
-     class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<> { };
-     constexpr unsigned int nphases = 4;
+    constexpr unsigned int num_additional_dof = 5;
 
-     constexpr unsigned int num_additional_dof = 5;
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + num_additional_dof> {};
+    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
+     constexpr unsigned int nphases = 4;
 
      std::array<floatType, 8 * nphases> density_t = {
          0.3213189,  0.845533,   0.18690375, 0.41729106, 0.98903451, 0.23659981, 0.91683233, 0.91839747,

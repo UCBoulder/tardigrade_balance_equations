@@ -416,7 +416,10 @@ void evaluate_at_nodes(const xi_in &xi_begin, const xi_in &xi_end, dt_type dt, c
 }
 
 BOOST_AUTO_TEST_CASE(test_computeBalanceOfVolumeFraction_fea, *boost::unit_test::tolerance(1e-5)) {
-    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<> {};
+
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + 0> {};
+    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
+
     constexpr unsigned int nphases = 1;
 
     std::array<floatType, 8 * nphases> density_t = {0.61289453, 0.12062867, 0.8263408,  0.60306013,
@@ -776,7 +779,8 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfVolumeFraction_fea, *boost::unit_test:
 }
 
 BOOST_AUTO_TEST_CASE(test_computeBalanceOfVolumeFraction_multiphase_fea, *boost::unit_test::tolerance(1e-5)) {
-    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<> {};
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + 0> {};
+    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
     constexpr unsigned int nphases = 4;
 
     std::array<floatType, 8 * nphases> density_t = {
@@ -1540,7 +1544,8 @@ BOOST_AUTO_TEST_CASE(test_linearHydraTest, *boost::unit_test::tolerance(DEFAULT_
     /*!
      * Test the linear hydra test model Jacobian
      */
-    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<> {};
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + 0> {};
+    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
 
     std::vector<floatType> additional_dof = {
         +0.392, -0.428, -0.546, +0.102, +0.438, -0.154, +0.962, +0.370, -0.038, -0.216, -0.314, +0.458, -0.122, -0.880,
@@ -2226,13 +2231,14 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfVolumeFraction_hydra_fea, *boost::unit
     /*!
      * Test computing the balance of volume fraction in a finite element context
      */
-    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<> {};
+    constexpr unsigned int num_additional_dof = 5;
+
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + num_additional_dof> {};
+    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
 
     constexpr unsigned int nphases = 4;
 
     constexpr unsigned int active_phase = 2;
-
-    constexpr unsigned int num_additional_dof = 5;
 
     std::array<floatType, 8 * nphases> density_t = {
         0.20763586, 0.29248941, 0.52001015, 0.90191137, 0.98363088, 0.25754206, 0.56435904, 0.80696868,
@@ -2874,11 +2880,12 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfVolumeFraction_multiphase_hydra_fea, *
     /*!
      * Test computing the balance of volume fraction in a finite element context
      */
-    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<> {};
+    constexpr unsigned int num_additional_dof = 5;
+
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + num_additional_dof> {};
+    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
 
     constexpr unsigned int nphases = 4;
-
-    constexpr unsigned int num_additional_dof = 5;
 
     std::array<floatType, 8 * nphases> density_t = {
         0.20763586, 0.29248941, 0.52001015, 0.90191137, 0.98363088, 0.25754206, 0.56435904, 0.80696868,

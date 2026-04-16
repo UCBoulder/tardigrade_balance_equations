@@ -33,7 +33,11 @@ namespace tardigradeBalanceEquations {
              * \param &result: The net mass change per unit volume \f$ c \f$
              */
 
-            computeBalanceOfMass<tardigradeBalanceEquations::BalanceEquationConfigurationBase<>>(
+
+            class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + 0> {};
+            class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
+
+            computeBalanceOfMass<configuration>(
                 density, density_dot, std::begin(density_gradient), std::end(density_gradient), std::begin(velocity),
                 std::end(velocity), std::begin(velocity_gradient), std::end(velocity_gradient), result);
         }
@@ -66,7 +70,10 @@ namespace tardigradeBalanceEquations {
              * v_{i,j} \f$
              */
 
-            computeBalanceOfMass<tardigradeBalanceEquations::BalanceEquationConfigurationBase<>>(
+            class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + 0> {};
+            class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
+
+            computeBalanceOfMass<configuration>(
                 density, density_dot, std::begin(density_gradient), std::end(density_gradient), std::begin(velocity),
                 std::end(velocity), std::begin(velocity_gradient), std::end(velocity_gradient), result, dRdRho,
                 dRdRhoDot, std::begin(dRdGradRho), std::end(dRdGradRho), std::begin(dRdV), std::end(dRdV),

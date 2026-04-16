@@ -1283,7 +1283,7 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <class configuration, int cauchy_stress_index, int internal_energy_index, int mass_change_index,
+        template <class configuration, int cauchy_stress_index, int internal_energy_index,
                   int body_force_index, int interphasic_force_index, int heat_flux_index,
                   int internal_heat_generation_index, int interphasic_heat_transfer_index,
                   int trace_mass_change_velocity_gradient_index, class density_iter, class volume_fraction_iter,
@@ -1360,13 +1360,13 @@ namespace tardigradeBalanceEquations {
 
                 // mass change rate
                 for (unsigned int i = 0; i < 1; ++i) {
-                    *(mixture_response_begin + mass_change_index + i) +=
-                        *(material_response_begin + phase * material_response_size + mass_change_index + i);
+                    *(mixture_response_begin + configuration::material::mass_change_index + i) +=
+                        *(material_response_begin + phase * material_response_size + configuration::material::mass_change_index + i);
 
                     for (unsigned int j = 0; j < num_dof; ++j) {
-                        *(mixture_jacobian_begin + num_dof * (i + mass_change_index) + j) +=
+                        *(mixture_jacobian_begin + num_dof * (i + configuration::material::mass_change_index) + j) +=
                             *(material_response_jacobian_begin + material_response_size * num_dof * phase +
-                              num_dof * (i + mass_change_index) + j);
+                              num_dof * (i + configuration::material::mass_change_index) + j);
                     }
                 }
 

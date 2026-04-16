@@ -1123,13 +1123,14 @@ void evaluate_at_nodes(
 }
 
 BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint, *boost::unit_test::tolerance(1e-5)) {
-    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<3, false> {};
+    constexpr unsigned int num_additional_dof = 5;
+
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + num_additional_dof> {};
+    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material, 3, false> {};
 
     constexpr unsigned int nphases = 4;
 
     constexpr unsigned int active_phase = 2;
-
-    constexpr unsigned int num_additional_dof = 5;
 
     std::array<floatType, 8 * nphases> density_t = {
         0.3213189,  0.845533,   0.18690375, 0.41729106, 0.98903451, 0.23659981, 0.91683233, 0.91839747,
@@ -1738,13 +1739,14 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint, *boost::unit_test::to
 }
 
 BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint2, *boost::unit_test::tolerance(1e-5)) {
-    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<3, true> {};
+    constexpr unsigned int num_additional_dof = 5;
+
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + num_additional_dof> {};
+    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material, 3, true> {};
 
     constexpr unsigned int nphases = 4;
 
     constexpr unsigned int active_phase = 2;
-
-    constexpr unsigned int num_additional_dof = 5;
 
     std::array<floatType, 8 * nphases> density_t = {
         0.3213189,  0.845533,   0.18690375, 0.41729106, 0.98903451, 0.23659981, 0.91683233, 0.91839747,
@@ -2353,11 +2355,12 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint2, *boost::unit_test::t
 }
 
 BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase, *boost::unit_test::tolerance(1e-5)) {
-    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<3, false> {};
+    constexpr unsigned int num_additional_dof = 5;
+
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + num_additional_dof> {};
+    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material, 3, false> {};
 
     constexpr unsigned int nphases = 4;
-
-    constexpr unsigned int num_additional_dof = 5;
 
     std::array<floatType, 8 * nphases> density_t = {
         0.3213189,  0.845533,   0.18690375, 0.41729106, 0.98903451, 0.23659981, 0.91683233, 0.91839747,
@@ -2922,11 +2925,12 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase, *boost::un
 }
 
 BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase2, *boost::unit_test::tolerance(1e-5)) {
-    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<3, true> {};
+    constexpr unsigned int num_additional_dof = 5;
+
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + num_additional_dof> {};
+    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material, 3, true> {};
 
     constexpr unsigned int nphases = 4;
-
-    constexpr unsigned int num_additional_dof = 5;
 
     std::array<floatType, 8 * nphases> density_t = {
         0.3213189,  0.845533,   0.18690375, 0.41729106, 0.98903451, 0.23659981, 0.91683233, 0.91839747,
@@ -3680,7 +3684,8 @@ BOOST_AUTO_TEST_CASE(test_computeDisplacementConstraint, *boost::unit_test::tole
      * Test computing the displacement constraint in a finite element context
      */
 
-    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<> {};
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + 0> {};
+    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
 
     constexpr unsigned int nphases = 4;
 
@@ -3967,7 +3972,7 @@ void evaluate_mixture_response(const dof_vector_iter &dof_vector_begin, const do
                       std::begin(material_response_jacobians) + material_response_size * dof_vector_size * phase);
         }
 
-        tardigradeBalanceEquations::constraintEquations::computeMixtureMaterialResponse<configuration, 0, 9, 10, 11, 14, 17, 20, 21,
+        tardigradeBalanceEquations::constraintEquations::computeMixtureMaterialResponse<configuration, 0, 9, 11, 14, 17, 20, 21,
                                                                                         22>(
             std::cbegin(densities), std::cend(densities), std::cbegin(volume_fractions), std::cend(volume_fractions),
             std::cbegin(material_responses), std::cend(material_responses), std::cbegin(material_response_jacobians),
@@ -3983,7 +3988,8 @@ BOOST_AUTO_TEST_CASE(test_computeMixtureMaterialResponse, *boost::unit_test::tol
      * Test computing the mixture material response in a finite element context
      */
 
-    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<> {};
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + 0> {};
+    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
 
     constexpr unsigned int nphases = 4;
 

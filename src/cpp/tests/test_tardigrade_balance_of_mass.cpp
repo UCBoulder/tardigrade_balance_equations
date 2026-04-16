@@ -544,7 +544,8 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfMass_fea, *boost::unit_test::tolerance
      * Test computing the balance of mass in a finite element context
      */
 
-    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<> {};
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + 0> {};
+    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
 
     std::array<floatType, 8> density_t = {0.61289453, 0.12062867, 0.8263408,  0.60306013,
                                           0.54506801, 0.34276383, 0.30412079, 0.41702221};
@@ -751,7 +752,8 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfMass_multiphase_fea, *boost::unit_test
 
     constexpr int nphases = 4;
 
-    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<> {};
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + 0> {};
+    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
 
     std::array<floatType, 8 * nphases> density_t = {
         0.20763586, 0.29248941, 0.52001015, 0.90191137, 0.98363088, 0.25754206, 0.56435904, 0.80696868,
@@ -986,7 +988,8 @@ BOOST_AUTO_TEST_CASE(test_multiphase_computeBalanceOfMass, *boost::unit_test::to
      */
 
     constexpr unsigned int nphases = 5;
-    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<> {};
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + 0> {};
+    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
 
     std::array<floatType, nphases> density = {0.44775226, 0.10257244, 0.02078009, 0.34655081, 0.63241094};
 
@@ -2234,11 +2237,13 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfMass_hydra_fea, *boost::unit_test::tol
      */
 
     constexpr unsigned int nphases = 4;
-    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<> {};
-
-    constexpr unsigned int active_phase = 2;
 
     constexpr unsigned int num_additional_dof = 5;
+
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + num_additional_dof> {};
+    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
+
+    constexpr unsigned int active_phase = 2;
 
     std::array<floatType, 8 * nphases> density_t = {
         0.20763586, 0.29248941, 0.52001015, 0.90191137, 0.98363088, 0.25754206, 0.56435904, 0.80696868,
@@ -2859,9 +2864,11 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfMass_hydra_multiphase_fea, *boost::uni
      */
 
     constexpr unsigned int nphases = 4;
-    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<> {};
 
     constexpr unsigned int num_additional_dof = 5;
+
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + num_additional_dof> {};
+    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
 
     std::array<floatType, 8 * nphases> density_t = {
         0.20763586, 0.29248941, 0.52001015, 0.90191137, 0.98363088, 0.25754206, 0.56435904, 0.80696868,
@@ -4394,9 +4401,11 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfMass_hydra_diffusionTerm_fea, *boost::
      */
 
     constexpr unsigned int nphases = 4;
-    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<> {};
 
     constexpr unsigned int num_additional_dof = 5;
+
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + num_additional_dof> {};
+    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
 
     constexpr unsigned int active_phase = 2;
 
@@ -5058,9 +5067,11 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfMass_hydra_diffusionTerm_fea_multiphas
      */
 
     constexpr unsigned int nphases = 4;
-    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<> {};
 
     constexpr unsigned int num_additional_dof = 5;
+
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1 + num_additional_dof> {};
+    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
 
     constexpr unsigned int active_phase = -1;
 
