@@ -1170,7 +1170,7 @@ namespace tardigradeBalanceEquations {
             for (auto v = std::pair<unsigned int, density_iter>(0, density_begin); v.second != density_end;
                  ++v.first, ++v.second) {
                 computeBalanceOfLinearMomentum<
-                    configuration::dimension, material_response_dim, body_force_index, cauchy_stress_index,
+                    configuration, material_response_dim, body_force_index, cauchy_stress_index,
                     interphasic_force_index, material_response_num_dof, density_type, density_dot_type,
                     density_gradient_iter, velocity_iter, velocity_dot_iter, velocity_gradient_iter,
                     material_response_iter, material_response_jacobian_iter, volume_fraction_type, testFunction_type,
@@ -1292,7 +1292,7 @@ namespace tardigradeBalanceEquations {
 
             for (auto v = std::pair<unsigned int, density_iter>(0, density_begin); v.second != density_end;
                  ++v.first, ++v.second) {
-                computeBalanceOfLinearMomentum<configuration::dimension, material_response_dim, body_force_index,
+                computeBalanceOfLinearMomentum<configuration, material_response_dim, body_force_index,
                                                cauchy_stress_index, interphasic_force_index>(
                     *(density_begin + v.first), *(density_dot_begin + v.first),
                     density_gradient_begin + configuration::dimension * v.first,
