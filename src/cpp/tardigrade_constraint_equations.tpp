@@ -92,7 +92,7 @@ namespace tardigradeBalanceEquations {
                      test_function;
         }
 
-        template <class configuration, int predicted_internal_energy_index, int material_response_num_dof,
+        template <class configuration, int predicted_internal_energy_index,
                   typename internal_energy_type, class material_response_iter, class material_response_jacobian_iter,
                   typename test_function_type, typename interpolation_function_type,
                   class interpolation_function_gradient_iter, class full_material_response_dof_gradient_iter,
@@ -181,7 +181,7 @@ namespace tardigradeBalanceEquations {
 
             const unsigned int     nphases            = (unsigned int)(dRdRho_end - dRdRho_begin);
             constexpr unsigned int num_phase_dof      = 4 + 2 * configuration::material::dimension;
-            constexpr unsigned int num_additional_dof = material_response_num_dof - num_phase_dof;
+            constexpr unsigned int num_additional_dof = configuration::material::num_dof - num_phase_dof;
 
             TARDIGRADE_ERROR_TOOLS_CHECK(
                 nphases * configuration::material::dimension == (unsigned int)(dRdU_end - dRdU_begin),
@@ -385,7 +385,7 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <class configuration, int predicted_internal_energy_index, int material_response_num_dof,
+        template <class configuration, int predicted_internal_energy_index,
                   typename internal_energy_type, typename density_type, class material_response_iter,
                   class material_response_jacobian_iter, typename test_function_type,
                   typename interpolation_function_type, class interpolation_function_gradient_iter,
@@ -478,7 +478,7 @@ namespace tardigradeBalanceEquations {
 
             const unsigned int     nphases            = (unsigned int)(dRdRho_end - dRdRho_begin);
             constexpr unsigned int num_phase_dof      = 4 + 2 * configuration::material::dimension;
-            constexpr unsigned int num_additional_dof = material_response_num_dof - num_phase_dof;
+            constexpr unsigned int num_additional_dof = configuration::material::num_dof - num_phase_dof;
 
             TARDIGRADE_ERROR_TOOLS_CHECK(
                 nphases * configuration::material::dimension == (unsigned int)(dRdU_end - dRdU_begin),
@@ -797,7 +797,7 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <class configuration, int predicted_internal_energy_index, int material_response_num_dof,
+        template <class configuration, int predicted_internal_energy_index,
                   class internal_energy_iter, class material_response_iter, class material_response_jacobian_iter,
                   typename test_function_type, typename interpolation_function_type,
                   class interpolation_function_gradient_iter, class full_material_response_dof_gradient_iter,
@@ -894,7 +894,7 @@ namespace tardigradeBalanceEquations {
             const unsigned int material_response_size =
                 (unsigned int)(material_response_end - material_response_begin) / nphases;
             constexpr unsigned int num_phase_dof      = 4 + 2 * configuration::material::dimension;
-            constexpr unsigned int num_additional_dof = material_response_num_dof - num_phase_dof;
+            constexpr unsigned int num_additional_dof = configuration::material::num_dof - num_phase_dof;
 
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(internal_energy_end - internal_energy_begin),
                                          "The number of internal energy values must be equal to the number of phases")
@@ -908,7 +908,7 @@ namespace tardigradeBalanceEquations {
                         (nphases * num_phase_dof + num_additional_dof) ==
                     (unsigned int)(material_response_jacobian_end - material_response_jacobian_begin),
                 "The material response jacobian must have a consistent size with the material response vector and the "
-                "material_response_num_dof\n  number of phases           : " +
+                "configuration::material::num_dof\n  number of phases           : " +
                     std::to_string(nphases) +
                     "\n  material_response_size     : " + std::to_string(material_response_size) +
                     "\n  dof per phase              : " + std::to_string(num_phase_dof) +
@@ -948,7 +948,7 @@ namespace tardigradeBalanceEquations {
             for (auto v = std::pair<unsigned int, result_iter>(0, result_begin); v.second != result_end;
                  ++v.first, ++v.second) {
                 computeInternalEnergyConstraint<
-                    configuration, predicted_internal_energy_index, material_response_num_dof,
+                    configuration, predicted_internal_energy_index,
                     internal_energy_type, material_response_iter, material_response_jacobian_iter, test_function_type,
                     interpolation_function_type, interpolation_function_gradient_iter,
                     full_material_response_dof_gradient_iter, dUDotdU_type, result_type, dRdRho_iter, dRdU_iter,
@@ -979,7 +979,7 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <class configuration, int predicted_internal_energy_index, int material_response_num_dof,
+        template <class configuration, int predicted_internal_energy_index,
                   class internal_energy_iter, class density_iter, class material_response_iter,
                   class material_response_jacobian_iter, typename test_function_type,
                   typename interpolation_function_type, class interpolation_function_gradient_iter,
@@ -1081,7 +1081,7 @@ namespace tardigradeBalanceEquations {
             const unsigned int material_response_size =
                 (unsigned int)(material_response_end - material_response_begin) / nphases;
             constexpr unsigned int num_phase_dof      = 4 + 2 * configuration::material::dimension;
-            constexpr unsigned int num_additional_dof = material_response_num_dof - num_phase_dof;
+            constexpr unsigned int num_additional_dof = configuration::material::num_dof - num_phase_dof;
 
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(internal_energy_end - internal_energy_begin),
                                          "The number of internal energy values must be equal to the number of phases")
@@ -1126,7 +1126,7 @@ namespace tardigradeBalanceEquations {
             for (auto v = std::pair<unsigned int, result_iter>(0, result_begin); v.second != result_end;
                  ++v.first, ++v.second) {
                 computeInternalEnergyConstraint<
-                    configuration, predicted_internal_energy_index, material_response_num_dof,
+                    configuration, predicted_internal_energy_index,
                     internal_energy_type, density_type, material_response_iter, material_response_jacobian_iter,
                     test_function_type, interpolation_function_type, interpolation_function_gradient_iter,
                     full_material_response_dof_gradient_iter, dUDotdU_type, result_type, dRdRho_iter, dRdU_iter,

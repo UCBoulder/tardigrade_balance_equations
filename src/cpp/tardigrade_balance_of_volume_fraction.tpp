@@ -267,7 +267,7 @@ namespace tardigradeBalanceEquations {
         }
 
         template <class configuration, int mass_change_rate_index,
-                  int trace_mass_change_velocity_gradient_index, int material_response_num_dof, typename density_type,
+                  int trace_mass_change_velocity_gradient_index, typename density_type,
                   class velocity_iter, typename volume_fraction_type, typename volume_fraction_dot_type,
                   class volume_fraction_gradient_iter, class material_response_iter,
                   class material_response_jacobian_iter, typename rest_density_type, typename test_function_type,
@@ -366,7 +366,7 @@ namespace tardigradeBalanceEquations {
 
             const unsigned int     nphases            = (unsigned int)(dRdRho_end - dRdRho_begin);
             constexpr unsigned int num_phase_dof      = 4 + 2 * configuration::material::dimension;
-            const unsigned int     num_additional_dof = material_response_num_dof - num_phase_dof;
+            const unsigned int     num_additional_dof = configuration::material::num_dof - num_phase_dof;
 
             TARDIGRADE_ERROR_TOOLS_CHECK(configuration::dimension * nphases == (unsigned int)(dRdU_end - dRdU_begin),
                                          "The dRdU must be a consistent size with the number of phases")
@@ -1083,7 +1083,7 @@ namespace tardigradeBalanceEquations {
         }
 
         template <class configuration, int mass_change_rate_index,
-                  int trace_mass_change_velocity_gradient_index, int material_response_num_dof, class density_iter,
+                  int trace_mass_change_velocity_gradient_index, class density_iter,
                   class velocity_iter, class volume_fraction_iter, class volume_fraction_dot_iter,
                   class volume_fraction_gradient_iter, class material_response_iter,
                   class material_response_jacobian_iter, class rest_density_iter, typename test_function_type,
@@ -1197,7 +1197,7 @@ namespace tardigradeBalanceEquations {
             const unsigned int material_response_size =
                 (unsigned int)(material_response_end - material_response_begin) / nphases;
             constexpr unsigned int num_phase_dof      = 4 + 2 * configuration::material::dimension;
-            const unsigned int     num_additional_dof = material_response_num_dof - num_phase_dof;
+            const unsigned int     num_additional_dof = configuration::material::num_dof - num_phase_dof;
 
             using density_type             = typename std::iterator_traits<density_iter>::value_type;
             using volume_fraction_type     = typename std::iterator_traits<volume_fraction_iter>::value_type;
@@ -1264,7 +1264,7 @@ namespace tardigradeBalanceEquations {
                  ++v.first, ++v.second) {
                 computeBalanceOfVolumeFraction<
                     configuration, mass_change_rate_index, trace_mass_change_velocity_gradient_index,
-                    material_response_num_dof, density_type, velocity_iter, volume_fraction_type,
+                    density_type, velocity_iter, volume_fraction_type,
                     volume_fraction_dot_type, volume_fraction_gradient_iter, material_response_iter,
                     material_response_jacobian_iter, rest_density_type, test_function_type, interpolation_function_type,
                     interpolation_function_gradient_iter, full_material_response_dof_gradient_iter, dUDotdU_type,

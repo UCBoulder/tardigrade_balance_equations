@@ -1964,8 +1964,6 @@ void evaluate_at_nodes(
 
     constexpr unsigned int num_phase_dof = 10;
 
-    constexpr unsigned int num_dof = (1 + 3 + 3 + 1 + 1 + 1) + num_additional_dof;
-
     constexpr unsigned int dof_vector_size =
         (nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3) + num_additional_dof + 3 * num_additional_dof);
 
@@ -2127,8 +2125,7 @@ void evaluate_at_nodes(
             if (active_phase >= 0) {
                 unsigned int j = active_phase;
 
-                tardigradeBalanceEquations::balanceOfVolumeFraction::computeBalanceOfVolumeFraction<configuration, 10, 22,
-                                                                                                    num_dof>(
+                tardigradeBalanceEquations::balanceOfVolumeFraction::computeBalanceOfVolumeFraction<configuration, 10, 22>(
                     density_tp1_p[j], std::cbegin(v_tp1_p) + 3 * j, std::cbegin(v_tp1_p) + 3 * (j + 1), vf_tp1_p[j],
                     vf_dot_tp1_p[j], std::cbegin(grad_vf_tp1) + 3 * j, std::cbegin(grad_vf_tp1) + 3 * (j + 1),
                     std::cbegin(material_response) + material_response_size * j,
@@ -2154,8 +2151,7 @@ void evaluate_at_nodes(
                                          std::placeholders::_1, J));
 
             } else {
-                tardigradeBalanceEquations::balanceOfVolumeFraction::computeBalanceOfVolumeFraction<configuration, 10, 22,
-                                                                                                    num_dof>(
+                tardigradeBalanceEquations::balanceOfVolumeFraction::computeBalanceOfVolumeFraction<configuration, 10, 22>(
                     std::cbegin(density_tp1_p), std::cend(density_tp1_p), std::cbegin(v_tp1_p), std::cend(v_tp1_p),
                     std::cbegin(vf_tp1_p), std::cend(vf_tp1_p), std::cbegin(vf_dot_tp1_p), std::cend(vf_dot_tp1_p),
                     std::cbegin(grad_vf_tp1), std::cend(grad_vf_tp1), std::cbegin(material_response),

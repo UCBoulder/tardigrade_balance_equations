@@ -825,8 +825,6 @@ void evaluate_at_nodes(
 
     constexpr unsigned int num_phase_dof = 10;
 
-    constexpr unsigned int num_dof = (1 + 3 + 3 + 1 + 1 + 1) + num_additional_dof;
-
     constexpr unsigned int dof_vector_size =
         (nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3) + num_additional_dof + 3 * num_additional_dof);
 
@@ -998,7 +996,7 @@ void evaluate_at_nodes(
                 unsigned int j = active_phase;
 
                 if (configuration::energy_is_per_unit_volume) {
-                    tardigradeBalanceEquations::constraintEquations::computeInternalEnergyConstraint<configuration, 9, num_dof>(
+                    tardigradeBalanceEquations::constraintEquations::computeInternalEnergyConstraint<configuration, 9>(
                         e_tp1_p[j], density_tp1_p[j], std::cbegin(material_response) + material_response_size * j,
                         std::cbegin(material_response) + material_response_size * (j + 1),
                         std::cbegin(material_response_jacobian) + material_response_size * dof_vector_size * j,
@@ -1015,7 +1013,7 @@ void evaluate_at_nodes(
                         std::begin(dRdZ_n) + num_additional_dof * (j + 1), std::begin(dRdUMesh_n) + configuration::dimension * j,
                         std::begin(dRdUMesh_n) + configuration::dimension * (j + 1));
                 } else {
-                    tardigradeBalanceEquations::constraintEquations::computeInternalEnergyConstraint<configuration, 9, num_dof>(
+                    tardigradeBalanceEquations::constraintEquations::computeInternalEnergyConstraint<configuration, 9>(
                         e_tp1_p[j], std::cbegin(material_response) + material_response_size * j,
                         std::cbegin(material_response) + material_response_size * (j + 1),
                         std::cbegin(material_response_jacobian) + material_response_size * dof_vector_size * j,
@@ -1040,7 +1038,7 @@ void evaluate_at_nodes(
 
             } else {
                 if (configuration::energy_is_per_unit_volume) {
-                    tardigradeBalanceEquations::constraintEquations::computeInternalEnergyConstraint<configuration, 9, num_dof>(
+                    tardigradeBalanceEquations::constraintEquations::computeInternalEnergyConstraint<configuration, 9>(
                         std::cbegin(e_tp1_p), std::cend(e_tp1_p), std::cbegin(density_tp1_p), std::cend(density_tp1_p),
                         std::cbegin(material_response), std::cend(material_response),
                         std::cbegin(material_response_jacobian), std::cend(material_response_jacobian), Ns[i], Ns[k],
@@ -1052,7 +1050,7 @@ void evaluate_at_nodes(
                         std::begin(dRdE_n), std::end(dRdE_n), std::begin(dRdVF_n), std::end(dRdVF_n),
                         std::begin(dRdZ_n), std::end(dRdZ_n), std::begin(dRdUMesh_n), std::end(dRdUMesh_n));
                 } else {
-                    tardigradeBalanceEquations::constraintEquations::computeInternalEnergyConstraint<configuration, 9, num_dof>(
+                    tardigradeBalanceEquations::constraintEquations::computeInternalEnergyConstraint<configuration, 9>(
                         std::cbegin(e_tp1_p), std::cend(e_tp1_p), std::cbegin(material_response),
                         std::cend(material_response), std::cbegin(material_response_jacobian),
                         std::cend(material_response_jacobian), Ns[i], Ns[k], std::begin(dNdx) + 3 * k,
