@@ -2122,7 +2122,7 @@ void evaluate_at_nodes(
             if (active_phase >= 0) {
                 unsigned int j = active_phase;
 
-                tardigradeBalanceEquations::balanceOfVolumeFraction::computeBalanceOfVolumeFraction<configuration, 3, 10, 22,
+                tardigradeBalanceEquations::balanceOfVolumeFraction::computeBalanceOfVolumeFraction<configuration, 10, 22,
                                                                                                     num_dof>(
                     density_tp1_p[j], std::cbegin(v_tp1_p) + 3 * j, std::cbegin(v_tp1_p) + 3 * (j + 1), vf_tp1_p[j],
                     vf_dot_tp1_p[j], std::cbegin(grad_vf_tp1) + 3 * j, std::cbegin(grad_vf_tp1) + 3 * (j + 1),
@@ -2149,7 +2149,7 @@ void evaluate_at_nodes(
                                          std::placeholders::_1, J));
 
             } else {
-                tardigradeBalanceEquations::balanceOfVolumeFraction::computeBalanceOfVolumeFraction<configuration, 3, 10, 22,
+                tardigradeBalanceEquations::balanceOfVolumeFraction::computeBalanceOfVolumeFraction<configuration, 10, 22,
                                                                                                     num_dof>(
                     std::cbegin(density_tp1_p), std::cend(density_tp1_p), std::cbegin(v_tp1_p), std::cend(v_tp1_p),
                     std::cbegin(vf_tp1_p), std::cend(vf_tp1_p), std::cbegin(vf_dot_tp1_p), std::cend(vf_dot_tp1_p),
