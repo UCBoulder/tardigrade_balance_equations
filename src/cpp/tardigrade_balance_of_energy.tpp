@@ -822,7 +822,7 @@ namespace tardigradeBalanceEquations {
 
         template <class configuration, int cauchy_stress_index,
                   int internal_heat_generation_index, int heat_flux_index, int interphasic_force_index,
-                  int interphasic_heat_transfer_index, int material_response_num_dof, typename density_type,
+                  int interphasic_heat_transfer_index, typename density_type,
                   typename density_dot_type, class density_gradient_iter, typename internal_energy_type,
                   typename internal_energy_dot_type, class internal_energy_gradient_iter, class velocity_iter,
                   class velocity_gradient_iter, class material_response_iter, class material_response_jacobian_iter,
@@ -974,7 +974,7 @@ namespace tardigradeBalanceEquations {
 
             const unsigned int     nphases            = (unsigned int)(dRdRho_end - dRdRho_begin);
             constexpr unsigned int num_phase_dof      = 4 + 2 * configuration::material::dimension;
-            constexpr unsigned int num_additional_dof = material_response_num_dof - num_phase_dof;
+            constexpr unsigned int num_additional_dof = configuration::material::num_dof - num_phase_dof;
 
             // Scale the volume fraction by the interpolation function
             *(dRdVolumeFraction_begin + phase) *= interpolation_function;
@@ -1956,7 +1956,7 @@ namespace tardigradeBalanceEquations {
 
         template <class configuration, int cauchy_stress_index,
                   int internal_heat_generation_index, int heat_flux_index, int interphasic_force_index,
-                  int interphasic_heat_transfer_index, int material_response_num_dof, class density_iter,
+                  int interphasic_heat_transfer_index, class density_iter,
                   class density_dot_iter, class density_gradient_iter, class internal_energy_iter,
                   class internal_energy_dot_iter, class internal_energy_gradient_iter, class velocity_iter,
                   class velocity_gradient_iter, class material_response_iter, class material_response_jacobian_iter,
@@ -2092,7 +2092,7 @@ namespace tardigradeBalanceEquations {
             const unsigned int material_response_size =
                 (unsigned int)(material_response_end - material_response_begin) / nphases;
             constexpr unsigned int num_phase_dof      = 4 + 2 * configuration::material::dimension;
-            constexpr unsigned int num_additional_dof = material_response_num_dof - num_phase_dof;
+            constexpr unsigned int num_additional_dof = configuration::material::num_dof - num_phase_dof;
 
             using density_type             = typename std::iterator_traits<density_iter>::value_type;
             using density_dot_type         = typename std::iterator_traits<density_dot_iter>::value_type;
@@ -2136,7 +2136,7 @@ namespace tardigradeBalanceEquations {
                         (1 + configuration::material::dimension) ==
                     (unsigned int)(material_response_jacobian_end - material_response_jacobian_begin),
                 "The material response jacobian must have a consistent size with the material response vector and the "
-                "material_response_num_dof\n  number of phases           : " +
+                "configuration::material::num_dof\n  number of phases           : " +
                     std::to_string(nphases) +
                     "\n  material_response_size     : " + std::to_string(material_response_size) +
                     "\n  dof per phase              : " + std::to_string(num_phase_dof) +
@@ -2201,7 +2201,7 @@ namespace tardigradeBalanceEquations {
                 computeBalanceOfEnergy<
                     configuration, cauchy_stress_index,
                     internal_heat_generation_index, heat_flux_index, interphasic_force_index,
-                    interphasic_heat_transfer_index, material_response_num_dof, density_type, density_dot_type,
+                    interphasic_heat_transfer_index, density_type, density_dot_type,
                     density_gradient_iter, internal_energy_type, internal_energy_dot_type,
                     internal_energy_gradient_iter, velocity_iter, velocity_gradient_iter, material_response_iter,
                     material_response_jacobian_iter, volume_fraction_type, test_function_type,

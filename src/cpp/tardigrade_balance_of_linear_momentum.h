@@ -199,7 +199,7 @@ namespace tardigradeBalanceEquations {
             result_iter result_end);
 
         template <class configuration, int body_force_index, int cauchy_stress_index,
-                  int interphasic_force_index, int material_response_num_dof, typename density_type,
+                  int interphasic_force_index, typename density_type,
                   typename density_dot_type, class density_gradient_iter, class velocity_iter, class velocity_dot_iter,
                   class velocity_gradient_iter, class material_response_iter, class material_response_jacobian_iter,
                   typename volume_fraction_type, typename testFunction_type, class testFunctionGradient_iter,
@@ -254,7 +254,7 @@ namespace tardigradeBalanceEquations {
             result_iter result_end);
 
         template <class configuration, int body_force_index, int cauchy_stress_index,
-                  int interphasic_force_index, int material_response_num_dof, class density_iter,
+                  int interphasic_force_index, class density_iter,
                   class density_dot_iter, class density_gradient_iter, class velocity_iter, class velocity_dot_iter,
                   class velocity_gradient_iter, class material_response_iter, class material_response_jacobian_iter,
                   class volume_fraction_iter, typename testFunction_type, class testFunctionGradient_iter,

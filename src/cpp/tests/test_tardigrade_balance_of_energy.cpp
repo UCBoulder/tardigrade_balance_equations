@@ -5889,8 +5889,6 @@ void evaluate_at_nodes(
 
     constexpr unsigned int num_phase_dof = 10;
 
-    constexpr unsigned int num_dof = (1 + 3 + 3 + 1 + 1 + 1) + num_additional_dof;
-
     constexpr unsigned int dof_vector_size =
         (nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3) + num_additional_dof + 3 * num_additional_dof);
 
@@ -6061,7 +6059,7 @@ void evaluate_at_nodes(
                 unsigned int j = active_phase;
 
                 tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<configuration,
-                                                                                    0, 20, 17, 14, 21, num_dof>(
+                                                                                    0, 20, 17, 14, 21>(
                     density_tp1_p[j], density_dot_tp1_p[j], std::cbegin(grad_density_tp1) + 3 * j,
                     std::cbegin(grad_density_tp1) + 3 * (j + 1), e_tp1_p[j], e_dot_tp1_p[j],
                     std::cbegin(grad_e_tp1) + 3 * j, std::cbegin(grad_e_tp1) + 3 * (j + 1),
@@ -6093,7 +6091,7 @@ void evaluate_at_nodes(
 
             } else {
                 tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<configuration,
-                                                                                    0, 20, 17, 14, 21, num_dof>(
+                                                                                    0, 20, 17, 14, 21>(
                     std::cbegin(density_tp1_p), std::cend(density_tp1_p), std::cbegin(density_dot_tp1_p),
                     std::cend(density_dot_tp1_p), std::cbegin(grad_density_tp1), std::cend(grad_density_tp1),
                     std::cbegin(e_tp1_p), std::cend(e_tp1_p), std::cbegin(e_dot_tp1_p), std::cend(e_dot_tp1_p),

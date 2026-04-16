@@ -252,7 +252,7 @@ namespace tardigradeBalanceEquations {
         }
 
         template <class configuration, int body_force_index, int cauchy_stress_index,
-                  int interphasic_force_index, int material_response_num_dof, typename density_type,
+                  int interphasic_force_index, typename density_type,
                   typename density_dot_type, class density_gradient_iter, class velocity_iter, class velocity_dot_iter,
                   class velocity_gradient_iter, class material_response_iter, class material_response_jacobian_iter,
                   typename volume_fraction_type, typename testFunction_type, class testFunctionGradient_iter,
@@ -392,7 +392,7 @@ namespace tardigradeBalanceEquations {
             // Set the number of phases
             const unsigned int     nphases       = (unsigned int)(dRdRho_end - dRdRho_begin) / configuration::dimension;
             constexpr unsigned int num_phase_dof = 4 + 2 * configuration::material::dimension;
-            constexpr unsigned int num_additional_dof = material_response_num_dof - num_phase_dof;
+            constexpr unsigned int num_additional_dof = configuration::material::num_dof - num_phase_dof;
 
             std::fill(dRdRho_begin, dRdRho_end, 0);
             std::fill(dRdU_begin, dRdU_end, 0);
@@ -942,7 +942,7 @@ namespace tardigradeBalanceEquations {
         }
 
         template <class configuration, int body_force_index, int cauchy_stress_index,
-                  int interphasic_force_index, int material_response_num_dof, class density_iter,
+                  int interphasic_force_index, class density_iter,
                   class density_dot_iter, class density_gradient_iter, class velocity_iter, class velocity_dot_iter,
                   class velocity_gradient_iter, class material_response_iter, class material_response_jacobian_iter,
                   class volume_fraction_iter, typename testFunction_type, class testFunctionGradient_iter,
@@ -1069,7 +1069,7 @@ namespace tardigradeBalanceEquations {
 
             constexpr unsigned int num_phase_dof = 4 + 2 * configuration::material::dimension;
 
-            constexpr unsigned int num_additional_dof = material_response_num_dof - num_phase_dof;
+            constexpr unsigned int num_additional_dof = configuration::material::num_dof - num_phase_dof;
 
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(density_dot_end - density_dot_begin),
                                          "The length of density dot and density must be the same")
@@ -1111,7 +1111,7 @@ namespace tardigradeBalanceEquations {
                     (unsigned int)(material_response_jacobian_end - material_response_jacobian_begin),
 
                 "The material response jacobian must have a consistent size with the material response vector and the "
-                "material_response_num_dof\n  number of phases           : " +
+                "configuration::material::num_dof\n  number of phases           : " +
                     std::to_string(nphases) +
                     "\n  material_response_size     : " + std::to_string(material_response_size) +
                     "\n  dof per phase              : " + std::to_string(num_phase_dof) +
@@ -1168,7 +1168,7 @@ namespace tardigradeBalanceEquations {
                  ++v.first, ++v.second) {
                 computeBalanceOfLinearMomentum<
                     configuration, body_force_index, cauchy_stress_index,
-                    interphasic_force_index, material_response_num_dof, density_type, density_dot_type,
+                    interphasic_force_index, density_type, density_dot_type,
                     density_gradient_iter, velocity_iter, velocity_dot_iter, velocity_gradient_iter,
                     material_response_iter, material_response_jacobian_iter, volume_fraction_type, testFunction_type,
                     testFunctionGradient_iter, interpolationFunction_type, interpolationFunctionGradient_iter,
