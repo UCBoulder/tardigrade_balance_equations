@@ -500,7 +500,7 @@ BOOST_AUTO_TEST_CASE(test_linearHydraTest, *boost::unit_test::tolerance(DEFAULT_
     }
 }
 
-template <class configuration, bool is_per_unit_volume, int node_count, int nphases, int num_additional_dof, class xi_in,
+template <class configuration, int node_count, int nphases, int num_additional_dof, class xi_in,
           typename dt_type, class density_t_in, class density_tp1_in, class u_t_in, class u_tp1_in, class w_t_in,
           class w_tp1_in, class theta_t_in, class theta_tp1_in, class e_t_in, class e_tp1_in, class z_t_in,
           class z_tp1_in, class vf_t_in, class vf_tp1_in, class umesh_t_in, class umesh_tp1_in, class v_t_in,
@@ -679,7 +679,7 @@ void evaluate_at_nodes(const xi_in &xi_begin, const xi_in &xi_end, dt_type dt, c
         if (active_phase >= 0) {
             unsigned int j = active_phase;
 
-            if (is_per_unit_volume) {
+            if (configuration::energy_is_per_unit_volume) {
                 tardigradeBalanceEquations::constraintEquations::computeInternalEnergyConstraint<9>(
                     e_tp1_p[j], density_tp1_p[j], std::cbegin(material_response) + material_response_size * j,
                     std::cbegin(material_response) + material_response_size * (j + 1), Ns[i],
@@ -697,7 +697,7 @@ void evaluate_at_nodes(const xi_in &xi_begin, const xi_in &xi_end, dt_type dt, c
                                      std::placeholders::_1, J));
 
         } else {
-            if (is_per_unit_volume) {
+            if (configuration::energy_is_per_unit_volume) {
                 tardigradeBalanceEquations::constraintEquations::computeInternalEnergyConstraint<9>(
                     std::cbegin(e_tp1_p), std::cend(e_tp1_p), std::cbegin(density_tp1_p), std::cend(density_tp1_p),
                     std::cbegin(material_response), std::cend(material_response), Ns[i], value_begin + nphases * i,
@@ -715,7 +715,7 @@ void evaluate_at_nodes(const xi_in &xi_begin, const xi_in &xi_end, dt_type dt, c
     }
 }
 
-template <class configuration, bool is_per_unit_volume, int node_count, int nphases, int num_additional_dof, class xi_in,
+template <class configuration, int node_count, int nphases, int num_additional_dof, class xi_in,
           typename dt_type, class density_t_in, class density_tp1_in, class u_t_in, class u_tp1_in, class w_t_in,
           class w_tp1_in, class theta_t_in, class theta_tp1_in, class e_t_in, class e_tp1_in, class z_t_in,
           class z_tp1_in, class vf_t_in, class vf_tp1_in, class umesh_t_in, class umesh_tp1_in, class v_t_in,
@@ -959,7 +959,7 @@ void evaluate_at_nodes(
         if (active_phase >= 0) {
             unsigned int j = active_phase;
 
-            if (is_per_unit_volume) {
+            if (configuration::energy_is_per_unit_volume) {
                 tardigradeBalanceEquations::constraintEquations::computeInternalEnergyConstraint<9>(
                     e_tp1_p[j], density_tp1_p[j], std::cbegin(material_response) + material_response_size * j,
                     std::cbegin(material_response) + material_response_size * (j + 1), Ns[i],
@@ -977,7 +977,7 @@ void evaluate_at_nodes(
                                      std::placeholders::_1, J));
 
         } else {
-            if (is_per_unit_volume) {
+            if (configuration::energy_is_per_unit_volume) {
                 tardigradeBalanceEquations::constraintEquations::computeInternalEnergyConstraint<9>(
                     std::cbegin(e_tp1_p), std::cend(e_tp1_p), std::cbegin(density_tp1_p), std::cend(density_tp1_p),
                     std::cbegin(material_response), std::cend(material_response), Ns[i], value_begin + nphases * i,
@@ -997,7 +997,7 @@ void evaluate_at_nodes(
             if (active_phase >= 0) {
                 unsigned int j = active_phase;
 
-                if (is_per_unit_volume) {
+                if (configuration::energy_is_per_unit_volume) {
                     tardigradeBalanceEquations::constraintEquations::computeInternalEnergyConstraint<configuration, 9, num_dof>(
                         e_tp1_p[j], density_tp1_p[j], std::cbegin(material_response) + material_response_size * j,
                         std::cbegin(material_response) + material_response_size * (j + 1),
@@ -1039,7 +1039,7 @@ void evaluate_at_nodes(
                                          std::placeholders::_1, J));
 
             } else {
-                if (is_per_unit_volume) {
+                if (configuration::energy_is_per_unit_volume) {
                     tardigradeBalanceEquations::constraintEquations::computeInternalEnergyConstraint<configuration, 9, num_dof>(
                         std::cbegin(e_tp1_p), std::cend(e_tp1_p), std::cbegin(density_tp1_p), std::cend(density_tp1_p),
                         std::cbegin(material_response), std::cend(material_response),
@@ -1123,15 +1123,13 @@ void evaluate_at_nodes(
 }
 
 BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint, *boost::unit_test::tolerance(1e-5)) {
-    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<> {};
+    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<3, false> {};
 
     constexpr unsigned int nphases = 4;
 
     constexpr unsigned int active_phase = 2;
 
     constexpr unsigned int num_additional_dof = 5;
-
-    constexpr bool is_per_unit_volume = false;
 
     std::array<floatType, 8 * nphases> density_t = {
         0.3213189,  0.845533,   0.18690375, 0.41729106, 0.98903451, 0.23659981, 0.91683233, 0.91839747,
@@ -1295,7 +1293,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint, *boost::unit_test::to
         +1.778246723e-01, +1.864314431e-01};
     std::array<floatType, 8 * nphases> result;
 
-    evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+    evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
         std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
         std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
         std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1), std::cbegin(theta_t),
@@ -1327,7 +1325,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint, *boost::unit_test::to
 
     std::fill(std::begin(result), std::end(result), 0);
 
-    evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+    evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
         std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
         std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
         std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1), std::cbegin(theta_t),
@@ -1362,7 +1360,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint, *boost::unit_test::to
 
             std::array<floatType, outdim> vp, vm;
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(xp), std::cend(xp), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
                 std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1), std::cbegin(theta_t),
@@ -1373,7 +1371,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint, *boost::unit_test::to
                 std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), alpha, beta, std::begin(vp),
                 std::end(vp), active_phase);
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(xm), std::cend(xm), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
                 std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1), std::cbegin(theta_t),
@@ -1411,7 +1409,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint, *boost::unit_test::to
 
             std::array<floatType, outdim> vp, vm;
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(xp),
                 std::cend(xp), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -1422,7 +1420,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint, *boost::unit_test::to
                 std::cbegin(umesh_tp1), std::cend(umesh_tp1), std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X),
                 std::cend(X), alpha, beta, std::begin(vp), std::end(vp), active_phase);
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(xm),
                 std::cend(xm), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -1460,7 +1458,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint, *boost::unit_test::to
 
             std::array<floatType, outdim> vp, vm;
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(xp), std::cend(xp),
@@ -1471,7 +1469,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint, *boost::unit_test::to
                 std::cbegin(umesh_tp1), std::cend(umesh_tp1), std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X),
                 std::cend(X), alpha, beta, std::begin(vp), std::end(vp), active_phase);
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(xm), std::cend(xm),
@@ -1509,7 +1507,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint, *boost::unit_test::to
 
             std::array<floatType, outdim> vp, vm;
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -1520,7 +1518,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint, *boost::unit_test::to
                 std::cend(umesh_tp1), std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), alpha,
                 beta, std::begin(vp), std::end(vp), active_phase);
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -1558,7 +1556,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint, *boost::unit_test::to
 
             std::array<floatType, outdim> vp, vm;
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -1569,7 +1567,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint, *boost::unit_test::to
                 std::cend(umesh_tp1), std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), alpha,
                 beta, std::begin(vp), std::end(vp), active_phase);
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -1607,7 +1605,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint, *boost::unit_test::to
 
             std::array<floatType, outdim> vp, vm;
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -1618,7 +1616,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint, *boost::unit_test::to
                 std::cend(umesh_tp1), std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), alpha,
                 beta, std::begin(vp), std::end(vp), active_phase);
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -1656,7 +1654,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint, *boost::unit_test::to
 
             std::array<floatType, outdim> vp, vm;
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -1667,7 +1665,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint, *boost::unit_test::to
                 std::cend(umesh_tp1), std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), alpha,
                 beta, std::begin(vp), std::end(vp), active_phase);
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -1705,7 +1703,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint, *boost::unit_test::to
 
             std::array<floatType, outdim> vp, vm;
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -1716,7 +1714,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint, *boost::unit_test::to
                 std::cend(xp), std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), alpha, beta,
                 std::begin(vp), std::end(vp), active_phase);
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -1740,15 +1738,13 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint, *boost::unit_test::to
 }
 
 BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint2, *boost::unit_test::tolerance(1e-5)) {
-    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<> {};
+    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<3, true> {};
 
     constexpr unsigned int nphases = 4;
 
     constexpr unsigned int active_phase = 2;
 
     constexpr unsigned int num_additional_dof = 5;
-
-    constexpr bool is_per_unit_volume = true;
 
     std::array<floatType, 8 * nphases> density_t = {
         0.3213189,  0.845533,   0.18690375, 0.41729106, 0.98903451, 0.23659981, 0.91683233, 0.91839747,
@@ -1912,7 +1908,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint2, *boost::unit_test::t
         +9.402266563e-02, +4.308229314e-02};
     std::array<floatType, 8 * nphases> result;
 
-    evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+    evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
         std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
         std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
         std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1), std::cbegin(theta_t),
@@ -1944,7 +1940,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint2, *boost::unit_test::t
 
     std::fill(std::begin(result), std::end(result), 0);
 
-    evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+    evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
         std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
         std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
         std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1), std::cbegin(theta_t),
@@ -1979,7 +1975,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint2, *boost::unit_test::t
 
             std::array<floatType, outdim> vp, vm;
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(xp), std::cend(xp), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
                 std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1), std::cbegin(theta_t),
@@ -1990,7 +1986,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint2, *boost::unit_test::t
                 std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), alpha, beta, std::begin(vp),
                 std::end(vp), active_phase);
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(xm), std::cend(xm), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
                 std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1), std::cbegin(theta_t),
@@ -2028,7 +2024,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint2, *boost::unit_test::t
 
             std::array<floatType, outdim> vp, vm;
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(xp),
                 std::cend(xp), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -2039,7 +2035,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint2, *boost::unit_test::t
                 std::cbegin(umesh_tp1), std::cend(umesh_tp1), std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X),
                 std::cend(X), alpha, beta, std::begin(vp), std::end(vp), active_phase);
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(xm),
                 std::cend(xm), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -2077,7 +2073,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint2, *boost::unit_test::t
 
             std::array<floatType, outdim> vp, vm;
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(xp), std::cend(xp),
@@ -2088,7 +2084,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint2, *boost::unit_test::t
                 std::cbegin(umesh_tp1), std::cend(umesh_tp1), std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X),
                 std::cend(X), alpha, beta, std::begin(vp), std::end(vp), active_phase);
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(xm), std::cend(xm),
@@ -2126,7 +2122,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint2, *boost::unit_test::t
 
             std::array<floatType, outdim> vp, vm;
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -2137,7 +2133,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint2, *boost::unit_test::t
                 std::cend(umesh_tp1), std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), alpha,
                 beta, std::begin(vp), std::end(vp), active_phase);
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -2175,7 +2171,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint2, *boost::unit_test::t
 
             std::array<floatType, outdim> vp, vm;
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -2186,7 +2182,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint2, *boost::unit_test::t
                 std::cend(umesh_tp1), std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), alpha,
                 beta, std::begin(vp), std::end(vp), active_phase);
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -2224,7 +2220,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint2, *boost::unit_test::t
 
             std::array<floatType, outdim> vp, vm;
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -2235,7 +2231,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint2, *boost::unit_test::t
                 std::cend(umesh_tp1), std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), alpha,
                 beta, std::begin(vp), std::end(vp), active_phase);
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -2273,7 +2269,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint2, *boost::unit_test::t
 
             std::array<floatType, outdim> vp, vm;
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -2284,7 +2280,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint2, *boost::unit_test::t
                 std::cend(umesh_tp1), std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), alpha,
                 beta, std::begin(vp), std::end(vp), active_phase);
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -2322,7 +2318,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint2, *boost::unit_test::t
 
             std::array<floatType, outdim> vp, vm;
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -2333,7 +2329,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint2, *boost::unit_test::t
                 std::cend(xp), std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), alpha, beta,
                 std::begin(vp), std::end(vp), active_phase);
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -2357,13 +2353,11 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint2, *boost::unit_test::t
 }
 
 BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase, *boost::unit_test::tolerance(1e-5)) {
-    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<> {};
+    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<3, false> {};
 
     constexpr unsigned int nphases = 4;
 
     constexpr unsigned int num_additional_dof = 5;
-
-    constexpr bool is_per_unit_volume = false;
 
     std::array<floatType, 8 * nphases> density_t = {
         0.3213189,  0.845533,   0.18690375, 0.41729106, 0.98903451, 0.23659981, 0.91683233, 0.91839747,
@@ -2527,7 +2521,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase, *boost::un
         +1.778246723e-01, +1.864314431e-01};
     std::array<floatType, 8 * nphases> result;
 
-    evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+    evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
         std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
         std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
         std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1), std::cbegin(theta_t),
@@ -2557,7 +2551,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase, *boost::un
 
     std::fill(std::begin(result), std::end(result), 0);
 
-    evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+    evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
         std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
         std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
         std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1), std::cbegin(theta_t),
@@ -2590,7 +2584,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase, *boost::un
 
             std::array<floatType, outdim> vp, vm;
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(xp), std::cend(xp), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
                 std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1), std::cbegin(theta_t),
@@ -2601,7 +2595,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase, *boost::un
                 std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), alpha, beta, std::begin(vp),
                 std::end(vp));
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(xm), std::cend(xm), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
                 std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1), std::cbegin(theta_t),
@@ -2634,7 +2628,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase, *boost::un
 
             std::array<floatType, outdim> vp, vm;
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(xp),
                 std::cend(xp), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -2645,7 +2639,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase, *boost::un
                 std::cbegin(umesh_tp1), std::cend(umesh_tp1), std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X),
                 std::cend(X), alpha, beta, std::begin(vp), std::end(vp));
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(xm),
                 std::cend(xm), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -2678,7 +2672,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase, *boost::un
 
             std::array<floatType, outdim> vp, vm;
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(xp), std::cend(xp),
@@ -2689,7 +2683,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase, *boost::un
                 std::cbegin(umesh_tp1), std::cend(umesh_tp1), std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X),
                 std::cend(X), alpha, beta, std::begin(vp), std::end(vp));
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(xm), std::cend(xm),
@@ -2722,7 +2716,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase, *boost::un
 
             std::array<floatType, outdim> vp, vm;
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -2733,7 +2727,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase, *boost::un
                 std::cend(umesh_tp1), std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), alpha,
                 beta, std::begin(vp), std::end(vp));
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -2766,7 +2760,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase, *boost::un
 
             std::array<floatType, outdim> vp, vm;
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -2777,7 +2771,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase, *boost::un
                 std::cend(umesh_tp1), std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), alpha,
                 beta, std::begin(vp), std::end(vp));
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -2810,7 +2804,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase, *boost::un
 
             std::array<floatType, outdim> vp, vm;
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -2821,7 +2815,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase, *boost::un
                 std::cend(umesh_tp1), std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), alpha,
                 beta, std::begin(vp), std::end(vp));
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -2854,7 +2848,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase, *boost::un
 
             std::array<floatType, outdim> vp, vm;
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -2865,7 +2859,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase, *boost::un
                 std::cend(umesh_tp1), std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), alpha,
                 beta, std::begin(vp), std::end(vp));
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -2898,7 +2892,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase, *boost::un
 
             std::array<floatType, outdim> vp, vm;
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -2909,7 +2903,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase, *boost::un
                 std::cend(xp), std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), alpha, beta,
                 std::begin(vp), std::end(vp));
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -2928,13 +2922,11 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase, *boost::un
 }
 
 BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase2, *boost::unit_test::tolerance(1e-5)) {
-    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<> {};
+    class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<3, true> {};
 
     constexpr unsigned int nphases = 4;
 
     constexpr unsigned int num_additional_dof = 5;
-
-    constexpr bool is_per_unit_volume = true;
 
     std::array<floatType, 8 * nphases> density_t = {
         0.3213189,  0.845533,   0.18690375, 0.41729106, 0.98903451, 0.23659981, 0.91683233, 0.91839747,
@@ -3098,7 +3090,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase2, *boost::u
         +9.402266563e-02, +4.308229314e-02};
     std::array<floatType, 8 * nphases> result;
 
-    evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+    evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
         std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
         std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
         std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1), std::cbegin(theta_t),
@@ -3128,7 +3120,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase2, *boost::u
 
     std::fill(std::begin(result), std::end(result), 0);
 
-    evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+    evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
         std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
         std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
         std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1), std::cbegin(theta_t),
@@ -3161,7 +3153,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase2, *boost::u
 
             std::array<floatType, outdim> vp, vm;
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(xp), std::cend(xp), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
                 std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1), std::cbegin(theta_t),
@@ -3172,7 +3164,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase2, *boost::u
                 std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), alpha, beta, std::begin(vp),
                 std::end(vp));
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(xm), std::cend(xm), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1), std::cend(u_tp1),
                 std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1), std::cbegin(theta_t),
@@ -3205,7 +3197,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase2, *boost::u
 
             std::array<floatType, outdim> vp, vm;
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(xp),
                 std::cend(xp), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -3216,7 +3208,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase2, *boost::u
                 std::cbegin(umesh_tp1), std::cend(umesh_tp1), std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X),
                 std::cend(X), alpha, beta, std::begin(vp), std::end(vp));
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(xm),
                 std::cend(xm), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -3249,7 +3241,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase2, *boost::u
 
             std::array<floatType, outdim> vp, vm;
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(xp), std::cend(xp),
@@ -3260,7 +3252,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase2, *boost::u
                 std::cbegin(umesh_tp1), std::cend(umesh_tp1), std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X),
                 std::cend(X), alpha, beta, std::begin(vp), std::end(vp));
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(xm), std::cend(xm),
@@ -3293,7 +3285,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase2, *boost::u
 
             std::array<floatType, outdim> vp, vm;
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -3304,7 +3296,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase2, *boost::u
                 std::cend(umesh_tp1), std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), alpha,
                 beta, std::begin(vp), std::end(vp));
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -3337,7 +3329,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase2, *boost::u
 
             std::array<floatType, outdim> vp, vm;
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -3348,7 +3340,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase2, *boost::u
                 std::cend(umesh_tp1), std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), alpha,
                 beta, std::begin(vp), std::end(vp));
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -3381,7 +3373,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase2, *boost::u
 
             std::array<floatType, outdim> vp, vm;
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -3392,7 +3384,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase2, *boost::u
                 std::cend(umesh_tp1), std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), alpha,
                 beta, std::begin(vp), std::end(vp));
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -3425,7 +3417,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase2, *boost::u
 
             std::array<floatType, outdim> vp, vm;
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -3436,7 +3428,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase2, *boost::u
                 std::cend(umesh_tp1), std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), alpha,
                 beta, std::begin(vp), std::end(vp));
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -3469,7 +3461,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase2, *boost::u
 
             std::array<floatType, outdim> vp, vm;
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
@@ -3480,7 +3472,7 @@ BOOST_AUTO_TEST_CASE(test_computeInternalEnergyConstraint_multiphase2, *boost::u
                 std::cend(xp), std::cbegin(u_dot_t), std::cend(u_dot_t), std::cbegin(X), std::cend(X), alpha, beta,
                 std::begin(vp), std::end(vp));
 
-            evaluate_at_nodes<configuration, is_per_unit_volume, 8, nphases, num_additional_dof>(
+            evaluate_at_nodes<configuration, 8, nphases, num_additional_dof>(
                 std::cbegin(local_point), std::cend(local_point), dt, std::cbegin(density_t), std::cend(density_t),
                 std::cbegin(density_tp1), std::cend(density_tp1), std::cbegin(u_t), std::cend(u_t), std::cbegin(u_tp1),
                 std::cend(u_tp1), std::cbegin(w_t), std::cend(w_t), std::cbegin(w_tp1), std::cend(w_tp1),
