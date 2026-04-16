@@ -2236,9 +2236,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfMass_hydra_fea, *boost::unit_test::tol
 
     constexpr unsigned int nphases = 4;
 
-    constexpr unsigned int num_additional_dof = 5;
-
-    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1, num_additional_dof> {};
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1, 5> {};
     class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
 
     constexpr unsigned int active_phase = 2;
@@ -2863,9 +2861,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfMass_hydra_multiphase_fea, *boost::uni
 
     constexpr unsigned int nphases = 4;
 
-    constexpr unsigned int num_additional_dof = 5;
-
-    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1, num_additional_dof> {};
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1, 5> {};
     class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
 
     std::array<floatType, 8 * nphases> density_t = {
@@ -3347,7 +3343,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfMass_hydra_multiphase_fea, *boost::uni
     }
     // Check the derivatives w.r.t. the additional dof
     {
-        constexpr unsigned int vardim = num_additional_dof * 8;
+        constexpr unsigned int vardim = configuration::material::num_additional_dof * 8;
         constexpr unsigned int outdim = 1 * nphases * 8;
 
         for (unsigned int i = 0; i < vardim; ++i) {
@@ -4398,9 +4394,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfMass_hydra_diffusionTerm_fea, *boost::
 
     constexpr unsigned int nphases = 4;
 
-    constexpr unsigned int num_additional_dof = 5;
-
-    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1, num_additional_dof> {};
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1, 5> {};
     class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
 
     constexpr unsigned int active_phase = 2;
@@ -4508,14 +4502,14 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfMass_hydra_diffusionTerm_fea, *boost::
         0.2499543,  0.35053932, 0.3430861,  0.63735673, 0.01273756, 0.76326864, 0.41641463, 0.43223919,
         0.48111502, 0.44921245, 0.4974709,  0.34590431, 0.45334614, 0.40465134, 0.51824272, 0.62326908};
 
-    std::array<floatType, 8 * num_additional_dof> z_t = {
+    std::array<floatType, 8 * configuration::material::num_additional_dof> z_t = {
         -0.16712678, 0.83631984,  -0.37692766, 0.88293399,  0.00649485,  -0.30221415, 0.29403919,  -0.50050759,
         -0.54047281, -0.60730711, 0.91979913,  -0.01417254, 0.50322993,  -0.05201624, 0.17508032,  0.16827796,
         0.95977262,  0.33686625,  -0.52046106, -0.96960468, -0.56263572, -0.08896072, -0.21315933, 0.62465248,
         0.57111351,  -0.82180806, 0.90402145,  0.05491335,  0.19280793,  -0.18988646, 0.29900191,  0.74265261,
         0.34787193,  0.94019709,  0.4022445,   0.64344147,  -0.90992083, 0.34539703,  0.30950529,  -0.7965079};
 
-    std::array<floatType, 8 * num_additional_dof> z_tp1 = {
+    std::array<floatType, 8 * configuration::material::num_additional_dof> z_tp1 = {
         0.68477499,  0.22834481,  -0.80334382, 0.18893424,  -0.0431683,  -0.53341286, -0.96048782, -0.26886544,
         0.23970215,  -0.34144173, -0.38549069, 0.50224248,  0.5172493,   0.43753167,  -0.79763609, 0.03233191,
         0.11559732,  0.48960905,  0.80635544,  -0.26192227, -0.14267306, 0.46553498,  0.32527284,  0.1157398,
@@ -4604,7 +4598,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfMass_hydra_diffusionTerm_fea, *boost::
 
     std::array<floatType, 8 * 1 * nphases * 8 * 1 * nphases> dRdVF;
 
-    std::array<floatType, 8 * 1 * nphases * 8 * num_additional_dof * nphases> dRdZ;
+    std::array<floatType, 8 * 1 * nphases * 8 * configuration::material::num_additional_dof * nphases> dRdZ;
 
     std::array<floatType, 8 * 1 * nphases * 8 * 3> dRdUMesh;
 
@@ -4953,7 +4947,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfMass_hydra_diffusionTerm_fea, *boost::
     // Check the derivatives w.r.t. the additional dof
     {
         floatType              eps    = 1e-6;
-        constexpr unsigned int vardim = num_additional_dof * 8;
+        constexpr unsigned int vardim = configuration::material::num_additional_dof * 8;
         constexpr unsigned int outdim = 1 * nphases * 8;
 
         for (unsigned int i = 0; i < vardim; ++i) {
@@ -5064,9 +5058,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfMass_hydra_diffusionTerm_fea_multiphas
 
     constexpr unsigned int nphases = 4;
 
-    constexpr unsigned int num_additional_dof = 5;
-
-    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1, num_additional_dof> {};
+    class material : public tardigradeBalanceEquations::MaterialResponseConfigurationBase<1 + 3 + 3 + 1 + 1 + 1, 5> {};
     class configuration : public tardigradeBalanceEquations::BalanceEquationConfigurationBase<material> {};
 
     constexpr unsigned int active_phase = -1;
@@ -5174,14 +5166,14 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfMass_hydra_diffusionTerm_fea_multiphas
         0.2499543,  0.35053932, 0.3430861,  0.63735673, 0.01273756, 0.76326864, 0.41641463, 0.43223919,
         0.48111502, 0.44921245, 0.4974709,  0.34590431, 0.45334614, 0.40465134, 0.51824272, 0.62326908};
 
-    std::array<floatType, 8 * num_additional_dof> z_t = {
+    std::array<floatType, 8 * configuration::material::num_additional_dof> z_t = {
         -0.16712678, 0.83631984,  -0.37692766, 0.88293399,  0.00649485,  -0.30221415, 0.29403919,  -0.50050759,
         -0.54047281, -0.60730711, 0.91979913,  -0.01417254, 0.50322993,  -0.05201624, 0.17508032,  0.16827796,
         0.95977262,  0.33686625,  -0.52046106, -0.96960468, -0.56263572, -0.08896072, -0.21315933, 0.62465248,
         0.57111351,  -0.82180806, 0.90402145,  0.05491335,  0.19280793,  -0.18988646, 0.29900191,  0.74265261,
         0.34787193,  0.94019709,  0.4022445,   0.64344147,  -0.90992083, 0.34539703,  0.30950529,  -0.7965079};
 
-    std::array<floatType, 8 * num_additional_dof> z_tp1 = {
+    std::array<floatType, 8 * configuration::material::num_additional_dof> z_tp1 = {
         0.68477499,  0.22834481,  -0.80334382, 0.18893424,  -0.0431683,  -0.53341286, -0.96048782, -0.26886544,
         0.23970215,  -0.34144173, -0.38549069, 0.50224248,  0.5172493,   0.43753167,  -0.79763609, 0.03233191,
         0.11559732,  0.48960905,  0.80635544,  -0.26192227, -0.14267306, 0.46553498,  0.32527284,  0.1157398,
@@ -5262,7 +5254,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfMass_hydra_diffusionTerm_fea_multiphas
 
     std::array<floatType, 8 * 1 * nphases * 8 * 1 * nphases> dRdVF;
 
-    std::array<floatType, 8 * 1 * nphases * 8 * num_additional_dof * nphases> dRdZ;
+    std::array<floatType, 8 * 1 * nphases * 8 * configuration::material::num_additional_dof * nphases> dRdZ;
 
     std::array<floatType, 8 * 1 * nphases * 8 * 3> dRdUMesh;
 
@@ -5555,7 +5547,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfMass_hydra_diffusionTerm_fea_multiphas
     // Check the derivatives w.r.t. the additional dof
     {
         floatType              eps    = 1e-6;
-        constexpr unsigned int vardim = num_additional_dof * 8;
+        constexpr unsigned int vardim = configuration::material::num_additional_dof * 8;
         constexpr unsigned int outdim = 1 * nphases * 8;
 
         for (unsigned int i = 0; i < vardim; ++i) {
