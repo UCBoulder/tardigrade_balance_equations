@@ -172,7 +172,7 @@ namespace tardigradeBalanceEquations {
             dRdRho_iter dRdRho_end, dRdU_iter dRdU_begin, dRdU_iter dRdU_end, dRdUMesh_iter dRdUMesh_begin,
             dRdUMesh_iter dRdUMesh_end);
 
-        template <class configuration, int material_response_dim, int mass_change_index, int material_response_num_dof,
+        template <class configuration, int mass_change_index, int material_response_num_dof,
                   typename density_type, typename densityDot_type, typename result_type, typename testFunction_type,
                   typename interpolationFunction_type, class densityGradient_iter, class velocity_iter,
                   class velocityGradient_iter, class material_response_iter, class material_response_jacobian_iter,
@@ -202,7 +202,7 @@ namespace tardigradeBalanceEquations {
             dRdVF_iter dRdVF_end, dRdZ_iter dRdZ_begin, dRdZ_iter dRdZ_end, dRdUMesh_iter dRdUMesh_begin,
             dRdUMesh_iter dRdUMesh_end);
 
-        template <class configuration, int material_response_dim, int mass_change_index, int material_response_num_dof,
+        template <class configuration, int mass_change_index, int material_response_num_dof,
                   class density_iter, class densityDot_iter, class result_iter, typename testFunction_type,
                   typename interpolationFunction_type, class densityGradient_iter, class velocity_iter,
                   class velocityGradient_iter, class material_response_iter, class material_response_jacobian_iter,

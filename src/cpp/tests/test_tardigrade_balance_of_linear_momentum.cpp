@@ -2811,7 +2811,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
          if (active_phase >= 0) {
              unsigned int j = active_phase;
 
-             tardigradeBalanceEquations::balanceOfLinearMomentum::computeBalanceOfLinearMomentum<configuration, 3, 11, 0, 14>(
+             tardigradeBalanceEquations::balanceOfLinearMomentum::computeBalanceOfLinearMomentum<configuration, 11, 0, 14>(
                  density_tp1_p[j], density_dot_tp1_p[j], std::cbegin(grad_density_tp1) + 3 * j,
                  std::cbegin(grad_density_tp1) + 3 * (j + 1), std::cbegin(v_tp1_p) + 3 * j,
                  std::cbegin(v_tp1_p) + 3 * (j + 1), std::cbegin(a_tp1_p) + 3 * j, std::cbegin(a_tp1_p) + 3 * (j + 1),
@@ -2829,7 +2829,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
                                       std::placeholders::_1, J));
 
          } else {
-             tardigradeBalanceEquations::balanceOfLinearMomentum::computeBalanceOfLinearMomentum<configuration, 3, 11, 0, 14>(
+             tardigradeBalanceEquations::balanceOfLinearMomentum::computeBalanceOfLinearMomentum<configuration, 11, 0, 14>(
                  std::cbegin(density_tp1_p), std::cend(density_tp1_p), std::cbegin(density_dot_tp1_p),
                  std::cend(density_dot_tp1_p), std::cbegin(grad_density_tp1), std::cend(grad_density_tp1),
                  std::cbegin(v_tp1_p), std::cend(v_tp1_p), std::cbegin(a_tp1_p), std::cend(a_tp1_p),
@@ -3124,7 +3124,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
          if (active_phase >= 0) {
              unsigned int j = active_phase;
 
-             tardigradeBalanceEquations::balanceOfLinearMomentum::computeBalanceOfLinearMomentum<configuration, 3, 11, 0, 14>(
+             tardigradeBalanceEquations::balanceOfLinearMomentum::computeBalanceOfLinearMomentum<configuration, 11, 0, 14>(
                  density_tp1_p[j], density_dot_tp1_p[j], std::cbegin(grad_density_tp1) + 3 * j,
                  std::cbegin(grad_density_tp1) + 3 * (j + 1), std::cbegin(v_tp1_p) + 3 * j,
                  std::cbegin(v_tp1_p) + 3 * (j + 1), std::cbegin(a_tp1_p) + 3 * j, std::cbegin(a_tp1_p) + 3 * (j + 1),
@@ -3142,7 +3142,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
                                       std::placeholders::_1, J));
 
          } else {
-             tardigradeBalanceEquations::balanceOfLinearMomentum::computeBalanceOfLinearMomentum<configuration, 3, 11, 0, 14>(
+             tardigradeBalanceEquations::balanceOfLinearMomentum::computeBalanceOfLinearMomentum<configuration, 11, 0, 14>(
                  std::cbegin(density_tp1_p), std::cend(density_tp1_p), std::cbegin(density_dot_tp1_p),
                  std::cend(density_dot_tp1_p), std::cbegin(grad_density_tp1), std::cend(grad_density_tp1),
                  std::cbegin(v_tp1_p), std::cend(v_tp1_p), std::cbegin(a_tp1_p), std::cend(a_tp1_p),
@@ -3163,7 +3163,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
                  // Single phase evaluation
                  unsigned int j = active_phase;
 
-                 tardigradeBalanceEquations::balanceOfLinearMomentum::computeBalanceOfLinearMomentum<configuration, 3, 11, 0, 14,
+                 tardigradeBalanceEquations::balanceOfLinearMomentum::computeBalanceOfLinearMomentum<configuration, 11, 0, 14,
                                                                                                      num_dof>(
                      density_tp1_p[j], density_dot_tp1_p[j], std::cbegin(grad_density_tp1) + 3 * j,
                      std::cbegin(grad_density_tp1) + 3 * (j + 1), std::cbegin(v_tp1_p) + 3 * j,
@@ -3204,7 +3204,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
 
              } else {
                  // Multiphase evaluation
-                 tardigradeBalanceEquations::balanceOfLinearMomentum::computeBalanceOfLinearMomentum<configuration, 3, 11, 0, 14,
+                 tardigradeBalanceEquations::balanceOfLinearMomentum::computeBalanceOfLinearMomentum<configuration, 11, 0, 14,
                                                                                                      num_dof>(
                      std::cbegin(density_tp1_p), std::cend(density_tp1_p), std::cbegin(density_dot_tp1_p),
                      std::cend(density_dot_tp1_p), std::cbegin(grad_density_tp1), std::cend(grad_density_tp1),
