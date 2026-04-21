@@ -179,9 +179,7 @@ namespace tardigradeBalanceEquations {
                   class interpolationFunctionGradient_iter, class full_material_response_dof_gradient_iter,
                   class dRdRho_iter, class dRdU_iter, class dRdW_iter, class dRdTheta_iter, class dRdE_iter,
                   class dRdVF_iter, class dRdZ_iter, class dRdUMesh_iter, typename dDensityDotdDensity_type,
-                  typename dUDotdU_type, int density_index = 0, int displacement_index = 1, int velocity_index = 4,
-                  int temperature_index = 7, int internal_energy_index = 8, int volume_fraction_index = 9,
-                  int additional_dof_index = 10>
+                  typename dUDotdU_type>
         inline void computeBalanceOfMass(
             const density_type &density, const densityDot_type &density_dot,
             const densityGradient_iter &density_gradient_begin, const densityGradient_iter &density_gradient_end,
@@ -209,9 +207,7 @@ namespace tardigradeBalanceEquations {
                   class interpolationFunctionGradient_iter, class full_material_response_dof_gradient_iter,
                   class dRdRho_iter, class dRdU_iter, class dRdW_iter, class dRdTheta_iter, class dRdE_iter,
                   class dRdVF_iter, class dRdZ_iter, class dRdUMesh_iter, typename dDensityDotdDensity_type,
-                  typename dUDotdU_type, int density_index = 0, int displacement_index = 1, int velocity_index = 4,
-                  int temperature_index = 7, int internal_energy_index = 8, int volume_fraction_index = 9,
-                  int additional_dof_index = 10>
+                  typename dUDotdU_type>
         inline void computeBalanceOfMass(
             const density_iter &density_begin, const density_iter &density_end,
             const densityDot_iter &density_dot_begin, const densityDot_iter &density_dot_end,
@@ -246,9 +242,7 @@ namespace tardigradeBalanceEquations {
                   typename interpolationFunction_type, class interpolationFunctionGradient_iter,
                   class material_response_jacobian_iter, class full_material_response_dof_gradient_iter,
                   class dRdRho_iter, class dRdU_iter, class dRdW_iter, class dRdTheta_iter, class dRdE_iter,
-                  class dRdVF_iter, class dRdZ_iter, class dRdUMesh_iter, int density_index = 0,
-                  int displacement_index = 1, int velocity_index = 4, int temperature_index = 7,
-                  int internal_energy_index = 8, int volume_fraction_index = 9, int additional_dof_index = 10>
+                  class dRdVF_iter, class dRdZ_iter, class dRdUMesh_iter>
         inline void computeDiffusionTerm(
             const material_response_iter &material_response_begin, const material_response_iter &material_response_end,
             const material_response_jacobian_iter          &material_response_jacobian_begin,
@@ -278,9 +272,7 @@ namespace tardigradeBalanceEquations {
                   typename interpolationFunction_type, class interpolationFunctionGradient_iter,
                   class material_response_jacobian_iter, class full_material_response_dof_gradient_iter,
                   class dRdRho_iter, class dRdU_iter, class dRdW_iter, class dRdTheta_iter, class dRdE_iter,
-                  class dRdVF_iter, class dRdZ_iter, class dRdUMesh_iter, int density_index = 0,
-                  int displacement_index = 1, int velocity_index = 4, int temperature_index = 7,
-                  int internal_energy_index = 8, int volume_fraction_index = 9, int additional_dof_index = 10>
+                  class dRdVF_iter, class dRdZ_iter, class dRdUMesh_iter>
         inline void computeDiffusionTerm(
             const material_response_iter &material_response_begin, const material_response_iter &material_response_end,
             const material_response_jacobian_iter          &material_response_jacobian_begin,

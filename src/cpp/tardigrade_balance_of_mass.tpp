@@ -869,8 +869,7 @@ namespace tardigradeBalanceEquations {
                   class interpolationFunctionGradient_iter, class full_material_response_dof_gradient_iter,
                   class dRdRho_iter, class dRdU_iter, class dRdW_iter, class dRdTheta_iter, class dRdE_iter,
                   class dRdVF_iter, class dRdZ_iter, class dRdUMesh_iter, typename dDensityDotdDensity_type,
-                  typename dUDotdU_type, int density_index, int displacement_index, int velocity_index,
-                  int temperature_index, int internal_energy_index, int volume_fraction_index, int additional_dof_index>
+                  typename dUDotdU_type>
         void computeBalanceOfMass(
             const density_type &density, const densityDot_type &density_dot,
             const densityGradient_iter &density_gradient_begin, const densityGradient_iter &density_gradient_end,
@@ -1225,8 +1224,7 @@ namespace tardigradeBalanceEquations {
                   class interpolationFunctionGradient_iter, class full_material_response_dof_gradient_iter,
                   class dRdRho_iter, class dRdU_iter, class dRdW_iter, class dRdTheta_iter, class dRdE_iter,
                   class dRdVF_iter, class dRdZ_iter, class dRdUMesh_iter, typename dDensityDotdDensity_type,
-                  typename dUDotdU_type, int density_index, int displacement_index, int velocity_index,
-                  int temperature_index, int internal_energy_index, int volume_fraction_index, int additional_dof_index>
+                  typename dUDotdU_type>
         void computeBalanceOfMass(
             const density_iter &density_begin, const density_iter &density_end,
             const densityDot_iter &density_dot_begin, const densityDot_iter &density_dot_end,
@@ -1442,13 +1440,7 @@ namespace tardigradeBalanceEquations {
             for (auto v = std::pair<unsigned int, density_iter>(0, density_begin); v.second != density_end;
                  ++v.first, ++v.second) {
                 computeBalanceOfMass<
-                    configuration, mass_change_index, density_type,
-                    density_dot_type, result_type, testFunction_type, interpolationFunction_type, densityGradient_iter,
-                    velocity_iter, velocityGradient_iter, material_response_iter, material_response_jacobian_iter,
-                    interpolationFunctionGradient_iter, full_material_response_dof_gradient_iter, dRdRho_iter,
-                    dRdU_iter, dRdW_iter, dRdTheta_iter, dRdE_iter, dRdVF_iter, dRdZ_iter, dRdUMesh_iter,
-                    dDensityDotdDensity_type, dUDotdU_type, configuration::material::density_index, configuration::material::displacement_index, configuration::material::velocity_index,
-                    configuration::material::temperature_index, configuration::material::internal_energy_index, configuration::material::volume_fraction_index, configuration::material::additional_dof_index>(
+                    configuration, mass_change_index>(
                     *(density_begin + v.first), *(density_dot_begin + v.first),
                     density_gradient_begin + configuration::dimension * v.first,
                     density_gradient_begin + configuration::dimension * (v.first + 1),
@@ -1529,9 +1521,7 @@ namespace tardigradeBalanceEquations {
                   typename interpolationFunction_type, class interpolationFunctionGradient_iter,
                   class material_response_jacobian_iter, class full_material_response_dof_gradient_iter,
                   class dRdRho_iter, class dRdU_iter, class dRdW_iter, class dRdTheta_iter, class dRdE_iter,
-                  class dRdVF_iter, class dRdZ_iter, class dRdUMesh_iter, int density_index, int displacement_index,
-                  int velocity_index, int temperature_index, int internal_energy_index, int volume_fraction_index,
-                  int additional_dof_index>
+                  class dRdVF_iter, class dRdZ_iter, class dRdUMesh_iter>
         void computeDiffusionTerm(
             const material_response_iter &material_response_begin, const material_response_iter &material_response_end,
             const material_response_jacobian_iter          &material_response_jacobian_begin,
@@ -1908,9 +1898,7 @@ namespace tardigradeBalanceEquations {
                   typename interpolationFunction_type, class interpolationFunctionGradient_iter,
                   class material_response_jacobian_iter, class full_material_response_dof_gradient_iter,
                   class dRdRho_iter, class dRdU_iter, class dRdW_iter, class dRdTheta_iter, class dRdE_iter,
-                  class dRdVF_iter, class dRdZ_iter, class dRdUMesh_iter, int density_index, int displacement_index,
-                  int velocity_index, int temperature_index, int internal_energy_index, int volume_fraction_index,
-                  int additional_dof_index>
+                  class dRdVF_iter, class dRdZ_iter, class dRdUMesh_iter>
         void computeDiffusionTerm(
             const material_response_iter &material_response_begin, const material_response_iter &material_response_end,
             const material_response_jacobian_iter          &material_response_jacobian_begin,
@@ -2051,12 +2039,7 @@ namespace tardigradeBalanceEquations {
             for (auto v = std::pair<unsigned int, result_iter>(0, result_begin); v.second != result_end;
                  ++v.first, ++v.second) {
                 computeDiffusionTerm<
-                    configuration, diffusion_index, dUDotdU_type, result_type,
-                    testFunctionGradient_iter, material_response_iter, interpolationFunction_type,
-                    interpolationFunctionGradient_iter, material_response_jacobian_iter,
-                    full_material_response_dof_gradient_iter, dRdRho_iter, dRdU_iter, dRdW_iter, dRdTheta_iter,
-                    dRdE_iter, dRdVF_iter, dRdZ_iter, dRdUMesh_iter, configuration::material::density_index, configuration::material::displacement_index, configuration::material::velocity_index,
-                    configuration::material::temperature_index, configuration::material::internal_energy_index, configuration::material::volume_fraction_index, configuration::material::additional_dof_index>(
+                    configuration, diffusion_index>(
                     material_response_begin + material_response_size * v.first,
                     material_response_begin + material_response_size * (v.first + 1),
                     material_response_jacobian_begin + material_response_size *
