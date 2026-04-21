@@ -1350,13 +1350,13 @@ namespace tardigradeBalanceEquations {
 
                 // heat flux
                 for (unsigned int i = 0; i < configuration::dimension; ++i) {
-                    *(mixture_response_begin + heat_flux_index + i) +=
-                        *(material_response_begin + phase * material_response_size + heat_flux_index + i);
+                    *(mixture_response_begin + configuration::material::output::heat_flux_index + i) +=
+                        *(material_response_begin + phase * material_response_size + configuration::material::output::heat_flux_index + i);
 
                     for (unsigned int j = 0; j < num_dof; ++j) {
-                        *(mixture_jacobian_begin + num_dof * (i + heat_flux_index) + j) +=
+                        *(mixture_jacobian_begin + num_dof * (i + configuration::material::output::heat_flux_index) + j) +=
                             *(material_response_jacobian_begin + material_response_size * num_dof * phase +
-                              num_dof * (i + heat_flux_index) + j);
+                              num_dof * (i + configuration::material::output::heat_flux_index) + j);
                     }
                 }
 
@@ -1481,33 +1481,33 @@ namespace tardigradeBalanceEquations {
 
                 // internal heat generation
                 for (unsigned int i = 0; i < 1; ++i) {
-                    *(mixture_response_begin + internal_heat_generation_index + i) +=
+                    *(mixture_response_begin + configuration::material::output::internal_heat_generation_index + i) +=
                         (*(density_begin + phase)) *
-                        (*(material_response_begin + phase * material_response_size + internal_heat_generation_index +
+                        (*(material_response_begin + phase * material_response_size + configuration::material::output::internal_heat_generation_index +
                            i)) /
                         density_sum;
 
                     for (unsigned int j = 0; j < num_dof; ++j) {
-                        *(mixture_jacobian_begin + num_dof * (i + internal_heat_generation_index) + j) +=
+                        *(mixture_jacobian_begin + num_dof * (i + configuration::material::output::internal_heat_generation_index) + j) +=
                             (*(density_begin + phase)) *
                             (*(material_response_jacobian_begin + phase * material_response_size * num_dof +
-                               num_dof * (i + internal_heat_generation_index) + j)) /
+                               num_dof * (i + configuration::material::output::internal_heat_generation_index) + j)) /
                             density_sum;
                     }
 
                     // Add contributions due to dependence on the density
-                    *(mixture_jacobian_begin + num_dof * (i + internal_heat_generation_index) +
+                    *(mixture_jacobian_begin + num_dof * (i + configuration::material::output::internal_heat_generation_index) +
                       (num_phases + 1) * configuration::material::dof::density_index + phase) +=
-                        (*(material_response_begin + material_response_size * phase + internal_heat_generation_index +
+                        (*(material_response_begin + material_response_size * phase + configuration::material::output::internal_heat_generation_index +
                            i)) /
                         density_sum;
 
                     for (unsigned int j = 0; j < num_phases; ++j) {
-                        *(mixture_jacobian_begin + num_dof * (i + internal_heat_generation_index) +
+                        *(mixture_jacobian_begin + num_dof * (i + configuration::material::output::internal_heat_generation_index) +
                           (num_phases + 1) * configuration::material::dof::density_index + j) +=
                             -(*(density_begin + phase)) *
                             (*(material_response_begin + material_response_size * phase +
-                               internal_heat_generation_index + i)) /
+                               configuration::material::output::internal_heat_generation_index + i)) /
                             (density_sum * density_sum);
                     }
                 }
