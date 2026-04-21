@@ -2992,8 +2992,6 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
          configuration::dimension>::const_iterator, floatType, 3, 3>(
              std::cbegin(dxdxi), std::cend(dxdxi), 3, 3);
 
-     constexpr unsigned int num_phase_dof = 10;
-
      constexpr unsigned int dof_vector_size =
          (nphases * (1 + 3 + 3 + 1 + 1 + +1 + 3 + 9 + 9 + 3 + 3 + 3) + configuration::material::num_additional_dof + 3 * configuration::material::num_additional_dof);
 
@@ -3179,7 +3177,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
                      std::cbegin(material_response_jacobian) + material_response_size * dof_vector_size * (j + 1),
                      vf_tp1_p[j], Ns[i], std::cbegin(dNdx) + 3 * i, std::cbegin(dNdx) + 3 * (i + 1), Ns[k],
                      std::cbegin(dNdx) + 3 * k, std::cbegin(dNdx) + 3 * (k + 1),
-                     std::cbegin(dof_vector) + (nphases * num_phase_dof + configuration::material::num_additional_dof), std::cend(dof_vector),
+                     std::cbegin(dof_vector) + (nphases * configuration::material::num_phase_dof + configuration::material::num_additional_dof), std::cend(dof_vector),
                      dDensityDotdDensity, dUDotdU, dUDDotdU, j, std::begin(value_n) + configuration::dimension *
                      nphases * i + configuration::dimension * j, std::begin(value_n) + configuration::dimension *
                      nphases * i + configuration::dimension * (j + 1), std::begin(dRdRho_n) + configuration::dimension
@@ -3216,7 +3214,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfLinearMomentum_multiphase_fea, *boost:
                      std::cend(material_response_jacobian), std::cbegin(vf_tp1_p), std::cend(vf_tp1_p), Ns[i],
                      std::cbegin(dNdx) + 3 * i, std::cbegin(dNdx) + 3 * (i + 1), Ns[k], std::cbegin(dNdx) + 3 * k,
                      std::cbegin(dNdx) + 3 * (k + 1),
-                     std::cbegin(dof_vector) + (nphases * num_phase_dof + configuration::material::num_additional_dof), std::cend(dof_vector),
+                     std::cbegin(dof_vector) + (nphases * configuration::material::num_phase_dof + configuration::material::num_additional_dof), std::cend(dof_vector),
                      dDensityDotdDensity, dUDotdU, dUDDotdU,
                      //                    std::begin( value_n ),             std::end( value_n ),
                      std::begin(value_n) + configuration::dimension * nphases * i, std::begin(value_n) +
