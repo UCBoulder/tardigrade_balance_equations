@@ -18,7 +18,7 @@ namespace tardigradeBalanceEquations {
 
     namespace constraintEquations {
 
-        template <int predicted_internal_energy_index, typename internal_energy_type, class material_response_iter,
+        template <class configuration, int predicted_internal_energy_index, typename internal_energy_type, class material_response_iter,
                   typename test_function_type, typename result_type>
         void computeInternalEnergyConstraint(const internal_energy_type   &internal_energy,
                                              const material_response_iter &material_response_begin,
@@ -53,7 +53,7 @@ namespace tardigradeBalanceEquations {
             result = (*(material_response_begin + predicted_internal_energy_index) - internal_energy) * test_function;
         }
 
-        template <int predicted_internal_energy_index, typename internal_energy_type, typename density_type,
+        template <class configuration, int predicted_internal_energy_index, typename internal_energy_type, typename density_type,
                   class material_response_iter, typename test_function_type, typename result_type>
         void computeInternalEnergyConstraint(const internal_energy_type &internal_energy, const density_type &density,
                                              const material_response_iter &material_response_begin,
@@ -206,7 +206,7 @@ namespace tardigradeBalanceEquations {
             std::fill(dRdZ_begin, dRdZ_end, 0);
             std::fill(dRdUMesh_begin, dRdUMesh_end, 0);
 
-            computeInternalEnergyConstraint<predicted_internal_energy_index>(internal_energy, material_response_begin,
+            computeInternalEnergyConstraint<configuration, predicted_internal_energy_index>(internal_energy, material_response_begin,
                                                                              material_response_end, test_function,
                                                                              result);
 
@@ -499,7 +499,7 @@ namespace tardigradeBalanceEquations {
             std::fill(dRdZ_begin, dRdZ_end, 0);
             std::fill(dRdUMesh_begin, dRdUMesh_end, 0);
 
-            computeInternalEnergyConstraint<predicted_internal_energy_index>(internal_energy, density,
+            computeInternalEnergyConstraint<configuration, predicted_internal_energy_index>(internal_energy, density,
                                                                              material_response_begin,
                                                                              material_response_end, test_function,
                                                                              result);
@@ -677,7 +677,7 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <int predicted_internal_energy_index, class internal_energy_iter, class material_response_iter,
+        template <class configuration, int predicted_internal_energy_index, class internal_energy_iter, class material_response_iter,
                   typename test_function_type, class result_iter>
         void computeInternalEnergyConstraint(const internal_energy_iter   &internal_energy_begin,
                                              const internal_energy_iter   &internal_energy_end,
@@ -724,13 +724,13 @@ namespace tardigradeBalanceEquations {
 
             for (auto v = std::pair<unsigned int, result_iter>(0, result_begin); v.second != result_end;
                  ++v.first, ++v.second) {
-                computeInternalEnergyConstraint<predicted_internal_energy_index>(
+                computeInternalEnergyConstraint<configuration, predicted_internal_energy_index>(
                     *(internal_energy_begin + v.first), material_response_begin + material_response_size * v.first,
                     material_response_begin + material_response_size * (v.first + 1), test_function, *v.second);
             }
         }
 
-        template <int predicted_internal_energy_index, class internal_energy_iter, class density_iter,
+        template <class configuration, int predicted_internal_energy_index, class internal_energy_iter, class density_iter,
                   class material_response_iter, typename test_function_type, class result_iter>
         void computeInternalEnergyConstraint(const internal_energy_iter &internal_energy_begin,
                                              const internal_energy_iter &internal_energy_end,
@@ -782,7 +782,7 @@ namespace tardigradeBalanceEquations {
 
             for (auto v = std::pair<unsigned int, result_iter>(0, result_begin); v.second != result_end;
                  ++v.first, ++v.second) {
-                computeInternalEnergyConstraint<predicted_internal_energy_index>(
+                computeInternalEnergyConstraint<configuration, predicted_internal_energy_index>(
                     *(internal_energy_begin + v.first), *(density_begin + v.first),
                     material_response_begin + material_response_size * v.first,
                     material_response_begin + material_response_size * (v.first + 1), test_function, *v.second);
@@ -1126,7 +1126,7 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <class displacement_dot_iter, class velocity_iter, typename test_function_type, class result_iter>
+        template <class configuration, class displacement_dot_iter, class velocity_iter, typename test_function_type, class result_iter>
         void computeDisplacementConstraint(const displacement_dot_iter &displacement_dot_begin,
                                            const displacement_dot_iter &displacement_dot_end,
                                            const velocity_iter &velocity_begin, const velocity_iter &velocity_end,
@@ -1230,7 +1230,7 @@ namespace tardigradeBalanceEquations {
                                          "The dRdUMesh vector must be the length of the density dot vector time the "
                                          "length of the interpolation function gradient vector")
 
-            computeDisplacementConstraint(displacement_dot_begin, displacement_dot_end, velocity_begin, velocity_end,
+            computeDisplacementConstraint<configuration>(displacement_dot_begin, displacement_dot_end, velocity_begin, velocity_end,
                                           test_function, result_begin, result_end);
 
             std::fill(dRdD_begin, dRdD_end, 0);
