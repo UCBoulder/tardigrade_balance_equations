@@ -831,8 +831,7 @@ namespace tardigradeBalanceEquations {
                   class full_material_response_dof_gradient_iter, typename dRhoDotdRho_type, typename dEDotdE_type,
                   typename dUDotdU_type, typename result_type, class dRdRho_iter, class dRdU_iter, class dRdW_iter,
                   class dRdTheta_iter, class dRdE_iter, class dRdVolumeFraction_iter, class dRdZ_iter,
-                  class dRdUMesh_iter, int density_index, int displacement_index, int velocity_index,
-                  int temperature_index, int internal_energy_index, int volume_fraction_index, int additional_dof_index>
+                  class dRdUMesh_iter>
         void computeBalanceOfEnergy(
             const density_type &density, const density_dot_type &density_dot,
             const density_gradient_iter &density_gradient_begin, const density_gradient_iter &density_gradient_end,
@@ -1963,8 +1962,7 @@ namespace tardigradeBalanceEquations {
                   class full_material_response_dof_gradient_iter, typename dRhoDotdRho_type, typename dEDotdE_type,
                   typename dUDotdU_type, class result_iter, class dRdRho_iter, class dRdU_iter, class dRdW_iter,
                   class dRdTheta_iter, class dRdE_iter, class dRdVolumeFraction_iter, class dRdZ_iter,
-                  class dRdUMesh_iter, int density_index, int displacement_index, int velocity_index,
-                  int temperature_index, int internal_energy_index, int volume_fraction_index, int additional_dof_index>
+                  class dRdUMesh_iter>
         void computeBalanceOfEnergy(
             const density_iter &density_begin, const density_iter &density_end,
             const density_dot_iter &density_dot_begin, const density_dot_iter &density_dot_end,
@@ -2197,15 +2195,7 @@ namespace tardigradeBalanceEquations {
                 computeBalanceOfEnergy<
                     configuration, cauchy_stress_index,
                     internal_heat_generation_index, heat_flux_index, interphasic_force_index,
-                    interphasic_heat_transfer_index, density_type, density_dot_type,
-                    density_gradient_iter, internal_energy_type, internal_energy_dot_type,
-                    internal_energy_gradient_iter, velocity_iter, velocity_gradient_iter, material_response_iter,
-                    material_response_jacobian_iter, volume_fraction_type, test_function_type,
-                    test_function_gradient_iter, interpolation_function_type, interpolation_function_gradient_iter,
-                    full_material_response_dof_gradient_iter, dRhoDotdRho_type, dEDotdE_type, dUDotdU_type, result_type,
-                    dRdRho_iter, dRdU_iter, dRdW_iter, dRdTheta_iter, dRdE_iter, dRdVolumeFraction_iter, dRdZ_iter,
-                    dRdUMesh_iter, configuration::material::density_index, configuration::material::displacement_index, configuration::material::velocity_index, configuration::material::temperature_index,
-                    configuration::material::internal_energy_index, configuration::material::volume_fraction_index, configuration::material::additional_dof_index>(
+                    interphasic_heat_transfer_index>(
                     *(density_begin + v.first), *(density_dot_begin + v.first),
                     density_gradient_begin + configuration::dimension * v.first,
                     density_gradient_begin + configuration::dimension * (v.first + 1),
