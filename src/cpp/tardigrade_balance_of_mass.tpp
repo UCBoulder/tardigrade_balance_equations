@@ -1468,7 +1468,7 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <int diffusion_index, typename result_type, class testFunctionGradient_iter,
+        template <class configuration, int diffusion_index, typename result_type, class testFunctionGradient_iter,
                   class material_response_iter>
         void computeDiffusionTerm(const material_response_iter    &material_response_begin,
                                   const material_response_iter    &material_response_end,
@@ -1643,7 +1643,7 @@ namespace tardigradeBalanceEquations {
                                              std::to_string(test_function_gradient_end - test_function_gradient_begin) +
                                              ")")
 
-            computeDiffusionTerm<diffusion_index>(material_response_begin, material_response_end,
+            computeDiffusionTerm<configuration,diffusion_index>(material_response_begin, material_response_end,
                                                   test_function_gradient_begin, test_function_gradient_end, result);
 
             // Zero out the Jacobians
@@ -1846,7 +1846,7 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <int diffusion_index, class result_iter, class testFunctionGradient_iter, class material_response_iter>
+        template <class configuration, int diffusion_index, class result_iter, class testFunctionGradient_iter, class material_response_iter>
         void computeDiffusionTerm(const material_response_iter    &material_response_begin,
                                   const material_response_iter    &material_response_end,
                                   const testFunctionGradient_iter &test_function_gradient_begin,
@@ -1880,7 +1880,7 @@ namespace tardigradeBalanceEquations {
 
             for (auto v = std::pair<unsigned int, result_iter>(0, result_begin); v.second != result_end;
                  ++v.first, ++v.second) {
-                computeDiffusionTerm<diffusion_index>(material_response_begin + material_response_size * v.first,
+                computeDiffusionTerm<configuration,diffusion_index>(material_response_begin + material_response_size * v.first,
                                                       material_response_begin + material_response_size * (v.first + 1),
                                                       test_function_gradient_begin, test_function_gradient_end,
                                                       *v.second);

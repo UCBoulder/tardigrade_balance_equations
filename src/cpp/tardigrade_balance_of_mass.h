@@ -229,7 +229,7 @@ namespace tardigradeBalanceEquations {
             dRdVF_iter dRdVF_end, dRdZ_iter dRdZ_begin, dRdZ_iter dRdZ_end, dRdUMesh_iter dRdUMesh_begin,
             dRdUMesh_iter dRdUMesh_end);
 
-        template <int diffusion_index, typename result_type, class testFunctionGradient_iter,
+        template <class configuration, int diffusion_index, typename result_type, class testFunctionGradient_iter,
                   class material_response_iter>
         inline void computeDiffusionTerm(const material_response_iter    &material_response_begin,
                                          const material_response_iter    &material_response_end,
@@ -260,7 +260,7 @@ namespace tardigradeBalanceEquations {
             dRdVF_iter dRdVF_begin, dRdVF_iter dRdVF_end, dRdZ_iter dRdZ_begin, dRdZ_iter dRdZ_end,
             dRdUMesh_iter dRdUMesh_begin, dRdUMesh_iter dRdUMesh_end);
 
-        template <int diffusion_index, class result_iter, class testFunctionGradient_iter, class material_response_iter>
+        template <class configuration, int diffusion_index, class result_iter, class testFunctionGradient_iter, class material_response_iter>
         inline void computeDiffusionTerm(const material_response_iter    &material_response_begin,
                                          const material_response_iter    &material_response_end,
                                          const testFunctionGradient_iter &test_function_gradient_begin,
