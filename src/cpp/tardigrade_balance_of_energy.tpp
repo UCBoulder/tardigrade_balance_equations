@@ -2088,13 +2088,6 @@ namespace tardigradeBalanceEquations {
             const unsigned int material_response_size =
                 (unsigned int)(material_response_end - material_response_begin) / nphases;
 
-            using density_type             = typename std::iterator_traits<density_iter>::value_type;
-            using density_dot_type         = typename std::iterator_traits<density_dot_iter>::value_type;
-            using internal_energy_type     = typename std::iterator_traits<internal_energy_iter>::value_type;
-            using internal_energy_dot_type = typename std::iterator_traits<internal_energy_dot_iter>::value_type;
-            using volume_fraction_type     = typename std::iterator_traits<volume_fraction_iter>::value_type;
-            using result_type              = typename std::iterator_traits<result_iter>::value_type;
-
             TARDIGRADE_ERROR_TOOLS_CHECK(nphases == (unsigned int)(density_dot_end - density_dot_begin),
                                          "The density and density dot vectors must be the same size")
 
