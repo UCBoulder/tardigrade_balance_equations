@@ -1054,10 +1054,6 @@ namespace tardigradeBalanceEquations {
              * \param &dRdUMesh_end: The stopping iterator of the Jacobian of the result w.r.t. the mesh displacement
              */
 
-            using density_type         = typename std::iterator_traits<density_iter>::value_type;
-            using density_dot_type     = typename std::iterator_traits<density_dot_iter>::value_type;
-            using volume_fraction_type = typename std::iterator_traits<volume_fraction_iter>::value_type;
-
             const unsigned int nphases = (unsigned int)(density_end - density_begin);
 
             const unsigned int material_response_size =
