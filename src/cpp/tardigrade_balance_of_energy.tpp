@@ -749,9 +749,8 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <class configuration, int cauchy_stress_index,
-                  int internal_heat_generation_index, int heat_flux_index, int interphasic_force_index,
-                  int interphasic_heat_transfer_index, typename density_type, typename density_dot_type,
+        template <class configuration,
+                  typename density_type, typename density_dot_type,
                   class density_gradient_iter, typename internal_energy_type, typename internal_energy_dot_type,
                   class internal_energy_gradient_iter, class velocity_iter, class velocity_gradient_iter,
                   class material_response_iter, typename volume_fraction_type, typename test_function_type,
@@ -820,9 +819,8 @@ namespace tardigradeBalanceEquations {
             result -= test_function * (*(material_response_begin + configuration::material::output::interphasic_heat_transfer_index));
         }
 
-        template <class configuration, int cauchy_stress_index,
-                  int internal_heat_generation_index, int heat_flux_index, int interphasic_force_index,
-                  int interphasic_heat_transfer_index, typename density_type,
+        template <class configuration,
+                  typename density_type,
                   typename density_dot_type, class density_gradient_iter, typename internal_energy_type,
                   typename internal_energy_dot_type, class internal_energy_gradient_iter, class velocity_iter,
                   class velocity_gradient_iter, class material_response_iter, class material_response_jacobian_iter,
@@ -1809,9 +1807,8 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <class configuration, int cauchy_stress_index,
-                  int internal_heat_generation_index, int heat_flux_index, int interphasic_force_index,
-                  int interphasic_heat_transfer_index, class density_iter, class density_dot_iter,
+        template <class configuration,
+                  class density_iter, class density_dot_iter,
                   class density_gradient_iter, class internal_energy_iter, class internal_energy_dot_iter,
                   class internal_energy_gradient_iter, class velocity_iter, class velocity_gradient_iter,
                   class material_response_iter, class volume_fraction_iter, typename test_function_type,
@@ -1931,9 +1928,7 @@ namespace tardigradeBalanceEquations {
 
             for (auto v = std::pair<unsigned int, density_iter>(0, density_begin); v.second != density_end;
                  ++v.first, ++v.second) {
-                computeBalanceOfEnergy<configuration, configuration::material::output::cauchy_stress_index,
-                                       configuration::material::output::internal_heat_generation_index, configuration::material::output::heat_flux_index, configuration::material::output::interphasic_force_index,
-                                       configuration::material::output::interphasic_heat_transfer_index>(
+                computeBalanceOfEnergy<configuration>(
                     *(density_begin + v.first), *(density_dot_begin + v.first),
                     density_gradient_begin + configuration::dimension * v.first,
                     density_gradient_begin + configuration::dimension * (v.first + 1),
@@ -1951,9 +1946,8 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <class configuration, int cauchy_stress_index,
-                  int internal_heat_generation_index, int heat_flux_index, int interphasic_force_index,
-                  int interphasic_heat_transfer_index, class density_iter,
+        template <class configuration,
+                  class density_iter,
                   class density_dot_iter, class density_gradient_iter, class internal_energy_iter,
                   class internal_energy_dot_iter, class internal_energy_gradient_iter, class velocity_iter,
                   class velocity_gradient_iter, class material_response_iter, class material_response_jacobian_iter,
@@ -2186,9 +2180,7 @@ namespace tardigradeBalanceEquations {
             for (auto v = std::pair<unsigned int, density_iter>(0, density_begin); v.second != density_end;
                  ++v.first, ++v.second) {
                 computeBalanceOfEnergy<
-                    configuration, configuration::material::output::cauchy_stress_index,
-                    configuration::material::output::internal_heat_generation_index, configuration::material::output::heat_flux_index, configuration::material::output::interphasic_force_index,
-                    configuration::material::output::interphasic_heat_transfer_index>(
+                    configuration>(
                     *(density_begin + v.first), *(density_dot_begin + v.first),
                     density_gradient_begin + configuration::dimension * v.first,
                     density_gradient_begin + configuration::dimension * (v.first + 1),

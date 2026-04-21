@@ -5718,8 +5718,7 @@ void evaluate_at_nodes(const xi_in &xi_begin, const xi_in &xi_end, dt_type dt, c
         if (active_phase >= 0) {
             unsigned int j = active_phase;
 
-            tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<configuration, 0,
-                                                                                20, 17, 14, 21>(
+            tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<configuration>(
                 density_tp1_p[j], density_dot_tp1_p[j], std::cbegin(grad_density_tp1) + 3 * j,
                 std::cbegin(grad_density_tp1) + 3 * (j + 1), e_tp1_p[j], e_dot_tp1_p[j],
                 std::cbegin(grad_e_tp1) + 3 * j, std::cbegin(grad_e_tp1) + 3 * (j + 1), std::cbegin(v_tp1_p) + 3 * j,
@@ -5735,8 +5734,7 @@ void evaluate_at_nodes(const xi_in &xi_begin, const xi_in &xi_end, dt_type dt, c
                                      std::placeholders::_1, J));
 
         } else {
-            tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<configuration, 0,
-                                                                                20, 17, 14, 21>(
+            tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<configuration>(
                 std::cbegin(density_tp1_p), std::cend(density_tp1_p), std::cbegin(density_dot_tp1_p),
                 std::cend(density_dot_tp1_p), std::cbegin(grad_density_tp1), std::cend(grad_density_tp1),
                 std::cbegin(e_tp1_p), std::cend(e_tp1_p), std::cbegin(e_dot_tp1_p), std::cend(e_dot_tp1_p),
@@ -6019,8 +6017,7 @@ void evaluate_at_nodes(
         if (active_phase >= 0) {
             unsigned int j = active_phase;
 
-            tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<configuration, 0,
-                                                                                20, 17, 14, 21>(
+            tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<configuration>(
                 density_tp1_p[j], density_dot_tp1_p[j], std::cbegin(grad_density_tp1) + 3 * j,
                 std::cbegin(grad_density_tp1) + 3 * (j + 1), e_tp1_p[j], e_dot_tp1_p[j],
                 std::cbegin(grad_e_tp1) + 3 * j, std::cbegin(grad_e_tp1) + 3 * (j + 1), std::cbegin(v_tp1_p) + 3 * j,
@@ -6036,8 +6033,7 @@ void evaluate_at_nodes(
                                      std::placeholders::_1, J));
 
         } else {
-            tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<configuration, 0,
-                                                                                20, 17, 14, 21>(
+            tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<configuration>(
                 std::cbegin(density_tp1_p), std::cend(density_tp1_p), std::cbegin(density_dot_tp1_p),
                 std::cend(density_dot_tp1_p), std::cbegin(grad_density_tp1), std::cend(grad_density_tp1),
                 std::cbegin(e_tp1_p), std::cend(e_tp1_p), std::cbegin(e_dot_tp1_p), std::cend(e_dot_tp1_p),
@@ -6056,8 +6052,7 @@ void evaluate_at_nodes(
             if (active_phase >= 0) {
                 unsigned int j = active_phase;
 
-                tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<configuration,
-                                                                                    0, 20, 17, 14, 21>(
+                tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<configuration>(
                     density_tp1_p[j], density_dot_tp1_p[j], std::cbegin(grad_density_tp1) + 3 * j,
                     std::cbegin(grad_density_tp1) + 3 * (j + 1), e_tp1_p[j], e_dot_tp1_p[j],
                     std::cbegin(grad_e_tp1) + 3 * j, std::cbegin(grad_e_tp1) + 3 * (j + 1),
@@ -6088,8 +6083,7 @@ void evaluate_at_nodes(
                                          std::placeholders::_1, J));
 
             } else {
-                tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<configuration,
-                                                                                    0, 20, 17, 14, 21>(
+                tardigradeBalanceEquations::balanceOfEnergy::computeBalanceOfEnergy<configuration>(
                     std::cbegin(density_tp1_p), std::cend(density_tp1_p), std::cbegin(density_dot_tp1_p),
                     std::cend(density_dot_tp1_p), std::cbegin(grad_density_tp1), std::cend(grad_density_tp1),
                     std::cbegin(e_tp1_p), std::cend(e_tp1_p), std::cbegin(e_dot_tp1_p), std::cend(e_dot_tp1_p),
