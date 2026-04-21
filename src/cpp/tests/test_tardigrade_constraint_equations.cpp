@@ -823,8 +823,6 @@ void evaluate_at_nodes(
         tardigradeVectorTools::determinant<typename std::array<floatType, configuration::dimension * configuration::dimension>::const_iterator, floatType, 3, 3>(
             std::cbegin(dxdxi), std::cend(dxdxi), 3, 3);
 
-    constexpr unsigned int num_phase_dof = 10;
-
     constexpr unsigned int dof_vector_size =
         (nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3) + configuration::material::num_additional_dof + 3 * configuration::material::num_additional_dof);
 
@@ -1002,7 +1000,7 @@ void evaluate_at_nodes(
                         std::cbegin(material_response_jacobian) + material_response_size * dof_vector_size * j,
                         std::cbegin(material_response_jacobian) + material_response_size * dof_vector_size * (j + 1),
                         Ns[i], Ns[k], std::begin(dNdx) + 3 * k, std::begin(dNdx) + 3 * (k + 1),
-                        std::cbegin(dof_vector) + (nphases * num_phase_dof + configuration::material::num_additional_dof), std::cend(dof_vector),
+                        std::cbegin(dof_vector) + (nphases * configuration::material::num_phase_dof + configuration::material::num_additional_dof), std::cend(dof_vector),
                         dUDotdU, j, *(std::begin(value_n) + nphases * i + j), std::begin(dRdRho_n) + nphases * 1 * j,
                         std::begin(dRdRho_n) + nphases * 1 * (j + 1), std::begin(dRdU_n) + nphases * 3 * j,
                         std::begin(dRdU_n) + nphases * 3 * (j + 1), std::begin(dRdW_n) + nphases * 3 * j,
@@ -1019,7 +1017,7 @@ void evaluate_at_nodes(
                         std::cbegin(material_response_jacobian) + material_response_size * dof_vector_size * j,
                         std::cbegin(material_response_jacobian) + material_response_size * dof_vector_size * (j + 1),
                         Ns[i], Ns[k], std::begin(dNdx) + 3 * k, std::begin(dNdx) + 3 * (k + 1),
-                        std::cbegin(dof_vector) + (nphases * num_phase_dof + configuration::material::num_additional_dof), std::cend(dof_vector),
+                        std::cbegin(dof_vector) + (nphases * configuration::material::num_phase_dof + configuration::material::num_additional_dof), std::cend(dof_vector),
                         dUDotdU, j, *(std::begin(value_n) + nphases * i + j), std::begin(dRdRho_n) + nphases * 1 * j,
                         std::begin(dRdRho_n) + nphases * 1 * (j + 1), std::begin(dRdU_n) + nphases * 3 * j,
                         std::begin(dRdU_n) + nphases * 3 * (j + 1), std::begin(dRdW_n) + nphases * 3 * j,
@@ -1043,7 +1041,7 @@ void evaluate_at_nodes(
                         std::cbegin(material_response), std::cend(material_response),
                         std::cbegin(material_response_jacobian), std::cend(material_response_jacobian), Ns[i], Ns[k],
                         std::begin(dNdx) + 3 * k, std::begin(dNdx) + 3 * (k + 1),
-                        std::cbegin(dof_vector) + (nphases * num_phase_dof + configuration::material::num_additional_dof), std::cend(dof_vector),
+                        std::cbegin(dof_vector) + (nphases * configuration::material::num_phase_dof + configuration::material::num_additional_dof), std::cend(dof_vector),
                         dUDotdU, std::begin(value_n) + nphases * i, std::begin(value_n) + nphases * (i + 1),
                         std::begin(dRdRho_n), std::end(dRdRho_n), std::begin(dRdU_n), std::end(dRdU_n),
                         std::begin(dRdW_n), std::end(dRdW_n), std::begin(dRdTheta_n), std::end(dRdTheta_n),
@@ -1055,7 +1053,7 @@ void evaluate_at_nodes(
                         std::cend(material_response), std::cbegin(material_response_jacobian),
                         std::cend(material_response_jacobian), Ns[i], Ns[k], std::begin(dNdx) + 3 * k,
                         std::begin(dNdx) + 3 * (k + 1),
-                        std::cbegin(dof_vector) + (nphases * num_phase_dof + configuration::material::num_additional_dof), std::cend(dof_vector),
+                        std::cbegin(dof_vector) + (nphases * configuration::material::num_phase_dof + configuration::material::num_additional_dof), std::cend(dof_vector),
                         dUDotdU, std::begin(value_n) + nphases * i, std::begin(value_n) + nphases * (i + 1),
                         std::begin(dRdRho_n), std::end(dRdRho_n), std::begin(dRdU_n), std::end(dRdU_n),
                         std::begin(dRdW_n), std::end(dRdW_n), std::begin(dRdTheta_n), std::end(dRdTheta_n),
@@ -3926,14 +3924,14 @@ BOOST_AUTO_TEST_CASE(test_computeDisplacementConstraint, *boost::unit_test::tole
     }
 }
 
-template <class configuration, int ntruephases, int phase_dof, class dof_vector_iter, class previous_dof_vector_iter,
+template <class configuration, int ntruephases, class dof_vector_iter, class previous_dof_vector_iter,
           class result_iter, class jacobian_iter, int material_response_size = 23>
 void evaluate_mixture_response(const dof_vector_iter &dof_vector_begin, const dof_vector_iter &dof_vector_end,
                                const previous_dof_vector_iter &previous_dof_vector_begin,
                                const previous_dof_vector_iter &previous_dof_vector_end, result_iter result_begin,
                                result_iter result_end, jacobian_iter jacobian_begin, jacobian_iter jacobian_end) {
     try {
-        constexpr unsigned int dof_vector_size = ((ntruephases + 1) * phase_dof + configuration::material::num_additional_dof) * 4;
+        constexpr unsigned int dof_vector_size = ((ntruephases + 1) * configuration::material::num_phase_dof + configuration::material::num_additional_dof) * 4;
 
         std::array<floatType, material_response_size * ntruephases>                   material_responses;
         std::array<floatType, material_response_size * ntruephases * dof_vector_size> material_response_jacobians;
@@ -3948,7 +3946,7 @@ void evaluate_mixture_response(const dof_vector_iter &dof_vector_begin, const do
             densities[phase]        = *(dof_vector_begin + phase);
             volume_fractions[phase] = *(dof_vector_begin + (ntruephases + 1) * (1 + 3 + 3 + 1 + 1) + phase);
 
-            hydraLinearTest linearTest(ntruephases + 1, phase, phase_dof, configuration::material::num_additional_dof, 0, 0.1, dof_vector,
+            hydraLinearTest linearTest(ntruephases + 1, phase, configuration::material::num_phase_dof, configuration::material::num_additional_dof, 0, 0.1, dof_vector,
                                        previous_dof_vector);
 
             linearTest.evaluate();
@@ -3983,11 +3981,9 @@ BOOST_AUTO_TEST_CASE(test_computeMixtureMaterialResponse, *boost::unit_test::tol
 
     constexpr unsigned int nphases = 4;
 
-    constexpr unsigned int num_phase_dof = 1 + 3 + 3 + 1 + 1 + 1;
-
     constexpr unsigned int num_material_responses = 23;
 
-    std::array<floatType, (nphases * num_phase_dof + configuration::material::num_additional_dof) * 4> dof_vector = {
+    std::array<floatType, (nphases * configuration::material::num_phase_dof + configuration::material::num_additional_dof) * 4> dof_vector = {
         +0.392, -0.428, -0.546, +0.102, +0.438, -0.154, +0.962, +0.370, -0.038, -0.216, -0.314, +0.458, -0.122, -0.880,
         -0.204, +0.476, -0.636, -0.650, +0.064, +0.064, +0.268, +0.698, +0.448, +0.222, +0.444, -0.354, -0.276, -0.544,
         -0.412, +0.262, -0.816, -0.132, -0.138, -0.012, -0.148, -0.376, -0.148, +0.786, +0.888, +0.004, +0.248, -0.768,
@@ -4002,7 +3998,7 @@ BOOST_AUTO_TEST_CASE(test_computeMixtureMaterialResponse, *boost::unit_test::tol
         +0.330, -0.778, +0.330, +0.776, +0.392, -0.120, -0.124, +0.530, +0.132, -0.830, +0.166, +0.630, -0.326, +0.856,
         +0.502, +0.148, +0.504, -0.842, +0.718, +0.644, +0.820, -0.742, -0.836, -0.724, -0.202, -0.152};
 
-    std::array<floatType, (nphases * num_phase_dof + configuration::material::num_additional_dof) * 4> previous_dof_vector;
+    std::array<floatType, (nphases * configuration::material::num_phase_dof + configuration::material::num_additional_dof) * 4> previous_dof_vector;
     std::fill(std::begin(previous_dof_vector), std::end(previous_dof_vector), 0);
 
     std::array<floatType, num_material_responses> answer = {
@@ -4011,9 +4007,9 @@ BOOST_AUTO_TEST_CASE(test_computeMixtureMaterialResponse, *boost::unit_test::tol
         -5.276835086e+00, -3.531407322e+00, +1.348075789e+01, +1.635220692e+01, +1.965343109e+01, +2.035800092e+01,
         +1.927842942e+01, +2.215208791e+01, -5.499118688e+00, +9.050081528e+00, +5.329965027e+00};
     std::array<floatType, num_material_responses>                                                     result;
-    std::array<floatType, num_material_responses *(num_phase_dof * nphases + configuration::material::num_additional_dof) * 4> jacobian;
+    std::array<floatType, num_material_responses *(configuration::material::num_phase_dof * nphases + configuration::material::num_additional_dof) * 4> jacobian;
 
-    evaluate_mixture_response<configuration, nphases - 1, num_phase_dof>(
+    evaluate_mixture_response<configuration, nphases - 1>(
         std::cbegin(dof_vector), std::cend(dof_vector), std::cbegin(previous_dof_vector),
         std::cend(previous_dof_vector), std::begin(result), std::end(result), std::begin(jacobian), std::end(jacobian));
 
@@ -4021,7 +4017,7 @@ BOOST_AUTO_TEST_CASE(test_computeMixtureMaterialResponse, *boost::unit_test::tol
 
     {
         constexpr floatType    eps     = 1e-5;
-        constexpr unsigned int VAR_DIM = (nphases * num_phase_dof + configuration::material::num_additional_dof) * 4;
+        constexpr unsigned int VAR_DIM = (nphases * configuration::material::num_phase_dof + configuration::material::num_additional_dof) * 4;
         constexpr unsigned int OUT_DIM = num_material_responses;
 
         std::array<floatType, VAR_DIM> x = dof_vector;
@@ -4038,13 +4034,13 @@ BOOST_AUTO_TEST_CASE(test_computeMixtureMaterialResponse, *boost::unit_test::tol
             std::array<floatType, OUT_DIM>           rp, rm;
             std::array<floatType, OUT_DIM * VAR_DIM> _J;
 
-            evaluate_mixture_response<configuration, nphases - 1, num_phase_dof>(std::cbegin(xp), std::cend(xp),
+            evaluate_mixture_response<configuration, nphases - 1>(std::cbegin(xp), std::cend(xp),
                                                                                       std::cbegin(previous_dof_vector),
                                                                                       std::cend(previous_dof_vector),
                                                                                       std::begin(rp), std::end(rp),
                                                                                       std::begin(_J), std::end(_J));
 
-            evaluate_mixture_response<configuration, nphases - 1, num_phase_dof>(std::cbegin(xm), std::cend(xm),
+            evaluate_mixture_response<configuration, nphases - 1>(std::cbegin(xm), std::cend(xm),
                                                                                       std::cbegin(previous_dof_vector),
                                                                                       std::cend(previous_dof_vector),
                                                                                       std::begin(rm), std::end(rm),
