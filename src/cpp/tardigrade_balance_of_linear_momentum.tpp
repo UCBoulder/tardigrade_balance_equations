@@ -180,8 +180,7 @@ namespace tardigradeBalanceEquations {
                            std::cbegin(divergence_result), result_begin, std::plus<final_type>());
         }
 
-        template <class configuration, int body_force_index, int cauchy_stress_index,
-                  int interphasic_force_index, typename density_type, typename density_dot_type,
+        template <class configuration, typename density_type, typename density_dot_type,
                   class density_gradient_iter, class velocity_iter, class velocity_dot_iter,
                   class velocity_gradient_iter, class material_response_iter, typename volume_fraction_type,
                   typename testFunction_type, class testFunctionGradient_iter, class result_iter>
@@ -251,8 +250,7 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <class configuration, int body_force_index, int cauchy_stress_index,
-                  int interphasic_force_index, typename density_type,
+        template <class configuration, typename density_type,
                   typename density_dot_type, class density_gradient_iter, class velocity_iter, class velocity_dot_iter,
                   class velocity_gradient_iter, class material_response_iter, class material_response_jacobian_iter,
                   typename volume_fraction_type, typename testFunction_type, class testFunctionGradient_iter,
@@ -938,8 +936,7 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <class configuration, int body_force_index, int cauchy_stress_index,
-                  int interphasic_force_index, class density_iter,
+        template <class configuration, class density_iter,
                   class density_dot_iter, class density_gradient_iter, class velocity_iter, class velocity_dot_iter,
                   class velocity_gradient_iter, class material_response_iter, class material_response_jacobian_iter,
                   class volume_fraction_iter, typename testFunction_type, class testFunctionGradient_iter,
@@ -1155,8 +1152,7 @@ namespace tardigradeBalanceEquations {
             for (auto v = std::pair<unsigned int, density_iter>(0, density_begin); v.second != density_end;
                  ++v.first, ++v.second) {
                 computeBalanceOfLinearMomentum<
-                    configuration, configuration::material::output::body_force_index, configuration::material::output::cauchy_stress_index,
-                    configuration::material::output::interphasic_force_index>(
+                    configuration>(
                     *(density_begin + v.first), *(density_dot_begin + v.first),
                     density_gradient_begin + configuration::dimension * v.first,
                     density_gradient_begin + configuration::dimension * (v.first + 1),
@@ -1199,8 +1195,7 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <class configuration, int body_force_index, int cauchy_stress_index,
-                  int interphasic_force_index, class density_iter, class density_dot_iter, class density_gradient_iter,
+        template <class configuration, class density_iter, class density_dot_iter, class density_gradient_iter,
                   class velocity_iter, class velocity_dot_iter, class velocity_gradient_iter,
                   class material_response_iter, class volume_fraction_iter, typename testFunction_type,
                   class testFunctionGradient_iter, class result_iter>
@@ -1269,8 +1264,7 @@ namespace tardigradeBalanceEquations {
 
             for (auto v = std::pair<unsigned int, density_iter>(0, density_begin); v.second != density_end;
                  ++v.first, ++v.second) {
-                computeBalanceOfLinearMomentum<configuration, configuration::material::output::body_force_index,
-                                               configuration::material::output::cauchy_stress_index, configuration::material::output::interphasic_force_index>(
+                computeBalanceOfLinearMomentum<configuration>(
                     *(density_begin + v.first), *(density_dot_begin + v.first),
                     density_gradient_begin + configuration::dimension * v.first,
                     density_gradient_begin + configuration::dimension * (v.first + 1),
