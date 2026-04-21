@@ -1696,7 +1696,7 @@ void evaluate_at_nodes(const xi_in &xi_begin, const xi_in &xi_end, dt_type dt, c
     std::array<typename std::iterator_traits<u_tp1_in>::value_type, configuration::dimension * nphases> v_tp1_p,
         w_tp1_p;
 
-    std::array<typename std::iterator_traits<z_tp1_in>::value_type, configuration::material::num_additional_dof> z_tp1_p;
+    std::array<typename std::iterator_traits<z_tp1_in>::value_type, configuration::material::dof::num_additional_dof> z_tp1_p;
 
     // Interpolate quantities to the local point
 
@@ -1729,7 +1729,7 @@ void evaluate_at_nodes(const xi_in &xi_begin, const xi_in &xi_end, dt_type dt, c
                configuration::dimension * configuration::dimension * nphases>
         grad_velocity_tp1, grad_w_tp1;
 
-    std::array<typename std::iterator_traits<u_tp1_in>::value_type, configuration::dimension * configuration::material::num_additional_dof>
+    std::array<typename std::iterator_traits<u_tp1_in>::value_type, configuration::dimension * configuration::material::dof::num_additional_dof>
         grad_z_tp1;
 
     e.GetGlobalQuantityGradient(xi_begin, xi_end, density_tp1_begin, density_tp1_end, std::begin(grad_density_tp1),
@@ -1759,8 +1759,8 @@ void evaluate_at_nodes(const xi_in &xi_begin, const xi_in &xi_end, dt_type dt, c
         typename std::array<floatType, configuration::dimension * configuration::dimension>::const_iterator, floatType,
         3, 3>(std::cbegin(dxdxi), std::cend(dxdxi), 3, 3);
 
-    std::vector<floatType> dof_vector(nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3) + configuration::material::num_additional_dof +
-                                          3 * configuration::material::num_additional_dof,
+    std::vector<floatType> dof_vector(nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3) + configuration::material::dof::num_additional_dof +
+                                          3 * configuration::material::dof::num_additional_dof,
                                       0);
 
     std::copy(std::begin(density_tp1_p), std::end(density_tp1_p), std::begin(dof_vector) + nphases * 0);
@@ -1778,25 +1778,25 @@ void evaluate_at_nodes(const xi_in &xi_begin, const xi_in &xi_end, dt_type dt, c
     std::copy(std::begin(z_tp1_p), std::end(z_tp1_p), std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1));
 
     std::copy(std::begin(grad_density_tp1), std::end(grad_density_tp1),
-              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1) + configuration::material::num_additional_dof);
+              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1) + configuration::material::dof::num_additional_dof);
 
     std::copy(std::begin(grad_w_tp1), std::end(grad_w_tp1),
-              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3) + configuration::material::num_additional_dof);
+              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3) + configuration::material::dof::num_additional_dof);
 
     std::copy(std::begin(grad_velocity_tp1), std::end(grad_velocity_tp1),
-              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9) + configuration::material::num_additional_dof);
+              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9) + configuration::material::dof::num_additional_dof);
 
     std::copy(std::begin(grad_theta_tp1), std::end(grad_theta_tp1),
-              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9) + configuration::material::num_additional_dof);
+              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9) + configuration::material::dof::num_additional_dof);
 
     std::copy(std::begin(grad_e_tp1), std::end(grad_e_tp1),
-              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3) + configuration::material::num_additional_dof);
+              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3) + configuration::material::dof::num_additional_dof);
 
     std::copy(std::begin(grad_vf_tp1), std::end(grad_vf_tp1),
-              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3) + configuration::material::num_additional_dof);
+              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3) + configuration::material::dof::num_additional_dof);
 
     std::copy(std::begin(grad_z_tp1), std::end(grad_z_tp1),
-              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3) + configuration::material::num_additional_dof);
+              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3) + configuration::material::dof::num_additional_dof);
 
     std::vector<floatType> previous_dof_vector(dof_vector.size());
 
@@ -1816,7 +1816,7 @@ void evaluate_at_nodes(const xi_in &xi_begin, const xi_in &xi_end, dt_type dt, c
     std::fill(std::begin(material_response), std::end(material_response), 0);
 
     for (unsigned int j = low_bound; j < high_bound; ++j) {
-        hydraLinearTest linearTest(nphases, j, 10, configuration::material::num_additional_dof, 0, 0.1, dof_vector, previous_dof_vector);
+        hydraLinearTest linearTest(nphases, j, 10, configuration::material::dof::num_additional_dof, 0, 0.1, dof_vector, previous_dof_vector);
 
         linearTest.evaluate();
 
@@ -1918,7 +1918,7 @@ void evaluate_at_nodes(
     std::array<typename std::iterator_traits<u_tp1_in>::value_type, configuration::dimension * nphases> v_tp1_p,
         w_tp1_p;
 
-    std::array<typename std::iterator_traits<z_tp1_in>::value_type, configuration::material::num_additional_dof> z_tp1_p;
+    std::array<typename std::iterator_traits<z_tp1_in>::value_type, configuration::material::dof::num_additional_dof> z_tp1_p;
 
     // Interpolate quantities to the local point
 
@@ -1951,7 +1951,7 @@ void evaluate_at_nodes(
                configuration::dimension * configuration::dimension * nphases>
         grad_velocity_tp1, grad_w_tp1;
 
-    std::array<typename std::iterator_traits<u_tp1_in>::value_type, configuration::dimension * configuration::material::num_additional_dof>
+    std::array<typename std::iterator_traits<u_tp1_in>::value_type, configuration::dimension * configuration::material::dof::num_additional_dof>
         grad_z_tp1;
 
     e.GetGlobalQuantityGradient(xi_begin, xi_end, density_tp1_begin, density_tp1_end, std::begin(grad_density_tp1),
@@ -1982,7 +1982,7 @@ void evaluate_at_nodes(
         3, 3>(std::cbegin(dxdxi), std::cend(dxdxi), 3, 3);
 
     constexpr unsigned int dof_vector_size =
-        (nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3) + configuration::material::num_additional_dof + 3 * configuration::material::num_additional_dof);
+        (nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3) + configuration::material::dof::num_additional_dof + 3 * configuration::material::dof::num_additional_dof);
 
     std::vector<floatType> dof_vector(dof_vector_size, 0);
 
@@ -2001,25 +2001,25 @@ void evaluate_at_nodes(
     std::copy(std::begin(z_tp1_p), std::end(z_tp1_p), std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1));
 
     std::copy(std::begin(grad_density_tp1), std::end(grad_density_tp1),
-              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1) + configuration::material::num_additional_dof);
+              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1) + configuration::material::dof::num_additional_dof);
 
     std::copy(std::begin(grad_w_tp1), std::end(grad_w_tp1),
-              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3) + configuration::material::num_additional_dof);
+              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3) + configuration::material::dof::num_additional_dof);
 
     std::copy(std::begin(grad_velocity_tp1), std::end(grad_velocity_tp1),
-              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9) + configuration::material::num_additional_dof);
+              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9) + configuration::material::dof::num_additional_dof);
 
     std::copy(std::begin(grad_theta_tp1), std::end(grad_theta_tp1),
-              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9) + configuration::material::num_additional_dof);
+              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9) + configuration::material::dof::num_additional_dof);
 
     std::copy(std::begin(grad_e_tp1), std::end(grad_e_tp1),
-              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3) + configuration::material::num_additional_dof);
+              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3) + configuration::material::dof::num_additional_dof);
 
     std::copy(std::begin(grad_vf_tp1), std::end(grad_vf_tp1),
-              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3) + configuration::material::num_additional_dof);
+              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3) + configuration::material::dof::num_additional_dof);
 
     std::copy(std::begin(grad_z_tp1), std::end(grad_z_tp1),
-              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3) + configuration::material::num_additional_dof);
+              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3) + configuration::material::dof::num_additional_dof);
 
     std::vector<floatType> previous_dof_vector(dof_vector.size(), 0);
 
@@ -2046,7 +2046,7 @@ void evaluate_at_nodes(
     std::fill(std::begin(material_response_jacobian), std::end(material_response_jacobian), 0);
 
     for (unsigned int j = low_bound; j < high_bound; ++j) {
-        hydraLinearTest linearTest(nphases, j, 10, configuration::material::num_additional_dof, 0, 0.1, dof_vector, previous_dof_vector);
+        hydraLinearTest linearTest(nphases, j, 10, configuration::material::dof::num_additional_dof, 0, 0.1, dof_vector, previous_dof_vector);
 
         linearTest.evaluate();
 
@@ -2069,7 +2069,7 @@ void evaluate_at_nodes(
 
     std::array<floatType, nphases * 1 * nphases * 3> dRdW_n;
 
-    std::array<floatType, nphases * 1 * configuration::material::num_additional_dof> dRdZ_n;
+    std::array<floatType, nphases * 1 * configuration::material::dof::num_additional_dof> dRdZ_n;
 
     std::array<floatType, nphases * 1 * 3> dRdUMesh_n;
 
@@ -2138,15 +2138,15 @@ void evaluate_at_nodes(
                     std::cbegin(material_response_jacobian) + material_response_size * dof_vector_size * (j + 1), Ns[i],
                     Ns[k], std::cbegin(dNdxs) + configuration::dimension * k,
                     std::cbegin(dNdxs) + configuration::dimension * (k + 1),
-                    std::begin(dof_vector) + (nphases * configuration::material::num_phase_dof + configuration::material::num_additional_dof), std::end(dof_vector),
+                    std::begin(dof_vector) + (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof), std::end(dof_vector),
                     dDensityDotdDensity, dUDotdU, j, value_n[nphases * i + j], std::begin(dRdRho_n) + nphases * 1 * j,
                     std::begin(dRdRho_n) + nphases * 1 * (j + 1), std::begin(dRdU_n) + nphases * 3 * j,
                     std::begin(dRdU_n) + nphases * 3 * (j + 1), std::begin(dRdW_n) + nphases * 3 * j,
                     std::begin(dRdW_n) + nphases * 3 * (j + 1), std::begin(dRdTheta_n) + nphases * 1 * j,
                     std::begin(dRdTheta_n) + nphases * 1 * (j + 1), std::begin(dRdE_n) + nphases * 1 * j,
                     std::begin(dRdE_n) + nphases * 1 * (j + 1), std::begin(dRdVF_n) + nphases * 1 * j,
-                    std::begin(dRdVF_n) + nphases * 1 * (j + 1), std::begin(dRdZ_n) + configuration::material::num_additional_dof * j,
-                    std::begin(dRdZ_n) + configuration::material::num_additional_dof * (j + 1), std::begin(dRdUMesh_n) + 3 * j,
+                    std::begin(dRdVF_n) + nphases * 1 * (j + 1), std::begin(dRdZ_n) + configuration::material::dof::num_additional_dof * j,
+                    std::begin(dRdZ_n) + configuration::material::dof::num_additional_dof * (j + 1), std::begin(dRdUMesh_n) + 3 * j,
                     std::begin(dRdUMesh_n) + 3 * (j + 1));
 
                 value_n[nphases * i + j] *= J;
@@ -2161,7 +2161,7 @@ void evaluate_at_nodes(
                     std::cbegin(material_response_jacobian), std::cend(material_response_jacobian), Ns[i], Ns[k],
                     std::cbegin(dNdxs) + configuration::dimension * k,
                     std::cbegin(dNdxs) + configuration::dimension * (k + 1),
-                    std::begin(dof_vector) + (nphases * configuration::material::num_phase_dof + configuration::material::num_additional_dof), std::end(dof_vector),
+                    std::begin(dof_vector) + (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof), std::end(dof_vector),
                     dDensityDotdDensity, dUDotdU, std::begin(value_n) + nphases * i,
                     std::begin(value_n) + nphases * (i + 1), std::begin(dRdRho_n), std::end(dRdRho_n),
                     std::begin(dRdU_n), std::end(dRdU_n), std::begin(dRdW_n), std::end(dRdW_n), std::begin(dRdTheta_n),
@@ -2212,10 +2212,10 @@ void evaluate_at_nodes(
                       nphases * 1 * k + l) += dRdVF_n[nphases * 1 * j + l] * J;
                 }
 
-                for (unsigned int l = 0; l < configuration::material::num_additional_dof; ++l) {
-                    *(dRdZ_begin + nphases * node_count * configuration::material::num_additional_dof * 1 * i +
-                      node_count * configuration::material::num_additional_dof * 1 * j + configuration::material::num_additional_dof * 1 * k + l) +=
-                        dRdZ_n[configuration::material::num_additional_dof * 1 * j + l] * J;
+                for (unsigned int l = 0; l < configuration::material::dof::num_additional_dof; ++l) {
+                    *(dRdZ_begin + nphases * node_count * configuration::material::dof::num_additional_dof * 1 * i +
+                      node_count * configuration::material::dof::num_additional_dof * 1 * j + configuration::material::dof::num_additional_dof * 1 * k + l) +=
+                        dRdZ_n[configuration::material::dof::num_additional_dof * 1 * j + l] * J;
                 }
 
                 for (unsigned int l = 0; l < configuration::dimension; ++l) {
@@ -2343,14 +2343,14 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfMass_hydra_fea, *boost::unit_test::tol
         0.67393597, 0.97009854, 0.70112225, 0.82172074, 0.04503958, 0.67269851, 0.65475264, 0.10174605,
         0.8423875,  0.6141724,  0.09832809, 0.59446712, 0.47841585, 0.23329357, 0.01975609, 0.36556728};
 
-    std::array<floatType, 8 * configuration::material::num_additional_dof> z_t = {
+    std::array<floatType, 8 * configuration::material::dof::num_additional_dof> z_t = {
         -0.51068043, -0.3228356, 0.12725597,  0.77335633,  0.49465181,  -0.58081608, -0.49644586, 0.04776138,
         0.53791739,  0.23752356, 0.00264853,  0.19425068,  0.51212006,  0.07415959,  0.79550549,  0.89413498,
         0.83070901,  0.50903668, -0.50735799, -0.22945711, -0.4400001,  0.31532048,  -0.35155675, 0.50878321,
         -0.77298184, 0.55072953, 0.17180395,  0.67077737,  -0.1382487,  0.24992891,  0.10882426,  0.95134253,
         0.51094878,  0.0896265,  -0.65193582, 0.80822843,  -0.58832443, 0.30008651,  0.87294371,  -0.55284074};
 
-    std::array<floatType, 8 * configuration::material::num_additional_dof> z_tp1 = {
+    std::array<floatType, 8 * configuration::material::dof::num_additional_dof> z_tp1 = {
         -0.54815292, 0.70363782,  0.65531005,  -0.29659329, -0.46980742, -0.74522306, 0.97587221,  0.6706862,
         0.79878321,  0.02735865,  -0.77123034, -0.89483932, -0.33883579, 0.84066087,  0.89516367,  0.68232773,
         -0.68264171, -0.16015366, -0.50751416, -0.58930045, 0.3696517,   -0.02777666, -0.35018071, -0.79957108,
@@ -2435,7 +2435,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfMass_hydra_fea, *boost::unit_test::tol
 
     std::array<floatType, 8 * 1 * nphases * 8 * 1 * nphases> dRdVF;
 
-    std::array<floatType, 8 * 1 * nphases * 8 * configuration::material::num_additional_dof * nphases> dRdZ;
+    std::array<floatType, 8 * 1 * nphases * 8 * configuration::material::dof::num_additional_dof * nphases> dRdZ;
 
     std::array<floatType, 8 * 1 * nphases * 8 * 3> dRdUMesh;
 
@@ -2755,7 +2755,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfMass_hydra_fea, *boost::unit_test::tol
 
     // Check the derivatives w.r.t. the additional dof
     {
-        constexpr unsigned int vardim = configuration::material::num_additional_dof * 8;
+        constexpr unsigned int vardim = configuration::material::dof::num_additional_dof * 8;
         constexpr unsigned int outdim = 1 * nphases * 8;
 
         for (unsigned int i = 0; i < vardim; ++i) {
@@ -2965,14 +2965,14 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfMass_hydra_multiphase_fea, *boost::uni
         0.67393597, 0.97009854, 0.70112225, 0.82172074, 0.04503958, 0.67269851, 0.65475264, 0.10174605,
         0.8423875,  0.6141724,  0.09832809, 0.59446712, 0.47841585, 0.23329357, 0.01975609, 0.36556728};
 
-    std::array<floatType, 8 * configuration::material::num_additional_dof> z_t = {
+    std::array<floatType, 8 * configuration::material::dof::num_additional_dof> z_t = {
         -0.51068043, -0.3228356, 0.12725597,  0.77335633,  0.49465181,  -0.58081608, -0.49644586, 0.04776138,
         0.53791739,  0.23752356, 0.00264853,  0.19425068,  0.51212006,  0.07415959,  0.79550549,  0.89413498,
         0.83070901,  0.50903668, -0.50735799, -0.22945711, -0.4400001,  0.31532048,  -0.35155675, 0.50878321,
         -0.77298184, 0.55072953, 0.17180395,  0.67077737,  -0.1382487,  0.24992891,  0.10882426,  0.95134253,
         0.51094878,  0.0896265,  -0.65193582, 0.80822843,  -0.58832443, 0.30008651,  0.87294371,  -0.55284074};
 
-    std::array<floatType, 8 * configuration::material::num_additional_dof> z_tp1 = {
+    std::array<floatType, 8 * configuration::material::dof::num_additional_dof> z_tp1 = {
         -0.54815292, 0.70363782,  0.65531005,  -0.29659329, -0.46980742, -0.74522306, 0.97587221,  0.6706862,
         0.79878321,  0.02735865,  -0.77123034, -0.89483932, -0.33883579, 0.84066087,  0.89516367,  0.68232773,
         -0.68264171, -0.16015366, -0.50751416, -0.58930045, 0.3696517,   -0.02777666, -0.35018071, -0.79957108,
@@ -3055,7 +3055,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfMass_hydra_multiphase_fea, *boost::uni
 
     std::array<floatType, 8 * 1 * nphases * 8 * 1 * nphases> dRdVF;
 
-    std::array<floatType, 8 * 1 * nphases * 8 * configuration::material::num_additional_dof * nphases> dRdZ;
+    std::array<floatType, 8 * 1 * nphases * 8 * configuration::material::dof::num_additional_dof * nphases> dRdZ;
 
     std::array<floatType, 8 * 1 * nphases * 8 * 3> dRdUMesh;
 
@@ -3341,7 +3341,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfMass_hydra_multiphase_fea, *boost::uni
     }
     // Check the derivatives w.r.t. the additional dof
     {
-        constexpr unsigned int vardim = configuration::material::num_additional_dof * 8;
+        constexpr unsigned int vardim = configuration::material::dof::num_additional_dof * 8;
         constexpr unsigned int outdim = 1 * nphases * 8;
 
         for (unsigned int i = 0; i < vardim; ++i) {
@@ -3829,7 +3829,7 @@ void evaluate_at_nodes_diffusion(
     std::array<typename std::iterator_traits<u_tp1_in>::value_type, configuration::dimension * nphases> v_tp1_p,
         w_tp1_p;
 
-    std::array<typename std::iterator_traits<z_tp1_in>::value_type, configuration::material::num_additional_dof> z_tp1_p;
+    std::array<typename std::iterator_traits<z_tp1_in>::value_type, configuration::material::dof::num_additional_dof> z_tp1_p;
 
     // Interpolate quantities to the local point
     e.InterpolateQuantity(xi_begin, xi_end, density_tp1_begin, density_tp1_end, std::begin(density_tp1_p),
@@ -3860,7 +3860,7 @@ void evaluate_at_nodes_diffusion(
                configuration::dimension * configuration::dimension * nphases>
         grad_velocity_tp1, grad_w_tp1;
 
-    std::array<typename std::iterator_traits<u_tp1_in>::value_type, configuration::dimension * configuration::material::num_additional_dof>
+    std::array<typename std::iterator_traits<u_tp1_in>::value_type, configuration::dimension * configuration::material::dof::num_additional_dof>
         grad_z_tp1;
 
     e.GetGlobalQuantityGradient(xi_begin, xi_end, density_tp1_begin, density_tp1_end, std::begin(grad_density_tp1),
@@ -3890,8 +3890,8 @@ void evaluate_at_nodes_diffusion(
         typename std::array<floatType, configuration::dimension * configuration::dimension>::const_iterator, floatType,
         3, 3>(std::cbegin(dxdxi), std::cend(dxdxi), 3, 3);
 
-    std::vector<floatType> dof_vector(nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3) + configuration::material::num_additional_dof +
-                                          3 * configuration::material::num_additional_dof,
+    std::vector<floatType> dof_vector(nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3) + configuration::material::dof::num_additional_dof +
+                                          3 * configuration::material::dof::num_additional_dof,
                                       0);
 
     std::copy(std::begin(density_tp1_p), std::end(density_tp1_p), std::begin(dof_vector) + nphases * 0);
@@ -3909,25 +3909,25 @@ void evaluate_at_nodes_diffusion(
     std::copy(std::begin(z_tp1_p), std::end(z_tp1_p), std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1));
 
     std::copy(std::begin(grad_density_tp1), std::end(grad_density_tp1),
-              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1) + configuration::material::num_additional_dof);
+              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1) + configuration::material::dof::num_additional_dof);
 
     std::copy(std::begin(grad_w_tp1), std::end(grad_w_tp1),
-              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3) + configuration::material::num_additional_dof);
+              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3) + configuration::material::dof::num_additional_dof);
 
     std::copy(std::begin(grad_velocity_tp1), std::end(grad_velocity_tp1),
-              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9) + configuration::material::num_additional_dof);
+              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9) + configuration::material::dof::num_additional_dof);
 
     std::copy(std::begin(grad_theta_tp1), std::end(grad_theta_tp1),
-              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9) + configuration::material::num_additional_dof);
+              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9) + configuration::material::dof::num_additional_dof);
 
     std::copy(std::begin(grad_e_tp1), std::end(grad_e_tp1),
-              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3) + configuration::material::num_additional_dof);
+              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3) + configuration::material::dof::num_additional_dof);
 
     std::copy(std::begin(grad_vf_tp1), std::end(grad_vf_tp1),
-              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3) + configuration::material::num_additional_dof);
+              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3) + configuration::material::dof::num_additional_dof);
 
     std::copy(std::begin(grad_z_tp1), std::end(grad_z_tp1),
-              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3) + configuration::material::num_additional_dof);
+              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3) + configuration::material::dof::num_additional_dof);
 
     std::vector<floatType> previous_dof_vector(dof_vector.size());
 
@@ -3951,7 +3951,7 @@ void evaluate_at_nodes_diffusion(
     std::fill(std::begin(material_response), std::end(material_response), 0);
 
     for (unsigned int j = low_bound; j < high_bound; ++j) {
-        hydraLinearTest2 linearTest(nphases, j, 10, configuration::material::num_additional_dof, 0, 0.1, dof_vector, previous_dof_vector);
+        hydraLinearTest2 linearTest(nphases, j, 10, configuration::material::dof::num_additional_dof, 0, 0.1, dof_vector, previous_dof_vector);
 
         linearTest.evaluate();
 
@@ -4049,7 +4049,7 @@ void evaluate_at_nodes_diffusion(
     std::array<typename std::iterator_traits<u_tp1_in>::value_type, configuration::dimension * nphases> v_tp1_p,
         w_tp1_p;
 
-    std::array<typename std::iterator_traits<z_tp1_in>::value_type, configuration::material::num_additional_dof> z_tp1_p;
+    std::array<typename std::iterator_traits<z_tp1_in>::value_type, configuration::material::dof::num_additional_dof> z_tp1_p;
 
     // Interpolate quantities to the local point
     e.InterpolateQuantity(xi_begin, xi_end, density_tp1_begin, density_tp1_end, std::begin(density_tp1_p),
@@ -4080,7 +4080,7 @@ void evaluate_at_nodes_diffusion(
                configuration::dimension * configuration::dimension * nphases>
         grad_velocity_tp1, grad_w_tp1;
 
-    std::array<typename std::iterator_traits<u_tp1_in>::value_type, configuration::dimension * configuration::material::num_additional_dof>
+    std::array<typename std::iterator_traits<u_tp1_in>::value_type, configuration::dimension * configuration::material::dof::num_additional_dof>
         grad_z_tp1;
 
     e.GetGlobalQuantityGradient(xi_begin, xi_end, density_tp1_begin, density_tp1_end, std::begin(grad_density_tp1),
@@ -4111,7 +4111,7 @@ void evaluate_at_nodes_diffusion(
         3, 3>(std::cbegin(dxdxi), std::cend(dxdxi), 3, 3);
 
     constexpr unsigned int dof_vector_size =
-        (nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3) + configuration::material::num_additional_dof + 3 * configuration::material::num_additional_dof);
+        (nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3) + configuration::material::dof::num_additional_dof + 3 * configuration::material::dof::num_additional_dof);
 
     std::vector<floatType> dof_vector(dof_vector_size, 0);
 
@@ -4130,25 +4130,25 @@ void evaluate_at_nodes_diffusion(
     std::copy(std::begin(z_tp1_p), std::end(z_tp1_p), std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1));
 
     std::copy(std::begin(grad_density_tp1), std::end(grad_density_tp1),
-              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1) + configuration::material::num_additional_dof);
+              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1) + configuration::material::dof::num_additional_dof);
 
     std::copy(std::begin(grad_w_tp1), std::end(grad_w_tp1),
-              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3) + configuration::material::num_additional_dof);
+              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3) + configuration::material::dof::num_additional_dof);
 
     std::copy(std::begin(grad_velocity_tp1), std::end(grad_velocity_tp1),
-              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9) + configuration::material::num_additional_dof);
+              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9) + configuration::material::dof::num_additional_dof);
 
     std::copy(std::begin(grad_theta_tp1), std::end(grad_theta_tp1),
-              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9) + configuration::material::num_additional_dof);
+              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9) + configuration::material::dof::num_additional_dof);
 
     std::copy(std::begin(grad_e_tp1), std::end(grad_e_tp1),
-              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3) + configuration::material::num_additional_dof);
+              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3) + configuration::material::dof::num_additional_dof);
 
     std::copy(std::begin(grad_vf_tp1), std::end(grad_vf_tp1),
-              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3) + configuration::material::num_additional_dof);
+              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3) + configuration::material::dof::num_additional_dof);
 
     std::copy(std::begin(grad_z_tp1), std::end(grad_z_tp1),
-              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3) + configuration::material::num_additional_dof);
+              std::begin(dof_vector) + nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3) + configuration::material::dof::num_additional_dof);
 
     std::vector<floatType> previous_dof_vector(dof_vector.size());
 
@@ -4175,7 +4175,7 @@ void evaluate_at_nodes_diffusion(
     std::fill(std::begin(material_response_jacobian), std::end(material_response_jacobian), 0);
 
     for (unsigned int j = low_bound; j < high_bound; ++j) {
-        hydraLinearTest2 linearTest(nphases, j, 10, configuration::material::num_additional_dof, 0, 0.1, dof_vector, previous_dof_vector);
+        hydraLinearTest2 linearTest(nphases, j, 10, configuration::material::dof::num_additional_dof, 0, 0.1, dof_vector, previous_dof_vector);
 
         linearTest.evaluate();
 
@@ -4198,7 +4198,7 @@ void evaluate_at_nodes_diffusion(
 
     std::array<floatType, nphases * 1 * nphases * 3> dRdW_n;
 
-    std::array<floatType, nphases * 1 * configuration::material::num_additional_dof> dRdZ_n;
+    std::array<floatType, nphases * 1 * configuration::material::dof::num_additional_dof> dRdZ_n;
 
     std::array<floatType, nphases * 1 * 3> dRdUMesh_n;
 
@@ -4260,15 +4260,15 @@ void evaluate_at_nodes_diffusion(
                     std::begin(dNdxs) + configuration::dimension * (i + 1), Ns[k],
                     std::cbegin(dNdxs) + configuration::dimension * k,
                     std::cbegin(dNdxs) + configuration::dimension * (k + 1),
-                    std::begin(dof_vector) + (nphases * configuration::material::num_phase_dof + configuration::material::num_additional_dof), std::end(dof_vector),
+                    std::begin(dof_vector) + (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof), std::end(dof_vector),
                     dUDotdU, value_n[nphases * i + j], std::begin(dRdRho_n) + nphases * 1 * j,
                     std::begin(dRdRho_n) + nphases * 1 * (j + 1), std::begin(dRdU_n) + nphases * 3 * j,
                     std::begin(dRdU_n) + nphases * 3 * (j + 1), std::begin(dRdW_n) + nphases * 3 * j,
                     std::begin(dRdW_n) + nphases * 3 * (j + 1), std::begin(dRdTheta_n) + nphases * 1 * j,
                     std::begin(dRdTheta_n) + nphases * 1 * (j + 1), std::begin(dRdE_n) + nphases * 1 * j,
                     std::begin(dRdE_n) + nphases * 1 * (j + 1), std::begin(dRdVF_n) + nphases * 1 * j,
-                    std::begin(dRdVF_n) + nphases * 1 * (j + 1), std::begin(dRdZ_n) + configuration::material::num_additional_dof * j,
-                    std::begin(dRdZ_n) + configuration::material::num_additional_dof * (j + 1), std::begin(dRdUMesh_n) + 3 * j,
+                    std::begin(dRdVF_n) + nphases * 1 * (j + 1), std::begin(dRdZ_n) + configuration::material::dof::num_additional_dof * j,
+                    std::begin(dRdZ_n) + configuration::material::dof::num_additional_dof * (j + 1), std::begin(dRdUMesh_n) + 3 * j,
                     std::begin(dRdUMesh_n) + 3 * (j + 1));
 
                 value_n[nphases * i + j] *= J;
@@ -4282,7 +4282,7 @@ void evaluate_at_nodes_diffusion(
                     std::cbegin(dNdxs) + configuration::dimension * (i + 1), Ns[k],
                     std::cbegin(dNdxs) + configuration::dimension * k,
                     std::cbegin(dNdxs) + configuration::dimension * (k + 1),
-                    std::begin(dof_vector) + (nphases * configuration::material::num_phase_dof + configuration::material::num_additional_dof), std::end(dof_vector),
+                    std::begin(dof_vector) + (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof), std::end(dof_vector),
                     dUDotdU, std::begin(value_n) + nphases * i, std::begin(value_n) + nphases * (i + 1),
                     std::begin(dRdRho_n), std::end(dRdRho_n), std::begin(dRdU_n), std::end(dRdU_n), std::begin(dRdW_n),
                     std::end(dRdW_n), std::begin(dRdTheta_n), std::end(dRdTheta_n), std::begin(dRdE_n),
@@ -4333,10 +4333,10 @@ void evaluate_at_nodes_diffusion(
                       nphases * 1 * k + l) += dRdVF_n[nphases * 1 * j + l] * J;
                 }
 
-                for (unsigned int l = 0; l < configuration::material::num_additional_dof; ++l) {
-                    *(dRdZ_begin + nphases * node_count * configuration::material::num_additional_dof * 1 * i +
-                      node_count * configuration::material::num_additional_dof * 1 * j + configuration::material::num_additional_dof * 1 * k + l) +=
-                        dRdZ_n[configuration::material::num_additional_dof * 1 * j + l] * J;
+                for (unsigned int l = 0; l < configuration::material::dof::num_additional_dof; ++l) {
+                    *(dRdZ_begin + nphases * node_count * configuration::material::dof::num_additional_dof * 1 * i +
+                      node_count * configuration::material::dof::num_additional_dof * 1 * j + configuration::material::dof::num_additional_dof * 1 * k + l) +=
+                        dRdZ_n[configuration::material::dof::num_additional_dof * 1 * j + l] * J;
                 }
 
                 for (unsigned int l = 0; l < configuration::dimension; ++l) {
@@ -4504,14 +4504,14 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfMass_hydra_diffusionTerm_fea, *boost::
         0.2499543,  0.35053932, 0.3430861,  0.63735673, 0.01273756, 0.76326864, 0.41641463, 0.43223919,
         0.48111502, 0.44921245, 0.4974709,  0.34590431, 0.45334614, 0.40465134, 0.51824272, 0.62326908};
 
-    std::array<floatType, 8 * configuration::material::num_additional_dof> z_t = {
+    std::array<floatType, 8 * configuration::material::dof::num_additional_dof> z_t = {
         -0.16712678, 0.83631984,  -0.37692766, 0.88293399,  0.00649485,  -0.30221415, 0.29403919,  -0.50050759,
         -0.54047281, -0.60730711, 0.91979913,  -0.01417254, 0.50322993,  -0.05201624, 0.17508032,  0.16827796,
         0.95977262,  0.33686625,  -0.52046106, -0.96960468, -0.56263572, -0.08896072, -0.21315933, 0.62465248,
         0.57111351,  -0.82180806, 0.90402145,  0.05491335,  0.19280793,  -0.18988646, 0.29900191,  0.74265261,
         0.34787193,  0.94019709,  0.4022445,   0.64344147,  -0.90992083, 0.34539703,  0.30950529,  -0.7965079};
 
-    std::array<floatType, 8 * configuration::material::num_additional_dof> z_tp1 = {
+    std::array<floatType, 8 * configuration::material::dof::num_additional_dof> z_tp1 = {
         0.68477499,  0.22834481,  -0.80334382, 0.18893424,  -0.0431683,  -0.53341286, -0.96048782, -0.26886544,
         0.23970215,  -0.34144173, -0.38549069, 0.50224248,  0.5172493,   0.43753167,  -0.79763609, 0.03233191,
         0.11559732,  0.48960905,  0.80635544,  -0.26192227, -0.14267306, 0.46553498,  0.32527284,  0.1157398,
@@ -4600,7 +4600,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfMass_hydra_diffusionTerm_fea, *boost::
 
     std::array<floatType, 8 * 1 * nphases * 8 * 1 * nphases> dRdVF;
 
-    std::array<floatType, 8 * 1 * nphases * 8 * configuration::material::num_additional_dof * nphases> dRdZ;
+    std::array<floatType, 8 * 1 * nphases * 8 * configuration::material::dof::num_additional_dof * nphases> dRdZ;
 
     std::array<floatType, 8 * 1 * nphases * 8 * 3> dRdUMesh;
 
@@ -4949,7 +4949,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfMass_hydra_diffusionTerm_fea, *boost::
     // Check the derivatives w.r.t. the additional dof
     {
         floatType              eps    = 1e-6;
-        constexpr unsigned int vardim = configuration::material::num_additional_dof * 8;
+        constexpr unsigned int vardim = configuration::material::dof::num_additional_dof * 8;
         constexpr unsigned int outdim = 1 * nphases * 8;
 
         for (unsigned int i = 0; i < vardim; ++i) {
@@ -5168,14 +5168,14 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfMass_hydra_diffusionTerm_fea_multiphas
         0.2499543,  0.35053932, 0.3430861,  0.63735673, 0.01273756, 0.76326864, 0.41641463, 0.43223919,
         0.48111502, 0.44921245, 0.4974709,  0.34590431, 0.45334614, 0.40465134, 0.51824272, 0.62326908};
 
-    std::array<floatType, 8 * configuration::material::num_additional_dof> z_t = {
+    std::array<floatType, 8 * configuration::material::dof::num_additional_dof> z_t = {
         -0.16712678, 0.83631984,  -0.37692766, 0.88293399,  0.00649485,  -0.30221415, 0.29403919,  -0.50050759,
         -0.54047281, -0.60730711, 0.91979913,  -0.01417254, 0.50322993,  -0.05201624, 0.17508032,  0.16827796,
         0.95977262,  0.33686625,  -0.52046106, -0.96960468, -0.56263572, -0.08896072, -0.21315933, 0.62465248,
         0.57111351,  -0.82180806, 0.90402145,  0.05491335,  0.19280793,  -0.18988646, 0.29900191,  0.74265261,
         0.34787193,  0.94019709,  0.4022445,   0.64344147,  -0.90992083, 0.34539703,  0.30950529,  -0.7965079};
 
-    std::array<floatType, 8 * configuration::material::num_additional_dof> z_tp1 = {
+    std::array<floatType, 8 * configuration::material::dof::num_additional_dof> z_tp1 = {
         0.68477499,  0.22834481,  -0.80334382, 0.18893424,  -0.0431683,  -0.53341286, -0.96048782, -0.26886544,
         0.23970215,  -0.34144173, -0.38549069, 0.50224248,  0.5172493,   0.43753167,  -0.79763609, 0.03233191,
         0.11559732,  0.48960905,  0.80635544,  -0.26192227, -0.14267306, 0.46553498,  0.32527284,  0.1157398,
@@ -5256,7 +5256,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfMass_hydra_diffusionTerm_fea_multiphas
 
     std::array<floatType, 8 * 1 * nphases * 8 * 1 * nphases> dRdVF;
 
-    std::array<floatType, 8 * 1 * nphases * 8 * configuration::material::num_additional_dof * nphases> dRdZ;
+    std::array<floatType, 8 * 1 * nphases * 8 * configuration::material::dof::num_additional_dof * nphases> dRdZ;
 
     std::array<floatType, 8 * 1 * nphases * 8 * 3> dRdUMesh;
 
@@ -5549,7 +5549,7 @@ BOOST_AUTO_TEST_CASE(test_computeBalanceOfMass_hydra_diffusionTerm_fea_multiphas
     // Check the derivatives w.r.t. the additional dof
     {
         floatType              eps    = 1e-6;
-        constexpr unsigned int vardim = configuration::material::num_additional_dof * 8;
+        constexpr unsigned int vardim = configuration::material::dof::num_additional_dof * 8;
         constexpr unsigned int outdim = 1 * nphases * 8;
 
         for (unsigned int i = 0; i < vardim; ++i) {

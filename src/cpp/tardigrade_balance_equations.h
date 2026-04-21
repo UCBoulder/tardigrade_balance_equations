@@ -17,6 +17,15 @@ namespace tardigradeBalanceEquations {
     template<int _num_phase_dof, int _num_additional_dof, int _density_index = 0, int _displacement_index = 1, int _velocity_index = 4, int _temperature_index = 7, int _internal_energy_index = 8, int _volume_fraction_index = 9, int _additional_dof_index = 10>
     class MaterialResponseDOFConfigurationBase {
         public:
+            //! The number of degrees of freedom associated with a specific phase of material
+            static constexpr int num_phase_dof = _num_phase_dof;
+
+            //! The number of additional degrees of freedom common to all phases
+            static constexpr int num_additional_dof = _num_additional_dof;
+
+            //! The number of degrees of freedom required in total for each material response
+            static constexpr int num_dof = _num_phase_dof + _num_additional_dof;
+
             //MATERIAL DOF VECTOR STRUCTURE
             //! The index of the density in the material dof vector
             static constexpr int density_index = _density_index;
@@ -62,9 +71,6 @@ namespace tardigradeBalanceEquations {
 
             //! The index of the mass-change rate in the material response vector
             static constexpr int mass_change_index = _mass_change_index;
-
-            //! The number of degrees of freedom associated with a specific phase of material
-            static constexpr int num_phase_dof = _num_phase_dof;
 
             //! The number of additional degrees of freedom common to all phases
             static constexpr int num_additional_dof = _num_additional_dof;
