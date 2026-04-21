@@ -12,18 +12,11 @@
 namespace tardigradeBalanceEquations {
 
     /*!
-     * A class which defines the configuration of the material response
+     * A class which defines the DOF configuration for the material response
      */
-    template<int _num_phase_dof, int _num_additional_dof, int _dimension = 3, int _mass_change_index = 10, int _density_index = 0, int _displacement_index = 1, int _velocity_index = 4, int _temperature_index = 7, int _internal_energy_index = 8, int _volume_fraction_index = 9, int _additional_dof_index = 10>
-    class MaterialResponseConfigurationBase {
+    template<int _num_phase_dof, int _num_additional_dof, int _density_index = 0, int _displacement_index = 1, int _velocity_index = 4, int _temperature_index = 7, int _internal_energy_index = 8, int _volume_fraction_index = 9, int _additional_dof_index = 10>
+    class MaterialResponseDOFConfigurationBase {
         public:
-            //! The spatial dimension of the material model
-            static constexpr int dimension = _dimension;
-
-            //MATERIAL RESPONSE VECTOR STRUCTURE
-            //! The index of the mass-change rate in the material response vector
-            static constexpr int mass_change_index = _mass_change_index;
-
             //MATERIAL DOF VECTOR STRUCTURE
             //! The index of the density in the material dof vector
             static constexpr int density_index = _density_index;
@@ -45,6 +38,30 @@ namespace tardigradeBalanceEquations {
 
             //! The index of the additional degrees of freedom in the material dof vector
             static constexpr int additional_dof_index = _additional_dof_index;
+
+    };
+
+    /*!
+     * A class which defines the configuration of the material response
+     */
+    template<int _num_phase_dof, int _num_additional_dof, int _dimension = 3, int _cauchy_stress_index = 0, int _predicted_internal_energy_index = 9, int _mass_change_index = 10, class _dof = MaterialResponseDOFConfigurationBase<_num_phase_dof, _num_additional_dof>>
+    class MaterialResponseConfigurationBase {
+        public:
+            //! The spatial dimension of the material model
+            static constexpr int dimension = _dimension;
+
+            //! The configuration of the DOF for the material
+            using dof = _dof;
+
+            //MATERIAL RESPONSE VECTOR STRUCTURE
+            //! The index of the Cauchy stress in the material response vector
+            static constexpr int cauchy_stress_index = _cauchy_stress_index;
+
+            //! The index of the predicted internal energy in the material response vector
+            static constexpr int predicted_internal_energy_index = _predicted_internal_energy_index;
+
+            //! The index of the mass-change rate in the material response vector
+            static constexpr int mass_change_index = _mass_change_index;
 
             //! The number of degrees of freedom associated with a specific phase of material
             static constexpr int num_phase_dof = _num_phase_dof;
