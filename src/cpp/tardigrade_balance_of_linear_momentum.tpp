@@ -1099,7 +1099,7 @@ namespace tardigradeBalanceEquations {
                     (unsigned int)(material_response_jacobian_end - material_response_jacobian_begin),
 
                 "The material response jacobian must have a consistent size with the material response vector and the "
-                "configuration::material::num_dof\n  number of phases           : " +
+                "configuration::material::dof::num_dof\n  number of phases           : " +
                     std::to_string(nphases) +
                     "\n  material_response_size     : " + std::to_string(material_response_size) +
                     "\n  dof per phase              : " + std::to_string(configuration::material::dof::num_phase_dof) +

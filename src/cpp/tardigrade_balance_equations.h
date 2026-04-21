@@ -72,12 +72,6 @@ namespace tardigradeBalanceEquations {
             //! The index of the mass-change rate in the material response vector
             static constexpr int mass_change_index = _mass_change_index;
 
-            //! The number of additional degrees of freedom common to all phases
-            static constexpr int num_additional_dof = _num_additional_dof;
-
-            //! The number of degrees of freedom required in total for each material response
-            static constexpr int num_dof = _num_phase_dof + _num_additional_dof;
-
     };
 
     /*!

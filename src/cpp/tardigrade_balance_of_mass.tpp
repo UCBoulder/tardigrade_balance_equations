@@ -926,7 +926,7 @@ namespace tardigradeBalanceEquations {
              *
              * mass_change_index is the index of the material response vector that represents the mass change rate
              * configuration::material::dimension is the spatial dimension of the material-response Jacobian
-             * configuration::material::num_dof are the number of degrees of freedom in the material-response Jacobian for each
+             * configuration::material::dof::num_dof are the number of degrees of freedom in the material-response Jacobian for each
              * phase We note that there are 3 + 2 * configuration::material::dimension expected degrees of freedom.
              *
              * \param &density: The value of the density \f$ \rho \f$
@@ -1384,7 +1384,7 @@ namespace tardigradeBalanceEquations {
                         (1 + configuration::material::dimension) ==
                     (unsigned int)(material_response_jacobian_end - material_response_jacobian_begin),
                 "The material response jacobian must have a consistent size with the material response vector and the "
-                "configuration::material::num_dof\n  number of phases           : " +
+                "configuration::material::dof::num_dof\n  number of phases           : " +
                     std::to_string(nphases) +
                     "\n  material_response_size     : " + std::to_string(material_response_size) +
                     "\n  dof per phase              : " + std::to_string(configuration::material::dof::num_phase_dof) +
@@ -1981,7 +1981,7 @@ namespace tardigradeBalanceEquations {
                         (1 + configuration::material::dimension) ==
                     (unsigned int)(material_response_jacobian_end - material_response_jacobian_begin),
                 "The material response jacobian must have a consistent size with the material response vector and the "
-                "configuration::material::num_dof\n  number of phases           : " +
+                "configuration::material::dof::num_dof\n  number of phases           : " +
                     std::to_string(nphases) +
                     "\n  material_response_size     : " + std::to_string(material_response_size) +
                     "\n  dof per phase              : " + std::to_string(configuration::material::dof::num_phase_dof) +
