@@ -60,7 +60,7 @@ namespace tardigradeBalanceEquations {
                                          const velocityGradient_iter &velocity_gradient_end,
                                          const testFunction_type &test_function, result_type &result);
 
-        template <class configuration, int mass_change_index, typename density_type, typename densityDot_type,
+        template <class configuration, typename density_type, typename densityDot_type,
                   typename result_type, typename testFunction_type, class densityGradient_iter, class velocity_iter,
                   class velocityGradient_iter, class material_response_iter>
         void computeBalanceOfMass(const density_type &density, const densityDot_type &density_dot,
@@ -73,10 +73,10 @@ namespace tardigradeBalanceEquations {
                                   const material_response_iter &material_response_end,
                                   const testFunction_type &test_function, result_type &result);
 
-        template <class configuration, int mass_change_index, class density_iter, class densityDot_iter,
+        template <class configuration, class density_iter, class densityDot_iter,
                   class result_iter, typename testFunction_type, class densityGradient_iter, class velocity_iter,
                   class velocityGradient_iter, class material_response_iter>
-        void computeBalanceOfMass(
+        void computeBalanceOfMassMultiphase(
             const density_iter &density_begin, const density_iter &density_end,
             const densityDot_iter &density_dot_begin, const densityDot_iter &density_dot_end,
             const densityGradient_iter &density_gradient_begin, const densityGradient_iter &density_gradient_end,
@@ -118,7 +118,7 @@ namespace tardigradeBalanceEquations {
 
         template <class configuration, class density_iter, class densityDot_iter, class densityGradient_iter,
                   class velocity_iter, class velocityGradient_iter, class result_iter>
-        inline void computeBalanceOfMass(const density_iter &density_begin, const density_iter &density_end,
+        inline void computeBalanceOfMassMultiphase(const density_iter &density_begin, const density_iter &density_end,
                                          const densityDot_iter      &density_dot_begin,
                                          const densityDot_iter      &density_dot_end,
                                          const densityGradient_iter &density_gradient_begin,
@@ -130,7 +130,7 @@ namespace tardigradeBalanceEquations {
 
         template <class configuration, class density_iter, class densityDot_iter, class densityGradient_iter,
                   typename testFunction_type, class velocity_iter, class velocityGradient_iter, class result_iter>
-        inline void computeBalanceOfMass(
+        inline void computeBalanceOfMassMultiphase(
             const density_iter &density_begin, const density_iter &density_end,
             const densityDot_iter &density_dot_begin, const densityDot_iter &density_dot_end,
             const densityGradient_iter &density_gradient_begin, const densityGradient_iter &density_gradient_end,
@@ -141,7 +141,7 @@ namespace tardigradeBalanceEquations {
         template <class configuration, class density_iter, class densityDot_iter, class densityGradient_iter,
                   class velocity_iter, class velocityGradient_iter, class result_iter, class dRdRho_iter,
                   class dRdRhoDot_iter, class dRdGradRho_iter, class dRdV_iter, class dRdGradV_iter>
-        inline void computeBalanceOfMass(
+        inline void computeBalanceOfMassMultiphase(
             const density_iter &density_begin, const density_iter &density_end,
             const densityDot_iter &density_dot_begin, const densityDot_iter &density_dot_end,
             const densityGradient_iter &density_gradient_begin, const densityGradient_iter &density_gradient_end,
@@ -157,7 +157,7 @@ namespace tardigradeBalanceEquations {
                   class velocityGradient_iter, class interpolationFunctionGradient_iter, class result_iter,
                   class dRdRho_iter, class dRdU_iter, class dRdUMesh_iter, class dDensityDotdDensity_iter,
                   class dUDotdU_iter>
-        inline void computeBalanceOfMass(
+        inline void computeBalanceOfMassMultiphase(
             const density_iter &density_begin, const density_iter &density_end,
             const densityDot_iter &density_dot_begin, const densityDot_iter &density_dot_end,
             const densityGradient_iter &density_gradient_begin, const densityGradient_iter &density_gradient_end,
@@ -172,7 +172,7 @@ namespace tardigradeBalanceEquations {
             dRdRho_iter dRdRho_end, dRdU_iter dRdU_begin, dRdU_iter dRdU_end, dRdUMesh_iter dRdUMesh_begin,
             dRdUMesh_iter dRdUMesh_end);
 
-        template <class configuration, int mass_change_index,
+        template <class configuration,
                   typename density_type, typename densityDot_type, typename result_type, typename testFunction_type,
                   typename interpolationFunction_type, class densityGradient_iter, class velocity_iter,
                   class velocityGradient_iter, class material_response_iter, class material_response_jacobian_iter,
@@ -200,7 +200,7 @@ namespace tardigradeBalanceEquations {
             dRdVF_iter dRdVF_end, dRdZ_iter dRdZ_begin, dRdZ_iter dRdZ_end, dRdUMesh_iter dRdUMesh_begin,
             dRdUMesh_iter dRdUMesh_end);
 
-        template <class configuration, int mass_change_index,
+        template <class configuration,
                   class density_iter, class densityDot_iter, class result_iter, typename testFunction_type,
                   typename interpolationFunction_type, class densityGradient_iter, class velocity_iter,
                   class velocityGradient_iter, class material_response_iter, class material_response_jacobian_iter,
@@ -208,7 +208,7 @@ namespace tardigradeBalanceEquations {
                   class dRdRho_iter, class dRdU_iter, class dRdW_iter, class dRdTheta_iter, class dRdE_iter,
                   class dRdVF_iter, class dRdZ_iter, class dRdUMesh_iter, typename dDensityDotdDensity_type,
                   typename dUDotdU_type>
-        inline void computeBalanceOfMass(
+        inline void computeBalanceOfMassMultiphase(
             const density_iter &density_begin, const density_iter &density_end,
             const densityDot_iter &density_dot_begin, const densityDot_iter &density_dot_end,
             const densityGradient_iter &density_gradient_begin, const densityGradient_iter &density_gradient_end,

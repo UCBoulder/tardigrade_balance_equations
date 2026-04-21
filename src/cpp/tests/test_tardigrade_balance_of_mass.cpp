@@ -318,7 +318,7 @@ void evaluate_at_nodes(const xi_in &xi_begin, const xi_in &xi_end, dt_type dt, c
 
     } else {
         for (unsigned int i = 0; i < node_count; ++i) {
-            tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMass<configuration>(
+            tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMassMultiphase<configuration>(
                 std::cbegin(density_tp1_p), std::cend(density_tp1_p), std::cbegin(density_dot_tp1_p),
                 std::cend(density_dot_tp1_p), std::cbegin(grad_density_tp1), std::cend(grad_density_tp1),
                 std::cbegin(v_tp1_p), std::cend(v_tp1_p), std::cbegin(grad_velocity_tp1), std::cend(grad_velocity_tp1),
@@ -490,7 +490,7 @@ void evaluate_at_nodes(const xi_in &xi_begin, const xi_in &xi_end, dt_type dt, c
         }
 
         for (unsigned int i = 0; i < node_count; ++i) {
-            tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMass<configuration>(
+            tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMassMultiphase<configuration>(
                 std::cbegin(density_tp1_p), std::cend(density_tp1_p), std::cbegin(density_dot_tp1_p),
                 std::cend(density_dot_tp1_p), std::cbegin(grad_density_tp1), std::cend(grad_density_tp1),
                 std::cbegin(v_tp1_p), std::cend(v_tp1_p), std::cbegin(grad_velocity_tp1), std::cend(grad_velocity_tp1),
@@ -507,7 +507,7 @@ void evaluate_at_nodes(const xi_in &xi_begin, const xi_in &xi_end, dt_type dt, c
 
             for (unsigned int j = 0; j < node_count; ++j) {  // Loop over the interpolation functions
 
-                tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMass<configuration>(
+                tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMassMultiphase<configuration>(
                     std::cbegin(density_tp1_p), std::cend(density_tp1_p), std::cbegin(density_dot_tp1_p),
                     std::cend(density_dot_tp1_p), std::cbegin(grad_density_tp1), std::cend(grad_density_tp1),
                     std::cbegin(v_tp1_p), std::cend(v_tp1_p), std::cbegin(grad_velocity_tp1),
@@ -1015,7 +1015,7 @@ BOOST_AUTO_TEST_CASE(test_multiphase_computeBalanceOfMass, *boost::unit_test::to
 
     std::array<floatType, nphases> result;
 
-    tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMass<configuration>(
+    tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMassMultiphase<configuration>(
         std::begin(density), std::end(density), std::begin(density_dot), std::end(density_dot),
         std::begin(density_gradient), std::end(density_gradient), std::begin(velocity), std::end(velocity),
         std::begin(velocity_gradient), std::end(velocity_gradient), std::begin(result), std::end(result));
@@ -1028,7 +1028,7 @@ BOOST_AUTO_TEST_CASE(test_multiphase_computeBalanceOfMass, *boost::unit_test::to
 
     std::array<floatType, nphases * configuration::dimension * configuration::dimension> dRdGradV;
 
-    tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMass<configuration>(
+    tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMassMultiphase<configuration>(
         std::begin(density), std::end(density), std::begin(density_dot), std::end(density_dot),
         std::begin(density_gradient), std::end(density_gradient), std::begin(velocity), std::end(velocity),
         std::begin(velocity_gradient), std::end(velocity_gradient), std::begin(result), std::end(result),
@@ -1052,12 +1052,12 @@ BOOST_AUTO_TEST_CASE(test_multiphase_computeBalanceOfMass, *boost::unit_test::to
 
         std::array<floatType, nphases> vp, vm;
 
-        tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMass<configuration>(
+        tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMassMultiphase<configuration>(
             std::begin(xp), std::end(xp), std::begin(density_dot), std::end(density_dot), std::begin(density_gradient),
             std::end(density_gradient), std::begin(velocity), std::end(velocity), std::begin(velocity_gradient),
             std::end(velocity_gradient), std::begin(vp), std::end(vp));
 
-        tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMass<configuration>(
+        tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMassMultiphase<configuration>(
             std::begin(xm), std::end(xm), std::begin(density_dot), std::end(density_dot), std::begin(density_gradient),
             std::end(density_gradient), std::begin(velocity), std::end(velocity), std::begin(velocity_gradient),
             std::end(velocity_gradient), std::begin(vm), std::end(vm));
@@ -1086,12 +1086,12 @@ BOOST_AUTO_TEST_CASE(test_multiphase_computeBalanceOfMass, *boost::unit_test::to
 
         std::array<floatType, nphases> vp, vm;
 
-        tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMass<configuration>(
+        tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMassMultiphase<configuration>(
             std::begin(density), std::end(density), std::begin(xp), std::end(xp), std::begin(density_gradient),
             std::end(density_gradient), std::begin(velocity), std::end(velocity), std::begin(velocity_gradient),
             std::end(velocity_gradient), std::begin(vp), std::end(vp));
 
-        tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMass<configuration>(
+        tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMassMultiphase<configuration>(
             std::begin(density), std::end(density), std::begin(xm), std::end(xm), std::begin(density_gradient),
             std::end(density_gradient), std::begin(velocity), std::end(velocity), std::begin(velocity_gradient),
             std::end(velocity_gradient), std::begin(vm), std::end(vm));
@@ -1120,12 +1120,12 @@ BOOST_AUTO_TEST_CASE(test_multiphase_computeBalanceOfMass, *boost::unit_test::to
 
         std::array<floatType, nphases> vp, vm;
 
-        tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMass<configuration>(
+        tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMassMultiphase<configuration>(
             std::begin(density), std::end(density), std::begin(density_dot), std::end(density_dot), std::begin(xp),
             std::end(xp), std::begin(velocity), std::end(velocity), std::begin(velocity_gradient),
             std::end(velocity_gradient), std::begin(vp), std::end(vp));
 
-        tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMass<configuration>(
+        tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMassMultiphase<configuration>(
             std::begin(density), std::end(density), std::begin(density_dot), std::end(density_dot), std::begin(xm),
             std::end(xm), std::begin(velocity), std::end(velocity), std::begin(velocity_gradient),
             std::end(velocity_gradient), std::begin(vm), std::end(vm));
@@ -1155,12 +1155,12 @@ BOOST_AUTO_TEST_CASE(test_multiphase_computeBalanceOfMass, *boost::unit_test::to
 
         std::array<floatType, nphases> vp, vm;
 
-        tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMass<configuration>(
+        tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMassMultiphase<configuration>(
             std::begin(density), std::end(density), std::begin(density_dot), std::end(density_dot),
             std::begin(density_gradient), std::end(density_gradient), std::begin(xp), std::end(xp),
             std::begin(velocity_gradient), std::end(velocity_gradient), std::begin(vp), std::end(vp));
 
-        tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMass<configuration>(
+        tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMassMultiphase<configuration>(
             std::begin(density), std::end(density), std::begin(density_dot), std::end(density_dot),
             std::begin(density_gradient), std::end(density_gradient), std::begin(xm), std::end(xm),
             std::begin(velocity_gradient), std::end(velocity_gradient), std::begin(vm), std::end(vm));
@@ -1190,12 +1190,12 @@ BOOST_AUTO_TEST_CASE(test_multiphase_computeBalanceOfMass, *boost::unit_test::to
 
         std::array<floatType, nphases> vp, vm;
 
-        tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMass<configuration>(
+        tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMassMultiphase<configuration>(
             std::begin(density), std::end(density), std::begin(density_dot), std::end(density_dot),
             std::begin(density_gradient), std::end(density_gradient), std::begin(velocity), std::end(velocity),
             std::begin(xp), std::end(xp), std::begin(vp), std::end(vp));
 
-        tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMass<configuration>(
+        tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMassMultiphase<configuration>(
             std::begin(density), std::end(density), std::begin(density_dot), std::end(density_dot),
             std::begin(density_gradient), std::end(density_gradient), std::begin(velocity), std::end(velocity),
             std::begin(xm), std::end(xm), std::begin(vm), std::end(vm));
@@ -1831,7 +1831,7 @@ void evaluate_at_nodes(const xi_in &xi_begin, const xi_in &xi_end, dt_type dt, c
             unsigned int j = active_phase;
 
             // Single phase evaluation
-            tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMass<configuration, 10>(
+            tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMass<configuration>(
                 density_tp1_p[j], density_dot_tp1_p[j], std::cbegin(grad_density_tp1) + 3 * j,
                 std::cbegin(grad_density_tp1) + 3 * (j + 1), std::cbegin(v_tp1_p) + 3 * j,
                 std::cbegin(v_tp1_p) + 3 * (j + 1), std::cbegin(grad_velocity_tp1) + 9 * j,
@@ -1844,7 +1844,7 @@ void evaluate_at_nodes(const xi_in &xi_begin, const xi_in &xi_end, dt_type dt, c
 
         } else {
             // Multiphase evaluation
-            tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMass<configuration, 10>(
+            tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMassMultiphase<configuration>(
                 std::cbegin(density_tp1_p), std::cend(density_tp1_p), std::cbegin(density_dot_tp1_p),
                 std::cend(density_dot_tp1_p), std::cbegin(grad_density_tp1), std::cend(grad_density_tp1),
                 std::cbegin(v_tp1_p), std::cend(v_tp1_p), std::cbegin(grad_velocity_tp1), std::cend(grad_velocity_tp1),
@@ -2097,7 +2097,7 @@ void evaluate_at_nodes(
             unsigned int j = active_phase;
 
             // Single phase evaluation
-            tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMass<configuration, 10>(
+            tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMass<configuration>(
                 density_tp1_p[j], density_dot_tp1_p[j], std::cbegin(grad_density_tp1) + 3 * j,
                 std::cbegin(grad_density_tp1) + 3 * (j + 1), std::cbegin(v_tp1_p) + 3 * j,
                 std::cbegin(v_tp1_p) + 3 * (j + 1), std::cbegin(grad_velocity_tp1) + 9 * j,
@@ -2110,7 +2110,7 @@ void evaluate_at_nodes(
 
         } else {
             // Multiphase evaluation
-            tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMass<configuration, 10>(
+            tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMassMultiphase<configuration>(
                 std::cbegin(density_tp1_p), std::cend(density_tp1_p), std::cbegin(density_dot_tp1_p),
                 std::cend(density_dot_tp1_p), std::cbegin(grad_density_tp1), std::cend(grad_density_tp1),
                 std::cbegin(v_tp1_p), std::cend(v_tp1_p), std::cbegin(grad_velocity_tp1), std::cend(grad_velocity_tp1),
@@ -2127,7 +2127,7 @@ void evaluate_at_nodes(
                 unsigned int j = active_phase;
 
                 // Single phase evaluation
-                tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMass<configuration, 10>(
+                tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMass<configuration>(
                     density_tp1_p[j], density_dot_tp1_p[j], std::cbegin(grad_density_tp1) + 3 * j,
                     std::cbegin(grad_density_tp1) + 3 * (j + 1), std::cbegin(v_tp1_p) + 3 * j,
                     std::cbegin(v_tp1_p) + 3 * (j + 1), std::cbegin(grad_velocity_tp1) + 9 * j,
@@ -2153,7 +2153,7 @@ void evaluate_at_nodes(
 
             } else {
                 // Multiphase evaluation
-                tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMass<configuration, 10>(
+                tardigradeBalanceEquations::balanceOfMass::computeBalanceOfMassMultiphase<configuration>(
                     std::cbegin(density_tp1_p), std::cend(density_tp1_p), std::cbegin(density_dot_tp1_p),
                     std::cend(density_dot_tp1_p), std::cbegin(grad_density_tp1), std::cend(grad_density_tp1),
                     std::cbegin(v_tp1_p), std::cend(v_tp1_p), std::cbegin(grad_velocity_tp1),

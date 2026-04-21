@@ -350,7 +350,7 @@ namespace tardigradeBalanceEquations {
 
         template <class configuration, class density_iter, class densityDot_iter, class densityGradient_iter,
                   class velocity_iter, class velocityGradient_iter, class result_iter>
-        void computeBalanceOfMass(const density_iter &density_begin, const density_iter &density_end,
+        void computeBalanceOfMassMultiphase(const density_iter &density_begin, const density_iter &density_end,
                                   const densityDot_iter &density_dot_begin, const densityDot_iter &density_dot_end,
                                   const densityGradient_iter &density_gradient_begin,
                                   const densityGradient_iter &density_gradient_end, const velocity_iter &velocity_begin,
@@ -423,7 +423,7 @@ namespace tardigradeBalanceEquations {
 
         template <class configuration, class density_iter, class densityDot_iter, class densityGradient_iter,
                   typename testFunction_type, class velocity_iter, class velocityGradient_iter, class result_iter>
-        void computeBalanceOfMass(const density_iter &density_begin, const density_iter &density_end,
+        void computeBalanceOfMassMultiphase(const density_iter &density_begin, const density_iter &density_end,
                                   const densityDot_iter &density_dot_begin, const densityDot_iter &density_dot_end,
                                   const densityGradient_iter &density_gradient_begin,
                                   const densityGradient_iter &density_gradient_end, const velocity_iter &velocity_begin,
@@ -460,7 +460,7 @@ namespace tardigradeBalanceEquations {
              * \param &result_end: The stopping iterator of the net mass change per unit volume \f$ c \f$
              */
 
-            computeBalanceOfMass<configuration>(density_begin, density_end, density_dot_begin, density_dot_end,
+            computeBalanceOfMassMultiphase<configuration>(density_begin, density_end, density_dot_begin, density_dot_end,
                                                 density_gradient_begin, density_gradient_end, velocity_begin,
                                                 velocity_end, velocity_gradient_begin, velocity_gradient_end,
                                                 result_begin, result_end);
@@ -473,7 +473,7 @@ namespace tardigradeBalanceEquations {
         template <class configuration, class density_iter, class densityDot_iter, class densityGradient_iter,
                   class velocity_iter, class velocityGradient_iter, class result_iter, class dRdRho_iter,
                   class dRdRhoDot_iter, class dRdGradRho_iter, class dRdV_iter, class dRdGradV_iter>
-        void computeBalanceOfMass(const density_iter &density_begin, const density_iter &density_end,
+        void computeBalanceOfMassMultiphase(const density_iter &density_begin, const density_iter &density_end,
                                   const densityDot_iter &density_dot_begin, const densityDot_iter &density_dot_end,
                                   const densityGradient_iter &density_gradient_begin,
                                   const densityGradient_iter &density_gradient_end, const velocity_iter &velocity_begin,
@@ -599,7 +599,7 @@ namespace tardigradeBalanceEquations {
                   class velocityGradient_iter, class interpolationFunctionGradient_iter, class result_iter,
                   class dRdRho_iter, class dRdU_iter, class dRdUMesh_iter, class dDensityDotdDensity_iter,
                   class dUDotdU_iter>
-        void computeBalanceOfMass(
+        void computeBalanceOfMassMultiphase(
             const density_iter &density_begin, const density_iter &density_end,
             const densityDot_iter &density_dot_begin, const densityDot_iter &density_dot_end,
             const densityGradient_iter &density_gradient_begin, const densityGradient_iter &density_gradient_end,
@@ -734,7 +734,7 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <class configuration, int mass_change_index, typename density_type, typename densityDot_type,
+        template <class configuration, typename density_type, typename densityDot_type,
                   typename result_type, typename testFunction_type, class densityGradient_iter, class velocity_iter,
                   class velocityGradient_iter, class material_response_iter>
         void computeBalanceOfMass(const density_type &density, const densityDot_type &density_dot,
@@ -778,10 +778,10 @@ namespace tardigradeBalanceEquations {
             result -= test_function * (*(material_response_begin + configuration::material::output::mass_change_index));
         }
 
-        template <class configuration, int mass_change_index, class density_iter, class densityDot_iter,
+        template <class configuration, class density_iter, class densityDot_iter,
                   class result_iter, typename testFunction_type, class densityGradient_iter, class velocity_iter,
                   class velocityGradient_iter, class material_response_iter>
-        void computeBalanceOfMass(
+        void computeBalanceOfMassMultiphase(
             const density_iter &density_begin, const density_iter &density_end,
             const densityDot_iter &density_dot_begin, const densityDot_iter &density_dot_end,
             const densityGradient_iter &density_gradient_begin, const densityGradient_iter &density_gradient_end,
@@ -792,8 +792,6 @@ namespace tardigradeBalanceEquations {
             /*!
              * A balance of mass function for a general material response problem where the change in mass may be
              * a function of many different variables. Evaluates for all phases.
-             *
-             * configuration::material::output::mass_change_index is the index of the material response vector that represents the mass change rate
              *
              * \param &density_begin: The starting iterator of the value of the density \f$ \rho \f$
              * \param &density_end: The stopping iterator of the value of the density \f$ \rho \f$
@@ -848,7 +846,7 @@ namespace tardigradeBalanceEquations {
 
             for (auto v = std::pair<unsigned int, density_iter>(0, density_begin); v.second != density_end;
                  ++v.first, ++v.second) {
-                computeBalanceOfMass<configuration, configuration::material::output::mass_change_index>(
+                computeBalanceOfMass<configuration>(
                     *v.second, *(density_dot_begin + v.first),
                     density_gradient_begin + configuration::dimension * v.first,
                     density_gradient_begin + configuration::dimension * (v.first + 1),
@@ -862,7 +860,7 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <class configuration, int mass_change_index,
+        template <class configuration,
                   typename density_type, typename densityDot_type, typename result_type, typename testFunction_type,
                   typename interpolationFunction_type, class densityGradient_iter, class velocity_iter,
                   class velocityGradient_iter, class material_response_iter, class material_response_jacobian_iter,
@@ -1217,7 +1215,7 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <class configuration, int mass_change_index,
+        template <class configuration,
                   class density_iter, class densityDot_iter, class result_iter, typename testFunction_type,
                   typename interpolationFunction_type, class densityGradient_iter, class velocity_iter,
                   class velocityGradient_iter, class material_response_iter, class material_response_jacobian_iter,
@@ -1225,7 +1223,7 @@ namespace tardigradeBalanceEquations {
                   class dRdRho_iter, class dRdU_iter, class dRdW_iter, class dRdTheta_iter, class dRdE_iter,
                   class dRdVF_iter, class dRdZ_iter, class dRdUMesh_iter, typename dDensityDotdDensity_type,
                   typename dUDotdU_type>
-        void computeBalanceOfMass(
+        void computeBalanceOfMassMultiphase(
             const density_iter &density_begin, const density_iter &density_end,
             const densityDot_iter &density_dot_begin, const densityDot_iter &density_dot_end,
             const densityGradient_iter &density_gradient_begin, const densityGradient_iter &density_gradient_end,
@@ -1434,7 +1432,7 @@ namespace tardigradeBalanceEquations {
             for (auto v = std::pair<unsigned int, density_iter>(0, density_begin); v.second != density_end;
                  ++v.first, ++v.second) {
                 computeBalanceOfMass<
-                    configuration, configuration::material::output::mass_change_index>(
+                    configuration>(
                     *(density_begin + v.first), *(density_dot_begin + v.first),
                     density_gradient_begin + configuration::dimension * v.first,
                     density_gradient_begin + configuration::dimension * (v.first + 1),
