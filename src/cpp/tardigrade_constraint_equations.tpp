@@ -877,9 +877,6 @@ namespace tardigradeBalanceEquations {
              * displacement
              */
 
-            using internal_energy_type = typename std::iterator_traits<internal_energy_iter>::value_type;
-            using result_type          = typename std::iterator_traits<result_iter>::value_type;
-
             const unsigned int nphases = (unsigned int)(result_end - result_begin);
             const unsigned int material_response_size =
                 (unsigned int)(material_response_end - material_response_begin) / nphases;
@@ -1052,10 +1049,6 @@ namespace tardigradeBalanceEquations {
              * \param &dRdUMesh_end: The stopping iterator of the derivative of the residual w.r.t. the mesh
              * displacement
              */
-
-            using internal_energy_type = typename std::iterator_traits<internal_energy_iter>::value_type;
-            using density_type         = typename std::iterator_traits<density_iter>::value_type;
-            using result_type          = typename std::iterator_traits<result_iter>::value_type;
 
             const unsigned int nphases = (unsigned int)(result_end - result_begin);
             const unsigned int material_response_size =
