@@ -97,9 +97,7 @@ namespace tardigradeBalanceEquations {
                   typename test_function_type, typename interpolation_function_type,
                   class interpolation_function_gradient_iter, class full_material_response_dof_gradient_iter,
                   typename dUDotdU_type, typename result_type, class dRdRho_iter, class dRdU_iter, class dRdW_iter,
-                  class dRdTheta_iter, class dRdE_iter, class dRdVF_iter, class dRdZ_iter, class dRdUMesh_iter,
-                  int density_index, int displacement_index, int velocity_index, int temperature_index,
-                  int internal_energy_index, int volume_fraction_index, int additional_dof_index>
+                  class dRdTheta_iter, class dRdE_iter, class dRdVF_iter, class dRdZ_iter, class dRdUMesh_iter>
         void computeInternalEnergyConstraint(
             const internal_energy_type &internal_energy, const material_response_iter &material_response_begin,
             const material_response_iter          &material_response_end,
@@ -389,9 +387,7 @@ namespace tardigradeBalanceEquations {
                   typename interpolation_function_type, class interpolation_function_gradient_iter,
                   class full_material_response_dof_gradient_iter, typename dUDotdU_type, typename result_type,
                   class dRdRho_iter, class dRdU_iter, class dRdW_iter, class dRdTheta_iter, class dRdE_iter,
-                  class dRdVF_iter, class dRdZ_iter, class dRdUMesh_iter, int density_index, int displacement_index,
-                  int velocity_index, int temperature_index, int internal_energy_index, int volume_fraction_index,
-                  int additional_dof_index>
+                  class dRdVF_iter, class dRdZ_iter, class dRdUMesh_iter>
         void computeInternalEnergyConstraint(
             const internal_energy_type &internal_energy, const density_type &density,
             const material_response_iter &material_response_begin, const material_response_iter &material_response_end,
@@ -798,9 +794,7 @@ namespace tardigradeBalanceEquations {
                   typename test_function_type, typename interpolation_function_type,
                   class interpolation_function_gradient_iter, class full_material_response_dof_gradient_iter,
                   typename dUDotdU_type, class result_iter, class dRdRho_iter, class dRdU_iter, class dRdW_iter,
-                  class dRdTheta_iter, class dRdE_iter, class dRdVF_iter, class dRdZ_iter, class dRdUMesh_iter,
-                  int density_index, int displacement_index, int velocity_index, int temperature_index,
-                  int internal_energy_index, int volume_fraction_index, int additional_dof_index>
+                  class dRdTheta_iter, class dRdE_iter, class dRdVF_iter, class dRdZ_iter, class dRdUMesh_iter>
         void computeInternalEnergyConstraint(
             const internal_energy_iter &internal_energy_begin, const internal_energy_iter &internal_energy_end,
             const material_response_iter &material_response_begin, const material_response_iter &material_response_end,
@@ -942,13 +936,7 @@ namespace tardigradeBalanceEquations {
             for (auto v = std::pair<unsigned int, result_iter>(0, result_begin); v.second != result_end;
                  ++v.first, ++v.second) {
                 computeInternalEnergyConstraint<
-                    configuration, predicted_internal_energy_index,
-                    internal_energy_type, material_response_iter, material_response_jacobian_iter, test_function_type,
-                    interpolation_function_type, interpolation_function_gradient_iter,
-                    full_material_response_dof_gradient_iter, dUDotdU_type, result_type, dRdRho_iter, dRdU_iter,
-                    dRdW_iter, dRdTheta_iter, dRdE_iter, dRdVF_iter, dRdZ_iter, dRdUMesh_iter, configuration::material::density_index,
-                    configuration::material::displacement_index, configuration::material::velocity_index, configuration::material::temperature_index, configuration::material::internal_energy_index, configuration::material::volume_fraction_index,
-                    configuration::material::additional_dof_index>(
+                    configuration, predicted_internal_energy_index>(
                     *(internal_energy_begin + v.first), material_response_begin + material_response_size * v.first,
                     material_response_begin + material_response_size * (v.first + 1),
                     material_response_jacobian_begin + material_response_size *
@@ -979,9 +967,7 @@ namespace tardigradeBalanceEquations {
                   typename interpolation_function_type, class interpolation_function_gradient_iter,
                   class full_material_response_dof_gradient_iter, typename dUDotdU_type, class result_iter,
                   class dRdRho_iter, class dRdU_iter, class dRdW_iter, class dRdTheta_iter, class dRdE_iter,
-                  class dRdVF_iter, class dRdZ_iter, class dRdUMesh_iter, int density_index, int displacement_index,
-                  int velocity_index, int temperature_index, int internal_energy_index, int volume_fraction_index,
-                  int additional_dof_index>
+                  class dRdVF_iter, class dRdZ_iter, class dRdUMesh_iter>
         void computeInternalEnergyConstraint(
             const internal_energy_iter &internal_energy_begin, const internal_energy_iter &internal_energy_end,
             const density_iter &density_begin, const density_iter &density_end,
@@ -1118,13 +1104,8 @@ namespace tardigradeBalanceEquations {
             for (auto v = std::pair<unsigned int, result_iter>(0, result_begin); v.second != result_end;
                  ++v.first, ++v.second) {
                 computeInternalEnergyConstraint<
-                    configuration, predicted_internal_energy_index,
-                    internal_energy_type, density_type, material_response_iter, material_response_jacobian_iter,
-                    test_function_type, interpolation_function_type, interpolation_function_gradient_iter,
-                    full_material_response_dof_gradient_iter, dUDotdU_type, result_type, dRdRho_iter, dRdU_iter,
-                    dRdW_iter, dRdTheta_iter, dRdE_iter, dRdVF_iter, dRdZ_iter, dRdUMesh_iter, configuration::material::density_index,
-                    configuration::material::displacement_index, configuration::material::velocity_index, configuration::material::temperature_index, configuration::material::internal_energy_index, configuration::material::volume_fraction_index,
-                    configuration::material::additional_dof_index>(*(internal_energy_begin + v.first), *(density_begin + v.first),
+                    configuration, predicted_internal_energy_index>(
+                    *(internal_energy_begin + v.first), *(density_begin + v.first),
                                           material_response_begin + material_response_size * v.first,
                                           material_response_begin + material_response_size * (v.first + 1),
                                           material_response_jacobian_begin +
@@ -1280,7 +1261,7 @@ namespace tardigradeBalanceEquations {
                   int internal_heat_generation_index, int interphasic_heat_transfer_index,
                   int trace_mass_change_velocity_gradient_index, class density_iter, class volume_fraction_iter,
                   class material_response_iter, class material_response_jacobian_iter, class mixture_response_iter,
-                  class mixture_jacobian_iter, int density_index, int volume_fraction_index>
+                  class mixture_jacobian_iter>
         inline void computeMixtureMaterialResponse(
             const density_iter &density_begin, const density_iter &density_end,
             const volume_fraction_iter &volume_fraction_begin, const volume_fraction_iter &volume_fraction_end,
