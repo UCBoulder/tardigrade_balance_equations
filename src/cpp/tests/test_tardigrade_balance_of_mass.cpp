@@ -1981,8 +1981,6 @@ void evaluate_at_nodes(
         typename std::array<floatType, configuration::dimension * configuration::dimension>::const_iterator, floatType,
         3, 3>(std::cbegin(dxdxi), std::cend(dxdxi), 3, 3);
 
-    constexpr unsigned int num_phase_dof = 10;
-
     constexpr unsigned int dof_vector_size =
         (nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3) + configuration::material::num_additional_dof + 3 * configuration::material::num_additional_dof);
 
@@ -2140,7 +2138,7 @@ void evaluate_at_nodes(
                     std::cbegin(material_response_jacobian) + material_response_size * dof_vector_size * (j + 1), Ns[i],
                     Ns[k], std::cbegin(dNdxs) + configuration::dimension * k,
                     std::cbegin(dNdxs) + configuration::dimension * (k + 1),
-                    std::begin(dof_vector) + (nphases * num_phase_dof + configuration::material::num_additional_dof), std::end(dof_vector),
+                    std::begin(dof_vector) + (nphases * configuration::material::num_phase_dof + configuration::material::num_additional_dof), std::end(dof_vector),
                     dDensityDotdDensity, dUDotdU, j, value_n[nphases * i + j], std::begin(dRdRho_n) + nphases * 1 * j,
                     std::begin(dRdRho_n) + nphases * 1 * (j + 1), std::begin(dRdU_n) + nphases * 3 * j,
                     std::begin(dRdU_n) + nphases * 3 * (j + 1), std::begin(dRdW_n) + nphases * 3 * j,
@@ -2163,7 +2161,7 @@ void evaluate_at_nodes(
                     std::cbegin(material_response_jacobian), std::cend(material_response_jacobian), Ns[i], Ns[k],
                     std::cbegin(dNdxs) + configuration::dimension * k,
                     std::cbegin(dNdxs) + configuration::dimension * (k + 1),
-                    std::begin(dof_vector) + (nphases * num_phase_dof + configuration::material::num_additional_dof), std::end(dof_vector),
+                    std::begin(dof_vector) + (nphases * configuration::material::num_phase_dof + configuration::material::num_additional_dof), std::end(dof_vector),
                     dDensityDotdDensity, dUDotdU, std::begin(value_n) + nphases * i,
                     std::begin(value_n) + nphases * (i + 1), std::begin(dRdRho_n), std::end(dRdRho_n),
                     std::begin(dRdU_n), std::end(dRdU_n), std::begin(dRdW_n), std::end(dRdW_n), std::begin(dRdTheta_n),
@@ -4112,8 +4110,6 @@ void evaluate_at_nodes_diffusion(
         typename std::array<floatType, configuration::dimension * configuration::dimension>::const_iterator, floatType,
         3, 3>(std::cbegin(dxdxi), std::cend(dxdxi), 3, 3);
 
-    constexpr unsigned int num_phase_dof = 10;
-
     constexpr unsigned int dof_vector_size =
         (nphases * (1 + 3 + 3 + 1 + 1 + 1 + 3 + 9 + 9 + 3 + 3 + 3) + configuration::material::num_additional_dof + 3 * configuration::material::num_additional_dof);
 
@@ -4264,7 +4260,7 @@ void evaluate_at_nodes_diffusion(
                     std::begin(dNdxs) + configuration::dimension * (i + 1), Ns[k],
                     std::cbegin(dNdxs) + configuration::dimension * k,
                     std::cbegin(dNdxs) + configuration::dimension * (k + 1),
-                    std::begin(dof_vector) + (nphases * num_phase_dof + configuration::material::num_additional_dof), std::end(dof_vector),
+                    std::begin(dof_vector) + (nphases * configuration::material::num_phase_dof + configuration::material::num_additional_dof), std::end(dof_vector),
                     dUDotdU, value_n[nphases * i + j], std::begin(dRdRho_n) + nphases * 1 * j,
                     std::begin(dRdRho_n) + nphases * 1 * (j + 1), std::begin(dRdU_n) + nphases * 3 * j,
                     std::begin(dRdU_n) + nphases * 3 * (j + 1), std::begin(dRdW_n) + nphases * 3 * j,
@@ -4286,7 +4282,7 @@ void evaluate_at_nodes_diffusion(
                     std::cbegin(dNdxs) + configuration::dimension * (i + 1), Ns[k],
                     std::cbegin(dNdxs) + configuration::dimension * k,
                     std::cbegin(dNdxs) + configuration::dimension * (k + 1),
-                    std::begin(dof_vector) + (nphases * num_phase_dof + configuration::material::num_additional_dof), std::end(dof_vector),
+                    std::begin(dof_vector) + (nphases * configuration::material::num_phase_dof + configuration::material::num_additional_dof), std::end(dof_vector),
                     dUDotdU, std::begin(value_n) + nphases * i, std::begin(value_n) + nphases * (i + 1),
                     std::begin(dRdRho_n), std::end(dRdRho_n), std::begin(dRdU_n), std::end(dRdU_n), std::begin(dRdW_n),
                     std::end(dRdW_n), std::begin(dRdTheta_n), std::end(dRdTheta_n), std::begin(dRdE_n),
