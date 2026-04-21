@@ -1355,12 +1355,6 @@ namespace tardigradeBalanceEquations {
              * displacement
              */
 
-            using density_type = typename std::iterator_traits<density_iter>::value_type;
-
-            using density_dot_type = typename std::iterator_traits<densityDot_iter>::value_type;
-
-            using result_type = typename std::iterator_traits<result_iter>::value_type;
-
             const unsigned int nphases = (unsigned int)(density_end - density_begin);
 
             const unsigned int material_response_size =
@@ -1973,8 +1967,6 @@ namespace tardigradeBalanceEquations {
              * \param &dRdUMesh_end: The stopping iterator of the derivative of the diffusion term w.r.t. the mesh
              * displacement
              */
-
-            using result_type = typename std::iterator_traits<result_iter>::value_type;
 
             auto nphases = (result_end - result_begin);
 
