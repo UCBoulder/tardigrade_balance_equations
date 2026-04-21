@@ -112,9 +112,7 @@ namespace tardigradeBalanceEquations {
                   class full_material_response_dof_gradient_iter, typename dUDotdU_type,
                   typename dVolumeFractionDotdVolumeFraction_type, typename result_type, class dRdRho_iter,
                   class dRdU_iter, class dRdW_iter, class dRdTheta_iter, class dRdE_iter, class dRdVolumeFraction_iter,
-                  class dRdZ_iter, class dRdUMesh_iter, int density_index = 0, int displacement_index = 1,
-                  int velocity_index = 4, int temperature_index = 7, int internal_energy_index = 8,
-                  int volume_fraction_index = 9, int additional_dof_index = 10>
+                  class dRdZ_iter, class dRdUMesh_iter>
         inline void computeBalanceOfVolumeFraction(
             const density_type &density, const velocity_iter &velocity_begin, const velocity_iter &velocity_end,
             const volume_fraction_type &volume_fraction, const volume_fraction_dot_type &volume_fraction_dot,
@@ -174,9 +172,7 @@ namespace tardigradeBalanceEquations {
                   class full_material_response_dof_gradient_iter, typename dUDotdU_type,
                   typename dVolumeFractionDotdVolumeFraction_type, class result_iter, class dRdRho_iter,
                   class dRdU_iter, class dRdW_iter, class dRdTheta_iter, class dRdE_iter, class dRdVolumeFraction_iter,
-                  class dRdZ_iter, class dRdUMesh_iter, int density_index = 0, int displacement_index = 1,
-                  int velocity_index = 4, int temperature_index = 7, int internal_energy_index = 8,
-                  int volume_fraction_index = 9, int additional_dof_index = 10>
+                  class dRdZ_iter, class dRdUMesh_iter>
         void computeBalanceOfVolumeFraction(
             const density_iter &density_begin, const density_iter &density_end, const velocity_iter &velocity_begin,
             const velocity_iter &velocity_end, const volume_fraction_iter &volume_fraction_begin,

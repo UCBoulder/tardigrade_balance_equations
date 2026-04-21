@@ -275,8 +275,7 @@ namespace tardigradeBalanceEquations {
                   class full_material_response_dof_gradient_iter, typename dUDotdU_type,
                   typename dVolumeFractionDotdVolumeFraction_type, typename result_type, class dRdRho_iter,
                   class dRdU_iter, class dRdW_iter, class dRdTheta_iter, class dRdE_iter, class dRdVolumeFraction_iter,
-                  class dRdZ_iter, class dRdUMesh_iter, int density_index, int displacement_index, int velocity_index,
-                  int temperature_index, int internal_energy_index, int volume_fraction_index, int additional_dof_index>
+                  class dRdZ_iter, class dRdUMesh_iter>
         void computeBalanceOfVolumeFraction(
             const density_type &density, const velocity_iter &velocity_begin, const velocity_iter &velocity_end,
             const volume_fraction_type &volume_fraction, const volume_fraction_dot_type &volume_fraction_dot,
@@ -1089,8 +1088,7 @@ namespace tardigradeBalanceEquations {
                   class full_material_response_dof_gradient_iter, typename dUDotdU_type,
                   typename dVolumeFractionDotdVolumeFraction_type, class result_iter, class dRdRho_iter,
                   class dRdU_iter, class dRdW_iter, class dRdTheta_iter, class dRdE_iter, class dRdVolumeFraction_iter,
-                  class dRdZ_iter, class dRdUMesh_iter, int density_index, int displacement_index, int velocity_index,
-                  int temperature_index, int internal_energy_index, int volume_fraction_index, int additional_dof_index>
+                  class dRdZ_iter, class dRdUMesh_iter>
         void computeBalanceOfVolumeFraction(
             const density_iter &density_begin, const density_iter &density_end, const velocity_iter &velocity_begin,
             const velocity_iter &velocity_end, const volume_fraction_iter &volume_fraction_begin,
@@ -1259,15 +1257,7 @@ namespace tardigradeBalanceEquations {
             for (auto v = std::pair<unsigned int, result_iter>(0, result_begin); v.second != result_end;
                  ++v.first, ++v.second) {
                 computeBalanceOfVolumeFraction<
-                    configuration, mass_change_rate_index, trace_mass_change_velocity_gradient_index,
-                    density_type, velocity_iter, volume_fraction_type,
-                    volume_fraction_dot_type, volume_fraction_gradient_iter, material_response_iter,
-                    material_response_jacobian_iter, rest_density_type, test_function_type, interpolation_function_type,
-                    interpolation_function_gradient_iter, full_material_response_dof_gradient_iter, dUDotdU_type,
-                    dVolumeFractionDotdVolumeFraction_type, result_type, dRdRho_iter, dRdU_iter, dRdW_iter,
-                    dRdTheta_iter, dRdE_iter, dRdVolumeFraction_iter, dRdZ_iter, dRdUMesh_iter, configuration::material::density_index,
-                    configuration::material::displacement_index, configuration::material::velocity_index, configuration::material::temperature_index, configuration::material::internal_energy_index, configuration::material::volume_fraction_index,
-                    configuration::material::additional_dof_index>(
+                    configuration, mass_change_rate_index, trace_mass_change_velocity_gradient_index>(
                     *(density_begin + v.first), velocity_begin + configuration::dimension * v.first, velocity_begin + configuration::dimension * (v.first + 1),
                     *(volume_fraction_begin + v.first), *(volume_fraction_dot_begin + v.first),
                     volume_fraction_gradient_begin + configuration::dimension * v.first,
