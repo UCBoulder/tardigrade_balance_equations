@@ -817,7 +817,7 @@ namespace tardigradeBalanceEquations {
                 material_response_begin + configuration::material::output::heat_flux_index + configuration::material::dimension, test_function,
                 test_function_gradient_begin, test_function_gradient_end, result);
 
-            result -= test_function * (*(material_response_begin + interphasic_heat_transfer_index));
+            result -= test_function * (*(material_response_begin + configuration::material::output::interphasic_heat_transfer_index));
         }
 
         template <class configuration, int cauchy_stress_index,
@@ -969,7 +969,7 @@ namespace tardigradeBalanceEquations {
                 std::begin(dRdpi_phase), std::end(dRdpi_phase), std::begin(dRdq_phase), std::end(dRdq_phase),
                 dRdUMesh_begin, dRdUMesh_end);
 
-            result -= test_function * (*(material_response_begin + interphasic_heat_transfer_index));
+            result -= test_function * (*(material_response_begin + configuration::material::output::interphasic_heat_transfer_index));
 
             const unsigned int     nphases            = (unsigned int)(dRdRho_end - dRdRho_begin);
 
@@ -1645,7 +1645,7 @@ namespace tardigradeBalanceEquations {
                 *p.second -= test_function *
                              (*(material_response_jacobian_begin +
                                 (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                    (interphasic_heat_transfer_index) +
+                                    (configuration::material::output::interphasic_heat_transfer_index) +
                                 nphases * configuration::material::dof::density_index + p.first)) *
                              interpolation_function;
 
@@ -1653,7 +1653,7 @@ namespace tardigradeBalanceEquations {
                     *p.second -= test_function *
                                  (*(material_response_jacobian_begin +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                        (interphasic_heat_transfer_index) +
+                                        (configuration::material::output::interphasic_heat_transfer_index) +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) +
                                     configuration::material::dimension * (nphases * configuration::material::dof::density_index + p.first) + a)) *
                                  (*(interpolation_function_gradient_begin + a));
@@ -1666,7 +1666,7 @@ namespace tardigradeBalanceEquations {
                 *p.second -= test_function *
                              (*(material_response_jacobian_begin +
                                 (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                    (interphasic_heat_transfer_index) +
+                                    (configuration::material::output::interphasic_heat_transfer_index) +
                                 nphases * configuration::material::dof::velocity_index + p.first)) *
                              interpolation_function * dUDotdU;
 
@@ -1674,7 +1674,7 @@ namespace tardigradeBalanceEquations {
                     *p.second -= test_function *
                                  (*(material_response_jacobian_begin +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                        (interphasic_heat_transfer_index) +
+                                        (configuration::material::output::interphasic_heat_transfer_index) +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) +
                                     configuration::material::dimension * (nphases * configuration::material::dof::velocity_index + p.first) + a)) *
                                  (*(interpolation_function_gradient_begin + a)) * dUDotdU;
@@ -1687,7 +1687,7 @@ namespace tardigradeBalanceEquations {
                 *p.second -= test_function *
                              (*(material_response_jacobian_begin +
                                 (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                    (interphasic_heat_transfer_index) +
+                                    (configuration::material::output::interphasic_heat_transfer_index) +
                                 nphases * configuration::material::dof::displacement_index + p.first)) *
                              interpolation_function;
 
@@ -1695,7 +1695,7 @@ namespace tardigradeBalanceEquations {
                     *p.second -= test_function *
                                  (*(material_response_jacobian_begin +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                        (interphasic_heat_transfer_index) +
+                                        (configuration::material::output::interphasic_heat_transfer_index) +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) +
                                     configuration::material::dimension * (nphases * configuration::material::dof::displacement_index + p.first) + a)) *
                                  (*(interpolation_function_gradient_begin + a));
@@ -1708,7 +1708,7 @@ namespace tardigradeBalanceEquations {
                 *p.second -= test_function *
                              (*(material_response_jacobian_begin +
                                 (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                    (interphasic_heat_transfer_index) +
+                                    (configuration::material::output::interphasic_heat_transfer_index) +
                                 nphases * configuration::material::dof::temperature_index + p.first)) *
                              interpolation_function;
 
@@ -1716,7 +1716,7 @@ namespace tardigradeBalanceEquations {
                     *p.second -= test_function *
                                  (*(material_response_jacobian_begin +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                        (interphasic_heat_transfer_index) +
+                                        (configuration::material::output::interphasic_heat_transfer_index) +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) +
                                     configuration::material::dimension * (nphases * configuration::material::dof::temperature_index + p.first) + a)) *
                                  (*(interpolation_function_gradient_begin + a));
@@ -1729,7 +1729,7 @@ namespace tardigradeBalanceEquations {
                 *p.second -= test_function *
                              (*(material_response_jacobian_begin +
                                 (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                    (interphasic_heat_transfer_index) +
+                                    (configuration::material::output::interphasic_heat_transfer_index) +
                                 nphases * configuration::material::dof::internal_energy_index + p.first)) *
                              interpolation_function;
 
@@ -1737,7 +1737,7 @@ namespace tardigradeBalanceEquations {
                     *p.second -= test_function *
                                  (*(material_response_jacobian_begin +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                        (interphasic_heat_transfer_index) +
+                                        (configuration::material::output::interphasic_heat_transfer_index) +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) +
                                     configuration::material::dimension * (nphases * configuration::material::dof::internal_energy_index + p.first) + a)) *
                                  (*(interpolation_function_gradient_begin + a));
@@ -1750,7 +1750,7 @@ namespace tardigradeBalanceEquations {
                 *p.second -= test_function *
                              (*(material_response_jacobian_begin +
                                 (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                    (interphasic_heat_transfer_index) +
+                                    (configuration::material::output::interphasic_heat_transfer_index) +
                                 nphases * configuration::material::dof::volume_fraction_index + p.first)) *
                              interpolation_function;
 
@@ -1758,7 +1758,7 @@ namespace tardigradeBalanceEquations {
                     *p.second -= test_function *
                                  (*(material_response_jacobian_begin +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                        (interphasic_heat_transfer_index) +
+                                        (configuration::material::output::interphasic_heat_transfer_index) +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) +
                                     configuration::material::dimension * (nphases * configuration::material::dof::volume_fraction_index + p.first) + a)) *
                                  (*(interpolation_function_gradient_begin + a));
@@ -1771,7 +1771,7 @@ namespace tardigradeBalanceEquations {
                 *p.second -= test_function *
                              (*(material_response_jacobian_begin +
                                 (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                    (interphasic_heat_transfer_index) +
+                                    (configuration::material::output::interphasic_heat_transfer_index) +
                                 nphases * configuration::material::dof::additional_dof_index + p.first)) *
                              interpolation_function;
 
@@ -1779,7 +1779,7 @@ namespace tardigradeBalanceEquations {
                     *p.second -= test_function *
                                  (*(material_response_jacobian_begin +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                        (interphasic_heat_transfer_index) +
+                                        (configuration::material::output::interphasic_heat_transfer_index) +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) +
                                     configuration::material::dimension * (nphases * configuration::material::dof::additional_dof_index + p.first) + a)) *
                                  (*(interpolation_function_gradient_begin + a));
@@ -1794,7 +1794,7 @@ namespace tardigradeBalanceEquations {
                             test_function *
                             (*(material_response_jacobian_begin +
                                (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                   (interphasic_heat_transfer_index) +
+                                   (configuration::material::output::interphasic_heat_transfer_index) +
                                (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) + configuration::material::dimension * I + k)) *
                             (*(full_material_response_dof_gradient_begin + configuration::material::dimension * I + a)) *
                             (*(interpolation_function_gradient_begin + k));
@@ -1804,7 +1804,7 @@ namespace tardigradeBalanceEquations {
 
             for (unsigned int a = 0; a < configuration::dimension; ++a) {
                 *(dRdUMesh_begin + a) -= test_function *
-                                         (*(material_response_begin + interphasic_heat_transfer_index)) *
+                                         (*(material_response_begin + configuration::material::output::interphasic_heat_transfer_index)) *
                                          (*(interpolation_function_gradient_begin + a));
             }
         }
@@ -1933,7 +1933,7 @@ namespace tardigradeBalanceEquations {
                  ++v.first, ++v.second) {
                 computeBalanceOfEnergy<configuration, configuration::material::output::cauchy_stress_index,
                                        configuration::material::output::internal_heat_generation_index, configuration::material::output::heat_flux_index, configuration::material::output::interphasic_force_index,
-                                       interphasic_heat_transfer_index>(
+                                       configuration::material::output::interphasic_heat_transfer_index>(
                     *(density_begin + v.first), *(density_dot_begin + v.first),
                     density_gradient_begin + configuration::dimension * v.first,
                     density_gradient_begin + configuration::dimension * (v.first + 1),
@@ -2188,7 +2188,7 @@ namespace tardigradeBalanceEquations {
                 computeBalanceOfEnergy<
                     configuration, configuration::material::output::cauchy_stress_index,
                     configuration::material::output::internal_heat_generation_index, configuration::material::output::heat_flux_index, configuration::material::output::interphasic_force_index,
-                    interphasic_heat_transfer_index>(
+                    configuration::material::output::interphasic_heat_transfer_index>(
                     *(density_begin + v.first), *(density_dot_begin + v.first),
                     density_gradient_begin + configuration::dimension * v.first,
                     density_gradient_begin + configuration::dimension * (v.first + 1),

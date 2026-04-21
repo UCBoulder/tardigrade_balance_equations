@@ -121,8 +121,8 @@ namespace tardigradeBalanceEquations {
             computeBalanceOfVolumeFraction<configuration>(density, velocity_begin, velocity_end, volume_fraction,
                                                 volume_fraction_dot, volume_fraction_gradient_begin,
                                                 volume_fraction_gradient_end,
-                                                *(material_response_begin + mass_change_rate_index), rest_density,
-                                                *(material_response_begin + trace_mass_change_velocity_gradient_index),
+                                                *(material_response_begin + configuration::material::output::mass_change_rate_index), rest_density,
+                                                *(material_response_begin + configuration::material::output::trace_mass_change_velocity_gradient_index),
                                                 test_function, result, volume_fraction_tolerance);
         }
 
@@ -397,8 +397,8 @@ namespace tardigradeBalanceEquations {
             computeBalanceOfVolumeFraction<configuration>(
                 density, velocity_begin, velocity_end, volume_fraction, volume_fraction_dot,
                 volume_fraction_gradient_begin, volume_fraction_gradient_end,
-                *(material_response_begin + mass_change_rate_index), rest_density,
-                *(material_response_begin + trace_mass_change_velocity_gradient_index), test_function,
+                *(material_response_begin + configuration::material::output::mass_change_rate_index), rest_density,
+                *(material_response_begin + configuration::material::output::trace_mass_change_velocity_gradient_index), test_function,
                 interpolation_function, interpolation_function_gradient_begin, interpolation_function_gradient_end,
                 dUDotdU, dVolumeFractionDotdVolumeFraction, result, *(dRdRho_begin + phase), dRdU_begin + configuration::dimension * phase,
                 dRdU_begin + configuration::dimension * (phase + 1), *(dRdVolumeFraction_begin + phase), dRdC_phase, dRdTraceVA_phase,
@@ -411,7 +411,7 @@ namespace tardigradeBalanceEquations {
                 *p.second += dRdC_phase *
                              (*(material_response_jacobian_begin +
                                 (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                    (mass_change_rate_index) +
+                                    (configuration::material::output::mass_change_rate_index) +
                                 nphases * configuration::material::dof::density_index + p.first)) *
                              interpolation_function;
 
@@ -419,7 +419,7 @@ namespace tardigradeBalanceEquations {
                     *p.second += dRdC_phase *
                                  (*(material_response_jacobian_begin +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                        (mass_change_rate_index) +
+                                        (configuration::material::output::mass_change_rate_index) +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) +
                                     configuration::material::dimension * (nphases * configuration::material::dof::density_index + p.first) + a)) *
                                  (*(interpolation_function_gradient_begin + a));
@@ -432,7 +432,7 @@ namespace tardigradeBalanceEquations {
                 *p.second += dRdC_phase *
                              (*(material_response_jacobian_begin +
                                 (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                    (mass_change_rate_index) +
+                                    (configuration::material::output::mass_change_rate_index) +
                                 nphases * configuration::material::dof::velocity_index + p.first)) *
                              interpolation_function * dUDotdU;
 
@@ -440,7 +440,7 @@ namespace tardigradeBalanceEquations {
                     *p.second += dRdC_phase *
                                  (*(material_response_jacobian_begin +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                        (mass_change_rate_index) +
+                                        (configuration::material::output::mass_change_rate_index) +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) +
                                     configuration::material::dimension * (nphases * configuration::material::dof::velocity_index + p.first) + a)) *
                                  (*(interpolation_function_gradient_begin + a)) * dUDotdU;
@@ -453,7 +453,7 @@ namespace tardigradeBalanceEquations {
                 *p.second += dRdC_phase *
                              (*(material_response_jacobian_begin +
                                 (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                    (mass_change_rate_index) +
+                                    (configuration::material::output::mass_change_rate_index) +
                                 nphases * configuration::material::dof::displacement_index + p.first)) *
                              interpolation_function;
 
@@ -461,7 +461,7 @@ namespace tardigradeBalanceEquations {
                     *p.second += dRdC_phase *
                                  (*(material_response_jacobian_begin +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                        (mass_change_rate_index) +
+                                        (configuration::material::output::mass_change_rate_index) +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) +
                                     configuration::material::dimension * (nphases * configuration::material::dof::displacement_index + p.first) + a)) *
                                  (*(interpolation_function_gradient_begin + a));
@@ -474,7 +474,7 @@ namespace tardigradeBalanceEquations {
                 *p.second += dRdC_phase *
                              (*(material_response_jacobian_begin +
                                 (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                    (mass_change_rate_index) +
+                                    (configuration::material::output::mass_change_rate_index) +
                                 nphases * configuration::material::dof::temperature_index + p.first)) *
                              interpolation_function;
 
@@ -482,7 +482,7 @@ namespace tardigradeBalanceEquations {
                     *p.second += dRdC_phase *
                                  (*(material_response_jacobian_begin +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                        (mass_change_rate_index) +
+                                        (configuration::material::output::mass_change_rate_index) +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) +
                                     configuration::material::dimension * (nphases * configuration::material::dof::temperature_index + p.first) + a)) *
                                  (*(interpolation_function_gradient_begin + a));
@@ -495,7 +495,7 @@ namespace tardigradeBalanceEquations {
                 *p.second += dRdC_phase *
                              (*(material_response_jacobian_begin +
                                 (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                    (mass_change_rate_index) +
+                                    (configuration::material::output::mass_change_rate_index) +
                                 nphases * configuration::material::dof::internal_energy_index + p.first)) *
                              interpolation_function;
 
@@ -503,7 +503,7 @@ namespace tardigradeBalanceEquations {
                     *p.second += dRdC_phase *
                                  (*(material_response_jacobian_begin +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                        (mass_change_rate_index) +
+                                        (configuration::material::output::mass_change_rate_index) +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) +
                                     configuration::material::dimension * (nphases * configuration::material::dof::internal_energy_index + p.first) + a)) *
                                  (*(interpolation_function_gradient_begin + a));
@@ -516,7 +516,7 @@ namespace tardigradeBalanceEquations {
                 *p.second += dRdC_phase *
                              (*(material_response_jacobian_begin +
                                 (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                    (mass_change_rate_index) +
+                                    (configuration::material::output::mass_change_rate_index) +
                                 nphases * configuration::material::dof::volume_fraction_index + p.first)) *
                              interpolation_function;
 
@@ -524,7 +524,7 @@ namespace tardigradeBalanceEquations {
                     *p.second += dRdC_phase *
                                  (*(material_response_jacobian_begin +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                        (mass_change_rate_index) +
+                                        (configuration::material::output::mass_change_rate_index) +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) +
                                     configuration::material::dimension * (nphases * configuration::material::dof::volume_fraction_index + p.first) + a)) *
                                  (*(interpolation_function_gradient_begin + a));
@@ -537,7 +537,7 @@ namespace tardigradeBalanceEquations {
                 *p.second += dRdC_phase *
                              (*(material_response_jacobian_begin +
                                 (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                    (mass_change_rate_index) +
+                                    (configuration::material::output::mass_change_rate_index) +
                                 nphases * configuration::material::dof::additional_dof_index + p.first)) *
                              interpolation_function;
 
@@ -545,7 +545,7 @@ namespace tardigradeBalanceEquations {
                     *p.second += dRdC_phase *
                                  (*(material_response_jacobian_begin +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                        (mass_change_rate_index) +
+                                        (configuration::material::output::mass_change_rate_index) +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) +
                                     configuration::material::dimension * (nphases * configuration::material::dof::additional_dof_index + p.first) + a)) *
                                  (*(interpolation_function_gradient_begin + a));
@@ -560,7 +560,7 @@ namespace tardigradeBalanceEquations {
                             dRdC_phase *
                             (*(material_response_jacobian_begin +
                                (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                   (mass_change_rate_index) +
+                                   (configuration::material::output::mass_change_rate_index) +
                                (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) + configuration::material::dimension * I + k)) *
                             (*(full_material_response_dof_gradient_begin + configuration::material::dimension * I + a)) *
                             (*(interpolation_function_gradient_begin + k));
@@ -575,7 +575,7 @@ namespace tardigradeBalanceEquations {
                 *p.second += dRdTraceVA_phase *
                              (*(material_response_jacobian_begin +
                                 (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                    (trace_mass_change_velocity_gradient_index) +
+                                    (configuration::material::output::trace_mass_change_velocity_gradient_index) +
                                 nphases * configuration::material::dof::density_index + p.first)) *
                              interpolation_function;
 
@@ -583,7 +583,7 @@ namespace tardigradeBalanceEquations {
                     *p.second += dRdTraceVA_phase *
                                  (*(material_response_jacobian_begin +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                        (trace_mass_change_velocity_gradient_index) +
+                                        (configuration::material::output::trace_mass_change_velocity_gradient_index) +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) +
                                     configuration::material::dimension * (nphases * configuration::material::dof::density_index + p.first) + a)) *
                                  (*(interpolation_function_gradient_begin + a));
@@ -596,7 +596,7 @@ namespace tardigradeBalanceEquations {
                 *p.second += dRdTraceVA_phase *
                              (*(material_response_jacobian_begin +
                                 (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                    (trace_mass_change_velocity_gradient_index) +
+                                    (configuration::material::output::trace_mass_change_velocity_gradient_index) +
                                 nphases * configuration::material::dof::velocity_index + p.first)) *
                              interpolation_function * dUDotdU;
 
@@ -604,7 +604,7 @@ namespace tardigradeBalanceEquations {
                     *p.second += dRdTraceVA_phase *
                                  (*(material_response_jacobian_begin +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                        (trace_mass_change_velocity_gradient_index) +
+                                        (configuration::material::output::trace_mass_change_velocity_gradient_index) +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) +
                                     configuration::material::dimension * (nphases * configuration::material::dof::velocity_index + p.first) + a)) *
                                  (*(interpolation_function_gradient_begin + a)) * dUDotdU;
@@ -617,7 +617,7 @@ namespace tardigradeBalanceEquations {
                 *p.second += dRdTraceVA_phase *
                              (*(material_response_jacobian_begin +
                                 (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                    (trace_mass_change_velocity_gradient_index) +
+                                    (configuration::material::output::trace_mass_change_velocity_gradient_index) +
                                 nphases * configuration::material::dof::displacement_index + p.first)) *
                              interpolation_function;
 
@@ -625,7 +625,7 @@ namespace tardigradeBalanceEquations {
                     *p.second += dRdTraceVA_phase *
                                  (*(material_response_jacobian_begin +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                        (trace_mass_change_velocity_gradient_index) +
+                                        (configuration::material::output::trace_mass_change_velocity_gradient_index) +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) +
                                     configuration::material::dimension * (nphases * configuration::material::dof::displacement_index + p.first) + a)) *
                                  (*(interpolation_function_gradient_begin + a));
@@ -638,7 +638,7 @@ namespace tardigradeBalanceEquations {
                 *p.second += dRdTraceVA_phase *
                              (*(material_response_jacobian_begin +
                                 (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                    (trace_mass_change_velocity_gradient_index) +
+                                    (configuration::material::output::trace_mass_change_velocity_gradient_index) +
                                 nphases * configuration::material::dof::temperature_index + p.first)) *
                              interpolation_function;
 
@@ -646,7 +646,7 @@ namespace tardigradeBalanceEquations {
                     *p.second += dRdTraceVA_phase *
                                  (*(material_response_jacobian_begin +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                        (trace_mass_change_velocity_gradient_index) +
+                                        (configuration::material::output::trace_mass_change_velocity_gradient_index) +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) +
                                     configuration::material::dimension * (nphases * configuration::material::dof::temperature_index + p.first) + a)) *
                                  (*(interpolation_function_gradient_begin + a));
@@ -659,7 +659,7 @@ namespace tardigradeBalanceEquations {
                 *p.second += dRdTraceVA_phase *
                              (*(material_response_jacobian_begin +
                                 (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                    (trace_mass_change_velocity_gradient_index) +
+                                    (configuration::material::output::trace_mass_change_velocity_gradient_index) +
                                 nphases * configuration::material::dof::internal_energy_index + p.first)) *
                              interpolation_function;
 
@@ -667,7 +667,7 @@ namespace tardigradeBalanceEquations {
                     *p.second += dRdTraceVA_phase *
                                  (*(material_response_jacobian_begin +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                        (trace_mass_change_velocity_gradient_index) +
+                                        (configuration::material::output::trace_mass_change_velocity_gradient_index) +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) +
                                     configuration::material::dimension * (nphases * configuration::material::dof::internal_energy_index + p.first) + a)) *
                                  (*(interpolation_function_gradient_begin + a));
@@ -680,7 +680,7 @@ namespace tardigradeBalanceEquations {
                 *p.second += dRdTraceVA_phase *
                              (*(material_response_jacobian_begin +
                                 (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                    (trace_mass_change_velocity_gradient_index) +
+                                    (configuration::material::output::trace_mass_change_velocity_gradient_index) +
                                 nphases * configuration::material::dof::volume_fraction_index + p.first)) *
                              interpolation_function;
 
@@ -688,7 +688,7 @@ namespace tardigradeBalanceEquations {
                     *p.second += dRdTraceVA_phase *
                                  (*(material_response_jacobian_begin +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                        (trace_mass_change_velocity_gradient_index) +
+                                        (configuration::material::output::trace_mass_change_velocity_gradient_index) +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) +
                                     configuration::material::dimension * (nphases * configuration::material::dof::volume_fraction_index + p.first) + a)) *
                                  (*(interpolation_function_gradient_begin + a));
@@ -701,7 +701,7 @@ namespace tardigradeBalanceEquations {
                 *p.second += dRdTraceVA_phase *
                              (*(material_response_jacobian_begin +
                                 (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                    (trace_mass_change_velocity_gradient_index) +
+                                    (configuration::material::output::trace_mass_change_velocity_gradient_index) +
                                 nphases * configuration::material::dof::additional_dof_index + p.first)) *
                              interpolation_function;
 
@@ -709,7 +709,7 @@ namespace tardigradeBalanceEquations {
                     *p.second += dRdTraceVA_phase *
                                  (*(material_response_jacobian_begin +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                        (trace_mass_change_velocity_gradient_index) +
+                                        (configuration::material::output::trace_mass_change_velocity_gradient_index) +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) +
                                     configuration::material::dimension * (nphases * configuration::material::dof::additional_dof_index + p.first) + a)) *
                                  (*(interpolation_function_gradient_begin + a));
@@ -724,7 +724,7 @@ namespace tardigradeBalanceEquations {
                             dRdTraceVA_phase *
                             (*(material_response_jacobian_begin +
                                (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) * (1 + configuration::material::dimension) *
-                                   (trace_mass_change_velocity_gradient_index) +
+                                   (configuration::material::output::trace_mass_change_velocity_gradient_index) +
                                (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) + configuration::material::dimension * I + k)) *
                             (*(full_material_response_dof_gradient_begin + configuration::material::dimension * I + a)) *
                             (*(interpolation_function_gradient_begin + k));
@@ -902,16 +902,16 @@ namespace tardigradeBalanceEquations {
                 "The material response vector size must be a integer multiple of the number of phases")
 
             TARDIGRADE_ERROR_TOOLS_CHECK(
-                (material_response_size > mass_change_rate_index),
+                (material_response_size > configuration::material::output::mass_change_rate_index),
                 "The material response vector size must larger than the index for the mass change rate")
 
-            TARDIGRADE_ERROR_TOOLS_CHECK((material_response_size > trace_mass_change_velocity_gradient_index),
+            TARDIGRADE_ERROR_TOOLS_CHECK((material_response_size > configuration::material::output::trace_mass_change_velocity_gradient_index),
                                          "The material response vector size must larger than the index for the trace "
                                          "of the mass change rate velocity gradient")
 
             for (auto rho = std::pair<unsigned int, density_iter>(0, density_begin); rho.second != density_end;
                  ++rho.first, ++rho.second) {
-                computeBalanceOfVolumeFraction<configuration, mass_change_rate_index, trace_mass_change_velocity_gradient_index>(
+                computeBalanceOfVolumeFraction<configuration, configuration::material::output::mass_change_rate_index, configuration::material::output::trace_mass_change_velocity_gradient_index>(
                     *rho.second, velocity_begin + configuration::dimension * rho.first, velocity_begin + configuration::dimension * (rho.first + 1),
                     *(volume_fraction_begin + rho.first), *(volume_fraction_dot_begin + rho.first),
                     volume_fraction_gradient_begin + configuration::dimension * rho.first,
@@ -1251,7 +1251,7 @@ namespace tardigradeBalanceEquations {
             for (auto v = std::pair<unsigned int, result_iter>(0, result_begin); v.second != result_end;
                  ++v.first, ++v.second) {
                 computeBalanceOfVolumeFraction<
-                    configuration, mass_change_rate_index, trace_mass_change_velocity_gradient_index>(
+                    configuration, configuration::material::output::mass_change_rate_index, configuration::material::output::trace_mass_change_velocity_gradient_index>(
                     *(density_begin + v.first), velocity_begin + configuration::dimension * v.first, velocity_begin + configuration::dimension * (v.first + 1),
                     *(volume_fraction_begin + v.first), *(volume_fraction_dot_begin + v.first),
                     volume_fraction_gradient_begin + configuration::dimension * v.first,

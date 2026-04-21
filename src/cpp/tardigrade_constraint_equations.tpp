@@ -1326,13 +1326,13 @@ namespace tardigradeBalanceEquations {
 
                 // mass change rate
                 for (unsigned int i = 0; i < 1; ++i) {
-                    *(mixture_response_begin + configuration::material::output::mass_change_index + i) +=
-                        *(material_response_begin + phase * material_response_size + configuration::material::output::mass_change_index + i);
+                    *(mixture_response_begin + configuration::material::output::mass_change_rate_index + i) +=
+                        *(material_response_begin + phase * material_response_size + configuration::material::output::mass_change_rate_index + i);
 
                     for (unsigned int j = 0; j < num_dof; ++j) {
-                        *(mixture_jacobian_begin + num_dof * (i + configuration::material::output::mass_change_index) + j) +=
+                        *(mixture_jacobian_begin + num_dof * (i + configuration::material::output::mass_change_rate_index) + j) +=
                             *(material_response_jacobian_begin + material_response_size * num_dof * phase +
-                              num_dof * (i + configuration::material::output::mass_change_index) + j);
+                              num_dof * (i + configuration::material::output::mass_change_rate_index) + j);
                     }
                 }
 
@@ -1362,14 +1362,14 @@ namespace tardigradeBalanceEquations {
 
                 // interphasic heat transfer
                 for (unsigned int i = 0; i < 1; ++i) {
-                    *(mixture_response_begin + interphasic_heat_transfer_index + i) +=
-                        *(material_response_begin + phase * material_response_size + interphasic_heat_transfer_index +
+                    *(mixture_response_begin + configuration::material::output::interphasic_heat_transfer_index + i) +=
+                        *(material_response_begin + phase * material_response_size + configuration::material::output::interphasic_heat_transfer_index +
                           i);
 
                     for (unsigned int j = 0; j < num_dof; ++j) {
-                        *(mixture_jacobian_begin + num_dof * (i + interphasic_heat_transfer_index) + j) +=
+                        *(mixture_jacobian_begin + num_dof * (i + configuration::material::output::interphasic_heat_transfer_index) + j) +=
                             *(material_response_jacobian_begin + material_response_size * num_dof * phase +
-                              num_dof * (i + interphasic_heat_transfer_index) + j);
+                              num_dof * (i + configuration::material::output::interphasic_heat_transfer_index) + j);
                     }
                 }
 

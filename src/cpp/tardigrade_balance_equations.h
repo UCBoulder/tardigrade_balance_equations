@@ -14,7 +14,7 @@ namespace tardigradeBalanceEquations {
     /*!
      * A class which defines the configuration of the material response output
      */
-    template<int _cauchy_stress_index = 0, int _predicted_internal_energy_index = 9, int _mass_change_index = 10, int _body_force_index = 11, int _interphasic_force_index = 14, int _heat_flux_index = 17, int _internal_heat_generation_index = 20, int _interphasic_heat_transfer_index = 21, int _trace_mass_change_velocity_gradient_index = 22, int _mass_diffusion_index = 23>
+    template<int _cauchy_stress_index = 0, int _predicted_internal_energy_index = 9, int _mass_change_rate_index = 10, int _body_force_index = 11, int _interphasic_force_index = 14, int _heat_flux_index = 17, int _internal_heat_generation_index = 20, int _interphasic_heat_transfer_index = 21, int _trace_mass_change_velocity_gradient_index = 22, int _mass_diffusion_index = 23>
     class MaterialResponseOutputConfigurationBase {
         public:
             //MATERIAL RESPONSE VECTOR STRUCTURE
@@ -25,7 +25,7 @@ namespace tardigradeBalanceEquations {
             static constexpr int predicted_internal_energy_index = _predicted_internal_energy_index;
 
             //! The index of the mass-change rate in the material response vector
-            static constexpr int mass_change_index = _mass_change_index;
+            static constexpr int mass_change_rate_index = _mass_change_rate_index;
 
             //! The index of the body force in the material response vector
             static constexpr int body_force_index = _body_force_index;
