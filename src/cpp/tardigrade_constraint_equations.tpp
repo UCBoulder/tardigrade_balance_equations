@@ -1249,7 +1249,7 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <class configuration, int cauchy_stress_index, int internal_energy_index,
+        template <class configuration, int cauchy_stress_index, int predicted_internal_energy_index,
                   int body_force_index, int interphasic_force_index, int heat_flux_index,
                   int internal_heat_generation_index, int interphasic_heat_transfer_index,
                   int trace_mass_change_velocity_gradient_index, class density_iter, class volume_fraction_iter,
@@ -1451,30 +1451,30 @@ namespace tardigradeBalanceEquations {
 
                 // internal energy
                 for (unsigned int i = 0; i < 1; ++i) {
-                    *(mixture_response_begin + internal_energy_index + i) +=
+                    *(mixture_response_begin + predicted_internal_energy_index + i) +=
                         (*(density_begin + phase)) *
-                        (*(material_response_begin + phase * material_response_size + internal_energy_index + i)) /
+                        (*(material_response_begin + phase * material_response_size + predicted_internal_energy_index + i)) /
                         density_sum;
 
                     for (unsigned int j = 0; j < num_dof; ++j) {
-                        *(mixture_jacobian_begin + num_dof * (i + internal_energy_index) + j) +=
+                        *(mixture_jacobian_begin + num_dof * (i + predicted_internal_energy_index) + j) +=
                             (*(density_begin + phase)) *
                             (*(material_response_jacobian_begin + material_response_size * num_dof * phase +
-                               num_dof * (i + internal_energy_index) + j)) /
+                               num_dof * (i + predicted_internal_energy_index) + j)) /
                             density_sum;
                     }
 
                     // Add contributions due to dependence on the density
-                    *(mixture_jacobian_begin + num_dof * (i + internal_energy_index) +
+                    *(mixture_jacobian_begin + num_dof * (i + predicted_internal_energy_index) +
                       (num_phases + 1) * configuration::material::density_index + phase) +=
-                        (*(material_response_begin + material_response_size * phase + internal_energy_index + i)) /
+                        (*(material_response_begin + material_response_size * phase + predicted_internal_energy_index + i)) /
                         density_sum;
 
                     for (unsigned int j = 0; j < num_phases; ++j) {
-                        *(mixture_jacobian_begin + num_dof * (i + internal_energy_index) +
+                        *(mixture_jacobian_begin + num_dof * (i + predicted_internal_energy_index) +
                           (num_phases + 1) * configuration::material::density_index + j) +=
                             -(*(density_begin + phase)) *
-                            (*(material_response_begin + material_response_size * phase + internal_energy_index + i)) /
+                            (*(material_response_begin + material_response_size * phase + predicted_internal_energy_index + i)) /
                             (density_sum * density_sum);
                     }
                 }
