@@ -181,10 +181,10 @@ namespace tardigradeBalanceEquations {
             dRdCauchy_iter dRdCauchy_end, dRdVolumeFraction_iter dRdVolumeFraction_begin,
             dRdVolumeFraction_iter dRdVolumeFraction_end);
 
-        template <class configuration, typename density_type, typename density_dot_type,
-                  class density_gradient_iter, class velocity_iter, class velocity_dot_iter,
-                  class velocity_gradient_iter, class material_response_iter, typename volume_fraction_type,
-                  typename testFunction_type, class testFunctionGradient_iter, class result_iter>
+        template <class configuration, typename density_type, typename density_dot_type, class density_gradient_iter,
+                  class velocity_iter, class velocity_dot_iter, class velocity_gradient_iter,
+                  class material_response_iter, typename volume_fraction_type, typename testFunction_type,
+                  class testFunctionGradient_iter, class result_iter>
         void computeBalanceOfLinearMomentum(
             const density_type &density, const density_dot_type &density_dot,
             const density_gradient_iter &density_gradient_begin, const density_gradient_iter &density_gradient_end,
@@ -197,15 +197,14 @@ namespace tardigradeBalanceEquations {
             const testFunctionGradient_iter &test_function_gradient_end, result_iter result_begin,
             result_iter result_end);
 
-        template <class configuration, typename density_type,
-                  typename density_dot_type, class density_gradient_iter, class velocity_iter, class velocity_dot_iter,
-                  class velocity_gradient_iter, class material_response_iter, class material_response_jacobian_iter,
-                  typename volume_fraction_type, typename testFunction_type, class testFunctionGradient_iter,
-                  typename interpolationFunction_type, class interpolationFunctionGradient_iter,
-                  class full_material_response_dof_gradient_iter, typename dDensityDotdDensity_type,
-                  typename dUDotdU_type, typename dUDDotdU_type, class result_iter, class dRdRho_iter, class dRdU_iter,
-                  class dRdW_iter, class dRdTheta_iter, class dRdE_iter, class dRdVolumeFraction_iter, class dRdZ_iter,
-                  class dRdUMesh_iter>
+        template <class configuration, typename density_type, typename density_dot_type, class density_gradient_iter,
+                  class velocity_iter, class velocity_dot_iter, class velocity_gradient_iter,
+                  class material_response_iter, class material_response_jacobian_iter, typename volume_fraction_type,
+                  typename testFunction_type, class testFunctionGradient_iter, typename interpolationFunction_type,
+                  class interpolationFunctionGradient_iter, class full_material_response_dof_gradient_iter,
+                  typename dDensityDotdDensity_type, typename dUDotdU_type, typename dUDDotdU_type, class result_iter,
+                  class dRdRho_iter, class dRdU_iter, class dRdW_iter, class dRdTheta_iter, class dRdE_iter,
+                  class dRdVolumeFraction_iter, class dRdZ_iter, class dRdUMesh_iter>
         void computeBalanceOfLinearMomentum(
             const density_type &density, const density_dot_type &density_dot,
             const density_gradient_iter &density_gradient_begin, const density_gradient_iter &density_gradient_end,
@@ -248,15 +247,14 @@ namespace tardigradeBalanceEquations {
             const testFunctionGradient_iter &test_function_gradient_end, result_iter result_begin,
             result_iter result_end);
 
-        template <class configuration, class density_iter,
-                  class density_dot_iter, class density_gradient_iter, class velocity_iter, class velocity_dot_iter,
-                  class velocity_gradient_iter, class material_response_iter, class material_response_jacobian_iter,
-                  class volume_fraction_iter, typename testFunction_type, class testFunctionGradient_iter,
-                  typename interpolationFunction_type, class interpolationFunctionGradient_iter,
-                  class full_material_response_dof_gradient_iter, typename dDensityDotdDensity_type,
-                  typename dUDotdU_type, typename dUDDotdU_type, class result_iter, class dRdRho_iter, class dRdU_iter,
-                  class dRdW_iter, class dRdTheta_iter, class dRdE_iter, class dRdVolumeFraction_iter, class dRdZ_iter,
-                  class dRdUMesh_iter>
+        template <class configuration, class density_iter, class density_dot_iter, class density_gradient_iter,
+                  class velocity_iter, class velocity_dot_iter, class velocity_gradient_iter,
+                  class material_response_iter, class material_response_jacobian_iter, class volume_fraction_iter,
+                  typename testFunction_type, class testFunctionGradient_iter, typename interpolationFunction_type,
+                  class interpolationFunctionGradient_iter, class full_material_response_dof_gradient_iter,
+                  typename dDensityDotdDensity_type, typename dUDotdU_type, typename dUDDotdU_type, class result_iter,
+                  class dRdRho_iter, class dRdU_iter, class dRdW_iter, class dRdTheta_iter, class dRdE_iter,
+                  class dRdVolumeFraction_iter, class dRdZ_iter, class dRdUMesh_iter>
         void computeBalanceOfLinearMomentum(
             const density_iter &density_begin, const density_iter &density_end,
             const density_dot_iter &density_dot_begin, const density_dot_iter &density_dot_end,
