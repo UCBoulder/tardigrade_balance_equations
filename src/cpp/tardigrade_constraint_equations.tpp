@@ -18,7 +18,7 @@ namespace tardigradeBalanceEquations {
 
     namespace constraintEquations {
 
-        template <class configuration, int predicted_internal_energy_index, typename internal_energy_type, class material_response_iter,
+        template <class configuration, typename internal_energy_type, class material_response_iter,
                   typename test_function_type, typename result_type>
         void computeInternalEnergyConstraint(const internal_energy_type   &internal_energy,
                                              const material_response_iter &material_response_begin,
@@ -53,7 +53,7 @@ namespace tardigradeBalanceEquations {
             result = (*(material_response_begin + configuration::material::output::predicted_internal_energy_index) - internal_energy) * test_function;
         }
 
-        template <class configuration, int predicted_internal_energy_index, typename internal_energy_type, typename density_type,
+        template <class configuration, typename internal_energy_type, typename density_type,
                   class material_response_iter, typename test_function_type, typename result_type>
         void computeInternalEnergyConstraint(const internal_energy_type &internal_energy, const density_type &density,
                                              const material_response_iter &material_response_begin,
@@ -92,7 +92,7 @@ namespace tardigradeBalanceEquations {
                      test_function;
         }
 
-        template <class configuration, int predicted_internal_energy_index,
+        template <class configuration,
                   typename internal_energy_type, class material_response_iter, class material_response_jacobian_iter,
                   typename test_function_type, typename interpolation_function_type,
                   class interpolation_function_gradient_iter, class full_material_response_dof_gradient_iter,
@@ -206,7 +206,7 @@ namespace tardigradeBalanceEquations {
             std::fill(dRdZ_begin, dRdZ_end, 0);
             std::fill(dRdUMesh_begin, dRdUMesh_end, 0);
 
-            computeInternalEnergyConstraint<configuration, configuration::material::output::predicted_internal_energy_index>(internal_energy, material_response_begin,
+            computeInternalEnergyConstraint<configuration>(internal_energy, material_response_begin,
                                                                              material_response_end, test_function,
                                                                              result);
 
@@ -381,7 +381,7 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <class configuration, int predicted_internal_energy_index,
+        template <class configuration,
                   typename internal_energy_type, typename density_type, class material_response_iter,
                   class material_response_jacobian_iter, typename test_function_type,
                   typename interpolation_function_type, class interpolation_function_gradient_iter,
@@ -499,7 +499,7 @@ namespace tardigradeBalanceEquations {
             std::fill(dRdZ_begin, dRdZ_end, 0);
             std::fill(dRdUMesh_begin, dRdUMesh_end, 0);
 
-            computeInternalEnergyConstraint<configuration, configuration::material::output::predicted_internal_energy_index>(internal_energy, density,
+            computeInternalEnergyConstraint<configuration>(internal_energy, density,
                                                                              material_response_begin,
                                                                              material_response_end, test_function,
                                                                              result);
@@ -677,7 +677,7 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <class configuration, int predicted_internal_energy_index, class internal_energy_iter, class material_response_iter,
+        template <class configuration, class internal_energy_iter, class material_response_iter,
                   typename test_function_type, class result_iter>
         void computeInternalEnergyConstraint(const internal_energy_iter   &internal_energy_begin,
                                              const internal_energy_iter   &internal_energy_end,
@@ -724,13 +724,13 @@ namespace tardigradeBalanceEquations {
 
             for (auto v = std::pair<unsigned int, result_iter>(0, result_begin); v.second != result_end;
                  ++v.first, ++v.second) {
-                computeInternalEnergyConstraint<configuration, configuration::material::output::predicted_internal_energy_index>(
+                computeInternalEnergyConstraint<configuration>(
                     *(internal_energy_begin + v.first), material_response_begin + material_response_size * v.first,
                     material_response_begin + material_response_size * (v.first + 1), test_function, *v.second);
             }
         }
 
-        template <class configuration, int predicted_internal_energy_index, class internal_energy_iter, class density_iter,
+        template <class configuration, class internal_energy_iter, class density_iter,
                   class material_response_iter, typename test_function_type, class result_iter>
         void computeInternalEnergyConstraint(const internal_energy_iter &internal_energy_begin,
                                              const internal_energy_iter &internal_energy_end,
@@ -782,14 +782,14 @@ namespace tardigradeBalanceEquations {
 
             for (auto v = std::pair<unsigned int, result_iter>(0, result_begin); v.second != result_end;
                  ++v.first, ++v.second) {
-                computeInternalEnergyConstraint<configuration, configuration::material::output::predicted_internal_energy_index>(
+                computeInternalEnergyConstraint<configuration>(
                     *(internal_energy_begin + v.first), *(density_begin + v.first),
                     material_response_begin + material_response_size * v.first,
                     material_response_begin + material_response_size * (v.first + 1), test_function, *v.second);
             }
         }
 
-        template <class configuration, int predicted_internal_energy_index,
+        template <class configuration,
                   class internal_energy_iter, class material_response_iter, class material_response_jacobian_iter,
                   typename test_function_type, typename interpolation_function_type,
                   class interpolation_function_gradient_iter, class full_material_response_dof_gradient_iter,
@@ -933,7 +933,7 @@ namespace tardigradeBalanceEquations {
             for (auto v = std::pair<unsigned int, result_iter>(0, result_begin); v.second != result_end;
                  ++v.first, ++v.second) {
                 computeInternalEnergyConstraint<
-                    configuration, configuration::material::output::predicted_internal_energy_index>(
+                    configuration>(
                     *(internal_energy_begin + v.first), material_response_begin + material_response_size * v.first,
                     material_response_begin + material_response_size * (v.first + 1),
                     material_response_jacobian_begin + material_response_size *
@@ -958,7 +958,7 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <class configuration, int predicted_internal_energy_index,
+        template <class configuration,
                   class internal_energy_iter, class density_iter, class material_response_iter,
                   class material_response_jacobian_iter, typename test_function_type,
                   typename interpolation_function_type, class interpolation_function_gradient_iter,
@@ -1097,7 +1097,7 @@ namespace tardigradeBalanceEquations {
             for (auto v = std::pair<unsigned int, result_iter>(0, result_begin); v.second != result_end;
                  ++v.first, ++v.second) {
                 computeInternalEnergyConstraint<
-                    configuration, configuration::material::output::predicted_internal_energy_index>(
+                    configuration>(
                     *(internal_energy_begin + v.first), *(density_begin + v.first),
                                           material_response_begin + material_response_size * v.first,
                                           material_response_begin + material_response_size * (v.first + 1),

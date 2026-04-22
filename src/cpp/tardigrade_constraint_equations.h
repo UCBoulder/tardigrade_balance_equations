@@ -16,14 +16,14 @@ namespace tardigradeBalanceEquations {
 
     namespace constraintEquations {
 
-        template <class configuration, int predicted_internal_energy_index, typename internal_energy_type, class material_response_iter,
+        template <class configuration, typename internal_energy_type, class material_response_iter,
                   typename test_function_type, typename result_type>
         inline void computeInternalEnergyConstraint(const internal_energy_type   &internal_energy,
                                                     const material_response_iter &material_response_begin,
                                                     const material_response_iter &material_response_end,
                                                     const test_function_type &test_function, result_type &result);
 
-        template <class configuration, int predicted_internal_energy_index, class internal_energy_iter, class material_response_iter,
+        template <class configuration, class internal_energy_iter, class material_response_iter,
                   typename test_function_type, class result_iter>
         inline void computeInternalEnergyConstraint(const internal_energy_iter   &internal_energy_begin,
                                                     const internal_energy_iter   &internal_energy_end,
@@ -32,7 +32,7 @@ namespace tardigradeBalanceEquations {
                                                     const test_function_type &test_function, result_iter result_begin,
                                                     result_iter result_end);
 
-        template <class configuration, int predicted_internal_energy_index, typename internal_energy_type, typename density_type,
+        template <class configuration, typename internal_energy_type, typename density_type,
                   class material_response_iter, typename test_function_type, typename result_type>
         inline void computeInternalEnergyConstraint(const internal_energy_type   &internal_energy,
                                                     const density_type           &density,
@@ -40,7 +40,7 @@ namespace tardigradeBalanceEquations {
                                                     const material_response_iter &material_response_end,
                                                     const test_function_type &test_function, result_type &result);
 
-        template <class configuration, int predicted_internal_energy_index, class internal_energy_iter, class density_iter,
+        template <class configuration, class internal_energy_iter, class density_iter,
                   class material_response_iter, typename test_function_type, class result_iter>
         inline void computeInternalEnergyConstraint(const internal_energy_iter &internal_energy_begin,
                                                     const internal_energy_iter &internal_energy_end,
@@ -50,7 +50,7 @@ namespace tardigradeBalanceEquations {
                                                     const test_function_type &test_function, result_iter result_begin,
                                                     result_iter result_end);
 
-        template <class configuration, int predicted_internal_energy_index,
+        template <class configuration,
                   typename internal_energy_type, class material_response_iter, class material_response_jacobian_iter,
                   typename test_function_type, typename interpolation_function_type,
                   class interpolation_function_gradient_iter, class full_material_response_dof_gradient_iter,
@@ -72,7 +72,7 @@ namespace tardigradeBalanceEquations {
             dRdVF_iter dRdVF_begin, dRdVF_iter dRdVF_end, dRdZ_iter dRdZ_begin, dRdZ_iter dRdZ_end,
             dRdUMesh_iter dRdUMesh_begin, dRdUMesh_iter dRdUMesh_end);
 
-        template <class configuration, int predicted_internal_energy_index,
+        template <class configuration,
                   class internal_energy_iter, class material_response_iter, class material_response_jacobian_iter,
                   typename test_function_type, typename interpolation_function_type,
                   class interpolation_function_gradient_iter, class full_material_response_dof_gradient_iter,
@@ -94,7 +94,7 @@ namespace tardigradeBalanceEquations {
             dRdVF_iter dRdVF_begin, dRdVF_iter dRdVF_end, dRdZ_iter dRdZ_begin, dRdZ_iter dRdZ_end,
             dRdUMesh_iter dRdUMesh_begin, dRdUMesh_iter dRdUMesh_end);
 
-        template <class configuration, int predicted_internal_energy_index,
+        template <class configuration,
                   typename internal_energy_type, typename density_type, class material_response_iter,
                   class material_response_jacobian_iter, typename test_function_type,
                   typename interpolation_function_type, class interpolation_function_gradient_iter,
@@ -117,7 +117,7 @@ namespace tardigradeBalanceEquations {
             dRdVF_iter dRdVF_begin, dRdVF_iter dRdVF_end, dRdZ_iter dRdZ_begin, dRdZ_iter dRdZ_end,
             dRdUMesh_iter dRdUMesh_begin, dRdUMesh_iter dRdUMesh_end);
 
-        template <class configuration, int predicted_internal_energy_index,
+        template <class configuration,
                   class internal_energy_iter, class density_iter, class material_response_iter,
                   class material_response_jacobian_iter, typename test_function_type,
                   typename interpolation_function_type, class interpolation_function_gradient_iter,
