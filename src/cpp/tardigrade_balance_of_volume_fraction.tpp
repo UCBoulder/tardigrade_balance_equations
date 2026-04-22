@@ -80,11 +80,11 @@ namespace tardigradeBalanceEquations {
             result *= test_function;
         }
 
-        template <class configuration, int mass_change_rate_index, int trace_mass_change_velocity_gradient_index,
+        template <class configuration,
                   typename density_type, class velocity_iter, typename volume_fraction_type,
                   typename volume_fraction_dot_type, class volume_fraction_gradient_iter, class material_response_iter,
                   typename rest_density_type, typename test_function_type, typename result_type>
-        void computeBalanceOfVolumeFraction(
+        void computeBalanceOfVolumeFractionFullMaterialResponse(
             const density_type &density, const velocity_iter &velocity_begin, const velocity_iter &velocity_end,
             const volume_fraction_type &volume_fraction, const volume_fraction_dot_type &volume_fraction_dot,
             const volume_fraction_gradient_iter &volume_fraction_gradient_begin,
@@ -266,8 +266,8 @@ namespace tardigradeBalanceEquations {
             dRdTraceVA = test_function * volume_fraction;
         }
 
-        template <class configuration, int mass_change_rate_index,
-                  int trace_mass_change_velocity_gradient_index, typename density_type,
+        template <class configuration,
+                  typename density_type,
                   class velocity_iter, typename volume_fraction_type, typename volume_fraction_dot_type,
                   class volume_fraction_gradient_iter, class material_response_iter,
                   class material_response_jacobian_iter, typename rest_density_type, typename test_function_type,
@@ -737,7 +737,7 @@ namespace tardigradeBalanceEquations {
                   class volume_fraction_dot_iter, class volume_fraction_gradient_iter, class mass_change_rate_iter,
                   class rest_density_iter, class trace_mass_change_velocity_gradient_iter, typename test_function_type,
                   class result_iter>
-        void computeBalanceOfVolumeFraction(
+        void computeBalanceOfVolumeFractionMultiphase(
             const density_iter &density_begin, const density_iter &density_end, const velocity_iter &velocity_begin,
             const velocity_iter &velocity_end, const volume_fraction_iter &volume_fraction_begin,
             const volume_fraction_iter &volume_fraction_end, const volume_fraction_dot_iter &volume_fraction_dot_begin,
@@ -826,11 +826,11 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <class configuration, int mass_change_rate_index, int trace_mass_change_velocity_gradient_index,
+        template <class configuration,
                   class density_iter, class velocity_iter, class volume_fraction_iter, class volume_fraction_dot_iter,
                   class volume_fraction_gradient_iter, class material_response_iter, class rest_density_iter,
                   typename test_function_type, class result_iter>
-        void computeBalanceOfVolumeFraction(
+        void computeBalanceOfVolumeFractionMultiphase(
             const density_iter &density_begin, const density_iter &density_end, const velocity_iter &velocity_begin,
             const velocity_iter &velocity_end, const volume_fraction_iter &volume_fraction_begin,
             const volume_fraction_iter &volume_fraction_end, const volume_fraction_dot_iter &volume_fraction_dot_begin,
@@ -911,7 +911,7 @@ namespace tardigradeBalanceEquations {
 
             for (auto rho = std::pair<unsigned int, density_iter>(0, density_begin); rho.second != density_end;
                  ++rho.first, ++rho.second) {
-                computeBalanceOfVolumeFraction<configuration, configuration::material::output::mass_change_rate_index, configuration::material::output::trace_mass_change_velocity_gradient_index>(
+                computeBalanceOfVolumeFractionFullMaterialResponse<configuration>(
                     *rho.second, velocity_begin + configuration::dimension * rho.first, velocity_begin + configuration::dimension * (rho.first + 1),
                     *(volume_fraction_begin + rho.first), *(volume_fraction_dot_begin + rho.first),
                     volume_fraction_gradient_begin + configuration::dimension * rho.first,
@@ -930,7 +930,7 @@ namespace tardigradeBalanceEquations {
                   typename dUDotdU_type, typename dVolumeFractionDotdVolumeFraction_type, class result_iter,
                   class dRdRho_iter, class dRdU_iter, class dRdVolumeFraction_iter, class dRdC_iter,
                   class dRdTraceVA_iter, class dRdUMesh_iter>
-        void computeBalanceOfVolumeFraction(
+        void computeBalanceOfVolumeFractionMultiphase(
             const density_iter &density_begin, const density_iter &density_end, const velocity_iter &velocity_begin,
             const velocity_iter &velocity_end, const volume_fraction_iter &volume_fraction_begin,
             const volume_fraction_iter &volume_fraction_end, const volume_fraction_dot_iter &volume_fraction_dot_begin,
@@ -1079,8 +1079,8 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <class configuration, int mass_change_rate_index,
-                  int trace_mass_change_velocity_gradient_index, class density_iter,
+        template <class configuration,
+                  class density_iter,
                   class velocity_iter, class volume_fraction_iter, class volume_fraction_dot_iter,
                   class volume_fraction_gradient_iter, class material_response_iter,
                   class material_response_jacobian_iter, class rest_density_iter, typename test_function_type,
@@ -1089,7 +1089,7 @@ namespace tardigradeBalanceEquations {
                   typename dVolumeFractionDotdVolumeFraction_type, class result_iter, class dRdRho_iter,
                   class dRdU_iter, class dRdW_iter, class dRdTheta_iter, class dRdE_iter, class dRdVolumeFraction_iter,
                   class dRdZ_iter, class dRdUMesh_iter>
-        void computeBalanceOfVolumeFraction(
+        void computeBalanceOfVolumeFractionMultiphase(
             const density_iter &density_begin, const density_iter &density_end, const velocity_iter &velocity_begin,
             const velocity_iter &velocity_end, const volume_fraction_iter &volume_fraction_begin,
             const volume_fraction_iter &volume_fraction_end, const volume_fraction_dot_iter &volume_fraction_dot_begin,
@@ -1251,7 +1251,7 @@ namespace tardigradeBalanceEquations {
             for (auto v = std::pair<unsigned int, result_iter>(0, result_begin); v.second != result_end;
                  ++v.first, ++v.second) {
                 computeBalanceOfVolumeFraction<
-                    configuration, configuration::material::output::mass_change_rate_index, configuration::material::output::trace_mass_change_velocity_gradient_index>(
+                    configuration>(
                     *(density_begin + v.first), velocity_begin + configuration::dimension * v.first, velocity_begin + configuration::dimension * (v.first + 1),
                     *(volume_fraction_begin + v.first), *(volume_fraction_dot_begin + v.first),
                     volume_fraction_gradient_begin + configuration::dimension * v.first,

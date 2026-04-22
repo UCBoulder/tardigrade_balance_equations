@@ -159,7 +159,7 @@ void evaluate_at_nodes(const xi_in &xi_begin, const xi_in &xi_end, dt_type dt, c
 
     } else {
         for (unsigned int i = 0; i < node_count; ++i) {
-            tardigradeBalanceEquations::balanceOfVolumeFraction::computeBalanceOfVolumeFraction<configuration>(
+            tardigradeBalanceEquations::balanceOfVolumeFraction::computeBalanceOfVolumeFractionMultiphase<configuration>(
                 std::cbegin(density_tp1_p), std::cend(density_tp1_p), std::cbegin(u_dot_tp1_p), std::cend(u_dot_tp1_p),
                 std::cbegin(phi_tp1_p), std::cend(phi_tp1_p), std::cbegin(phi_dot_tp1_p), std::cend(phi_dot_tp1_p),
                 std::cbegin(grad_phi_tp1), std::cend(grad_phi_tp1), mass_change_rate_begin, mass_change_rate_end,
@@ -350,7 +350,7 @@ void evaluate_at_nodes(const xi_in &xi_begin, const xi_in &xi_end, dt_type dt, c
 
     } else {
         for (unsigned int i = 0; i < node_count; ++i) {
-            tardigradeBalanceEquations::balanceOfVolumeFraction::computeBalanceOfVolumeFraction<configuration>(
+            tardigradeBalanceEquations::balanceOfVolumeFraction::computeBalanceOfVolumeFractionMultiphase<configuration>(
                 std::cbegin(density_tp1_p), std::cend(density_tp1_p), std::cbegin(u_dot_tp1_p), std::cend(u_dot_tp1_p),
                 std::cbegin(phi_tp1_p), std::cend(phi_tp1_p), std::cbegin(phi_dot_tp1_p), std::cend(phi_dot_tp1_p),
                 std::cbegin(grad_phi_tp1), std::cend(grad_phi_tp1), mass_change_rate_begin, mass_change_rate_end,
@@ -363,7 +363,7 @@ void evaluate_at_nodes(const xi_in &xi_begin, const xi_in &xi_end, dt_type dt, c
                                      std::placeholders::_1, J));
 
             for (unsigned int j = 0; j < node_count; ++j) {
-                tardigradeBalanceEquations::balanceOfVolumeFraction::computeBalanceOfVolumeFraction<configuration>(
+                tardigradeBalanceEquations::balanceOfVolumeFraction::computeBalanceOfVolumeFractionMultiphase<configuration>(
                     std::cbegin(density_tp1_p), std::cend(density_tp1_p), std::cbegin(u_dot_tp1_p),
                     std::cend(u_dot_tp1_p), std::cbegin(phi_tp1_p), std::cend(phi_tp1_p), std::cbegin(phi_dot_tp1_p),
                     std::cend(phi_dot_tp1_p), std::cbegin(grad_phi_tp1), std::cend(grad_phi_tp1),
@@ -1815,7 +1815,7 @@ void evaluate_at_nodes_multiphase(const xi_in &xi_begin, const xi_in &xi_end, dt
         if (active_phase >= 0) {
             unsigned int j = active_phase;
 
-            tardigradeBalanceEquations::balanceOfVolumeFraction::computeBalanceOfVolumeFraction<configuration, 10, 22>(
+            tardigradeBalanceEquations::balanceOfVolumeFraction::computeBalanceOfVolumeFractionFullMaterialResponse<configuration>(
                 density_tp1_p[j], std::cbegin(v_tp1_p) + 3 * j, std::cbegin(v_tp1_p) + 3 * (j + 1), vf_tp1_p[j],
                 vf_dot_tp1_p[j], std::cbegin(grad_vf_tp1) + 3 * j, std::cbegin(grad_vf_tp1) + 3 * (j + 1),
                 std::cbegin(material_response) + material_response_size * j,
@@ -1828,7 +1828,7 @@ void evaluate_at_nodes_multiphase(const xi_in &xi_begin, const xi_in &xi_end, dt
                                      std::placeholders::_1, J));
 
         } else {
-            tardigradeBalanceEquations::balanceOfVolumeFraction::computeBalanceOfVolumeFraction<configuration, 10, 22>(
+            tardigradeBalanceEquations::balanceOfVolumeFraction::computeBalanceOfVolumeFractionMultiphase<configuration>(
                 std::cbegin(density_tp1_p), std::cend(density_tp1_p), std::cbegin(v_tp1_p), std::cend(v_tp1_p),
                 std::cbegin(vf_tp1_p), std::cend(vf_tp1_p), std::cbegin(vf_dot_tp1_p), std::cend(vf_dot_tp1_p),
                 std::cbegin(grad_vf_tp1), std::cend(grad_vf_tp1), std::cbegin(material_response),
@@ -2094,7 +2094,7 @@ void evaluate_at_nodes_multiphase(
         if (active_phase >= 0) {
             unsigned int j = active_phase;
 
-            tardigradeBalanceEquations::balanceOfVolumeFraction::computeBalanceOfVolumeFraction<configuration, 10, 22>(
+            tardigradeBalanceEquations::balanceOfVolumeFraction::computeBalanceOfVolumeFractionFullMaterialResponse<configuration>(
                 density_tp1_p[j], std::cbegin(v_tp1_p) + 3 * j, std::cbegin(v_tp1_p) + 3 * (j + 1), vf_tp1_p[j],
                 vf_dot_tp1_p[j], std::cbegin(grad_vf_tp1) + 3 * j, std::cbegin(grad_vf_tp1) + 3 * (j + 1),
                 std::cbegin(material_response) + material_response_size * j,
@@ -2107,7 +2107,7 @@ void evaluate_at_nodes_multiphase(
                                      std::placeholders::_1, J));
 
         } else {
-            tardigradeBalanceEquations::balanceOfVolumeFraction::computeBalanceOfVolumeFraction<configuration, 10, 22>(
+            tardigradeBalanceEquations::balanceOfVolumeFraction::computeBalanceOfVolumeFractionMultiphase<configuration>(
                 std::cbegin(density_tp1_p), std::cend(density_tp1_p), std::cbegin(v_tp1_p), std::cend(v_tp1_p),
                 std::cbegin(vf_tp1_p), std::cend(vf_tp1_p), std::cbegin(vf_dot_tp1_p), std::cend(vf_dot_tp1_p),
                 std::cbegin(grad_vf_tp1), std::cend(grad_vf_tp1), std::cbegin(material_response),
@@ -2123,7 +2123,7 @@ void evaluate_at_nodes_multiphase(
             if (active_phase >= 0) {
                 unsigned int j = active_phase;
 
-                tardigradeBalanceEquations::balanceOfVolumeFraction::computeBalanceOfVolumeFraction<configuration, 10, 22>(
+                tardigradeBalanceEquations::balanceOfVolumeFraction::computeBalanceOfVolumeFraction<configuration>(
                     density_tp1_p[j], std::cbegin(v_tp1_p) + 3 * j, std::cbegin(v_tp1_p) + 3 * (j + 1), vf_tp1_p[j],
                     vf_dot_tp1_p[j], std::cbegin(grad_vf_tp1) + 3 * j, std::cbegin(grad_vf_tp1) + 3 * (j + 1),
                     std::cbegin(material_response) + material_response_size * j,
@@ -2149,7 +2149,7 @@ void evaluate_at_nodes_multiphase(
                                          std::placeholders::_1, J));
 
             } else {
-                tardigradeBalanceEquations::balanceOfVolumeFraction::computeBalanceOfVolumeFraction<configuration, 10, 22>(
+                tardigradeBalanceEquations::balanceOfVolumeFraction::computeBalanceOfVolumeFractionMultiphase<configuration>(
                     std::cbegin(density_tp1_p), std::cend(density_tp1_p), std::cbegin(v_tp1_p), std::cend(v_tp1_p),
                     std::cbegin(vf_tp1_p), std::cend(vf_tp1_p), std::cbegin(vf_dot_tp1_p), std::cend(vf_dot_tp1_p),
                     std::cbegin(grad_vf_tp1), std::cend(grad_vf_tp1), std::cbegin(material_response),
