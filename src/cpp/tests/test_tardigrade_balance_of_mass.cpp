@@ -3966,7 +3966,7 @@ void evaluate_at_nodes_diffusion(
             unsigned int j = active_phase;
 
             // Single phase evaluation
-            tardigradeBalanceEquations::balanceOfMass::computeDiffusionTerm<configuration,10>(
+            tardigradeBalanceEquations::balanceOfMass::computeDiffusionTerm<configuration>(
                 std::cbegin(material_response) + material_response_size * j,
                 std::cbegin(material_response) + material_response_size * (j + 1),
                 std::begin(dNdxs) + configuration::dimension * i,
@@ -3976,7 +3976,7 @@ void evaluate_at_nodes_diffusion(
 
         } else {
             // Multiphase evaluation
-            tardigradeBalanceEquations::balanceOfMass::computeDiffusionTerm<configuration,10>(
+            tardigradeBalanceEquations::balanceOfMass::computeDiffusionTerm<configuration>(
                 std::cbegin(material_response), std::cend(material_response),
                 std::begin(dNdxs) + configuration::dimension * i,
                 std::begin(dNdxs) + configuration::dimension * (i + 1), value_begin + nphases * i,
@@ -4226,7 +4226,7 @@ void evaluate_at_nodes_diffusion(
             unsigned int j = active_phase;
 
             // Single phase evaluation
-            tardigradeBalanceEquations::balanceOfMass::computeDiffusionTerm<configuration,10>(
+            tardigradeBalanceEquations::balanceOfMass::computeDiffusionTerm<configuration>(
                 std::cbegin(material_response) + material_response_size * j,
                 std::cbegin(material_response) + material_response_size * (j + 1),
                 std::begin(dNdxs) + configuration::dimension * i,
@@ -4236,7 +4236,7 @@ void evaluate_at_nodes_diffusion(
 
         } else {
             // Multiphase evaluation
-            tardigradeBalanceEquations::balanceOfMass::computeDiffusionTerm<configuration,10>(
+            tardigradeBalanceEquations::balanceOfMass::computeDiffusionTerm<configuration>(
                 std::cbegin(material_response), std::cend(material_response),
                 std::begin(dNdxs) + configuration::dimension * i,
                 std::begin(dNdxs) + configuration::dimension * (i + 1), value_begin + nphases * i,
@@ -4251,7 +4251,7 @@ void evaluate_at_nodes_diffusion(
                 unsigned int j = active_phase;
 
                 // Single phase evaluation
-                tardigradeBalanceEquations::balanceOfMass::computeDiffusionTerm<configuration, 10>(
+                tardigradeBalanceEquations::balanceOfMass::computeDiffusionTerm<configuration>(
                     std::cbegin(material_response) + material_response_size * j,
                     std::cbegin(material_response) + material_response_size * (j + 1),
                     std::cbegin(material_response_jacobian) + material_response_size * dof_vector_size * j,
@@ -4275,7 +4275,7 @@ void evaluate_at_nodes_diffusion(
 
             } else {
                 // Multiphase evaluation
-                tardigradeBalanceEquations::balanceOfMass::computeDiffusionTerm<configuration, 10>(
+                tardigradeBalanceEquations::balanceOfMass::computeDiffusionTerm<configuration>(
                     std::cbegin(material_response), std::cend(material_response),
                     std::cbegin(material_response_jacobian), std::cend(material_response_jacobian),
                     std::cbegin(dNdxs) + configuration::dimension * i,
@@ -4361,7 +4361,7 @@ BOOST_AUTO_TEST_CASE(test_computeDiffusionTerm, *boost::unit_test::tolerance(DEF
 
     double result;
 
-    tardigradeBalanceEquations::balanceOfMass::computeDiffusionTerm<configuration,1>(std::begin(material_response),
+    tardigradeBalanceEquations::balanceOfMass::computeDiffusionTerm<configuration>(std::begin(material_response),
                                                                        std::end(material_response),
                                                                        std::begin(testFunctionGradient),
                                                                        std::end(testFunctionGradient), result);
@@ -4382,7 +4382,7 @@ BOOST_AUTO_TEST_CASE(test_computeDiffusionTerm_multiphase, *boost::unit_test::to
 
     std::array<double, 2> result;
 
-    tardigradeBalanceEquations::balanceOfMass::computeDiffusionTerm<configuration,1>(std::begin(material_response),
+    tardigradeBalanceEquations::balanceOfMass::computeDiffusionTerm<configuration>(std::begin(material_response),
                                                                        std::end(material_response),
                                                                        std::begin(testFunctionGradient),
                                                                        std::end(testFunctionGradient),

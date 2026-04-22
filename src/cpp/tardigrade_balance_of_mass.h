@@ -229,7 +229,7 @@ namespace tardigradeBalanceEquations {
             dRdVF_iter dRdVF_end, dRdZ_iter dRdZ_begin, dRdZ_iter dRdZ_end, dRdUMesh_iter dRdUMesh_begin,
             dRdUMesh_iter dRdUMesh_end);
 
-        template <class configuration, int mass_diffusion_index, typename result_type, class testFunctionGradient_iter,
+        template <class configuration, typename result_type, class testFunctionGradient_iter,
                   class material_response_iter>
         inline void computeDiffusionTerm(const material_response_iter    &material_response_begin,
                                          const material_response_iter    &material_response_end,
@@ -237,7 +237,7 @@ namespace tardigradeBalanceEquations {
                                          const testFunctionGradient_iter &test_function_gradient_end,
                                          result_type                     &result);
 
-        template <class configuration, int mass_diffusion_index, typename dUDotdU_type,
+        template <class configuration, typename dUDotdU_type,
                   typename result_type, class testFunctionGradient_iter, class material_response_iter,
                   typename interpolationFunction_type, class interpolationFunctionGradient_iter,
                   class material_response_jacobian_iter, class full_material_response_dof_gradient_iter,
@@ -260,14 +260,14 @@ namespace tardigradeBalanceEquations {
             dRdVF_iter dRdVF_begin, dRdVF_iter dRdVF_end, dRdZ_iter dRdZ_begin, dRdZ_iter dRdZ_end,
             dRdUMesh_iter dRdUMesh_begin, dRdUMesh_iter dRdUMesh_end);
 
-        template <class configuration, int mass_diffusion_index, class result_iter, class testFunctionGradient_iter, class material_response_iter>
+        template <class configuration, class result_iter, class testFunctionGradient_iter, class material_response_iter>
         inline void computeDiffusionTerm(const material_response_iter    &material_response_begin,
                                          const material_response_iter    &material_response_end,
                                          const testFunctionGradient_iter &test_function_gradient_begin,
                                          const testFunctionGradient_iter &test_function_gradient_end,
                                          result_iter result_begin, result_iter result_end);
 
-        template <class configuration, int mass_diffusion_index, typename dUDotdU_type,
+        template <class configuration, typename dUDotdU_type,
                   class result_iter, class testFunctionGradient_iter, class material_response_iter,
                   typename interpolationFunction_type, class interpolationFunctionGradient_iter,
                   class material_response_jacobian_iter, class full_material_response_dof_gradient_iter,

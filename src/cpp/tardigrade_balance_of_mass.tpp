@@ -1466,7 +1466,7 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <class configuration, int mass_diffusion_index, typename result_type, class testFunctionGradient_iter,
+        template <class configuration, typename result_type, class testFunctionGradient_iter,
                   class material_response_iter>
         void computeDiffusionTerm(const material_response_iter    &material_response_begin,
                                   const material_response_iter    &material_response_end,
@@ -1508,7 +1508,7 @@ namespace tardigradeBalanceEquations {
             result *= -1;
         }
 
-        template <class configuration, int mass_diffusion_index, typename dUDotdU_type,
+        template <class configuration, typename dUDotdU_type,
                   typename result_type, class testFunctionGradient_iter, class material_response_iter,
                   typename interpolationFunction_type, class interpolationFunctionGradient_iter,
                   class material_response_jacobian_iter, class full_material_response_dof_gradient_iter,
@@ -1641,7 +1641,7 @@ namespace tardigradeBalanceEquations {
                                              std::to_string(test_function_gradient_end - test_function_gradient_begin) +
                                              ")")
 
-            computeDiffusionTerm<configuration,configuration::material::output::mass_diffusion_index>(material_response_begin, material_response_end,
+            computeDiffusionTerm<configuration>(material_response_begin, material_response_end,
                                                   test_function_gradient_begin, test_function_gradient_end, result);
 
             // Zero out the Jacobians
@@ -1844,7 +1844,7 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <class configuration, int mass_diffusion_index, class result_iter, class testFunctionGradient_iter, class material_response_iter>
+        template <class configuration, class result_iter, class testFunctionGradient_iter, class material_response_iter>
         void computeDiffusionTerm(const material_response_iter    &material_response_begin,
                                   const material_response_iter    &material_response_end,
                                   const testFunctionGradient_iter &test_function_gradient_begin,
@@ -1878,14 +1878,14 @@ namespace tardigradeBalanceEquations {
 
             for (auto v = std::pair<unsigned int, result_iter>(0, result_begin); v.second != result_end;
                  ++v.first, ++v.second) {
-                computeDiffusionTerm<configuration,configuration::material::output::mass_diffusion_index>(material_response_begin + material_response_size * v.first,
+                computeDiffusionTerm<configuration>(material_response_begin + material_response_size * v.first,
                                                       material_response_begin + material_response_size * (v.first + 1),
                                                       test_function_gradient_begin, test_function_gradient_end,
                                                       *v.second);
             }
         }
 
-        template <class configuration, int mass_diffusion_index, typename dUDotdU_type,
+        template <class configuration, typename dUDotdU_type,
                   class result_iter, class testFunctionGradient_iter, class material_response_iter,
                   typename interpolationFunction_type, class interpolationFunctionGradient_iter,
                   class material_response_jacobian_iter, class full_material_response_dof_gradient_iter,
@@ -2029,7 +2029,7 @@ namespace tardigradeBalanceEquations {
             for (auto v = std::pair<unsigned int, result_iter>(0, result_begin); v.second != result_end;
                  ++v.first, ++v.second) {
                 computeDiffusionTerm<
-                    configuration, configuration::material::output::mass_diffusion_index>(
+                    configuration>(
                     material_response_begin + material_response_size * v.first,
                     material_response_begin + material_response_size * (v.first + 1),
                     material_response_jacobian_begin + material_response_size *
