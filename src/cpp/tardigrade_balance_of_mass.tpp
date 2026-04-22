@@ -1466,7 +1466,7 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <class configuration, int diffusion_index, typename result_type, class testFunctionGradient_iter,
+        template <class configuration, int mass_diffusion_index, typename result_type, class testFunctionGradient_iter,
                   class material_response_iter>
         void computeDiffusionTerm(const material_response_iter    &material_response_begin,
                                   const material_response_iter    &material_response_end,
@@ -1488,27 +1488,27 @@ namespace tardigradeBalanceEquations {
              */
 
             TARDIGRADE_ERROR_TOOLS_CHECK(
-                diffusion_index < (unsigned int)(material_response_end - material_response_begin),
-                "The diffusion index (" + std::to_string(diffusion_index) +
+                configuration::material::output::mass_diffusion_index < (unsigned int)(material_response_end - material_response_begin),
+                "The diffusion index (" + std::to_string(configuration::material::output::mass_diffusion_index) +
                     ") is greater than the material response vector (" +
                     std::to_string((unsigned int)(material_response_end - material_response_begin)) + ")")
 
             TARDIGRADE_ERROR_TOOLS_CHECK(
                 (unsigned int)(test_function_gradient_end - test_function_gradient_begin) <=
-                    (unsigned int)(material_response_end - (material_response_begin + diffusion_index)),
+                    (unsigned int)(material_response_end - (material_response_begin + configuration::material::output::mass_diffusion_index)),
                 "The material response vector size (" +
                     std::to_string((unsigned int)(material_response_end - material_response_begin)) +
                     ") is inconsistent with the required diffusion term size (" +
                     std::to_string((unsigned int)(test_function_gradient_end - test_function_gradient_begin)) +
-                    ") and the index of the diffusion term (" + std::to_string(diffusion_index) + ")")
+                    ") and the index of the diffusion term (" + std::to_string(configuration::material::output::mass_diffusion_index) + ")")
 
             result = std::inner_product(test_function_gradient_begin, test_function_gradient_end,
-                                        material_response_begin + diffusion_index, result_type());
+                                        material_response_begin + configuration::material::output::mass_diffusion_index, result_type());
 
             result *= -1;
         }
 
-        template <class configuration, int diffusion_index, typename dUDotdU_type,
+        template <class configuration, int mass_diffusion_index, typename dUDotdU_type,
                   typename result_type, class testFunctionGradient_iter, class material_response_iter,
                   typename interpolationFunction_type, class interpolationFunctionGradient_iter,
                   class material_response_jacobian_iter, class full_material_response_dof_gradient_iter,
@@ -1641,7 +1641,7 @@ namespace tardigradeBalanceEquations {
                                              std::to_string(test_function_gradient_end - test_function_gradient_begin) +
                                              ")")
 
-            computeDiffusionTerm<configuration,diffusion_index>(material_response_begin, material_response_end,
+            computeDiffusionTerm<configuration,configuration::material::output::mass_diffusion_index>(material_response_begin, material_response_end,
                                                   test_function_gradient_begin, test_function_gradient_end, result);
 
             // Zero out the Jacobians
@@ -1661,7 +1661,7 @@ namespace tardigradeBalanceEquations {
                     *p.second -= (*(test_function_gradient_begin + j)) *
                                  (*(material_response_jacobian_begin +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) *
-                                        (1 + configuration::material::dimension) * (diffusion_index + j) +
+                                        (1 + configuration::material::dimension) * (configuration::material::output::mass_diffusion_index + j) +
                                     nphases * configuration::material::dof::density_index + p.first)) *
                                  interpolation_function;
 
@@ -1670,7 +1670,7 @@ namespace tardigradeBalanceEquations {
                             (*(test_function_gradient_begin + j)) *
                             (*(material_response_jacobian_begin +
                                (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) *
-                                   (1 + configuration::material::dimension) * (diffusion_index + j) +
+                                   (1 + configuration::material::dimension) * (configuration::material::output::mass_diffusion_index + j) +
                                (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) +
                                configuration::material::dimension * (nphases * configuration::material::dof::density_index + p.first) + a)) *
                             (*(interpolation_function_gradient_begin + a));
@@ -1683,7 +1683,7 @@ namespace tardigradeBalanceEquations {
                     *p.second -= (*(test_function_gradient_begin + j)) *
                                  (*(material_response_jacobian_begin +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) *
-                                        (1 + configuration::material::dimension) * (diffusion_index + j) +
+                                        (1 + configuration::material::dimension) * (configuration::material::output::mass_diffusion_index + j) +
                                     nphases * configuration::material::dof::velocity_index + p.first)) *
                                  interpolation_function * dUDotdU;
 
@@ -1692,7 +1692,7 @@ namespace tardigradeBalanceEquations {
                             (*(test_function_gradient_begin + j)) *
                             (*(material_response_jacobian_begin +
                                (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) *
-                                   (1 + configuration::material::dimension) * (diffusion_index + j) +
+                                   (1 + configuration::material::dimension) * (configuration::material::output::mass_diffusion_index + j) +
                                (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) +
                                configuration::material::dimension * (nphases * configuration::material::dof::velocity_index + p.first) + a)) *
                             (*(interpolation_function_gradient_begin + a)) * dUDotdU;
@@ -1705,7 +1705,7 @@ namespace tardigradeBalanceEquations {
                     *p.second -= (*(test_function_gradient_begin + j)) *
                                  (*(material_response_jacobian_begin +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) *
-                                        (1 + configuration::material::dimension) * (diffusion_index + j) +
+                                        (1 + configuration::material::dimension) * (configuration::material::output::mass_diffusion_index + j) +
                                     nphases * configuration::material::dof::displacement_index + p.first)) *
                                  interpolation_function;
 
@@ -1714,7 +1714,7 @@ namespace tardigradeBalanceEquations {
                             (*(test_function_gradient_begin + j)) *
                             (*(material_response_jacobian_begin +
                                (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) *
-                                   (1 + configuration::material::dimension) * (diffusion_index + j) +
+                                   (1 + configuration::material::dimension) * (configuration::material::output::mass_diffusion_index + j) +
                                (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) +
                                configuration::material::dimension * (nphases * configuration::material::dof::displacement_index + p.first) +
                                a)) *
@@ -1728,7 +1728,7 @@ namespace tardigradeBalanceEquations {
                     *p.second -= (*(test_function_gradient_begin + j)) *
                                  (*(material_response_jacobian_begin +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) *
-                                        (1 + configuration::material::dimension) * (diffusion_index + j) +
+                                        (1 + configuration::material::dimension) * (configuration::material::output::mass_diffusion_index + j) +
                                     nphases * configuration::material::dof::temperature_index + p.first)) *
                                  interpolation_function;
 
@@ -1737,7 +1737,7 @@ namespace tardigradeBalanceEquations {
                             (*(test_function_gradient_begin + j)) *
                             (*(material_response_jacobian_begin +
                                (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) *
-                                   (1 + configuration::material::dimension) * (diffusion_index + j) +
+                                   (1 + configuration::material::dimension) * (configuration::material::output::mass_diffusion_index + j) +
                                (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) +
                                configuration::material::dimension * (nphases * configuration::material::dof::temperature_index + p.first) +
                                a)) *
@@ -1751,7 +1751,7 @@ namespace tardigradeBalanceEquations {
                     *p.second -= (*(test_function_gradient_begin + j)) *
                                  (*(material_response_jacobian_begin +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) *
-                                        (1 + configuration::material::dimension) * (diffusion_index + j) +
+                                        (1 + configuration::material::dimension) * (configuration::material::output::mass_diffusion_index + j) +
                                     nphases * configuration::material::dof::internal_energy_index + p.first)) *
                                  interpolation_function;
 
@@ -1759,7 +1759,7 @@ namespace tardigradeBalanceEquations {
                         *p.second -= (*(test_function_gradient_begin + j)) *
                                      (*(material_response_jacobian_begin +
                                         (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) *
-                                            (1 + configuration::material::dimension) * (diffusion_index + j) +
+                                            (1 + configuration::material::dimension) * (configuration::material::output::mass_diffusion_index + j) +
                                         (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) +
                                         configuration::material::dimension *
                                             (nphases * configuration::material::dof::internal_energy_index + p.first) +
@@ -1774,7 +1774,7 @@ namespace tardigradeBalanceEquations {
                     *p.second -= (*(test_function_gradient_begin + j)) *
                                  (*(material_response_jacobian_begin +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) *
-                                        (1 + configuration::material::dimension) * (diffusion_index + j) +
+                                        (1 + configuration::material::dimension) * (configuration::material::output::mass_diffusion_index + j) +
                                     nphases * configuration::material::dof::volume_fraction_index + p.first)) *
                                  interpolation_function;
 
@@ -1782,7 +1782,7 @@ namespace tardigradeBalanceEquations {
                         *p.second -= (*(test_function_gradient_begin + j)) *
                                      (*(material_response_jacobian_begin +
                                         (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) *
-                                            (1 + configuration::material::dimension) * (diffusion_index + j) +
+                                            (1 + configuration::material::dimension) * (configuration::material::output::mass_diffusion_index + j) +
                                         (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) +
                                         configuration::material::dimension *
                                             (nphases * configuration::material::dof::volume_fraction_index + p.first) +
@@ -1797,7 +1797,7 @@ namespace tardigradeBalanceEquations {
                     *p.second -= (*(test_function_gradient_begin + j)) *
                                  (*(material_response_jacobian_begin +
                                     (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) *
-                                        (1 + configuration::material::dimension) * (diffusion_index + j) +
+                                        (1 + configuration::material::dimension) * (configuration::material::output::mass_diffusion_index + j) +
                                     nphases * configuration::material::dof::additional_dof_index + p.first)) *
                                  interpolation_function;
 
@@ -1806,7 +1806,7 @@ namespace tardigradeBalanceEquations {
                             (*(test_function_gradient_begin + j)) *
                             (*(material_response_jacobian_begin +
                                (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) *
-                                   (1 + configuration::material::dimension) * (diffusion_index + j) +
+                                   (1 + configuration::material::dimension) * (configuration::material::output::mass_diffusion_index + j) +
                                (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) +
                                configuration::material::dimension * (nphases * configuration::material::dof::additional_dof_index + p.first) +
                                a)) *
@@ -1822,7 +1822,7 @@ namespace tardigradeBalanceEquations {
                                 (*(test_function_gradient_begin + j)) *
                                 (*(material_response_jacobian_begin +
                                    (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) *
-                                       (1 + configuration::material::dimension) * (diffusion_index + j) +
+                                       (1 + configuration::material::dimension) * (configuration::material::output::mass_diffusion_index + j) +
                                    (nphases * configuration::material::dof::num_phase_dof + configuration::material::dof::num_additional_dof) +
                                    configuration::material::dimension * I + k)) *
                                 (*(full_material_response_dof_gradient_begin +
@@ -1839,12 +1839,12 @@ namespace tardigradeBalanceEquations {
                 for (unsigned int b = 0; b < configuration::material::dimension; ++b) {
                     *(dRdUMesh_begin + a) += (*(test_function_gradient_begin + a)) *
                                              (*(interpolation_function_gradient_begin + b)) *
-                                             (*(material_response_begin + diffusion_index + b));
+                                             (*(material_response_begin + configuration::material::output::mass_diffusion_index + b));
                 }
             }
         }
 
-        template <class configuration, int diffusion_index, class result_iter, class testFunctionGradient_iter, class material_response_iter>
+        template <class configuration, int mass_diffusion_index, class result_iter, class testFunctionGradient_iter, class material_response_iter>
         void computeDiffusionTerm(const material_response_iter    &material_response_begin,
                                   const material_response_iter    &material_response_end,
                                   const testFunctionGradient_iter &test_function_gradient_begin,
@@ -1878,14 +1878,14 @@ namespace tardigradeBalanceEquations {
 
             for (auto v = std::pair<unsigned int, result_iter>(0, result_begin); v.second != result_end;
                  ++v.first, ++v.second) {
-                computeDiffusionTerm<configuration,diffusion_index>(material_response_begin + material_response_size * v.first,
+                computeDiffusionTerm<configuration,configuration::material::output::mass_diffusion_index>(material_response_begin + material_response_size * v.first,
                                                       material_response_begin + material_response_size * (v.first + 1),
                                                       test_function_gradient_begin, test_function_gradient_end,
                                                       *v.second);
             }
         }
 
-        template <class configuration, int diffusion_index, typename dUDotdU_type,
+        template <class configuration, int mass_diffusion_index, typename dUDotdU_type,
                   class result_iter, class testFunctionGradient_iter, class material_response_iter,
                   typename interpolationFunction_type, class interpolationFunctionGradient_iter,
                   class material_response_jacobian_iter, class full_material_response_dof_gradient_iter,
@@ -1971,7 +1971,7 @@ namespace tardigradeBalanceEquations {
             auto material_response_size = (material_response_end - material_response_begin) / nphases;
 
             TARDIGRADE_ERROR_TOOLS_CHECK(
-                diffusion_index < material_response_size,
+                configuration::material::output::mass_diffusion_index < material_response_size,
                 "The material response vector must be larger than the diffusion index times the number of phases")
 
             TARDIGRADE_ERROR_TOOLS_CHECK(
@@ -2029,7 +2029,7 @@ namespace tardigradeBalanceEquations {
             for (auto v = std::pair<unsigned int, result_iter>(0, result_begin); v.second != result_end;
                  ++v.first, ++v.second) {
                 computeDiffusionTerm<
-                    configuration, diffusion_index>(
+                    configuration, configuration::material::output::mass_diffusion_index>(
                     material_response_begin + material_response_size * v.first,
                     material_response_begin + material_response_size * (v.first + 1),
                     material_response_jacobian_begin + material_response_size *
