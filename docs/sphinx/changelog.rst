@@ -9,6 +9,10 @@ Changelog
 0.3.0 (unreleased)
 ******************
 
+New Features
+============
+- Added the calculation of the DOF rate of change and acceleration from the dof values using a generalized trapezoidal theory (:pull:`64`). By `Nathan Miller`_.
+
 Internal Changes
 ================
 - Have the integration point evaluate the residual and Jacobian when the values are requested (:pull:`60`). By `Nathan Miller`_.
