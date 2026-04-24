@@ -38,6 +38,21 @@ namespace tardigradeBalanceEquations {
                                             floatVector grad_interp, const unsigned int index,
                                             output_iterator dgrad_adui_start);
 
+        template <typename dt_type, class v_t_in, class v_tp1_in, class vDot_t_in, typename alpha_type, class vDot_tp1_out,
+                  typename dVDotdV_type>
+        void compute_current_rate_of_change(const dt_type &dt, const v_t_in &v_t_begin, const v_t_in &v_t_end,
+                                            const v_tp1_in &v_tp1_begin, const v_tp1_in &v_tp1_end,
+                                            const vDot_t_in &vDot_t_begin, const vDot_t_in &vDot_t_end, const alpha_type &alpha,
+                                            vDot_tp1_out vDot_tp1_begin, vDot_tp1_out vDot_tp1_end, dVDotdV_type &dVDotdV);
+        
+        template <typename dt_type, class v_t_in, class v_tp1_in, class vDot_t_in, class vDDot_t_in, typename alpha_type,
+                  typename beta_type, class vDDot_tp1_out, typename dVDDotdV_type>
+        void compute_current_acceleration(const dt_type &dt, const v_t_in &v_t_begin, const v_t_in &v_t_end,
+                                          const v_tp1_in &v_tp1_begin, const v_tp1_in &v_tp1_end, const vDot_t_in &vDot_t_begin,
+                                          const vDot_t_in &vDot_t_end, const vDDot_t_in &vDDot_t_begin,
+                                          const vDDot_t_in &vDDot_t_end, const alpha_type &alpha, const beta_type &beta,
+                                          vDDot_tp1_out vDDot_tp1_begin, vDDot_tp1_out vDDot_tp1_end, dVDDotdV_type &dVDDotdV);
+
     }  // namespace finiteElement
 
 }  // namespace tardigradeBalanceEquations
