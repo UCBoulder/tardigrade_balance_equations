@@ -64,3 +64,143 @@ BOOST_AUTO_TEST_CASE(test_computeGradientSpatialJacobian, *boost::unit_test::tol
 
     BOOST_TEST(answer == result, CHECK_PER_ELEMENT);
 }
+
+BOOST_AUTO_TEST_CASE(test_compute_current_rate_of_change, *boost::unit_test::tolerance(DEFAULT_TEST_TOLERANCE)) {
+    double dt = 1.34;
+
+    std::vector<double> v_t = {.11, .22, .33};
+
+    std::vector<double> v_tp1 = {.44, .55, .66};
+
+    std::vector<double> vDot_t = {-0.123, -0.14, 0.5};
+
+    std::vector<double> vDot_tp1(3, 0);
+
+    double alpha = 0.67;
+
+    double dVDotdV;
+
+    tardigradeBalanceEquations::finiteElement::compute_current_rate_of_change(dt, std::begin(v_t), std::end(v_t),
+                                                                              std::begin(v_tp1), std::end(v_tp1),
+                                                                              std::begin(vDot_t), std::end(vDot_t),
+                                                                              alpha, std::begin(vDot_tp1),
+                                                                              std::end(vDot_tp1), dVDotdV);
+
+    std::vector<double> result(3, 0);
+    for (unsigned int i = 0; i < 3; ++i) {
+        result[i] = v_t[i] + dt * ((1 - alpha) * vDot_t[i] + alpha * vDot_tp1[i]);
+    }
+
+    BOOST_TEST(v_tp1 == result, CHECK_PER_ELEMENT);
+
+    {
+        double                 eps     = 1e-6;
+        constexpr unsigned int NUM_VAR = 3;
+        constexpr unsigned int NUM_OUT = 3;
+        std::vector<double>    x       = v_tp1;
+        std::vector<double>    jacobian(NUM_VAR * NUM_OUT, 0);
+
+        for (unsigned int i = 0; i < NUM_VAR; ++i) {
+            double delta = eps * std::fabs(x[i]) + eps;
+
+            std::vector<double> xp = x;
+            std::vector<double> xm = x;
+
+            xp[i] += delta;
+            xm[i] -= delta;
+
+            double tempp, tempm;
+
+            std::vector<double> rp(NUM_VAR, 0);
+            std::vector<double> rm(NUM_VAR, 0);
+
+            tardigradeBalanceEquations::finiteElement::compute_current_rate_of_change(
+                dt, std::begin(v_t), std::end(v_t), std::begin(xp), std::end(xp), std::begin(vDot_t), std::end(vDot_t),
+                alpha, std::begin(rp), std::end(rp), tempp);
+
+            tardigradeBalanceEquations::finiteElement::compute_current_rate_of_change(
+                dt, std::begin(v_t), std::end(v_t), std::begin(xm), std::end(xm), std::begin(vDot_t), std::end(vDot_t),
+                alpha, std::begin(rm), std::end(rm), tempm);
+
+            for (unsigned int j = 0; j < NUM_OUT; ++j) {
+                jacobian[NUM_VAR * j + i] = (rp[j] - rm[j]) / (2 * delta);
+            }
+        }
+
+        std::vector<double> jacobian_answer = {dVDotdV, 0, 0, 0, dVDotdV, 0, 0, 0, dVDotdV};
+
+        BOOST_TEST(jacobian_answer == jacobian, CHECK_PER_ELEMENT);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(test_compute_current_acceleration, *boost::unit_test::tolerance(DEFAULT_TEST_TOLERANCE)) {
+    double dt = 1.34;
+
+    std::vector<double> v_t = {.11, .22, .33};
+
+    std::vector<double> v_tp1 = {.44, .55, .66};
+
+    std::vector<double> vDot_t = {-0.123, -0.14, 0.50};
+
+    std::vector<double> vDDot_t = {0.203, 1.014, 0.75};
+
+    std::vector<double> vDDot_tp1(3, 0);
+
+    double alpha = 0.67;
+
+    double beta = 0.46;
+
+    double dVDDotdV;
+
+    tardigradeBalanceEquations::finiteElement::compute_current_acceleration(
+        dt, std::begin(v_t), std::end(v_t), std::begin(v_tp1), std::end(v_tp1), std::begin(vDot_t), std::end(vDot_t),
+        std::begin(vDDot_t), std::end(vDDot_t), alpha, beta, std::begin(vDDot_tp1), std::end(vDDot_tp1), dVDDotdV);
+
+    std::vector<double> vDot_tp1(3, 0);
+    std::vector<double> result(3, 0);
+    for (unsigned int i = 0; i < 3; ++i) {
+        vDot_tp1[i] = vDot_t[i] + dt * ((1 - beta) * vDDot_t[i] + beta * vDDot_tp1[i]);
+        result[i]   = v_t[i] + dt * ((1 - alpha) * vDot_t[i] + alpha * vDot_tp1[i]);
+    }
+
+    BOOST_TEST(v_tp1 == result, CHECK_PER_ELEMENT);
+
+    {
+        double                 eps     = 1e-6;
+        constexpr unsigned int NUM_VAR = 3;
+        constexpr unsigned int NUM_OUT = 3;
+        std::vector<double>    x       = v_tp1;
+        std::vector<double>    jacobian(NUM_VAR * NUM_OUT, 0);
+
+        for (unsigned int i = 0; i < NUM_VAR; ++i) {
+            double delta = eps * std::fabs(x[i]) + eps;
+
+            std::vector<double> xp = x;
+            std::vector<double> xm = x;
+
+            xp[i] += delta;
+            xm[i] -= delta;
+
+            double tempp, tempm;
+
+            std::vector<double> rp(NUM_VAR, 0);
+            std::vector<double> rm(NUM_VAR, 0);
+
+            tardigradeBalanceEquations::finiteElement::compute_current_acceleration(
+                dt, std::begin(v_t), std::end(v_t), std::begin(xp), std::end(xp), std::begin(vDot_t), std::end(vDot_t),
+                std::begin(vDDot_t), std::end(vDDot_t), alpha, beta, std::begin(rp), std::end(rp), tempp);
+
+            tardigradeBalanceEquations::finiteElement::compute_current_acceleration(
+                dt, std::begin(v_t), std::end(v_t), std::begin(xm), std::end(xm), std::begin(vDot_t), std::end(vDot_t),
+                std::begin(vDDot_t), std::end(vDDot_t), alpha, beta, std::begin(rm), std::end(rm), tempm);
+
+            for (unsigned int j = 0; j < NUM_OUT; ++j) {
+                jacobian[NUM_VAR * j + i] = (rp[j] - rm[j]) / (2 * delta);
+            }
+        }
+
+        std::vector<double> jacobian_answer = {dVDDotdV, 0, 0, 0, dVDDotdV, 0, 0, 0, dVDDotdV};
+
+        BOOST_TEST(jacobian_answer == jacobian, CHECK_PER_ELEMENT);
+    }
+}
