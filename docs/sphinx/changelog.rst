@@ -6,6 +6,24 @@ Changelog
 #########
 
 ******************
+0.3.0 (unreleased)
+******************
+
+New Features
+============
+- Added the calculation of the DOF rate of change and acceleration from the dof values using a generalized trapezoidal theory (:pull:`64`). By `Nathan Miller`_.
+
+Internal Changes
+================
+- Have the integration point evaluate the residual and Jacobian when the values are requested (:pull:`60`). By `Nathan Miller`_.
+- Added public flag for functions which should be accessbile (:pull:`61`). By `Nathan Miller`_.
+- Changed the IntegrationPointConfigurationBase parameter dim to dimension (:pull:`62`). By `Nathan Miller`_.
+
+Breaking Changes
+================
+- Changed the configuration of the balance equations to use a class-based framework to reduce the number of template parameters (:pull:`63`). By `Nathan Miller`_.
+
+******************
 0.2.6 (03-26-2026)
 ******************
 

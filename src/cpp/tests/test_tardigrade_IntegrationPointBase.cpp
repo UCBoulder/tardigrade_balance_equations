@@ -54,10 +54,6 @@ BOOST_AUTO_TEST_CASE(tardigrade_IntegrationPointBase_assembleIntegrationPointRes
 
         unsigned int num_computeVariablePointJacobian = 0;
 
-        void public_assembleIntegrationPointResponse() { assembleIntegrationPointResponse(); }
-
-        void public_assembleIntegrationPointJacobian() { assembleIntegrationPointJacobian(); }
-
         double constant_response = 0;
 
         double constant_jacobian = 0;
@@ -123,7 +119,7 @@ BOOST_AUTO_TEST_CASE(tardigrade_IntegrationPointBase_assembleIntegrationPointRes
     IntegrationPointBaseMock point(test, grad_test, interpolation, grad_interpolation, dof, grad_dof, previous_dof,
                                    previous_grad_dof, Jxw);
 
-    point.public_assembleIntegrationPointResponse();
+    BOOST_TEST(response_answer == *point.getResponse(), CHECK_PER_ELEMENT);
 
     BOOST_TEST(point.num_computeConstantPointResponse == 1);
 
@@ -133,9 +129,7 @@ BOOST_AUTO_TEST_CASE(tardigrade_IntegrationPointBase_assembleIntegrationPointRes
 
     BOOST_TEST(point.num_computeVariablePointJacobian == 0);
 
-    BOOST_TEST(response_answer == *point.getResponse(), CHECK_PER_ELEMENT);
-
-    point.public_assembleIntegrationPointJacobian();
+    BOOST_TEST(jacobian_answer == *point.getJacobian(), CHECK_PER_ELEMENT);
 
     BOOST_TEST(point.num_computeConstantPointResponse == 1);
 
@@ -144,6 +138,4 @@ BOOST_AUTO_TEST_CASE(tardigrade_IntegrationPointBase_assembleIntegrationPointRes
     BOOST_TEST(point.num_computeConstantPointJacobian == 1);
 
     BOOST_TEST(point.num_computeVariablePointJacobian == 20);
-
-    BOOST_TEST(jacobian_answer == *point.getJacobian(), CHECK_PER_ELEMENT);
 }
