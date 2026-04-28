@@ -6,6 +6,22 @@ Changelog
 #########
 
 ******************
+0.3.2 (unreleased)
+******************
+
+******************
+0.3.1 (04-28-2026)
+******************
+
+Internal Changes
+================
+- Updated the mixture material to use the new configuration class (:pull:`66`). By `Nathan Miller`_.
+
+Release
+=======
+- Released version (:pull:`67`). By `Nathan Miller`_.
+
+******************
 0.3.0 (unreleased)
 ******************
 
@@ -22,6 +38,10 @@ Internal Changes
 Breaking Changes
 ================
 - Changed the configuration of the balance equations to use a class-based framework to reduce the number of template parameters (:pull:`63`). By `Nathan Miller`_.
+
+Release
+=======
+- Released version (:pull:`65`). By `Nathan Miller`_.
 
 ******************
 0.2.6 (03-26-2026)
