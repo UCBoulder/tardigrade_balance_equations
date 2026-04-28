@@ -1377,10 +1377,8 @@ namespace tardigradeBalanceEquations {
             }
         }
 
-        template <class configuration,
-                  class density_iter, class volume_fraction_iter,
-                  class material_response_iter, class material_response_jacobian_iter, class mixture_response_iter,
-                  class mixture_jacobian_iter>
+        template <class configuration, class density_iter, class volume_fraction_iter, class material_response_iter,
+                  class material_response_jacobian_iter, class mixture_response_iter, class mixture_jacobian_iter>
         inline void computeMixtureMaterialResponse(
             const density_iter &density_begin, const density_iter &density_end,
             const volume_fraction_iter &volume_fraction_begin, const volume_fraction_iter &volume_fraction_end,
@@ -1533,20 +1531,26 @@ namespace tardigradeBalanceEquations {
 
                 // trace mass change velocity gradient
                 for (unsigned int i = 0; i < 1; ++i) {
-                    *(mixture_response_begin + configuration::material::output::trace_mass_change_velocity_gradient_index + i) +=
+                    *(mixture_response_begin +
+                      configuration::material::output::trace_mass_change_velocity_gradient_index + i) +=
                         (*(volume_fraction_begin + phase)) *
                         (*(material_response_begin + phase * material_response_size +
                            configuration::material::output::trace_mass_change_velocity_gradient_index + i));
 
                     for (unsigned int j = 0; j < num_dof; ++j) {
-                        *(mixture_jacobian_begin + num_dof * (i + configuration::material::output::trace_mass_change_velocity_gradient_index) + j) +=
+                        *(mixture_jacobian_begin +
+                          num_dof * (i + configuration::material::output::trace_mass_change_velocity_gradient_index) +
+                          j) +=
                             (*(volume_fraction_begin + phase)) *
                             (*(material_response_jacobian_begin + material_response_size * num_dof * phase +
-                               num_dof * (i + configuration::material::output::trace_mass_change_velocity_gradient_index) + j));
+                               num_dof *
+                                   (i + configuration::material::output::trace_mass_change_velocity_gradient_index) +
+                               j));
                     }
 
                     // Add contributions due to dependence on the volume fraction
-                    *(mixture_jacobian_begin + num_dof * (i + configuration::material::output::trace_mass_change_velocity_gradient_index) +
+                    *(mixture_jacobian_begin +
+                      num_dof * (i + configuration::material::output::trace_mass_change_velocity_gradient_index) +
                       (num_phases + 1) * configuration::material::dof::volume_fraction_index + phase) +=
                         (*(material_response_begin + material_response_size * phase +
                            configuration::material::output::trace_mass_change_velocity_gradient_index + i));

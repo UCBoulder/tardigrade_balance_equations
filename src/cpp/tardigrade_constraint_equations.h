@@ -159,10 +159,8 @@ namespace tardigradeBalanceEquations {
             const dDDotdD_type &dDDotdD, result_iter result_begin, result_iter result_end, dRdD_iter dRdD_begin,
             dRdD_iter dRdD_end, dRdV_iter dRdV_begin, dRdV_iter dRdV_end, dRdUMesh_iter dRdUMesh_begin,
             dRdUMesh_iter dRdUMesh_end);
-        template <class configuration,
-                  class density_iter, class volume_fraction_iter,
-                  class material_response_iter, class material_response_jacobian_iter, class mixture_response_iter,
-                  class mixture_jacobian_iter>
+        template <class configuration, class density_iter, class volume_fraction_iter, class material_response_iter,
+                  class material_response_jacobian_iter, class mixture_response_iter, class mixture_jacobian_iter>
         inline void computeMixtureMaterialResponse(
             const density_iter &density_begin, const density_iter &density_end,
             const volume_fraction_iter &volume_fraction_begin, const volume_fraction_iter &volume_fraction_end,
