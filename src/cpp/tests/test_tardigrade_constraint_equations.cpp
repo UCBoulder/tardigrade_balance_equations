@@ -4036,8 +4036,7 @@ void evaluate_mixture_response(const dof_vector_iter &dof_vector_begin, const do
                       std::begin(material_response_jacobians) + material_response_size * dof_vector_size * phase);
         }
 
-        tardigradeBalanceEquations::constraintEquations::computeMixtureMaterialResponse<configuration, 0, 9, 11, 14, 17,
-                                                                                        20, 21, 22>(
+        tardigradeBalanceEquations::constraintEquations::computeMixtureMaterialResponse<configuration>(
             std::cbegin(densities), std::cend(densities), std::cbegin(volume_fractions), std::cend(volume_fractions),
             std::cbegin(material_responses), std::cend(material_responses), std::cbegin(material_response_jacobians),
             std::cend(material_response_jacobians), result_begin, result_end, jacobian_begin, jacobian_end);
